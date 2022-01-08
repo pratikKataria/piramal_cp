@@ -5,6 +5,7 @@ import 'package:piramal_channel_partner/res/Strings.dart';
 import 'package:piramal_channel_partner/ui/base/base_screen.dart';
 import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
 import 'package:piramal_channel_partner/ui/home/home_screen.dart';
+import 'package:piramal_channel_partner/ui/myProfile/my_profile.dart';
 import 'package:piramal_channel_partner/utils/scroll_behavior.dart';
 import 'package:provider/provider.dart';
 
@@ -37,7 +38,7 @@ class MyApp extends StatelessWidget {
           );
         },
         theme: ThemeData(primarySwatch: Colors.deepOrange, scaffoldBackgroundColor: AppColors.white),
-        home: HomeScreen(),
+        home: MyProfileScreen(),
       ),
     );
   }
