@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Strings.dart';
+import 'package:piramal_channel_partner/ui/home/home_screen.dart';
 import 'package:piramal_channel_partner/ui/login/login_screen.dart';
 import 'package:piramal_channel_partner/utils/scroll_behavior.dart';
 
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
         );
       },
       theme: ThemeData(primarySwatch: Colors.deepOrange, scaffoldBackgroundColor: AppColors.white),
-      home: LoginScreen(),
+      home: HomeScreen(),
     );
   }
 }

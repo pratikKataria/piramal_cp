@@ -4,7 +4,7 @@ import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
 import 'package:piramal_channel_partner/res/Strings.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
-import 'package:piramal_channel_partner/widgets/PmlButton.dart';
+import 'package:piramal_channel_partner/widgets/pml_button.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key key}) : super(key: key);

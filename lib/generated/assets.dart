@@ -6,5 +6,11 @@ class Assets {
   static const String fontsCalibriLight = 'assets/fonts/calibri_light.ttf';
   static const String fontsCalibriRegular = 'assets/fonts/calibri_regular.ttf';
   static const String imagesIcAppLogo = 'assets/images/ic_app_logo.png';
+  static const String imagesIcCallender = 'assets/images/ic_callender.png';
+  static const String imagesIcFilter = 'assets/images/ic_filter.png';
+  static const String imagesIcMenu = 'assets/images/ic_menu.png';
+  static const String imagesIcPhone = 'assets/images/ic_phone.png';
+  static const String imagesIcWhatsApp = 'assets/images/ic_whats_app.png';
+  static const String imagesImgPlaceholder = 'assets/images/img_placeholder.png';
 
 }
