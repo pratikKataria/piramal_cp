@@ -9,6 +9,7 @@ import 'package:piramal_channel_partner/ui/myProfile/my_profile.dart';
 import 'package:piramal_channel_partner/utils/scroll_behavior.dart';
 import 'package:provider/provider.dart';
 
+import 'ui/addLead/add_lead.dart';
 import 'utils/Utility.dart';
 
 Future<void> main() async {
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
           );
         },
         theme: ThemeData(primarySwatch: Colors.deepOrange, scaffoldBackgroundColor: AppColors.white),
-        home: MyProfileScreen(),
+        home: AddLeadScreen(),
       ),
     );
   }
