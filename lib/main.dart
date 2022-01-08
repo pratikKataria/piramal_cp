@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Strings.dart';
+import 'package:piramal_channel_partner/ui/base/base_screen.dart';
+import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
 import 'package:piramal_channel_partner/ui/home/home_screen.dart';
-import 'package:piramal_channel_partner/ui/login/login_screen.dart';
 import 'package:piramal_channel_partner/utils/scroll_behavior.dart';
+import 'package:provider/provider.dart';
 
 import 'utils/Utility.dart';
 
@@ -24,16 +26,19 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: kAppName,
-      builder: (_, child) {
-        return ScrollConfiguration(
-          behavior: MyBehavior(),
-          child: child,
-        );
-      },
-      theme: ThemeData(primarySwatch: Colors.deepOrange, scaffoldBackgroundColor: AppColors.white),
-      home: HomeScreen(),
+    return ChangeNotifierProvider<BaseProvider>(
+      create: (_) => BaseProvider(),
+      child: MaterialApp(
+        title: kAppName,
+        builder: (_, child) {
+          return ScrollConfiguration(
+            behavior: MyBehavior(),
+            child: BaseScreen(child: child),
+          );
+        },
+        theme: ThemeData(primarySwatch: Colors.deepOrange, scaffoldBackgroundColor: AppColors.white),
+        home: HomeScreen(),
+      ),
     );
   }
 }

@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
+import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
 import 'package:piramal_channel_partner/widgets/pml_outline_button.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key key}) : super(key: key);
@@ -29,16 +31,23 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.screenBackgroundColor,
-      appBar: buildAppBar(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           eventRibbon(),
-          if (filterIsOpen) ...[
-            buildFilter(),
-            verticalSpace(23.5),
-            Container(height: 2, color: AppColors.lineColor),
-          ],
+          Consumer<BaseProvider>(
+            builder: (_, provider, __) {
+              return Column(
+                children: [
+                  if (provider.filterIsOpen) ...[
+                    buildFilter(),
+                    verticalSpace(23.5),
+                    Container(height: 2, color: AppColors.lineColor),
+                  ]
+                ],
+              );
+            },
+          ),
           Container(
             margin: EdgeInsets.symmetric(horizontal: 20.0),
             child: Column(
@@ -52,7 +61,6 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
               ],
             ),
           ),
-
           Expanded(
             child: ListView(
               children: [
@@ -476,44 +484,6 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
           ),
         ),
       ],
-    );
-  }
-
-  AppBar buildAppBar() {
-    return AppBar(
-      backgroundColor: AppColors.white,
-      title: Text("Piramal Realty", style: textStyleDark18pxW700),
-      centerTitle: true,
-      leading: Row(
-        children: [
-          horizontalSpace(20.0),
-          Container(
-            child: Image.asset(
-              Images.kIconMenu,
-              width: 16.0,
-            ),
-          )
-        ],
-      ),
-      actions: [
-        InkWell(
-          onTap: () {
-            filterIsOpen = !filterIsOpen;
-            setState(() {});
-          },
-          child: Container(
-            height: 40.0,
-            width: 40.0,
-            padding: EdgeInsets.all(11.0),
-            child: Image.asset(
-              Images.kIconFilter,
-              color: filterIsOpen ? AppColors.colorPrimary : AppColors.colorSecondary,
-            ),
-          ),
-        ),
-        Container(height: 10, width: 6),
-      ],
-      elevation: 0.0,
     );
   }
 }
