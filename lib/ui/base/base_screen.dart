@@ -35,27 +35,33 @@ class BaseScreen extends StatelessWidget {
         ],
       ),
       actions: [
-        Consumer<BaseProvider>(builder: (_, provider, __) {
-          return InkWell(
-            onTap: () {
-              var baseProvider = Provider.of<BaseProvider>(context, listen: false);
-              baseProvider.toggleFilter();
-              // setState(() {});
-            },
-            child: Container(
-              height: 40.0,
-              width: 40.0,
-              padding: EdgeInsets.all(11.0),
-              child: Image.asset(
-                Images.kIconFilter,
-                color: provider.filterIsOpen ? AppColors.colorPrimary : AppColors.colorSecondary,
-              ),
-            ),
-          );
-        }),
-        Container(height: 10, width: 6),
+        buildFilterButton(context),
+        horizontalSpace(6.0),
       ],
       elevation: 0.0,
+    );
+  }
+
+  Consumer<BaseProvider> buildFilterButton(BuildContext context) {
+    return Consumer<BaseProvider>(
+      builder: (_, provider, __) {
+        return InkWell(
+          onTap: () {
+            var baseProvider = Provider.of<BaseProvider>(context, listen: false);
+            baseProvider.toggleFilter();
+            // setState(() {});
+          },
+          child: Container(
+            height: 40.0,
+            width: 40.0,
+            padding: EdgeInsets.all(11.0),
+            child: Image.asset(
+              Images.kIconFilter,
+              color: provider.filterIsOpen ? AppColors.colorPrimary : AppColors.colorSecondary,
+            ),
+          ),
+        );
+      },
     );
   }
 }
