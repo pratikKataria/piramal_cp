@@ -6,19 +6,35 @@ import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:provider/provider.dart';
 
+import 'persistent_side_navigation.dart';
+
 class BaseScreen extends StatelessWidget {
   BaseScreen({this.child});
 
   final Widget child;
+  var drawerKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(context),
-      body: Column(
-        children: [
-          Expanded(child: child),
-        ],
+      drawerScrimColor: Colors.transparent,
+      body: Scaffold(
+        key: drawerKey,
+        drawerEnableOpenDragGesture: false,
+        drawer: Container(
+          width: Utility.screenWidth(context),
+          color: AppColors.screenBackgroundColor,
+          child: Drawer(
+            elevation: 0.0,
+            child: PersistentSideNavigation(),
+          ),
+        ),
+        body: Column(
+          children: [
+            Expanded(child: child),
+          ],
+        ),
       ),
     );
   }
@@ -26,19 +42,26 @@ class BaseScreen extends StatelessWidget {
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
       backgroundColor: AppColors.white,
-      title: Text("Piramal Realty", style: textStyleDark18pxW700),
       centerTitle: true,
-      leading: Row(
-        children: [
-          horizontalSpace(20.0),
-          Container(child: Image.asset(Images.kIconMenu, width: 16.0)),
-        ],
+      elevation: 0.0,
+      title: Text("Piramal Realty", style: textStyleDark18pxW700),
+      leading: InkWell(
+        onTap: () {
+          var baseProvider = Provider.of<BaseProvider>(context, listen: false);
+          baseProvider.toggleDrawer();
+          drawerKey.currentState.openDrawer();
+        },
+        child: Row(
+          children: [
+            horizontalSpace(20.0),
+            Container(child: Image.asset(Images.kIconMenu, width: 16.0)),
+          ],
+        ),
       ),
       actions: [
         buildFilterButton(context),
         horizontalSpace(6.0),
       ],
-      elevation: 0.0,
     );
   }
 
@@ -47,8 +70,7 @@ class BaseScreen extends StatelessWidget {
       builder: (_, provider, __) {
         return InkWell(
           onTap: () {
-            var baseProvider = Provider.of<BaseProvider>(context, listen: false);
-            baseProvider.toggleFilter();
+            provider.toggleFilter();
             // setState(() {});
           },
           child: Container(

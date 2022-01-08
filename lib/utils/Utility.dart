@@ -327,6 +327,13 @@ Widget horizontalSpace(double height) =>
       width: height,
     );
 
+Widget line({double width}) =>
+    Container(
+      width: width,
+      height: 1,
+      color: AppColors.lineColor,
+    );
+
 class HexColor extends Color {
   static int _getColorFromHex(String hexColor) {
     hexColor = hexColor.toUpperCase().replaceAll("#", "");

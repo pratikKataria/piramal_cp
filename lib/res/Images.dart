@@ -13,6 +13,14 @@ class Images {
   static const kIconPhone = base + "ic_phone.png";
   static const kIconWhatsApp = base + "ic_whats_app.png";
 
+   static const kIconAssist = base + "ic_assists.png";
+   static const kIconCpEvents = base + "ic_cp_events.png";
+   static const kIconCurrentPromotion = base + "ic_current_promotions.png";
+   static const kIconHome = base + "ic_home.png";
+   static const kIconLeads = base + "ic_leads.png";
+   static const kIconProjects = base + "ic_projects.png";
+   static const kIconSetting = base + "ic_setting.png";
+
 
 
   static const kImgPlaceholder = base + "img_placeholder.png";
