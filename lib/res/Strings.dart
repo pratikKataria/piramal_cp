@@ -5,6 +5,10 @@
 
 const kAppName = "Piramal Channel Partner";
 
+//Login Screen
+const kLogin = "Log In";
+final kCreateAccountText = "Or Create an Account";
+final kForgotPasswordText = "Forgot Password?";
 
 
 //Network check

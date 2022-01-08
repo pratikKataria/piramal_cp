@@ -192,7 +192,7 @@ class Dialogs {
                 Container(
                   child: Column(
                     children: [
-                      Image.asset(Images.kIconExpireToken, height: 50.0),
+                      // Image.asset(Images.kIconExpireToken, height: 50.0),
                       verticalSpace(10.0),
                       Text('Login session expired', style: textStyleDark14px500w),
                       verticalSpace(10.0),
