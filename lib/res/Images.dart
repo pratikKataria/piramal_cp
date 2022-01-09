@@ -20,8 +20,11 @@ class Images {
    static const kIconLeads = base + "ic_leads.png";
    static const kIconProjects = base + "ic_projects.png";
    static const kIconSetting = base + "ic_setting.png";
+  static const kIconicIntelligence = base + "ic_intelligence.png";
 
 
 
   static const kImgPlaceholder = base + "img_placeholder.png";
+  static const kImgPlaceholder1 = base + "img_placeholder_1.png";
+
 }
