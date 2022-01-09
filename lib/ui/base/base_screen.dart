@@ -26,17 +26,19 @@ class BaseScreen extends StatelessWidget {
         return Scaffold(
           appBar: provider.showAppbarAndBottomNavigation ? buildAppBar(context) : null,
           drawerScrimColor: Colors.transparent,
-          body: Scaffold(
-            key: drawerKey,
-            drawerEnableOpenDragGesture: false,
-            backgroundColor: AppColors.screenBackgroundColor,
-            bottomNavigationBar: provider.showAppbarAndBottomNavigation ? PersistentBottomNavigation() : null,
-            onDrawerChanged: drawerOpenCloseListener,
-            drawer: PersistentSideNavigation(),
-            body: Column(
-              children: [
-                Expanded(child: child),
-              ],
+          body: SafeArea(
+            child: Scaffold(
+              key: drawerKey,
+              drawerEnableOpenDragGesture: false,
+              backgroundColor: AppColors.screenBackgroundColor,
+              bottomNavigationBar: provider.showAppbarAndBottomNavigation ? PersistentBottomNavigation() : null,
+              onDrawerChanged: drawerOpenCloseListener,
+              drawer: PersistentSideNavigation(),
+              body: Column(
+                children: [
+                  Expanded(child: child),
+                ],
+              ),
             ),
           ),
         );

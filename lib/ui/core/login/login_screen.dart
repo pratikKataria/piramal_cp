@@ -34,8 +34,15 @@ class LoginScreen extends StatelessWidget {
               Text(kForgotPasswordText, style: subTextStyle),
               verticalSpace(110.0),
               loginButton(context),
-              verticalSpace(20.0),
-              Text(kCreateAccountText, style: subTextStyle),
+              verticalSpace(10.0),
+              InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, Screens.kSignupScreen);
+                },
+                child: Container(
+                    padding: EdgeInsets.all(10.0),
+                    child: Text(kCreateAccountText, style: subTextStyle)),
+              ),
             ],
           ),
         ),

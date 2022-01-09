@@ -34,6 +34,7 @@ class Assets {
   static const String imagesIcSetting = 'assets/images/ic_setting.png';
   static const String imagesIcTodayFollowup = 'assets/images/ic_today_followup.png';
   static const String imagesIcTower = 'assets/images/ic_tower.png';
+  static const String imagesIcUpload = 'assets/images/ic_upload.png';
   static const String imagesIcWhatsApp = 'assets/images/ic_whats_app.png';
   static const String imagesImgCarousel1 = 'assets/images/img_carousel_1.png';
   static const String imagesImgCarousel2 = 'assets/images/img_carousel_2.png';

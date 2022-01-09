@@ -7,6 +7,8 @@ import 'package:piramal_channel_partner/res/Strings.dart';
 import 'package:piramal_channel_partner/ui/base/base_screen.dart';
 import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home_bottom_navigation_base_screen.dart';
+import 'package:piramal_channel_partner/ui/core/signup/signup_screen.dart';
+import 'package:piramal_channel_partner/ui/core/uploadDocument/upload_document_screen.dart';
 import 'package:piramal_channel_partner/ui/cpEvent/cp_event_screen.dart';
 import 'package:piramal_channel_partner/ui/currentPromotions/current_promotions_screen.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/booked/booked_customer_profile_detail_Screen.dart';
@@ -19,7 +21,7 @@ import 'package:piramal_channel_partner/ui/projectsFlo/projectList/project_scree
 import 'package:piramal_channel_partner/utils/scroll_behavior.dart';
 import 'package:provider/provider.dart';
 
-import 'ui/login/login_screen.dart';
+import 'ui/core/login/login_screen.dart';
 import 'ui/projectsFlo/projectDetail/project_detail_screen.dart';
 import 'utils/Utility.dart';
 import 'utils/navigator_gk.dart';
@@ -92,6 +94,12 @@ class MyApp extends StatelessWidget {
               break;
             case Screens.kLoginScreen:
               return RouteTransition(widget: LoginScreen());
+              break;
+            case Screens.kSignupScreen:
+              return RouteTransition(widget: SignupScreen());
+              break;
+            case Screens.kUploadDocumentScreen:
+              return RouteTransition(widget: UploadDocumentScreen());
               break;
             default:
               return RouteTransition(widget: HomeBottomNavigationBaseScreen());

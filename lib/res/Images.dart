@@ -38,6 +38,7 @@ class Images {
   static const kIconNotification = base + "ic_notification.png";
   static const kIconTodayFollowup = base + "ic_today_followup.png";
   static const kIconClose = base + "ic_close.png";
+  static const kIconUpload = base + "ic_upload.png";
 
 
   static const kImgPlaceholder = base + "img_placeholder.png";
