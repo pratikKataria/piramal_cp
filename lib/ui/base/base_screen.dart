@@ -23,6 +23,7 @@ class BaseScreen extends StatelessWidget {
         key: drawerKey,
         drawerEnableOpenDragGesture: false,
         backgroundColor: AppColors.screenBackgroundColor,
+        bottomNavigationBar: Container(color: Colors.yellow, height: 50.0,),
         drawer: Container(
           width: Utility.screenWidth(context),
           color: AppColors.screenBackgroundColor,

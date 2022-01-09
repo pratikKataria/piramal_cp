@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
+import 'package:piramal_channel_partner/res/RouteTransition.dart';
+import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/res/Strings.dart';
 import 'package:piramal_channel_partner/ui/base/base_screen.dart';
 import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
-import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/project_detail_screen.dart';
+import 'package:piramal_channel_partner/ui/customerProfile/walkin/walkin_customer_profile_detail_Screen.dart';
+import 'package:piramal_channel_partner/ui/home/home_screen.dart';
 import 'package:piramal_channel_partner/utils/scroll_behavior.dart';
 import 'package:provider/provider.dart';
 
-import 'ui/projectsFlo/projectList/project_screen.dart';
 import 'utils/Utility.dart';
 
 Future<void> main() async {
@@ -38,7 +40,20 @@ class MyApp extends StatelessWidget {
           );
         },
         theme: ThemeData(primarySwatch: Colors.deepOrange, scaffoldBackgroundColor: AppColors.white),
-        home: ProjectDetailScreen(),
+        onGenerateRoute: (RouteSettings settings) {
+          switch (settings.name) {
+            case "/":
+              return RouteTransition(widget: HomeScreen());
+              break;
+            case Screens.kCustomerProfileDetailWalkin:
+              return RouteTransition(widget: WalkinCustomerProfileDetailScreen());
+              break;
+            default:
+              return RouteTransition(widget: HomeScreen());
+              break;
+          }
+        },
+        home: HomeScreen(),
       ),
     );
   }

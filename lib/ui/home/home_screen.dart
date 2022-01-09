@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
+import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
+import 'package:piramal_channel_partner/ui/customerProfile/walkin/walkin_customer_profile_detail_Screen.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
 import 'package:piramal_channel_partner/widgets/pml_outline_button.dart';
@@ -289,25 +291,30 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Row(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(80.0),
-                child: Container(
-                  height: 37,
-                  width: 37,
-                  child: Image.asset(Images.kImgPlaceholder, fit: BoxFit.fill),
+          InkWell(
+            onTap: () {
+              Navigator.pushNamed(context, Screens.kCustomerProfileDetailWalkin);
+            },
+            child: Row(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(80.0),
+                  child: Container(
+                    height: 37,
+                    width: 37,
+                    child: Image.asset(Images.kImgPlaceholder, fit: BoxFit.fill),
+                  ),
                 ),
-              ),
-              horizontalSpace(8.0),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("Narayana Patel", style: textStyleRegular18pxW500),
-                  Text("Next Follow up: March 27th", style: textStyleSubText14px500w),
-                ],
-              ),
-            ],
+                horizontalSpace(8.0),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Narayana Patel", style: textStyleRegular18pxW500),
+                    Text("Next Follow up: March 27th", style: textStyleSubText14px500w),
+                  ],
+                ),
+              ],
+            ),
           ),
           Container(
             height: 30,
