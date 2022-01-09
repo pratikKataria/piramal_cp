@@ -177,7 +177,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Vihaan khatri", style: textStyle14px500w),
+                  Text("Vihaan khatri", style: textStyleRegular18pxW500),
                   Text("Next Follow up: March 27th", style: textStyleSubText14px500w),
                 ],
               ),
@@ -303,7 +303,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Narayana Patel", style: textStyle14px500w),
+                  Text("Narayana Patel", style: textStyleRegular18pxW500),
                   Text("Next Follow up: March 27th", style: textStyleSubText14px500w),
                 ],
               ),

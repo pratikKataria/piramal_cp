@@ -22,6 +22,7 @@ class BaseScreen extends StatelessWidget {
       body: Scaffold(
         key: drawerKey,
         drawerEnableOpenDragGesture: false,
+        backgroundColor: AppColors.screenBackgroundColor,
         drawer: Container(
           width: Utility.screenWidth(context),
           color: AppColors.screenBackgroundColor,
