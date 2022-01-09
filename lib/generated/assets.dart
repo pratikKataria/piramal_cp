@@ -30,6 +30,9 @@ class Assets {
   static const String imagesIcSetting = 'assets/images/ic_setting.png';
   static const String imagesIcTower = 'assets/images/ic_tower.png';
   static const String imagesIcWhatsApp = 'assets/images/ic_whats_app.png';
+  static const String imagesImgCarousel1 = 'assets/images/img_carousel_1.png';
+  static const String imagesImgCarousel2 = 'assets/images/img_carousel_2.png';
+  static const String imagesImgCarousel3 = 'assets/images/img_carousel_3.png';
   static const String imagesImgEventPlaceholder = 'assets/images/img_event_placeholder.png';
   static const String imagesImgEventPlaceholder1 = 'assets/images/img_event_placeholder_1.png';
   static const String imagesImgPlace = 'assets/images/img_place.png';

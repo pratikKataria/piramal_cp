@@ -10,7 +10,7 @@ class ProjectDetailOverviewPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: Column(
+      child: ListView(
         children: [
           Text(
             "Demonstrating lavishness and sophistication in every facet, Piramal Mahalaxmi is a landmark development of greatest glory. It encompasses the spirit of Mahalaxmi while mirroring South Mumbai’s essence with its three phenomenal towers.",

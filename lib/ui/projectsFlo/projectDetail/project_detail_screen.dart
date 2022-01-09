@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
@@ -17,11 +18,19 @@ class ProjectDetailScreen extends StatefulWidget {
 
 class _ProjectDetailScreenState extends State<ProjectDetailScreen> with SingleTickerProviderStateMixin {
   TabController _tabController;
+  List<String> listOfImages = [Images.kImgPlaceholderCarousel1, Images.kImgPlaceholderCarousel2, Images.kImgPlaceholderCarousel3];
 
   @override
   void initState() {
     _tabController = TabController(length: 4, vsync: this);
+    _tabController.addListener(onTabChangeListener);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _tabController.removeListener(onTabChangeListener);
+    super.dispose();
   }
 
   @override
@@ -30,6 +39,16 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> with SingleTi
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Container(
+            height: 180.0,
+            child: Swiper(
+              itemBuilder: (BuildContext context, int index) {
+                return new Image.asset(listOfImages[index], fit: BoxFit.fill);
+              },
+              itemCount: 3,
+              pagination: new SwiperPagination(),
+            ),
+          ),
           verticalSpace(20.0),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -101,5 +120,9 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> with SingleTi
       padding: EdgeInsets.all(11.0),
       child: child,
     );
+  }
+
+  void onTabChangeListener() {
+    setState(() {});
   }
 }

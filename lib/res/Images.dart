@@ -41,4 +41,8 @@ class Images {
   static const kImgEventPlaceholder1 = base + "img_event_placeholder_1.png";
   static const kImgPlaceholderMap = base + "img_place_map.png";
   static const kImgPlaceholderAmenities = base + "img_placeholder_amenities.png";
+  static const kImgPlaceholderCarousel1 = base + "img_carousel_1.png";
+  static const kImgPlaceholderCarousel2 = base + "img_carousel_2.png";
+  static const kImgPlaceholderCarousel3 = base + "img_carousel_3.png";
+
 }
