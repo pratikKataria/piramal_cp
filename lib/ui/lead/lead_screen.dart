@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
+import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
 
@@ -31,6 +32,9 @@ class LeadScreen extends StatelessWidget {
                   text: "Add Lead",
                   color: AppColors.colorSecondary,
                   padding: EdgeInsets.symmetric(horizontal: 20.0),
+                  onTap: () {
+                    Navigator.pushNamed(context, Screens.kAddLeadScreen);
+                  },
                 )
               ],
             ),

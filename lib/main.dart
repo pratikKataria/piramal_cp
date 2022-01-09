@@ -9,7 +9,9 @@ import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home_bottom_navigation_base_screen.dart';
 import 'package:piramal_channel_partner/ui/cpEvent/cp_event_screen.dart';
 import 'package:piramal_channel_partner/ui/currentPromotions/current_promotions_screen.dart';
+import 'package:piramal_channel_partner/ui/customerProfile/booked/booked_customer_profile_detail_Screen.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/walkin/walkin_customer_profile_detail_Screen.dart';
+import 'package:piramal_channel_partner/ui/lead/addLead/add_lead_screen.dart';
 import 'package:piramal_channel_partner/ui/lead/lead_screen.dart';
 import 'package:piramal_channel_partner/ui/myAssit/my_assist_screen.dart';
 import 'package:piramal_channel_partner/ui/myProfile/my_profile.dart';
@@ -17,6 +19,7 @@ import 'package:piramal_channel_partner/ui/projectsFlo/projectList/project_scree
 import 'package:piramal_channel_partner/utils/scroll_behavior.dart';
 import 'package:provider/provider.dart';
 
+import 'ui/projectsFlo/projectDetail/project_detail_screen.dart';
 import 'utils/Utility.dart';
 import 'utils/navigator_gk.dart';
 
@@ -56,6 +59,9 @@ class MyApp extends StatelessWidget {
             case Screens.kCustomerProfileDetailWalkin:
               return RouteTransition(widget: WalkinCustomerProfileDetailScreen());
               break;
+            case Screens.kCustomerProfileDetailBooking:
+              return RouteTransition(widget: BookedCustomerProfileDetailScreen());
+              break;
             case Screens.kProjectScreen:
               return RouteTransition(widget: ProjectScreen());
               break;
@@ -73,6 +79,12 @@ class MyApp extends StatelessWidget {
               break;
             case Screens.kSettingsScreen:
               return RouteTransition(widget: MyProfileScreen());
+              break;
+            case Screens.kAddLeadScreen:
+              return RouteTransition(widget: AddLeadScreen());
+              break;
+            case Screens.kProjectDetailScreen:
+              return RouteTransition(widget: ProjectDetailScreen());
               break;
             default:
               return RouteTransition(widget: HomeBottomNavigationBaseScreen());

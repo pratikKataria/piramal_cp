@@ -5,7 +5,6 @@ import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
 import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
-import 'package:piramal_channel_partner/ui/customerProfile/walkin/walkin_customer_profile_detail_Screen.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
 import 'package:piramal_channel_partner/widgets/pml_outline_button.dart';
@@ -21,6 +20,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
   TabController _tabController;
   bool filterIsOpen = true;
+  String currentSelectedTab = "All";
 
   @override
   void initState() {
@@ -64,13 +64,35 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
             ),
           ),
           Expanded(
-            child: ListView(
+            child: TabBarView(
+              controller: _tabController,
+              physics: NeverScrollableScrollPhysics(),
               children: [
-                //Card one
-                buildFirstCard(),
+                ListView(
+                  children: [
+                    //Card one
+                    buildFirstCard(),
 
-                //Card Two
-                buildSecondCard(),
+                    //Card Two
+                    buildSecondCard(),
+                  ],
+                ),
+                ListView(
+                  children: [
+                    //Card one
+                    buildFirstCard(),
+
+                    //Card Two
+                    buildSecondCard(),
+                  ],
+                ),
+                ListView(
+                  children: [
+                    //Card one
+                    buildFirstCardB(),
+
+                  ],
+                ),
               ],
             ),
           ),
@@ -400,9 +422,139 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     );
   }
 
+  Container buildFirstCardB() {
+    return Container(
+      height: 165,
+      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 2.0),
+      margin: EdgeInsets.only(bottom: 18.0, left: 20.0, right: 20.0),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(6.0),
+        boxShadow: [
+          BoxShadow(
+            // box-shadow: 0px 10px 30px 0px #0000000D;
+            color: AppColors.colorSecondary.withOpacity(0.1),
+            blurRadius: 20.0,
+            spreadRadius: 5.0,
+            offset: Offset(0, 8),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          InkWell(
+            onTap: () {
+              Navigator.pushNamed(context, Screens.kCustomerProfileDetailBooking);
+            },
+            child: Row(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(80.0),
+                  child: Container(
+                    height: 37,
+                    width: 37,
+                    child: Image.asset(Images.kImgPlaceholder, fit: BoxFit.fill),
+                  ),
+                ),
+                horizontalSpace(8.0),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Narayana Patel", style: textStyleRegular18pxW500),
+                    Text("Next Follow up: March 27th", style: textStyleSubText14px500w),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Container(
+            height: 30,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(6),
+                    color: AppColors.colorPrimary,
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+                  child: Text("Hot", style: textStyleWhite14px500w),
+                ),
+                horizontalSpace(10.0),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(6),
+                    color: AppColors.chipColor,
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+                  child: Text("Validity: 23 Day", style: textStyle14px500w),
+                ),
+                horizontalSpace(10.0),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(6),
+                    color: AppColors.chipColor,
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+                  child: Text("Revisit", style: textStyle14px500w),
+                ),
+              ],
+            ),
+          ),
+          Row(
+            children: [
+              Container(
+                width: 35,
+                height: 35,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.colorPrimaryLight,
+                ),
+                padding: EdgeInsets.all(10.0),
+                child: Image.asset(Images.kIconCalender),
+              ),
+              horizontalSpace(8.0),
+              Container(
+                width: 35,
+                height: 35,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.colorPrimaryLight,
+                ),
+                padding: EdgeInsets.all(10.0),
+                child: Image.asset(Images.kIconPhone),
+              ),
+              horizontalSpace(8.0),
+              Container(
+                width: 35,
+                height: 35,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.colorPrimaryLight,
+                ),
+                child: Image.asset(Images.kIconWhatsApp),
+              ),
+              Spacer(),
+              Container(
+                width: 35,
+                height: 35,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.colorSecondary,
+                ),
+                child: Icon(Icons.add, color: AppColors.white),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
   TabBar buildTabs() {
     return TabBar(
-      isScrollable: true,
       controller: _tabController,
       indicatorColor: Colors.transparent,
       labelPadding: EdgeInsets.symmetric(horizontal: 5.0),
@@ -410,51 +562,81 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
       unselectedLabelColor: AppColors.textColorBlack,
       labelColor: AppColors.textColorGreen,
       onTap: (int index) {
-        setState(() {
-          switch (index) {
-            case 0:
-              /*     _presenter.getUserTestHistory(context);
-                  attemptedText = Text('Attempted', style: textStyleGreen16px500w);
-                  unattemptedText = Text('Unattempted', style: textStyleDark14px500w);*/
-              return;
-              break;
-            case 1:
-              /*       _presenter.getUserTestHistory(context);
-                  unattemptedText = Text('Unattempted', style: textStyleGreen16px500w);
-                  attemptedText = Text('Attempted', style: textStyleDark14px500w);*/
-              return;
-              break;
-          }
-        });
+        setState(() {});
       },
       tabs: [
         Tab(
-          child: PmlOutlineButton(
-            text: "All",
-            width: 95.0,
-            height: 28.0,
-            textStyle: textStyle12px500w,
-          ),
+          child: currentSelectedTab == "All"
+              ? PmlOutlineButton(
+                  text: "All",
+                  height: 28.0,
+                  textStyle: textStyle12px500w,
+                  onTap: () {
+                    currentSelectedTab = "All";
+                    _tabController.index = 0;
+                    setState(() {});
+                  },
+                )
+              : PmlButton(
+                  text: "All",
+                  height: 28.0,
+                  textStyle: textStyleWhite12px500w,
+                  color: AppColors.colorSecondary,
+                  onTap: () {
+                    currentSelectedTab = "All";
+                    _tabController.index = 0;
+                    setState(() {});
+                  },
+                ),
         ),
         Tab(
-          child: PmlButton(
-            text: "Walk in",
-            width: 95.0,
-            height: 28.0,
-            color: AppColors.colorSecondary,
-            textStyle: textStyleWhite12px500w,
-          ),
+          child: currentSelectedTab == "Walk in"
+              ? PmlOutlineButton(
+                  text: "Walk in",
+                  height: 28.0,
+                  textStyle: textStyle12px500w,
+                  onTap: () {
+                    currentSelectedTab = "Walk in";
+                    _tabController.index = 1;
+                    setState(() {});
+                  },
+                )
+              : PmlButton(
+                  text: "Walk in",
+                  height: 28.0,
+                  textStyle: textStyleWhite12px500w,
+                  color: AppColors.colorSecondary,
+                  onTap: () {
+                    currentSelectedTab = "Walk in";
+                    _tabController.index = 1;
+                    setState(() {});
+                  },
+                ),
         ),
         Tab(
-          child: PmlButton(
-            text: "Booking",
-            width: 95.0,
-            height: 28.0,
-            margin: EdgeInsets.symmetric(horizontal: 10.0),
-            color: AppColors.colorSecondary,
-            textStyle: textStyleWhite12px500w,
-          ),
-        )
+          child: currentSelectedTab == "Booking"
+              ? PmlOutlineButton(
+                  text: "Booking",
+                  height: 28.0,
+                  textStyle: textStyle12px500w,
+                  onTap: () {
+                    currentSelectedTab = "Booking";
+                    _tabController.index = 2;
+                    setState(() {});
+                  },
+                )
+              : PmlButton(
+                  text: "Booking",
+                  height: 28.0,
+                  textStyle: textStyleWhite12px500w,
+                  color: AppColors.colorSecondary,
+                  onTap: () {
+                    currentSelectedTab = "Booking";
+                    _tabController.index = 2;
+                    setState(() {});
+                  },
+                ),
+        ),
       ],
     );
   }
