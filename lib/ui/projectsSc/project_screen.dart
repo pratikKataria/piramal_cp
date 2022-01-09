@@ -12,9 +12,6 @@ class ProjectScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 18% from top
-    final perTop18 = Utility.screenHeight(context) * 0.18;
-
     return Scaffold(
       backgroundColor: AppColors.screenBackgroundColor,
       body: Container(
