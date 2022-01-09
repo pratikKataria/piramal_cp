@@ -8,6 +8,7 @@ import 'package:piramal_channel_partner/utils/scroll_behavior.dart';
 import 'package:provider/provider.dart';
 
 import 'ui/cpEvent/cp_event_screen.dart';
+import 'ui/customerProfile/booked/booked_customer_profile_detail_Screen.dart';
 import 'ui/customerProfile/walkin/walkin_customer_profile_detail_Screen.dart';
 import 'ui/notificationSc/notification_screen.dart';
 import 'utils/Utility.dart';
@@ -39,7 +40,7 @@ class MyApp extends StatelessWidget {
           );
         },
         theme: ThemeData(primarySwatch: Colors.deepOrange, scaffoldBackgroundColor: AppColors.white),
-        home: WalkinCustomerProfileDetailScreen(),
+        home: BookedCustomerProfileDetailScreen(),
       ),
     );
   }

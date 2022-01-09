@@ -26,6 +26,7 @@ class Assets {
   static const String imagesIcWhatsApp = 'assets/images/ic_whats_app.png';
   static const String imagesImgEventPlaceholder = 'assets/images/img_event_placeholder.png';
   static const String imagesImgEventPlaceholder1 = 'assets/images/img_event_placeholder_1.png';
+  static const String imagesImgPlace = 'assets/images/img_place.png';
   static const String imagesImgPlaceholder = 'assets/images/img_placeholder.png';
   static const String imagesImgPlaceholder1 = 'assets/images/img_placeholder_1.png';
 

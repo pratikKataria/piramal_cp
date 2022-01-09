@@ -26,6 +26,7 @@ class Images {
   static const kIconCpEventCalender = base + "ic_event_calender.png";
   static const kIconChatLeft = base + "ic_chat_left.png";
   static const kIconChatRight = base + "ic_chat_right.png";
+  static const kIconProject = base + "img_place.png";
 
   static const kImgPlaceholder = base + "img_placeholder.png";
   static const kImgPlaceholder1 = base + "img_placeholder_1.png";
