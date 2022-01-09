@@ -35,13 +35,7 @@ class PersistentSideNavigation extends StatelessWidget {
           line(),
           verticalSpace(20.0),
           InkWell(
-            onTap: () {
-              if (provider.drawerKey.currentState.isDrawerOpen)  {
-                provider.drawerIsOpen = false;
-                provider.drawerKey.currentState.openEndDrawer();
-              }
-
-            },
+            onTap: () => closeDrawerAndNavigation(provider, Screens.kHomeScreen),
             child: Row(
               children: [
                 Image.asset(Images.kIconHome, width: iconSize),
@@ -56,14 +50,7 @@ class PersistentSideNavigation extends StatelessWidget {
           //Projects
           verticalSpace(20.0),
           InkWell(
-            onTap: () {
-              if (provider.drawerKey.currentState.isDrawerOpen)  {
-                provider.drawerIsOpen = false;
-                provider.drawerKey.currentState.openEndDrawer();
-              }
-
-              navigatorGk.currentState.pushNamed(Screens.kProjectScreen);
-            },
+            onTap: () => closeDrawerAndNavigation(provider, Screens.kProjectScreen),
             child: Row(
               children: [
                 Image.asset(Images.kIconProjects, width: iconSize),
@@ -78,14 +65,7 @@ class PersistentSideNavigation extends StatelessWidget {
           //Current Promotions
           verticalSpace(20.0),
           InkWell(
-            onTap: () {
-              if (provider.drawerKey.currentState.isDrawerOpen)  {
-                provider.drawerIsOpen = false;
-                provider.drawerKey.currentState.openEndDrawer();
-              }
-
-              navigatorGk.currentState.pushNamed(Screens.kCurrentPromotionsScreen);
-            },
+            onTap: () => closeDrawerAndNavigation(provider, Screens.kCurrentPromotionsScreen),
             child: Row(
               children: [
                 Image.asset(Images.kIconCurrentPromotion, width: iconSize),
@@ -100,14 +80,7 @@ class PersistentSideNavigation extends StatelessWidget {
           //View/Add Leads
           verticalSpace(20.0),
           InkWell(
-            onTap: () {
-              if (provider.drawerKey.currentState.isDrawerOpen)  {
-                provider.drawerIsOpen = false;
-                provider.drawerKey.currentState.openEndDrawer();
-              }
-
-              navigatorGk.currentState.pushNamed(Screens.kLeadScreen);
-            },
+            onTap: () => closeDrawerAndNavigation(provider, Screens.kLeadScreen),
             child: Row(
               children: [
                 Image.asset(Images.kIconLeads, width: iconSize),
@@ -122,14 +95,7 @@ class PersistentSideNavigation extends StatelessWidget {
           //CP Events
           verticalSpace(20.0),
           InkWell(
-            onTap: () {
-              if (provider.drawerKey.currentState.isDrawerOpen)  {
-                provider.drawerIsOpen = false;
-                provider.drawerKey.currentState.openEndDrawer();
-              }
-
-              navigatorGk.currentState.pushNamed(Screens.kCPEventScreen);
-            },
+            onTap: () => closeDrawerAndNavigation(provider, Screens.kCPEventScreen),
             child: Row(
               children: [
                 Image.asset(Images.kIconCpEvents, width: iconSize),
@@ -144,13 +110,7 @@ class PersistentSideNavigation extends StatelessWidget {
           //My Assists
           verticalSpace(20.0),
           InkWell(
-            onTap: () {
-              if (provider.drawerKey.currentState.isDrawerOpen)  {
-                provider.drawerKey.currentState.openEndDrawer();
-              }
-
-              navigatorGk.currentState.pushNamed(Screens.kMyAssistScreen);
-            },
+            onTap: () => closeDrawerAndNavigation(provider, Screens.kMyAssistScreen),
             child: Row(
               children: [
                 Image.asset(Images.kIconAssist, width: iconSize),
@@ -165,13 +125,7 @@ class PersistentSideNavigation extends StatelessWidget {
           //Settings
           verticalSpace(20.0),
           InkWell(
-            onTap: () {
-              if (provider.drawerKey.currentState.isDrawerOpen)  {
-                provider.drawerKey.currentState.openEndDrawer();
-              }
-
-              navigatorGk.currentState.pushNamed(Screens.kSettingsScreen);
-            },
+            onTap: () => closeDrawerAndNavigation(provider, Screens.kSettingsScreen),
             child: Row(
               children: [
                 Image.asset(Images.kIconSetting, width: iconSize),
@@ -185,5 +139,10 @@ class PersistentSideNavigation extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void closeDrawerAndNavigation(BaseProvider provider, String screen) {
+    if (provider.drawerKey.currentState.isDrawerOpen) provider.closeDrawer();
+    navigatorGk.currentState.pushNamed(screen);
   }
 }

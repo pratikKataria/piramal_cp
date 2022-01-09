@@ -14,6 +14,7 @@ class Assets {
   static const String imagesIcChatLeft = 'assets/images/ic_chat_left.png';
   static const String imagesIcChatRight = 'assets/images/ic_chat_right.png';
   static const String imagesIcClock = 'assets/images/ic_clock.png';
+  static const String imagesIcClose = 'assets/images/ic_close.png';
   static const String imagesIcCpEvents = 'assets/images/ic_cp_events.png';
   static const String imagesIcCurrentPromotions = 'assets/images/ic_current_promotions.png';
   static const String imagesIcDownload = 'assets/images/ic_download.png';

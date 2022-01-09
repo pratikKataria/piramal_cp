@@ -14,10 +14,12 @@ class BaseScreen extends StatelessWidget {
 
   final Widget child;
   GlobalKey<ScaffoldState> drawerKey = GlobalKey<ScaffoldState>();
+  BaseProvider _baseProvider;
 
   @override
   Widget build(BuildContext context) {
-    setDrawerKey(context);
+    _baseProvider = Provider.of<BaseProvider>(context, listen: false);
+    _baseProvider.drawerKey = drawerKey; // set drawer key to provider when any of the navigation tile is clicked
     return Scaffold(
       appBar: buildAppBar(context),
       drawerScrimColor: Colors.transparent,
@@ -26,6 +28,7 @@ class BaseScreen extends StatelessWidget {
         drawerEnableOpenDragGesture: false,
         backgroundColor: AppColors.screenBackgroundColor,
         bottomNavigationBar: PersistentBottomNavigation(),
+        onDrawerChanged: drawerOpenCloseListener,
         drawer: Container(
           width: Utility.screenWidth(context),
           color: AppColors.screenBackgroundColor,
@@ -43,29 +46,27 @@ class BaseScreen extends StatelessWidget {
     );
   }
 
-  void setDrawerKey(BuildContext context) {
-    var provider = Provider.of<BaseProvider>(context, listen: false);
-    provider.drawerKey = drawerKey;
-  }
-
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
       backgroundColor: AppColors.white,
       centerTitle: true,
       elevation: 0.0,
       title: Text("Piramal Realty", style: textStyleDark18pxW700),
-      leading: InkWell(
-        onTap: () {
-          var baseProvider = Provider.of<BaseProvider>(context, listen: false);
-          baseProvider.toggleDrawer();
-          drawerKey.currentState.openDrawer();
+      leading: Consumer<BaseProvider>(
+        builder: (_, provider, __) {
+          return InkWell(
+            onTap: () {
+              if (provider.drawerStatus == false) provider.openDrawer(); //if drawer is open use close button to close
+              else provider.closeDrawer(); // if drawer is closed then show menu icon and open drawer
+            },
+            child: Row(
+              children: [
+                horizontalSpace(20.0),
+                Image.asset(provider.drawerStatus == true ? Images.kIconClose : Images.kIconMenu, width: 16.0)
+              ],
+            ),
+          );
         },
-        child: Row(
-          children: [
-            horizontalSpace(20.0),
-            Container(child: Image.asset(Images.kIconMenu, width: 16.0)),
-          ],
-        ),
       ),
       actions: [
         buildFilterButton(context),
@@ -94,5 +95,11 @@ class BaseScreen extends StatelessWidget {
         );
       },
     );
+  }
+
+  //Listen to the drawer open and close
+  void drawerOpenCloseListener(bool drawerStatus) {
+    //when status is false drawer is closed
+    if (drawerStatus == false) _baseProvider.closeDrawer();
   }
 }

@@ -3,9 +3,12 @@ import 'package:piramal_channel_partner/res/Screens.dart';
 
 class BaseProvider extends ChangeNotifier {
   bool filterIsOpen = false;
-  bool drawerIsOpen = false;
+  bool _drawerIsOpen = false;
   String currentScreen = Screens.kHomeScreen;
   GlobalKey<ScaffoldState> drawerKey;
+
+  //getter
+  get drawerStatus => _drawerIsOpen;
 
   //Notifiers
   void toggleFilter() {
@@ -13,8 +16,15 @@ class BaseProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void toggleDrawer() {
-    drawerIsOpen = !drawerIsOpen;
+  void openDrawer() {
+    _drawerIsOpen = true;
+    drawerKey.currentState.openDrawer();
+    notifyListeners();
+  }
+
+  void closeDrawer() {
+    _drawerIsOpen = false;
+    drawerKey.currentState.openEndDrawer();
     notifyListeners();
   }
 
