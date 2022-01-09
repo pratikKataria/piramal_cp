@@ -31,10 +31,14 @@ class Images {
   static const kIconDownload = base + "ic_download.png";
   static const kIconOverview = base + "ic_overview.png";
   static const kIconTower = base + "ic_tower.png";
+  static const kIconBrochure = base + "ic_brochure.png";
+  static const kIconPlan = base + "ic_plan.png";
+
 
   static const kImgPlaceholder = base + "img_placeholder.png";
   static const kImgPlaceholder1 = base + "img_placeholder_1.png";
   static const kImgEventPlaceholder = base + "img_event_placeholder.png";
   static const kImgEventPlaceholder1 = base + "img_event_placeholder_1.png";
   static const kImgPlaceholderMap = base + "img_place_map.png";
+  static const kImgPlaceholderAmenities = base + "img_placeholder_amenities.png";
 }

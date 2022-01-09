@@ -9,6 +9,7 @@ class Assets {
   static const String imagesIcAppLogo = 'assets/images/ic_app_logo.png';
   static const String imagesIcAssistPerson = 'assets/images/ic_assist_person.png';
   static const String imagesIcAssists = 'assets/images/ic_assists.png';
+  static const String imagesIcBrochure = 'assets/images/ic_brochure.png';
   static const String imagesIcCallender = 'assets/images/ic_callender.png';
   static const String imagesIcChatLeft = 'assets/images/ic_chat_left.png';
   static const String imagesIcChatRight = 'assets/images/ic_chat_right.png';
@@ -24,6 +25,7 @@ class Assets {
   static const String imagesIcMenu = 'assets/images/ic_menu.png';
   static const String imagesIcOverview = 'assets/images/ic_overview.png';
   static const String imagesIcPhone = 'assets/images/ic_phone.png';
+  static const String imagesIcPlan = 'assets/images/ic_plan.png';
   static const String imagesIcProjects = 'assets/images/ic_projects.png';
   static const String imagesIcSetting = 'assets/images/ic_setting.png';
   static const String imagesIcTower = 'assets/images/ic_tower.png';
@@ -34,5 +36,6 @@ class Assets {
   static const String imagesImgPlaceMap = 'assets/images/img_place_map.png';
   static const String imagesImgPlaceholder = 'assets/images/img_placeholder.png';
   static const String imagesImgPlaceholder1 = 'assets/images/img_placeholder_1.png';
+  static const String imagesImgPlaceholderAmenities = 'assets/images/img_placeholder_amenities.png';
 
 }
