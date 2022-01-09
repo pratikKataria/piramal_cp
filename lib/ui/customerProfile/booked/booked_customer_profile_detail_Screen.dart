@@ -4,6 +4,7 @@ import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
+import 'package:piramal_channel_partner/widgets/pml_button.dart';
 
 class BookedCustomerProfileDetailScreen extends StatelessWidget {
   const BookedCustomerProfileDetailScreen({Key key}) : super(key: key);
@@ -133,18 +134,17 @@ class BookedCustomerProfileDetailScreen extends StatelessWidget {
                   horizontalSpace(12.0),
                   Text("On March 21th, 2021", style: textStyleSubText14px500w),
                   Spacer(),
-                  Container(
+                  PmlButton(
                     width: 30,
                     height: 30,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppColors.colorSecondary,
-                    ),
-                    child: Icon(Icons.add, color: AppColors.white, size: 16.0,),
+                    color: AppColors.colorSecondary,
+                    child: Icon(Icons.add, color: AppColors.white, size: 16.0),
+                    onTap: () {
+                      showDetailDialog(context);
+                    },
                   ),
                 ],
               ),
-
               verticalSpace(25.0),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 6.0),
@@ -159,7 +159,6 @@ class BookedCustomerProfileDetailScreen extends StatelessWidget {
                 ),
               ),
               verticalSpace(25.0),
-
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
@@ -173,7 +172,6 @@ class BookedCustomerProfileDetailScreen extends StatelessWidget {
           ),
         ),
         line(),
-
 
         verticalSpace(20.0),
         Padding(
@@ -197,6 +195,71 @@ class BookedCustomerProfileDetailScreen extends StatelessWidget {
         verticalSpace(30.0),
         line(),
       ],
+    );
+  }
+
+  Column buildDialogRow(String s, String m) {
+    return Column(
+      children: [
+        verticalSpace(16.0),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text("$s", style: textStyleSubText12px400w),
+            Text("$m", style: textStyle12px500w),
+          ],
+        ),
+        verticalSpace(16.0),
+        line()
+      ],
+    );
+  }
+
+  void showDetailDialog(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      contentPadding: EdgeInsets.all(0.0),
+      backgroundColor: Colors.transparent,
+      content: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(6),
+            ),
+            margin: EdgeInsets.all(10.0),
+            padding: EdgeInsets.all(10.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                buildDialogRow("Unit Number", "1102"),
+                buildDialogRow("Tower", "North Tower / Tower 3"),
+                buildDialogRow("Carpet Area", "1152 Sq.Ft."),
+                buildDialogRow("Agreement Value", "INR 3.2 Cr."),
+              ],
+            ),
+          ),
+          Positioned(
+            right: 0,
+            top: 0,
+            child: PmlButton(
+              width: 30,
+              height: 30,
+              color: AppColors.colorPrimary,
+              child: Icon(Icons.close, color: AppColors.white, size: 16.0),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 }
