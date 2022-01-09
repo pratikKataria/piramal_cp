@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
+import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/res/Strings.dart';
+import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key key}) : super(key: key);
@@ -127,6 +130,11 @@ class LoginScreen extends StatelessWidget {
       width: Utility.screenWidth(context) * 0.58,
       height: 36,
       text: kLogin,
+      onTap: () {
+        var provider = Provider.of<BaseProvider>(context, listen: false);
+        provider.showToolTip();
+        Navigator.pushNamed(context, Screens.kHomeBase);
+      },
     );
   }
 }

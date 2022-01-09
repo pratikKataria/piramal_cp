@@ -3,6 +3,7 @@
 /// 🍴 Focused on Clean Architecture
 /// Created by 🔱 Pratik Kataria 🔱 on 12-08-2021.
 abstract class Screens {
+   static const kHomeBase = "kHomeBase";
    static const kHomeScreen = "Home";
    static const kCustomerProfileDetailWalkin = "kCustomerProfileDetailWalkin";
    static const kCustomerProfileDetailBooking = "kCustomerProfileDetailBooking";
@@ -18,4 +19,6 @@ abstract class Screens {
    static const kMyAssistScreen = "kMyAssistScreen";
    static const kSettingsScreen = "kSettings";
    static const kProjectDetailScreen = "kProjectDetailScreen";
+   static const kLoginScreen = "kLoginScreen";
+
 }

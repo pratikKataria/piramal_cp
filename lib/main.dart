@@ -19,6 +19,7 @@ import 'package:piramal_channel_partner/ui/projectsFlo/projectList/project_scree
 import 'package:piramal_channel_partner/utils/scroll_behavior.dart';
 import 'package:provider/provider.dart';
 
+import 'ui/login/login_screen.dart';
 import 'ui/projectsFlo/projectDetail/project_detail_screen.dart';
 import 'utils/Utility.dart';
 import 'utils/navigator_gk.dart';
@@ -56,6 +57,9 @@ class MyApp extends StatelessWidget {
             case "/":
               return RouteTransition(widget: HomeBottomNavigationBaseScreen());
               break;
+            case Screens.kHomeBase:
+              return RouteTransition(widget: HomeBottomNavigationBaseScreen());
+              break;
             case Screens.kCustomerProfileDetailWalkin:
               return RouteTransition(widget: WalkinCustomerProfileDetailScreen());
               break;
@@ -86,12 +90,15 @@ class MyApp extends StatelessWidget {
             case Screens.kProjectDetailScreen:
               return RouteTransition(widget: ProjectDetailScreen());
               break;
+            case Screens.kLoginScreen:
+              return RouteTransition(widget: LoginScreen());
+              break;
             default:
               return RouteTransition(widget: HomeBottomNavigationBaseScreen());
               break;
           }
         },
-        home: HomeBottomNavigationBaseScreen(),
+        home: LoginScreen(),
       ),
     );
   }

@@ -20,29 +20,27 @@ class BaseScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     _baseProvider = Provider.of<BaseProvider>(context, listen: false);
     _baseProvider.drawerKey = drawerKey; // set drawer key to provider when any of the navigation tile is clicked
-    return Scaffold(
-      appBar: buildAppBar(context),
-      drawerScrimColor: Colors.transparent,
-      body: Scaffold(
-        key: drawerKey,
-        drawerEnableOpenDragGesture: false,
-        backgroundColor: AppColors.screenBackgroundColor,
-        bottomNavigationBar: PersistentBottomNavigation(),
-        onDrawerChanged: drawerOpenCloseListener,
-        drawer: Container(
-          width: Utility.screenWidth(context),
-          color: AppColors.screenBackgroundColor,
-          child: Drawer(
-            elevation: 0.0,
-            child: PersistentSideNavigation(),
+    return Consumer<BaseProvider>(
+      builder: (_, provider, __) {
+        print("Base consumer rebuilding ...");
+        return Scaffold(
+          appBar: provider.showAppbarAndBottomNavigation ? buildAppBar(context) : null,
+          drawerScrimColor: Colors.transparent,
+          body: Scaffold(
+            key: drawerKey,
+            drawerEnableOpenDragGesture: false,
+            backgroundColor: AppColors.screenBackgroundColor,
+            bottomNavigationBar: provider.showAppbarAndBottomNavigation ? PersistentBottomNavigation() : null,
+            onDrawerChanged: drawerOpenCloseListener,
+            drawer: PersistentSideNavigation(),
+            body: Column(
+              children: [
+                Expanded(child: child),
+              ],
+            ),
           ),
-        ),
-        body: Column(
-          children: [
-            Expanded(child: child),
-          ],
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -56,8 +54,10 @@ class BaseScreen extends StatelessWidget {
         builder: (_, provider, __) {
           return InkWell(
             onTap: () {
-              if (provider.drawerStatus == false) provider.openDrawer(); //if drawer is open use close button to close
-              else provider.closeDrawer(); // if drawer is closed then show menu icon and open drawer
+              if (provider.drawerStatus == false)
+                provider.openDrawer(); //if drawer is open use close button to close
+              else
+                provider.closeDrawer(); // if drawer is closed then show menu icon and open drawer
             },
             child: Row(
               children: [
