@@ -6,6 +6,7 @@ class Assets {
   static const String fontsCalibriLight = 'assets/fonts/calibri_light.ttf';
   static const String fontsCalibriRegular = 'assets/fonts/calibri_regular.ttf';
   static const String imagesIcAppLogo = 'assets/images/ic_app_logo.png';
+  static const String imagesIcAssistPerson = 'assets/images/ic_assist_person.png';
   static const String imagesIcAssists = 'assets/images/ic_assists.png';
   static const String imagesIcCallender = 'assets/images/ic_callender.png';
   static const String imagesIcCpEvents = 'assets/images/ic_cp_events.png';

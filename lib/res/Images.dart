@@ -21,7 +21,7 @@ class Images {
    static const kIconProjects = base + "ic_projects.png";
    static const kIconSetting = base + "ic_setting.png";
   static const kIconicIntelligence = base + "ic_intelligence.png";
-
+  static const kIconicAssistPerson = base + "ic_assist_person.png";
 
 
   static const kImgPlaceholder = base + "img_placeholder.png";

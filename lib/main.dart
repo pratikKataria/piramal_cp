@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 
 import 'ui/explore/explore_screen.dart';
 import 'ui/lead/addLead/add_lead_screen.dart';
+import 'ui/myAssit/my_assist_screen.dart';
 import 'utils/Utility.dart';
 
 Future<void> main() async {
@@ -41,7 +42,7 @@ class MyApp extends StatelessWidget {
           );
         },
         theme: ThemeData(primarySwatch: Colors.deepOrange, scaffoldBackgroundColor: AppColors.white),
-        home: ExploreScreen(),
+        home: MyAssistScreen(),
       ),
     );
   }
