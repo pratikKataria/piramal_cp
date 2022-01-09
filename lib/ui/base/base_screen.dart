@@ -13,10 +13,11 @@ class BaseScreen extends StatelessWidget {
   BaseScreen({this.child});
 
   final Widget child;
-  var drawerKey = GlobalKey<ScaffoldState>();
+  GlobalKey<ScaffoldState> drawerKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
+    setDrawerKey(context);
     return Scaffold(
       appBar: buildAppBar(context),
       drawerScrimColor: Colors.transparent,
@@ -40,6 +41,11 @@ class BaseScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void setDrawerKey(BuildContext context) {
+    var provider = Provider.of<BaseProvider>(context, listen: false);
+    provider.drawerKey = drawerKey;
   }
 
   AppBar buildAppBar(BuildContext context) {

@@ -9,4 +9,10 @@ abstract class Screens {
    static const kTodayFollowUpScreen = "Today's FU";
    static const kNotificationsScreen = "Notifications";
 
+   static const kProjectScreen = "kProjectScreen";
+   static const kCurrentPromotionsScreen = "kCurrentPromotions";
+   static const kLeadScreen = "kLead";
+   static const kCPEventScreen = "kCpEventScreen";
+   static const kMyAssistScreen = "kMyAssistScreen";
+   static const kSettingsScreen = "kSettings";
 }

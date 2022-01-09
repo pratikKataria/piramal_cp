@@ -5,7 +5,7 @@ class BaseProvider extends ChangeNotifier {
   bool filterIsOpen = false;
   bool drawerIsOpen = false;
   String currentScreen = Screens.kHomeScreen;
-
+  GlobalKey<ScaffoldState> drawerKey;
 
   //Notifiers
   void toggleFilter() {
