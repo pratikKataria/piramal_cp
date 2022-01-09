@@ -4,15 +4,10 @@ import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Strings.dart';
 import 'package:piramal_channel_partner/ui/base/base_screen.dart';
 import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
-import 'package:piramal_channel_partner/ui/home/home_screen.dart';
-import 'package:piramal_channel_partner/ui/lead/lead_screen.dart';
-import 'package:piramal_channel_partner/ui/myProfile/my_profile.dart';
 import 'package:piramal_channel_partner/utils/scroll_behavior.dart';
 import 'package:provider/provider.dart';
 
-import 'ui/explore/explore_screen.dart';
-import 'ui/lead/addLead/add_lead_screen.dart';
-import 'ui/myAssit/my_assist_screen.dart';
+import 'ui/cpEvent/cp_event_screen.dart';
 import 'ui/notificationSc/notification_screen.dart';
 import 'utils/Utility.dart';
 
@@ -43,7 +38,7 @@ class MyApp extends StatelessWidget {
           );
         },
         theme: ThemeData(primarySwatch: Colors.deepOrange, scaffoldBackgroundColor: AppColors.white),
-        home: NotificationScreen(),
+        home: CPEventScreen(),
       ),
     );
   }

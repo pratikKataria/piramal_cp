@@ -35,4 +35,6 @@ abstract class AppColors {
   static const chipColor = Color(0xFFCBD2D5);
   static const lineColor = Color(0xFFD5DADC);
   static const assistIconBackgroundColor = Color(0xFFD5DADC);
+  static const tentativeButtonColor = Color(0xFFFF6F4E);
+  static const attendButtonColor = Color(0xFF40C14D);
 }
