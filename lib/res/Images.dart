@@ -33,6 +33,10 @@ class Images {
   static const kIconTower = base + "ic_tower.png";
   static const kIconBrochure = base + "ic_brochure.png";
   static const kIconPlan = base + "ic_plan.png";
+  static const kIconExplore = base + "ic_explore.png";
+  static const kIconLeaderboard = base + "ic_leaderboard.png";
+  static const kIconNotification = base + "ic_notification.png";
+  static const kIconTodayFollowup = base + "ic_today_followup.png";
 
 
   static const kImgPlaceholder = base + "img_placeholder.png";
@@ -44,5 +48,4 @@ class Images {
   static const kImgPlaceholderCarousel1 = base + "img_carousel_1.png";
   static const kImgPlaceholderCarousel2 = base + "img_carousel_2.png";
   static const kImgPlaceholderCarousel3 = base + "img_carousel_3.png";
-
 }

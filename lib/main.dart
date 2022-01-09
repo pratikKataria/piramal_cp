@@ -6,9 +6,9 @@ import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/res/Strings.dart';
 import 'package:piramal_channel_partner/ui/base/base_screen.dart';
 import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
+import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home_bottom_navigation_base_screen.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/walkin/walkin_customer_profile_detail_Screen.dart';
-import 'package:piramal_channel_partner/ui/home/home_screen.dart';
-import 'package:piramal_channel_partner/utils/scroll_behavior.dart';
+ import 'package:piramal_channel_partner/utils/scroll_behavior.dart';
 import 'package:provider/provider.dart';
 
 import 'utils/Utility.dart';
@@ -43,17 +43,17 @@ class MyApp extends StatelessWidget {
         onGenerateRoute: (RouteSettings settings) {
           switch (settings.name) {
             case "/":
-              return RouteTransition(widget: HomeScreen());
+              return RouteTransition(widget: HomeBottomNavigationBaseScreen());
               break;
             case Screens.kCustomerProfileDetailWalkin:
               return RouteTransition(widget: WalkinCustomerProfileDetailScreen());
               break;
             default:
-              return RouteTransition(widget: HomeScreen());
+              return RouteTransition(widget: HomeBottomNavigationBaseScreen());
               break;
           }
         },
-        home: HomeScreen(),
+        home: HomeBottomNavigationBaseScreen(),
       ),
     );
   }

@@ -5,4 +5,8 @@
 abstract class Screens {
    static const kHomeScreen = "Home";
    static const kCustomerProfileDetailWalkin = "kCustomerProfileDetailWalkin";
+   static const kExploreScreen = "Explore";
+   static const kTodayFollowUpScreen = "Today's FU";
+   static const kNotificationsScreen = "Notifications";
+
 }

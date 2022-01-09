@@ -6,6 +6,7 @@ import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:provider/provider.dart';
 
+import 'persistent_bottom_navigation.dart';
 import 'persistent_side_navigation.dart';
 
 class BaseScreen extends StatelessWidget {
@@ -23,7 +24,7 @@ class BaseScreen extends StatelessWidget {
         key: drawerKey,
         drawerEnableOpenDragGesture: false,
         backgroundColor: AppColors.screenBackgroundColor,
-        bottomNavigationBar: Container(color: Colors.yellow, height: 50.0,),
+        bottomNavigationBar: PersistentBottomNavigation(),
         drawer: Container(
           width: Utility.screenWidth(context),
           color: AppColors.screenBackgroundColor,
