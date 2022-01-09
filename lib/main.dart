@@ -4,15 +4,11 @@ import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Strings.dart';
 import 'package:piramal_channel_partner/ui/base/base_screen.dart';
 import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
-import 'package:piramal_channel_partner/ui/projectsSc/project_screen.dart';
+import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/project_detail_screen.dart';
 import 'package:piramal_channel_partner/utils/scroll_behavior.dart';
 import 'package:provider/provider.dart';
 
-import 'ui/cpEvent/cp_event_screen.dart';
-import 'ui/currentPromotions/current_promotions_screen.dart';
-import 'ui/customerProfile/booked/booked_customer_profile_detail_Screen.dart';
-import 'ui/customerProfile/walkin/walkin_customer_profile_detail_Screen.dart';
-import 'ui/notificationSc/notification_screen.dart';
+import 'ui/projectsFlo/projectList/project_screen.dart';
 import 'utils/Utility.dart';
 
 Future<void> main() async {
@@ -42,7 +38,7 @@ class MyApp extends StatelessWidget {
           );
         },
         theme: ThemeData(primarySwatch: Colors.deepOrange, scaffoldBackgroundColor: AppColors.white),
-        home: ProjectScreen(),
+        home: ProjectDetailScreen(),
       ),
     );
   }

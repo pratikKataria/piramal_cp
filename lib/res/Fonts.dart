@@ -387,6 +387,13 @@ const textStyle14px500w = TextStyle(
     fontWeight: FontWeight.w500,
     fontSize: 14);
 
+const textStyle14px500w20H = TextStyle(
+    color: AppColors.textColor,
+    fontFamily: kFontFamily,
+    fontWeight: FontWeight.w500,
+    fontSize: 14,
+    height: 1.5,
+);
 
 const textStyleDark14px500w = TextStyle(
     color: AppColors.textColorBlack,

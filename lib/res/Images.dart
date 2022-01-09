@@ -27,9 +27,14 @@ class Images {
   static const kIconChatLeft = base + "ic_chat_left.png";
   static const kIconChatRight = base + "ic_chat_right.png";
   static const kIconProject = base + "img_place.png";
+  static const kIconAmenities = base + "ic_amenities.png";
+  static const kIconDownload = base + "ic_download.png";
+  static const kIconOverview = base + "ic_overview.png";
+  static const kIconTower = base + "ic_tower.png";
 
   static const kImgPlaceholder = base + "img_placeholder.png";
   static const kImgPlaceholder1 = base + "img_placeholder_1.png";
   static const kImgEventPlaceholder = base + "img_event_placeholder.png";
   static const kImgEventPlaceholder1 = base + "img_event_placeholder_1.png";
+  static const kImgPlaceholderMap = base + "img_place_map.png";
 }
