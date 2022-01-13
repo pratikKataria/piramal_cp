@@ -66,7 +66,7 @@ class MyApp extends StatelessWidget {
               return RouteTransition(widget: WalkinCustomerProfileDetailScreen());
               break;
             case Screens.kCustomerProfileDetailBooking:
-              return RouteTransition(widget: BookedCustomerProfileDetailScreen());
+              return RouteTransition(widget: const BookedCustomerProfileDetailScreen());
               break;
             case Screens.kProjectScreen:
               return RouteTransition(widget: ProjectScreen());
