@@ -91,15 +91,15 @@ class Utility {
     FToast fToast = FToast(context);
     Widget toast = Container(
       padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 6.0),
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0), color: AppColors.colorPrimary),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0), color: AppColors.red),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.warning_rounded, color: AppColors.red),
+          Icon(Icons.warning_rounded, color: AppColors.white),
           SizedBox(width: 6.0),
           Expanded(
               child:
-              Text("$text", style: textStyleRed12px600w, maxLines: 2, overflow: TextOverflow.ellipsis)),
+              Text("$text", style: textStyleWhite14px500w, maxLines: 2, overflow: TextOverflow.ellipsis)),
         ],
       ),
     );
@@ -107,28 +107,47 @@ class Utility {
     fToast.showToast(
       child: toast,
       gravity: ToastGravity.CENTER,
-      toastDuration: Duration(seconds: 2),
+      toastDuration: Duration(seconds: 3),
     );
   }
 
+  static void showErrorToastT(BuildContext context, String text) async {
+    FToast fToast = FToast(context);
+    Widget toast = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 6.0),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0), color: AppColors.red),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.warning_rounded, color: AppColors.white),
+          SizedBox(width: 6.0),
+          Expanded(
+              child:
+              Text("$text", style: textStyleWhite14px500w, maxLines: 2, overflow: TextOverflow.ellipsis)),
+        ],
+      ),
+    );
+
+    fToast.showToast(
+      child: toast,
+      gravity: ToastGravity.TOP,
+      toastDuration: Duration(seconds: 3),
+    );
+  }
 
   static void showErrorToastB(BuildContext context, String text) async {
     FToast fToast = FToast(context);
     Widget toast = Container(
       padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 6.0),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(4.0),
-          color: AppColors.colorPrimary.withOpacity(0.8)),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0), color: AppColors.red),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.warning_rounded, color: AppColors.red),
+          Icon(Icons.warning_rounded, color: AppColors.white),
           SizedBox(width: 6.0),
           Expanded(
               child:
-              Text("$text", style: textStyleRed12px600w,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis)),
+              Text("$text", style: textStyleWhite14px500w, maxLines: 2, overflow: TextOverflow.ellipsis)),
         ],
       ),
     );
@@ -136,7 +155,7 @@ class Utility {
     fToast.showToast(
       child: toast,
       gravity: ToastGravity.BOTTOM,
-      toastDuration: Duration(seconds: 2),
+      toastDuration: Duration(seconds: 3),
     );
   }
 

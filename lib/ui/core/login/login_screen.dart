@@ -4,20 +4,27 @@ import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
 import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/res/Strings.dart';
-import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
+import 'package:piramal_channel_partner/ui/core/core_presenter.dart';
+import 'package:piramal_channel_partner/ui/core/login/login_view.dart';
+import 'package:piramal_channel_partner/ui/core/login/model/token_response.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
-import 'package:provider/provider.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({Key key}) : super(key: key);
+class LoginScreen extends StatelessWidget implements LoginView {
+  LoginScreen({Key key}) : super(key: key);
   final subTextStyle = textStyleSubText14px500w;
   final mainTextStyle = textStyle14px500w;
+  final TextEditingController emailTextController = TextEditingController();
+  final TextEditingController otpTextController = TextEditingController();
+  BuildContext _context;
+
+  TokenResponse _tokenResponse;
 
   @override
   Widget build(BuildContext context) {
     // 18% from top
-    final perTop18 = Utility.screenHeight(context) * 0.18;
+    final perTop18 = Utility.screenHeight(context) * 0.12;
+    _context = context;
     return Scaffold(
       body: Container(
         margin: EdgeInsets.symmetric(horizontal: 20.0),
@@ -39,9 +46,7 @@ class LoginScreen extends StatelessWidget {
                 onTap: () {
                   Navigator.pushNamed(context, Screens.kSignupScreen);
                 },
-                child: Container(
-                    padding: EdgeInsets.all(10.0),
-                    child: Text(kCreateAccountText, style: subTextStyle)),
+                child: Container(padding: EdgeInsets.all(10.0), child: Text(kCreateAccountText, style: subTextStyle)),
               ),
             ],
           ),
@@ -70,7 +75,7 @@ class LoginScreen extends StatelessWidget {
             child: TextFormField(
               obscureText: false,
               textAlign: TextAlign.left,
-              // controller: widget.textEditingController ?? _controller,
+              controller: emailTextController,
               maxLines: 1,
               textCapitalization: TextCapitalization.none,
               style: subTextStyle,
@@ -111,7 +116,7 @@ class LoginScreen extends StatelessWidget {
             child: TextFormField(
               obscureText: true,
               textAlign: TextAlign.left,
-              // controller: widget.textEditingController ?? _controller,
+              controller: otpTextController,
               maxLines: 1,
               textCapitalization: TextCapitalization.none,
               style: subTextStyle,
@@ -138,10 +143,29 @@ class LoginScreen extends StatelessWidget {
       height: 36,
       text: kLogin,
       onTap: () {
-        var provider = Provider.of<BaseProvider>(context, listen: false);
-        provider.showToolTip();
-        Navigator.pushNamed(context, Screens.kHomeBase);
+        CorePresenter presenter = CorePresenter(this);
+        presenter.getAccessToken();
+        // var provider = Provider.of<BaseProvider>(context, listen: false);
+        // provider.showToolTip();
+        // Navigator.pushNamed(context, Screens.kHomeBase);
       },
     );
+  }
+
+  @override
+  onTokenGenerated(TokenResponse tokenResponse) {
+    _tokenResponse = tokenResponse;
+    CorePresenter presenter = CorePresenter(this);
+    presenter.sendEmailOtp(emailTextController.text.toString());
+  }
+
+  @override
+  onOtpSent(int otp) {
+
+  }
+
+  @override
+  onError(String message) {
+    Utility.showErrorToastB(_context, message);
   }
 }
