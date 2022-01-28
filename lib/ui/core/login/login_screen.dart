@@ -11,6 +11,7 @@ import 'package:piramal_channel_partner/ui/core/login/model/login_response.dart'
 import 'package:piramal_channel_partner/ui/core/login/model/token_response.dart';
 import 'package:piramal_channel_partner/user/AuthUser.dart';
 import 'package:piramal_channel_partner/user/CurrentUser.dart';
+import 'package:piramal_channel_partner/utils/Dialogs.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
 
@@ -164,6 +165,7 @@ class _LoginScreenState extends State<LoginScreen> implements LoginView {
       height: 36,
       text: "$text",
       onTap: () {
+        Dialogs.showLoader(context, "Please wait ...");
         if (otp == null)
           sendOTP();
         else
@@ -207,6 +209,7 @@ class _LoginScreenState extends State<LoginScreen> implements LoginView {
 
   @override
   onOtpSent(int otp) {
+    Dialogs.hideLoader(context);
     Utility.showSuccessToastB(_context, "OTP sent");
     this.otp = otp;
     setState(() {});
@@ -215,6 +218,7 @@ class _LoginScreenState extends State<LoginScreen> implements LoginView {
   @override
   onError(String message) {
     Utility.showErrorToastB(_context, message);
+    Dialogs.hideLoader(context);
   }
 
   resetOTP() {
@@ -225,6 +229,7 @@ class _LoginScreenState extends State<LoginScreen> implements LoginView {
   @override
   onEmailVerified(LoginResponse loginResponse) async {
     //Save userId
+    Dialogs.hideLoader(context);
     var currentUser = await AuthUser.getInstance().getCurrentUser();
     currentUser.userCredentials = loginResponse;
     AuthUser.getInstance().login(currentUser);

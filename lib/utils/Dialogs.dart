@@ -4,7 +4,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
-import 'package:piramal_channel_partner/res/Images.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
 import 'Utility.dart';
@@ -37,8 +36,8 @@ class Dialogs {
 
   static ProgressDialog _dialog;
 
-  static void showLoader(BuildContext context, String description, String title) {
-    print(context.toString() + 'nameeeeeeeeeeee');
+  static void showLoader(BuildContext context, String description) {
+    // print(context.toString() + 'nameeeeeeeeeeee');
     _dialog = ProgressDialog(context,
         type: ProgressDialogType.Normal,
         isDismissible: false,
@@ -50,8 +49,8 @@ class Dialogs {
               Container(width: 24.0, height: 24.0, child: CircularProgressIndicator()),
               horizontalSpace(20.0),
               Expanded(
-                  child:
-                      Text('$description', style: textStylePrimary14px500w, overflow: TextOverflow.ellipsis)),
+                child: Text('$description', style: textStylePrimary14px500w, overflow: TextOverflow.ellipsis),
+              ),
             ],
           ),
         ));
@@ -216,8 +215,7 @@ class Dialogs {
     );
   }
 
-  static showCustomDialog(BuildContext context,
-      {Function onAccept, Function onReject, String title, String message}) {
+  static showCustomDialog(BuildContext context, {Function onAccept, Function onReject, String title, String message}) {
     // set up the buttons
     Widget cancelButton = FlatButton(
       child: Text(
