@@ -5,8 +5,10 @@ import 'package:piramal_channel_partner/api/api_controller_expo.dart';
 import 'package:piramal_channel_partner/api/api_end_points.dart';
 import 'package:piramal_channel_partner/ui/core/core_view.dart';
 import 'package:piramal_channel_partner/ui/core/login/login_view.dart';
+import 'package:piramal_channel_partner/ui/core/login/model/login_response.dart';
 import 'package:piramal_channel_partner/ui/core/login/model/otp_response.dart';
 import 'package:piramal_channel_partner/ui/core/login/model/token_response.dart';
+import 'package:piramal_channel_partner/user/AuthUser.dart';
 import 'package:piramal_channel_partner/utils/NetworkCheck.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 
@@ -40,20 +42,30 @@ class CorePresenter {
   }
 
   void sendEmailOtp(String email) async {
+    //check for internal token
+    if (await AuthUser.getInstance().hasToken()) {
+      _v.onError("Token not found");
+      return;
+    }
+
+    //check network
     if (!await NetworkCheck.check()) return;
-    int mobileOtp = genRandomNumber();
+
+    int mobileOtp = _genRandomNumber();
 
     var body = {
       "EmailId": "$email",
       "GenOTP": "$mobileOtp",
     };
 
-    apiController.post(EndPoints.SEND_OTP, body: body)
+    apiController.post(EndPoints.SEND_OTP, body: body, headers: await Utility.header())
       ..then((response) {
         OTPResponse otpResponse = OTPResponse.fromJson(response.data);
         LoginView loginView = _v as LoginView;
-        if (otpResponse.returnCode) loginView.onOtpSent(mobileOtp);
-        else loginView.onError(otpResponse.message);
+        if (otpResponse.returnCode)
+          loginView.onOtpSent(mobileOtp);
+        else
+          loginView.onError(otpResponse.message);
       })
       ..catchError((e) {
         _v.onError(e.message);
@@ -61,7 +73,36 @@ class CorePresenter {
       });
   }
 
-  int genRandomNumber() {
+  void verifyEmail(String email) async {
+    //check for internal token
+    if (await AuthUser.getInstance().hasToken()) {
+      _v.onError("Token not found");
+      return;
+    }
+
+    //check network
+    if (!await NetworkCheck.check()) return;
+
+    var body = {
+      "EmailId": "$email",
+    };
+
+    apiController.post(EndPoints.VERIFY_EMAIL, body: body, headers: await Utility.header())
+      ..then((response) {
+        LoginResponse loginResponse = LoginResponse.fromJson(response.data);
+        LoginView loginView = _v as LoginView;
+        if (loginResponse.returnCode)
+          loginView.onEmailVerified(loginResponse);
+        else
+          loginView.onError(loginResponse.message);
+      })
+      ..catchError((e) {
+        _v.onError(e.message);
+        Utility.log(tag, e.toString());
+      });
+  }
+
+  int _genRandomNumber() {
     var rng = new Random();
     var code = rng.nextInt(900) + 1000;
     Utility.log(tag, code);

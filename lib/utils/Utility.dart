@@ -1,11 +1,12 @@
 import 'dart:developer' as dev;
 
+import 'package:flutter/foundation.dart' show kIsWeb ;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:flutter/foundation.dart' show kIsWeb ;
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
+import 'package:piramal_channel_partner/user/AuthUser.dart';
 
 /// Created by Pratik Kataria on 20-02-2021.
 
@@ -332,7 +333,7 @@ class Utility {
   }
 
   static Future<Map<String, String>> header() async {
-    // return {'Authorization': await AuthUser.getInstance().token()};
+    return {'Authorization': await AuthUser.getInstance().token()};
   }
 }
 

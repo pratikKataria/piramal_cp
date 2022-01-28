@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
@@ -6,25 +7,40 @@ import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/res/Strings.dart';
 import 'package:piramal_channel_partner/ui/core/core_presenter.dart';
 import 'package:piramal_channel_partner/ui/core/login/login_view.dart';
+import 'package:piramal_channel_partner/ui/core/login/model/login_response.dart';
 import 'package:piramal_channel_partner/ui/core/login/model/token_response.dart';
+import 'package:piramal_channel_partner/user/AuthUser.dart';
+import 'package:piramal_channel_partner/user/CurrentUser.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
 
-class LoginScreen extends StatelessWidget implements LoginView {
+class LoginScreen extends StatefulWidget {
   LoginScreen({Key key}) : super(key: key);
+
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> implements LoginView {
   final subTextStyle = textStyleSubText14px500w;
+
   final mainTextStyle = textStyle14px500w;
+
   final TextEditingController emailTextController = TextEditingController();
+
   final TextEditingController otpTextController = TextEditingController();
+
   BuildContext _context;
+
+  int otp;
 
   TokenResponse _tokenResponse;
 
   @override
   Widget build(BuildContext context) {
     // 18% from top
-    final perTop18 = Utility.screenHeight(context) * 0.12;
     _context = context;
+    final perTop18 = Utility.screenHeight(context) * 0.12;
     return Scaffold(
       body: Container(
         margin: EdgeInsets.symmetric(horizontal: 20.0),
@@ -36,17 +52,20 @@ class LoginScreen extends StatelessWidget implements LoginView {
               verticalSpace(perTop18),
               emailField(),
               verticalSpace(10.0),
-              passwordField(),
+              if (otp != null) passwordField(),
               verticalSpace(18.0),
               Text(kForgotPasswordText, style: subTextStyle),
-              verticalSpace(110.0),
-              loginButton(context),
+              verticalSpace(50.0),
+              loginButton(otp != null ? "Log In" : "Send OTP"),
               verticalSpace(10.0),
               InkWell(
                 onTap: () {
                   Navigator.pushNamed(context, Screens.kSignupScreen);
                 },
-                child: Container(padding: EdgeInsets.all(10.0), child: Text(kCreateAccountText, style: subTextStyle)),
+                child: Container(
+                  padding: EdgeInsets.all(10.0),
+                  child: Text(kCreateAccountText, style: subTextStyle),
+                ),
               ),
             ],
           ),
@@ -69,7 +88,7 @@ class LoginScreen extends StatelessWidget implements LoginView {
           Container(
             width: 65,
             margin: EdgeInsets.symmetric(horizontal: 12.0),
-            child: Text("Email", style: mainTextStyle),
+            child: Text("Email /Mobile", style: mainTextStyle),
           ),
           Expanded(
             child: TextFormField(
@@ -86,6 +105,7 @@ class LoginScreen extends StatelessWidget implements LoginView {
                 suffixStyle: TextStyle(color: AppColors.textColor),
               ),
               onChanged: (String val) {
+                resetOTP();
                 /*      widget.onTextChange(val);
                         resetErrorOnTyping();*/
               },
@@ -110,14 +130,15 @@ class LoginScreen extends StatelessWidget implements LoginView {
           Container(
             width: 65,
             margin: EdgeInsets.symmetric(horizontal: 12.0),
-            child: Text("Password", style: mainTextStyle),
+            child: Text("OTP", style: mainTextStyle),
           ),
           Expanded(
             child: TextFormField(
-              obscureText: true,
+              // obscureText: true,
               textAlign: TextAlign.left,
               controller: otpTextController,
               maxLines: 1,
+              inputFormatters: [LengthLimitingTextInputFormatter(4)],
               textCapitalization: TextCapitalization.none,
               style: subTextStyle,
               decoration: InputDecoration(
@@ -137,14 +158,17 @@ class LoginScreen extends StatelessWidget implements LoginView {
     );
   }
 
-  PmlButton loginButton(BuildContext context) {
+  PmlButton loginButton(String text) {
     return PmlButton(
-      width: Utility.screenWidth(context) * 0.58,
+      width: Utility.screenWidth(_context) * 0.58,
       height: 36,
-      text: kLogin,
+      text: "$text",
       onTap: () {
-        CorePresenter presenter = CorePresenter(this);
-        presenter.getAccessToken();
+        if (otp == null)
+          sendOTP();
+        else
+          verifyOTP();
+
         // var provider = Provider.of<BaseProvider>(context, listen: false);
         // provider.showToolTip();
         // Navigator.pushNamed(context, Screens.kHomeBase);
@@ -152,20 +176,57 @@ class LoginScreen extends StatelessWidget implements LoginView {
     );
   }
 
+  void sendOTP() {
+    CorePresenter presenter = CorePresenter(this);
+    presenter.getAccessToken();
+    presenter.sendEmailOtp(emailTextController.text.toString());
+  }
+
+  void verifyOTP() {
+    if (otpTextController.text.toString() != otp.toString()) {
+      onError("Please enter correct OTP");
+      return;
+    }
+
+    CorePresenter presenter = CorePresenter(this);
+    presenter.verifyEmail(emailTextController.text.toString());
+  }
+
   @override
   onTokenGenerated(TokenResponse tokenResponse) {
     _tokenResponse = tokenResponse;
+
+    //Save token
+    var currentUser = CurrentUser()..tokenResponse = tokenResponse;
+    AuthUser.getInstance().saveToken(currentUser);
+
+    //sent otp request
     CorePresenter presenter = CorePresenter(this);
     presenter.sendEmailOtp(emailTextController.text.toString());
   }
 
   @override
   onOtpSent(int otp) {
-
+    Utility.showSuccessToastB(_context, "OTP sent");
+    this.otp = otp;
+    setState(() {});
   }
 
   @override
   onError(String message) {
     Utility.showErrorToastB(_context, message);
+  }
+
+  resetOTP() {
+    otp = null;
+    setState(() {});
+  }
+
+  @override
+  onEmailVerified(LoginResponse loginResponse) async {
+    //Save userId
+    var currentUser = await AuthUser.getInstance().getCurrentUser();
+    currentUser.userCredentials = loginResponse;
+    AuthUser.getInstance().login(currentUser);
   }
 }

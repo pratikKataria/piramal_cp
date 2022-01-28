@@ -8,5 +8,5 @@ class EndPoints {
   static const String EMAIL_LOGIN = BASE_URL + "/CP_Mobile_App/EmailLoginCP";
   static const String MOBILE_LOGIN = BASE_URL + "/CP_Mobile_App/MobileLogincp";
   static const String SEND_OTP = BASE_URL + "/CP_Mobile_App/EmailOTPCP";
-
+  static const String VERIFY_EMAIL = BASE_URL + "/CP_Mobile_App/EmailLoginCP";
 }
