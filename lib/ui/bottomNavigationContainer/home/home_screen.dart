@@ -5,6 +5,10 @@ import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
 import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
+import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/homeWidgets/booking_card_widget.dart';
+import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/home_presenter.dart';
+import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/home_view.dart';
+import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/booking_response.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
 import 'package:piramal_channel_partner/widgets/pml_outline_button.dart';
@@ -17,15 +21,19 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
+class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin implements HomeView {
   TabController _tabController;
   bool filterIsOpen = true;
   String currentSelectedTab = "All";
+  HomePresenter _homePresenter;
+
+  List<Widget> bookingListWidgets = [];
 
   @override
   void initState() {
     _tabController = TabController(length: 3, vsync: this);
-
+    _homePresenter = HomePresenter(this);
+    _homePresenter.getBookingList();
     super.initState();
   }
 
@@ -87,11 +95,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                   ],
                 ),
                 ListView(
-                  children: [
-                    //Card one
-                    buildFirstCardB(),
-
-                  ],
+                  children: bookingListWidgets,
                 ),
               ],
             ),
@@ -675,4 +679,20 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
       ],
     );
   }
+
+  @override
+  void onBookingListFetched(List<BookingResponse> brList) {
+    brList.forEach((element) {
+      bookingListWidgets.add(BookingCardWidget(element));
+    });
+    setState(() {});
+  }
+
+  @override
+  onError(String message) {
+    throw UnimplementedError();
+  }
+
+  @override
+  void onWalkInListFetched() {}
 }
