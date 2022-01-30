@@ -7,6 +7,7 @@ import 'package:piramal_channel_partner/res/Images.dart';
 import 'package:piramal_channel_partner/ui/cpEvent/cp_event_presenter.dart';
 import 'package:piramal_channel_partner/ui/cpEvent/cp_event_view.dart';
 import 'package:piramal_channel_partner/ui/cpEvent/model/cp_event_response.dart';
+import 'package:piramal_channel_partner/ui/cpEvent/model/cp_event_status_update_response.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
 
@@ -43,7 +44,7 @@ class _CPEventScreenState extends State<CPEventScreen> implements CPEventView {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             verticalSpace(22.0),
-            Text("CP Events (1)", style: textStyle24px500w),
+            Text("CP Events (${cpEventList.length})", style: textStyle24px500w),
             verticalSpace(33.0),
             Expanded(
               child: ListView(
@@ -110,18 +111,20 @@ class _CPEventScreenState extends State<CPEventScreen> implements CPEventView {
                       height: 32.0,
                       text: "Attend",
                       color: AppColors.attendButtonColor,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 20.0,
-                      ),
+                      padding: EdgeInsets.symmetric(horizontal: 20.0),
+                      onTap: () {
+                        presenter.revertToEvent(context, "Attend", cpEventData.cpeventId);
+                      },
                     ),
                     horizontalSpace(10.0),
                     PmlButton(
                       height: 32.0,
                       text: "Tentative",
                       color: AppColors.tentativeButtonColor,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 20.0,
-                      ),
+                      padding: EdgeInsets.symmetric(horizontal: 20.0),
+                      onTap: () {
+                        presenter.revertToEvent(context, "Tentative", cpEventData.cpeventId);
+                      },
                     )
                   ],
                 )
@@ -156,6 +159,11 @@ class _CPEventScreenState extends State<CPEventScreen> implements CPEventView {
     cpEventList.clear();
     cpEventList.addAll(response);
     setState(() {});
+  }
+
+  @override
+  void onCpEventStatusUpdated(CpEventStatusUpdateResponse response) {
+    Utility.showSuccessToastB(context, response.availabilityStatus);
   }
 }
 

@@ -18,5 +18,6 @@ class EndPoints {
   static const String DELETE_LEAD = BASE_URL + "/CP_Mobile_App/DeleteCplead";
   static const String CREATE_LEAD = BASE_URL + "/CP_Mobile_App/CPLeadDetails";
   static const String CP_EVENT_LIST = BASE_URL + "/CP_Mobile_App/CPEvents";
+  static const String CP_EVENT_AVAILABILITY = BASE_URL + "/CP_Mobile_App/CPEventsAvailability";
 
 }
