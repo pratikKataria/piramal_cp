@@ -15,5 +15,7 @@ class EndPoints {
   static const String SCHEDULE_VISIT = BASE_URL + "/CP_Mobile_App/Createactivityschedulesv";
   static const String UNIT_DETAIL = BASE_URL + "/CP_Mobile_App/CustomerUnitdetails";
   static const String ALL_LEAD_LIST = BASE_URL + "/CP_Mobile_App/Allleaddetails";
+  static const String DELETE_LEAD = BASE_URL + "/CP_Mobile_App/DeleteCplead";
+  static const String CREATE_LEAD = BASE_URL + "/CP_Mobile_App/CPLeadDetails";
 
 }

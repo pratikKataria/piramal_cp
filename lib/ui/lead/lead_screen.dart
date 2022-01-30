@@ -129,6 +129,7 @@ class _LeadScreenState extends State<LeadScreen> implements LeadView {
                 width: 32.0,
                 color: AppColors.colorPrimaryLight,
                 child: Icon(Icons.delete, color: AppColors.colorPrimary, size: 16),
+                onTap: () => leadPresenter.deleteLead(context, leadData),
               ),
             ],
           ),
@@ -173,5 +174,11 @@ class _LeadScreenState extends State<LeadScreen> implements LeadView {
   @override
   onError(String message) {
     Utility.showErrorToastB(context, message);
+  }
+
+  @override
+  void onLeadDeleted(AllLeadResponse response) {
+    listOfList.remove(response);
+    setState(() {});
   }
 }
