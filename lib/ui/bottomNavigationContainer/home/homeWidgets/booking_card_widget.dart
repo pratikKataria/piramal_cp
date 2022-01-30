@@ -5,14 +5,16 @@ import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
 import 'package:piramal_channel_partner/res/Screens.dart';
+import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/home_presenter.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/booking_response.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class BookingCardWidget extends StatelessWidget {
   final BookingResponse _bookingResponse;
+  final HomePresenter _presenter;
 
-  const BookingCardWidget(this._bookingResponse, {Key key}) : super(key: key);
+  const BookingCardWidget(this._bookingResponse, this._presenter, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -98,16 +100,7 @@ class BookingCardWidget extends StatelessWidget {
           ),
           Row(
             children: [
-              Container(
-                width: 35,
-                height: 35,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.colorPrimaryLight,
-                ),
-                padding: EdgeInsets.all(10.0),
-                child: Image.asset(Images.kIconCalender),
-              ),
+              calenderButton(context),
               horizontalSpace(8.0),
               callButton(),
               horizontalSpace(8.0),
@@ -121,11 +114,27 @@ class BookingCardWidget extends StatelessWidget {
     );
   }
 
-  InkWell addButton(BuildContext context) {
+  InkWell calenderButton(BuildContext context) {
     return InkWell(
       onTap: () {
         _selectDate(context);
       },
+      child: Container(
+        width: 35,
+        height: 35,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: AppColors.colorPrimaryLight,
+        ),
+        padding: EdgeInsets.all(10.0),
+        child: Image.asset(Images.kIconCalender),
+      ),
+    );
+  }
+
+  InkWell addButton(BuildContext context) {
+    return InkWell(
+      onTap: () {},
       child: Container(
         width: 35,
         height: 35,
@@ -201,29 +210,20 @@ class BookingCardWidget extends StatelessWidget {
       firstDate: DateTime.now(),
       lastDate: DateTime(2100),
     );
-     if (picked != null) {
-       _selectTime(context);
-     }
+    if (picked != null) {
+      String date = "${picked.year}-${picked.month}-${picked.day}";
+      _selectTime(context, date);
+    }
   }
 
-  Future<Null> _selectTime(BuildContext context) async {
+  Future<Null> _selectTime(BuildContext context, String datePicked) async {
     final TimeOfDay picked = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
     );
+
     if (picked != null) {
-
+      _presenter.scheduleTime(context, _bookingResponse.sfdcid, datePicked);
     }
-
-      // setState(() {
-      //   selectedTime = picked;
-      //   _hour = selectedTime.hour.toString();
-      //   _minute = selectedTime.minute.toString();
-      //   _time = _hour + ' : ' + _minute;
-      //   _timeController.text = _time;
-      //   _timeController.text = formatDate(
-      //       DateTime(2019, 08, 1, selectedTime.hour, selectedTime.minute),
-      //       [hh, ':', nn, " ", am]).toString();
-      // });
   }
 }

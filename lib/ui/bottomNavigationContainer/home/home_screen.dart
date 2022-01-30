@@ -8,6 +8,7 @@ import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/homeWi
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/home_presenter.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/home_view.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/booking_response.dart';
+import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/schedule_visit_response.dart';
 import 'package:piramal_channel_partner/ui/core/login/model/token_response.dart';
 import 'package:piramal_channel_partner/user/AuthUser.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
@@ -292,7 +293,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   @override
   void onBookingListFetched(List<BookingResponse> brList) {
     brList.forEach((element) {
-      bookingListWidgets.add(BookingCardWidget(element));
+      bookingListWidgets.add(BookingCardWidget(element, _homePresenter));
     });
     setState(() {});
   }
@@ -305,7 +306,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   @override
   void onWalkInListFetched(List<BookingResponse> wList) {
     wList.forEach((element) {
-      walkInListWidgets.add(WalkInCardWidget(element));
+      walkInListWidgets.add(WalkInCardWidget(element, _homePresenter));
     });
     setState(() {});
     _homePresenter.getBookingList();
@@ -320,5 +321,11 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 
     //sent request again
     _homePresenter.getWalkInList();
+  }
+
+  @override
+  void onSiteVisitScheduled(ScheduleVisitResponse visitResponse) {
+    // Navigator.pop(context);
+    Utility.showSuccessToastB(context, "Visit Scheduled");
   }
 }

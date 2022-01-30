@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:piramal_channel_partner/api/api_controller_expo.dart';
 import 'package:piramal_channel_partner/api/api_end_points.dart';
 import 'package:piramal_channel_partner/api/api_error_parser.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/booking_response.dart';
+import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/schedule_visit_response.dart';
 import 'package:piramal_channel_partner/user/AuthUser.dart';
 import 'package:piramal_channel_partner/utils/NetworkCheck.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
@@ -80,6 +82,39 @@ class HomePresenter {
         //   loginView.onOtpSent(mobileOtp);
         // else
         //   loginView.onError(otpResponse.message);
+      })
+      ..catchError((e) {
+        ApiErrorParser.getResult(e, _v);
+      });
+  }
+
+  void scheduleTime(BuildContext context, String otyId, String visitDate) async {
+    //check for internal token
+    if (await AuthUser.getInstance().hasToken()) {
+      _v.onError("Token not found");
+      return;
+    }
+
+    //check network
+    if (!await NetworkCheck.check()) {
+      _v.onError("Network Error");
+      return;
+    }
+
+    var body = {
+      "CustomerAccountId": "001p000000y1SqW",
+      "CustomerOpportunityId": otyId,
+      "Dateofvisit": visitDate //2022-1-21
+    };
+
+    apiController.post(EndPoints.SCHEDULE_VISIT, body: body, headers: await Utility.header())
+      ..then((response) {
+        ScheduleVisitResponse visitResponse = ScheduleVisitResponse.fromJson(response.data);
+        if (visitResponse.returnCode) {
+          _v.onSiteVisitScheduled(visitResponse);
+        } else {
+          _v.onError(visitResponse.message);
+        }
       })
       ..catchError((e) {
         ApiErrorParser.getResult(e, _v);

@@ -9,10 +9,13 @@ import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../home_presenter.dart';
+
 class WalkInCardWidget extends StatelessWidget {
   final BookingResponse _bookingResponse;
+  final HomePresenter _presenter;
 
-  const WalkInCardWidget(this._bookingResponse, {Key key}) : super(key: key);
+  const WalkInCardWidget(this._bookingResponse, this._presenter, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -98,16 +101,7 @@ class WalkInCardWidget extends StatelessWidget {
           ),
           Row(
             children: [
-              Container(
-                width: 35,
-                height: 35,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.colorPrimaryLight,
-                ),
-                padding: EdgeInsets.all(10.0),
-                child: Image.asset(Images.kIconCalender),
-              ),
+              calenderButton(context),
               horizontalSpace(8.0),
               callButton(),
               horizontalSpace(8.0),
@@ -125,6 +119,24 @@ class WalkInCardWidget extends StatelessWidget {
             ],
           ),
         ],
+      ),
+    );
+  }
+
+  InkWell calenderButton(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        _selectDate(context);
+      },
+      child: Container(
+        width: 35,
+        height: 35,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: AppColors.colorPrimaryLight,
+        ),
+        padding: EdgeInsets.all(10.0),
+        child: Image.asset(Images.kIconCalender),
       ),
     );
   }
@@ -165,7 +177,7 @@ class WalkInCardWidget extends StatelessWidget {
   }
 
   void openWhatsapp() async {
-    var whatsapp = "+91${_bookingResponse?.mobilenumber??""}";
+    var whatsapp = "+91${_bookingResponse?.mobilenumber ?? ""}";
     var whatsappURl_android = "whatsapp://send?phone=" + whatsapp + "&text=hello";
     var whatappURL_ios = "https://wa.me/$whatsapp?text=${Uri.parse("hello")}";
     if (Platform.isIOS) {
@@ -182,6 +194,30 @@ class WalkInCardWidget extends StatelessWidget {
       } else {
         // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: new Text("whatsapp no installed")));
       }
+    }
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2100),
+    );
+    if (picked != null) {
+      String date = "${picked.year}-${picked.month}-${picked.day}";
+      _selectTime(context, date);
+    }
+  }
+
+  Future<Null> _selectTime(BuildContext context, String datePicked) async {
+    final TimeOfDay picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+
+    if (picked != null) {
+      _presenter.scheduleTime(context, _bookingResponse.sfdcid, datePicked);
     }
   }
 }

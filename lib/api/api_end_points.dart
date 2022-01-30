@@ -12,5 +12,7 @@ class EndPoints {
 
   static const String GET_BOOKING = BASE_URL + "/CP_Mobile_App/OpportunityDetails";
   static const String GET_WALK_IN = BASE_URL + "/CP_Mobile_App/WalkinOpportunityDetails";
+  static const String SCHEDULE_VISIT = BASE_URL + "/CP_Mobile_App/Createactivityschedulesv";
+  static const String UNIT_DETAIL = BASE_URL + "/CP_Mobile_App/CustomerUnitdetails";
 
 }
