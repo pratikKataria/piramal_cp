@@ -3,13 +3,31 @@ import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
+import 'package:piramal_channel_partner/ui/currentPromotions/current_promo_presenter.dart';
+import 'package:piramal_channel_partner/ui/currentPromotions/current_promo_view.dart';
+import 'package:piramal_channel_partner/ui/currentPromotions/model/current_promo_response.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
-import 'package:piramal_channel_partner/widgets/pml_button.dart';
 
-class CurrentPromotionScreen extends StatelessWidget {
+class CurrentPromotionScreen extends StatefulWidget {
   const CurrentPromotionScreen({Key key}) : super(key: key);
+
+  @override
+  _CurrentPromotionScreenState createState() => _CurrentPromotionScreenState();
+}
+
+class _CurrentPromotionScreenState extends State<CurrentPromotionScreen> implements CurrentPromoView {
   final subTextStyle = textStyleSubText14px500w;
   final mainTextStyle = textStyle14px500w;
+
+  CurrentPromoPresenter promoPresenter;
+  List<CurrentPromoResponse> listOfPromos = [];
+
+  @override
+  void initState() {
+    super.initState();
+    promoPresenter = CurrentPromoPresenter(this);
+    promoPresenter.getProjectList(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,9 +70,9 @@ class CurrentPromotionScreen extends StatelessWidget {
                           height: 130.0,
                           decoration: BoxDecoration(
                               image: DecorationImage(
-                                image: AssetImage(Images.kImgEventPlaceholder1),
-                                fit: BoxFit.fill,
-                              )),
+                            image: AssetImage(Images.kImgEventPlaceholder1),
+                            fit: BoxFit.fill,
+                          )),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
@@ -96,7 +114,11 @@ class CurrentPromotionScreen extends StatelessWidget {
                                           shape: BoxShape.circle,
                                           color: AppColors.colorPrimary,
                                         ),
-                                        child: Icon(Icons.download_rounded, color: AppColors.white, size: 16,),
+                                        child: Icon(
+                                          Icons.download_rounded,
+                                          color: AppColors.white,
+                                          size: 16,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -105,8 +127,10 @@ class CurrentPromotionScreen extends StatelessWidget {
                               verticalSpace(10.0),
                               Text("South Mumbai - India", style: textStyleSubText14px500w),
                               verticalSpace(10.0),
-                              Text("- 0% SDR till March 31, 2021 \n- No floor rise on 2BHK City \n- Select",
-                                style: textStyle14px500w,)
+                              Text(
+                                "- 0% SDR till March 31, 2021 \n- No floor rise on 2BHK City \n- Select",
+                                style: textStyle14px500w,
+                              )
                             ],
                           ),
                         ),
@@ -114,7 +138,6 @@ class CurrentPromotionScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-
                   Container(
                     margin: EdgeInsets.only(bottom: 18.0),
                     decoration: BoxDecoration(
@@ -138,9 +161,9 @@ class CurrentPromotionScreen extends StatelessWidget {
                           height: 130.0,
                           decoration: BoxDecoration(
                               image: DecorationImage(
-                                image: AssetImage(Images.kImgEventPlaceholder),
-                                fit: BoxFit.fill,
-                              )),
+                            image: AssetImage(Images.kImgEventPlaceholder),
+                            fit: BoxFit.fill,
+                          )),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
@@ -182,7 +205,11 @@ class CurrentPromotionScreen extends StatelessWidget {
                                           shape: BoxShape.circle,
                                           color: AppColors.colorPrimary,
                                         ),
-                                        child: Icon(Icons.download_rounded, color: AppColors.white, size: 16,),
+                                        child: Icon(
+                                          Icons.download_rounded,
+                                          color: AppColors.white,
+                                          size: 16,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -191,8 +218,10 @@ class CurrentPromotionScreen extends StatelessWidget {
                               verticalSpace(10.0),
                               Text("South Mumbai - India", style: textStyleSubText14px500w),
                               verticalSpace(10.0),
-                              Text("- 0% SDR till March 31, 2021 \n- No floor rise on 2BHK City \n- Select",
-                                style: textStyle14px500w,)
+                              Text(
+                                "- 0% SDR till March 31, 2021 \n- No floor rise on 2BHK City \n- Select",
+                                style: textStyle14px500w,
+                              )
                             ],
                           ),
                         ),
@@ -228,5 +257,17 @@ class CurrentPromotionScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  @override
+  void onCurrentPromoListFetched(List<CurrentPromoResponse> projectListResponse) {
+    listOfPromos.clear();
+    listOfPromos.addAll(projectListResponse);
+    setState(() {});
+  }
+
+  @override
+  onError(String message) {
+    Utility.showErrorToastB(context, message);
   }
 }
