@@ -106,7 +106,7 @@ class MyApp extends StatelessWidget {
               break;
           }
         },
-        home: CurrentPromotionScreen(),
+        home: HomeBottomNavigationBaseScreen(),
       ),
     );
   }

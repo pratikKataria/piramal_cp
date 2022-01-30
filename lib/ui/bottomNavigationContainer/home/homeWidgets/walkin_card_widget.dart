@@ -73,10 +73,10 @@ class WalkInCardWidget extends StatelessWidget {
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(6),
-                    color: AppColors.colorPrimary,
+                    color: getRatingColor(_bookingResponse.newRating),
                   ),
                   padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-                  child: Text("Hot", style: textStyleWhite14px500w),
+                  child: Text("${_bookingResponse.newRating}", style: textStyleWhite14px500w),
                 ),
                 horizontalSpace(10.0),
                 Container(
@@ -85,17 +85,18 @@ class WalkInCardWidget extends StatelessWidget {
                     color: AppColors.chipColor,
                   ),
                   padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-                  child: Text("Validity: 23 Day", style: textStyle14px500w),
+                  child: Text("Validity: ${_bookingResponse.createdDays} Day", style: textStyle14px500w),
                 ),
                 horizontalSpace(10.0),
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    color: AppColors.chipColor,
+                if (_bookingResponse.revisit)
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(6),
+                      color: AppColors.chipColor,
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+                    child: Text("Revisit", style: textStyle14px500w),
                   ),
-                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-                  child: Text("Revisit", style: textStyle14px500w),
-                ),
               ],
             ),
           ),
@@ -121,6 +122,19 @@ class WalkInCardWidget extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Color getRatingColor(String rating) {
+    switch (rating.toUpperCase()) {
+      case "HOT":
+        return AppColors.colorPrimary;
+      case "WARM":
+        return AppColors.colorPrimaryLight;
+      case "COLD":
+        return AppColors.textColorBlue;
+      default:
+        return AppColors.colorPrimary;
+    }
   }
 
   InkWell calenderButton(BuildContext context) {
