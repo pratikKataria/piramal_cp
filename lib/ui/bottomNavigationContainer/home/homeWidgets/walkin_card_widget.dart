@@ -9,10 +9,10 @@ import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class BookingCardWidget extends StatelessWidget {
+class WalkInCardWidget extends StatelessWidget {
   final BookingResponse _bookingResponse;
 
-  const BookingCardWidget(this._bookingResponse, {Key key}) : super(key: key);
+  const WalkInCardWidget(this._bookingResponse, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -113,27 +113,18 @@ class BookingCardWidget extends StatelessWidget {
               horizontalSpace(8.0),
               whatsApp(),
               Spacer(),
-              addButton(context),
+              Container(
+                width: 35,
+                height: 35,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.colorSecondary,
+                ),
+                child: Icon(Icons.add, color: AppColors.white),
+              ),
             ],
           ),
         ],
-      ),
-    );
-  }
-
-  InkWell addButton(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        _selectDate(context);
-      },
-      child: Container(
-        width: 35,
-        height: 35,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: AppColors.colorSecondary,
-        ),
-        child: Icon(Icons.add, color: AppColors.white),
       ),
     );
   }
@@ -174,7 +165,7 @@ class BookingCardWidget extends StatelessWidget {
   }
 
   void openWhatsapp() async {
-    var whatsapp = "+91${_bookingResponse?.mobilenumber ?? ""}";
+    var whatsapp = "+91${_bookingResponse?.mobilenumber??""}";
     var whatsappURl_android = "whatsapp://send?phone=" + whatsapp + "&text=hello";
     var whatappURL_ios = "https://wa.me/$whatsapp?text=${Uri.parse("hello")}";
     if (Platform.isIOS) {
@@ -192,38 +183,5 @@ class BookingCardWidget extends StatelessWidget {
         // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: new Text("whatsapp no installed")));
       }
     }
-  }
-
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime.now(),
-      lastDate: DateTime(2100),
-    );
-     if (picked != null) {
-       _selectTime(context);
-     }
-  }
-
-  Future<Null> _selectTime(BuildContext context) async {
-    final TimeOfDay picked = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-    );
-    if (picked != null) {
-
-    }
-
-      // setState(() {
-      //   selectedTime = picked;
-      //   _hour = selectedTime.hour.toString();
-      //   _minute = selectedTime.minute.toString();
-      //   _time = _hour + ' : ' + _minute;
-      //   _timeController.text = _time;
-      //   _timeController.text = formatDate(
-      //       DateTime(2019, 08, 1, selectedTime.hour, selectedTime.minute),
-      //       [hh, ':', nn, " ", am]).toString();
-      // });
   }
 }

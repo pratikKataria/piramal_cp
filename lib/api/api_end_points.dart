@@ -11,5 +11,6 @@ class EndPoints {
   static const String VERIFY_EMAIL = BASE_URL + "/CP_Mobile_App/EmailLoginCP";
 
   static const String GET_BOOKING = BASE_URL + "/CP_Mobile_App/OpportunityDetails";
+  static const String GET_WALK_IN = BASE_URL + "/CP_Mobile_App/WalkinOpportunityDetails";
 
 }

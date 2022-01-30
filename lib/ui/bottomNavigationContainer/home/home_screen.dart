@@ -2,13 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
-import 'package:piramal_channel_partner/res/Images.dart';
-import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/homeWidgets/booking_card_widget.dart';
+import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/homeWidgets/walkin_card_widget.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/home_presenter.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/home_view.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/booking_response.dart';
+import 'package:piramal_channel_partner/ui/core/login/model/token_response.dart';
+import 'package:piramal_channel_partner/user/AuthUser.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
 import 'package:piramal_channel_partner/widgets/pml_outline_button.dart';
@@ -24,16 +25,17 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin implements HomeView {
   TabController _tabController;
   bool filterIsOpen = true;
-  String currentSelectedTab = "All";
+  String currentSelectedTab = "Walk in";
   HomePresenter _homePresenter;
 
   List<Widget> bookingListWidgets = [];
+  List<Widget> walkInListWidgets = [];
 
   @override
   void initState() {
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
     _homePresenter = HomePresenter(this);
-    _homePresenter.getBookingList();
+    _homePresenter.getWalkInList();
     super.initState();
   }
 
@@ -71,35 +73,30 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
               ],
             ),
           ),
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              physics: NeverScrollableScrollPhysics(),
-              children: [
-                ListView(
-                  children: [
-                    //Card one
-                    buildFirstCard(),
-
-                    //Card Two
-                    buildSecondCard(),
-                  ],
-                ),
-                ListView(
-                  children: [
-                    //Card one
-                    buildFirstCard(),
-
-                    //Card Two
-                    buildSecondCard(),
-                  ],
-                ),
-                ListView(
-                  children: bookingListWidgets,
-                ),
-              ],
+          if (walkInListWidgets.isNotEmpty)
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                physics: NeverScrollableScrollPhysics(),
+                children: [
+                  // ListView(
+                  //   children: [
+                  //     //Card one
+                  //     buildFirstCard(),
+                  //
+                  //     //Card Two
+                  //     buildSecondCard(),
+                  //   ],
+                  // ),
+                  ListView(
+                    children: walkInListWidgets,
+                  ),
+                  ListView(
+                    children: bookingListWidgets,
+                  ),
+                ],
+              ),
             ),
-          ),
         ],
       ),
     );
@@ -169,394 +166,6 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     );
   }
 
-  Container buildSecondCard() {
-    return Container(
-      height: 165,
-      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 2.0),
-      margin: EdgeInsets.only(bottom: 25.0, left: 20.0, right: 20.0),
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(6.0),
-        boxShadow: [
-          BoxShadow(
-            // box-shadow: 0px 10px 30px 0px #0000000D;
-            color: AppColors.colorSecondary.withOpacity(0.1),
-            blurRadius: 20.0,
-            spreadRadius: 5.0,
-            offset: Offset(0, 8),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Row(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(80.0),
-                child: Container(
-                  height: 37,
-                  width: 37,
-                  child: Image.asset(Images.kImgPlaceholder, fit: BoxFit.fill),
-                ),
-              ),
-              horizontalSpace(8.0),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("Vihaan khatri", style: textStyleRegular18pxW500),
-                  Text("Next Follow up: March 27th", style: textStyleSubText14px500w),
-                ],
-              ),
-            ],
-          ),
-          Container(
-            height: 30,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    color: Colors.blue,
-                  ),
-                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-                  child: Text("Cold", style: textStyleWhite14px500w),
-                ),
-                horizontalSpace(10.0),
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    color: AppColors.chipColor,
-                  ),
-                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-                  child: Text("Validity: 2 Day", style: textStyle14px500w),
-                ),
-                horizontalSpace(10.0),
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    color: AppColors.chipColor,
-                  ),
-                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-                  child: Text("Revisit", style: textStyle14px500w),
-                ),
-              ],
-            ),
-          ),
-          Row(
-            children: [
-              Container(
-                width: 35,
-                height: 35,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.colorPrimaryLight,
-                ),
-                padding: EdgeInsets.all(10.0),
-                child: Image.asset(Images.kIconCalender),
-              ),
-              horizontalSpace(8.0),
-              Container(
-                width: 35,
-                height: 35,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.colorPrimaryLight,
-                ),
-                padding: EdgeInsets.all(10.0),
-                child: Image.asset(Images.kIconPhone),
-              ),
-              horizontalSpace(8.0),
-              Container(
-                width: 35,
-                height: 35,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.colorPrimaryLight,
-                ),
-                child: Image.asset(Images.kIconWhatsApp),
-              ),
-              Spacer(),
-              Container(
-                width: 35,
-                height: 35,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.colorSecondary,
-                ),
-                child: Icon(Icons.add, color: AppColors.white),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Container buildFirstCard() {
-    return Container(
-      height: 165,
-      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 2.0),
-      margin: EdgeInsets.only(bottom: 18.0, left: 20.0, right: 20.0),
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(6.0),
-        boxShadow: [
-          BoxShadow(
-            // box-shadow: 0px 10px 30px 0px #0000000D;
-            color: AppColors.colorSecondary.withOpacity(0.1),
-            blurRadius: 20.0,
-            spreadRadius: 5.0,
-            offset: Offset(0, 8),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          InkWell(
-            onTap: () {
-              Navigator.pushNamed(context, Screens.kCustomerProfileDetailWalkin);
-            },
-            child: Row(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(80.0),
-                  child: Container(
-                    height: 37,
-                    width: 37,
-                    child: Image.asset(Images.kImgPlaceholder, fit: BoxFit.fill),
-                  ),
-                ),
-                horizontalSpace(8.0),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Narayana Patel", style: textStyleRegular18pxW500),
-                    Text("Next Follow up: March 27th", style: textStyleSubText14px500w),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          Container(
-            height: 30,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    color: AppColors.colorPrimary,
-                  ),
-                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-                  child: Text("Hot", style: textStyleWhite14px500w),
-                ),
-                horizontalSpace(10.0),
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    color: AppColors.chipColor,
-                  ),
-                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-                  child: Text("Validity: 23 Day", style: textStyle14px500w),
-                ),
-                horizontalSpace(10.0),
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    color: AppColors.chipColor,
-                  ),
-                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-                  child: Text("Revisit", style: textStyle14px500w),
-                ),
-              ],
-            ),
-          ),
-          Row(
-            children: [
-              Container(
-                width: 35,
-                height: 35,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.colorPrimaryLight,
-                ),
-                padding: EdgeInsets.all(10.0),
-                child: Image.asset(Images.kIconCalender),
-              ),
-              horizontalSpace(8.0),
-              Container(
-                width: 35,
-                height: 35,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.colorPrimaryLight,
-                ),
-                padding: EdgeInsets.all(10.0),
-                child: Image.asset(Images.kIconPhone),
-              ),
-              horizontalSpace(8.0),
-              Container(
-                width: 35,
-                height: 35,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.colorPrimaryLight,
-                ),
-                child: Image.asset(Images.kIconWhatsApp),
-              ),
-              Spacer(),
-              Container(
-                width: 35,
-                height: 35,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.colorSecondary,
-                ),
-                child: Icon(Icons.add, color: AppColors.white),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Container buildFirstCardB() {
-    return Container(
-      height: 165,
-      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 2.0),
-      margin: EdgeInsets.only(bottom: 18.0, left: 20.0, right: 20.0),
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(6.0),
-        boxShadow: [
-          BoxShadow(
-            // box-shadow: 0px 10px 30px 0px #0000000D;
-            color: AppColors.colorSecondary.withOpacity(0.1),
-            blurRadius: 20.0,
-            spreadRadius: 5.0,
-            offset: Offset(0, 8),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          InkWell(
-            onTap: () {
-              Navigator.pushNamed(context, Screens.kCustomerProfileDetailBooking);
-            },
-            child: Row(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(80.0),
-                  child: Container(
-                    height: 37,
-                    width: 37,
-                    child: Image.asset(Images.kImgPlaceholder, fit: BoxFit.fill),
-                  ),
-                ),
-                horizontalSpace(8.0),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Narayana Patel", style: textStyleRegular18pxW500),
-                    Text("Next Follow up: March 27th", style: textStyleSubText14px500w),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          Container(
-            height: 30,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    color: AppColors.colorPrimary,
-                  ),
-                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-                  child: Text("Hot", style: textStyleWhite14px500w),
-                ),
-                horizontalSpace(10.0),
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    color: AppColors.chipColor,
-                  ),
-                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-                  child: Text("Validity: 23 Day", style: textStyle14px500w),
-                ),
-                horizontalSpace(10.0),
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    color: AppColors.chipColor,
-                  ),
-                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-                  child: Text("Revisit", style: textStyle14px500w),
-                ),
-              ],
-            ),
-          ),
-          Row(
-            children: [
-              Container(
-                width: 35,
-                height: 35,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.colorPrimaryLight,
-                ),
-                padding: EdgeInsets.all(10.0),
-                child: Image.asset(Images.kIconCalender),
-              ),
-              horizontalSpace(8.0),
-              Container(
-                width: 35,
-                height: 35,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.colorPrimaryLight,
-                ),
-                padding: EdgeInsets.all(10.0),
-                child: Image.asset(Images.kIconPhone),
-              ),
-              horizontalSpace(8.0),
-              Container(
-                width: 35,
-                height: 35,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.colorPrimaryLight,
-                ),
-                child: Image.asset(Images.kIconWhatsApp),
-              ),
-              Spacer(),
-              Container(
-                width: 35,
-                height: 35,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.colorSecondary,
-                ),
-                child: Icon(Icons.add, color: AppColors.white),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
   TabBar buildTabs() {
     return TabBar(
       controller: _tabController,
@@ -569,30 +178,30 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
         setState(() {});
       },
       tabs: [
-        Tab(
-          child: currentSelectedTab == "All"
-              ? PmlOutlineButton(
-                  text: "All",
-                  height: 28.0,
-                  textStyle: textStyle12px500w,
-                  onTap: () {
-                    currentSelectedTab = "All";
-                    _tabController.index = 0;
-                    setState(() {});
-                  },
-                )
-              : PmlButton(
-                  text: "All",
-                  height: 28.0,
-                  textStyle: textStyleWhite12px500w,
-                  color: AppColors.colorSecondary,
-                  onTap: () {
-                    currentSelectedTab = "All";
-                    _tabController.index = 0;
-                    setState(() {});
-                  },
-                ),
-        ),
+        // Tab(
+        //   child: currentSelectedTab == "All"
+        //       ? PmlOutlineButton(
+        //           text: "All",
+        //           height: 28.0,
+        //           textStyle: textStyle12px500w,
+        //           onTap: () {
+        //             currentSelectedTab = "All";
+        //             _tabController.index = 0;
+        //             setState(() {});
+        //           },
+        //         )
+        //       : PmlButton(
+        //           text: "All",
+        //           height: 28.0,
+        //           textStyle: textStyleWhite12px500w,
+        //           color: AppColors.colorSecondary,
+        //           onTap: () {
+        //             currentSelectedTab = "All";
+        //             _tabController.index = 0;
+        //             setState(() {});
+        //           },
+        //         ),
+        // ),
         Tab(
           child: currentSelectedTab == "Walk in"
               ? PmlOutlineButton(
@@ -601,7 +210,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                   textStyle: textStyle12px500w,
                   onTap: () {
                     currentSelectedTab = "Walk in";
-                    _tabController.index = 1;
+                    _tabController.index = 0;
                     setState(() {});
                   },
                 )
@@ -612,7 +221,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                   color: AppColors.colorSecondary,
                   onTap: () {
                     currentSelectedTab = "Walk in";
-                    _tabController.index = 1;
+                    _tabController.index = 0;
                     setState(() {});
                   },
                 ),
@@ -625,7 +234,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                   textStyle: textStyle12px500w,
                   onTap: () {
                     currentSelectedTab = "Booking";
-                    _tabController.index = 2;
+                    _tabController.index = 1;
                     setState(() {});
                   },
                 )
@@ -636,7 +245,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                   color: AppColors.colorSecondary,
                   onTap: () {
                     currentSelectedTab = "Booking";
-                    _tabController.index = 2;
+                    _tabController.index = 1;
                     setState(() {});
                   },
                 ),
@@ -690,9 +299,26 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 
   @override
   onError(String message) {
-    throw UnimplementedError();
+    Utility.showErrorToastB(context, message);
   }
 
   @override
-  void onWalkInListFetched() {}
+  void onWalkInListFetched(List<BookingResponse> wList) {
+    wList.forEach((element) {
+      walkInListWidgets.add(WalkInCardWidget(element));
+    });
+    setState(() {});
+    _homePresenter.getBookingList();
+  }
+
+  @override
+  Future<void> onTokenRegenerated(TokenResponse tokenResponse) async {
+    //Save token
+    var currentUser = await AuthUser.getInstance().getCurrentUser();
+    currentUser.tokenResponse = tokenResponse;
+    AuthUser.getInstance().updateUser(currentUser);
+
+    //sent request again
+    _homePresenter.getWalkInList();
+  }
 }
