@@ -2,12 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:piramal_channel_partner/api/api_controller_expo.dart';
 import 'package:piramal_channel_partner/api/api_end_points.dart';
 import 'package:piramal_channel_partner/api/api_error_parser.dart';
+import 'package:piramal_channel_partner/ui/lead/addLead/add_lead_view.dart';
 import 'package:piramal_channel_partner/ui/lead/addLead/model/create_lead_request.dart';
+import 'package:piramal_channel_partner/ui/lead/addLead/model/create_lead_response.dart';
 import 'package:piramal_channel_partner/ui/lead/lead_marker_interface.dart';
 import 'package:piramal_channel_partner/ui/lead/model/all_lead_response.dart';
 import 'package:piramal_channel_partner/ui/lead/model/delete_lead_response.dart';
 import 'package:piramal_channel_partner/user/AuthUser.dart';
 import 'package:piramal_channel_partner/user/CurrentUser.dart';
+import 'package:piramal_channel_partner/utils/Dialogs.dart';
 import 'package:piramal_channel_partner/utils/NetworkCheck.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 
@@ -32,10 +35,12 @@ class LeadPresenter {
       return;
     }
 
-    var body = {"CustomerAccountId": "001p000000y1SqW"};
+    var body = {"CustomerAccountId": "001N000001S7nkdIAB"};
 
+    Dialogs.showLoader(context, "Please wait fetching your lead data ...");
     apiController.post(EndPoints.ALL_LEAD_LIST, body: body, headers: await Utility.header())
       ..then((response) {
+        Dialogs.hideLoader(context);
         List<AllLeadResponse> brList = [];
         var listOfDynamic = response.data as List;
         listOfDynamic.forEach((element) {
@@ -45,6 +50,7 @@ class LeadPresenter {
         (_v as LeadView).onAllLeadFetched(brList);
       })
       ..catchError((e) {
+        Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }
@@ -65,14 +71,16 @@ class LeadPresenter {
     var body = {
       "cpleadid": "${leadData.sfdcid}",
     };
-
+    Dialogs.showLoader(context, "Deleting your lead data ...");
     apiController.post(EndPoints.DELETE_LEAD, body: body, headers: await Utility.header())
       ..then((response) {
+        Dialogs.hideLoader(context);
         DeleteLeadResponse deleteLeadResponse = DeleteLeadResponse.fromJson(response.data);
         deleteLeadResponse.leadId = leadData.sfdcid;
         (_v as LeadView).onLeadDeleted(leadData);
       })
       ..catchError((e) {
+        Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }
@@ -94,13 +102,18 @@ class LeadPresenter {
     CurrentUser currentUser = await AuthUser.getInstance().getCurrentUser();
     request.customerAccountId = currentUser.userCredentials.accountId;
 
+    Dialogs.showLoader(context, "Creating your lead ...");
     apiController.post(EndPoints.CREATE_LEAD, body: request.toJson(), headers: await Utility.header())
       ..then((response) {
+        Dialogs.hideLoader(context);
+        CreateLeadResponse createLeadResponse = CreateLeadResponse.fromJson(response.data);
+        (_v as AddLeadView).onLeadCreated();
         // DeleteLeadResponse deleteLeadResponse = DeleteLeadResponse.fromJson(response.data);
         // deleteLeadResponse.leadId = leadData.sfdcid;
         // (_v as LeadView).onLeadDeleted(leadData);
       })
       ..catchError((e) {
+        Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }

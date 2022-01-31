@@ -6,6 +6,7 @@ import 'package:piramal_channel_partner/ui/projectsFlo/projectList/model/project
 import 'package:piramal_channel_partner/ui/projectsFlo/projectList/project_view.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/project_marker_interface.dart';
 import 'package:piramal_channel_partner/user/AuthUser.dart';
+import 'package:piramal_channel_partner/utils/Dialogs.dart';
 import 'package:piramal_channel_partner/utils/NetworkCheck.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 
@@ -31,9 +32,10 @@ class ProjectPresenter {
     var body = {
       "projectList": [{}]
     };
-
+    Dialogs.showLoader(context, "Please wait fetching your project list ...");
     apiController.post(EndPoints.ALL_PROJECT_LIST, body: body, headers: await Utility.header())
       ..then((response) {
+        Dialogs.hideLoader(context);
         List<ProjectListResponse> projectListResponse = [];
         var listOfDynamic = response.data as List;
         listOfDynamic.forEach((element) {
@@ -43,6 +45,7 @@ class ProjectPresenter {
         (_v as ProjectView).onProjectListFetched(projectListResponse);
       })
       ..catchError((e) {
+        Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }

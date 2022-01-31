@@ -270,5 +270,7 @@ class _AddLeadScreenState extends State<AddLeadScreen> implements AddLeadView {
   }
 
   @override
-  void onLeadCreated() {}
+  void onLeadCreated() {
+    Navigator.pop(context, true);
+  }
 }

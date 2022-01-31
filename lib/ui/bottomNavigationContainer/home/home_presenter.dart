@@ -110,8 +110,11 @@ class HomePresenter {
       "Dateofvisit": visitDate //2022-1-21
     };
 
+    Dialogs.showLoader(context, "Please wait scheduling your visit ...");
+
     apiController.post(EndPoints.SCHEDULE_VISIT, body: body, headers: await Utility.header())
       ..then((response) {
+        Dialogs.hideLoader(context);
         ScheduleVisitResponse visitResponse = ScheduleVisitResponse.fromJson(response.data);
         if (visitResponse.returnCode) {
           _v.onSiteVisitScheduled(visitResponse);
@@ -120,6 +123,7 @@ class HomePresenter {
         }
       })
       ..catchError((e) {
+        Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }

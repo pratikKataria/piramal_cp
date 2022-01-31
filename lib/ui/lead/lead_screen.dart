@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
@@ -51,8 +52,9 @@ class _LeadScreenState extends State<LeadScreen> implements LeadView {
                   text: "Add Lead",
                   color: AppColors.colorSecondary,
                   padding: EdgeInsets.symmetric(horizontal: 20.0),
-                  onTap: () {
-                    Navigator.pushNamed(context, Screens.kAddLeadScreen);
+                  onTap: () async {
+                    var created = await Navigator.pushNamed(context, Screens.kAddLeadScreen);
+                    if (created is bool && created) leadPresenter.getLeadList(context);
                   },
                 )
               ],
