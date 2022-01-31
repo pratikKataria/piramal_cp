@@ -4,6 +4,7 @@ import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
 import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
+import 'package:piramal_channel_partner/user/AuthUser.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/utils/navigator_gk.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
@@ -146,6 +147,18 @@ class PersistentSideNavigation extends StatelessWidget {
               ),
               verticalSpace(20.0),
               line(),
+
+              verticalSpace(20.0),
+              InkWell(
+                onTap: () => closeDrawerAndLogout(provider, context),
+                child: Row(
+                  children: [
+                    Image.asset(Images.kIconSetting, width: iconSize),
+                    horizontalSpace(iconPadding),
+                    Text("Logout", style: textStyle),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
@@ -156,5 +169,14 @@ class PersistentSideNavigation extends StatelessWidget {
   void closeDrawerAndNavigation(BaseProvider provider, String screen) {
     if (provider.drawerKey.currentState.isDrawerOpen) provider.closeDrawer();
     navigatorGk.currentState.pushNamed(screen);
+  }
+
+  void closeDrawerAndLogout(BaseProvider provider, BuildContext context) {
+    if (provider.drawerKey.currentState.isDrawerOpen) provider.closeDrawer();
+    provider.hideToolTip();
+
+    AuthUser.getInstance().logout();
+    navigatorGk.currentState.pop();
+    navigatorGk.currentState.pushNamed(Screens.kLoginScreen);
   }
 }

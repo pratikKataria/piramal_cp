@@ -5,6 +5,7 @@ import 'package:piramal_channel_partner/api/api_error_parser.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/booking_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/schedule_visit_response.dart';
 import 'package:piramal_channel_partner/user/AuthUser.dart';
+import 'package:piramal_channel_partner/utils/Dialogs.dart';
 import 'package:piramal_channel_partner/utils/NetworkCheck.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 
@@ -17,7 +18,7 @@ class HomePresenter {
 
   HomePresenter(this._v);
 
-  void getBookingList() async {
+  void getBookingList(BuildContext context) async {
     //check for internal token
     if (await AuthUser.getInstance().hasToken()) {
       _v.onError("Token not found");
@@ -31,9 +32,10 @@ class HomePresenter {
     }
 
     var body = {"CustomerAccountId": "001p000000y1SqW"};
-
+    Dialogs.showLoader(context, "Please wait fetching your data ...");
     apiController.post(EndPoints.GET_BOOKING, body: body, headers: await Utility.header())
       ..then((response) {
+        Dialogs.hideLoader(context);
         List<BookingResponse> brList = [];
         var listOfDynamic = response.data as List;
         listOfDynamic.forEach((element) {
@@ -49,6 +51,7 @@ class HomePresenter {
       })
       ..catchError((e) {
         _v.onError(e.message);
+        Dialogs.hideLoader(context);
         Utility.log(tag, e.toString());
       });
   }

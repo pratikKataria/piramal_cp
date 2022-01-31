@@ -4,7 +4,7 @@ import 'package:piramal_channel_partner/res/Screens.dart';
 class BaseProvider extends ChangeNotifier {
   bool filterIsOpen = false;
   bool _drawerIsOpen = false;
-  bool showAppbarAndBottomNavigation = false;
+  bool showAppbarAndBottomNavigation = true;
   String currentScreen = Screens.kHomeScreen;
 
   GlobalKey<ScaffoldState> drawerKey;

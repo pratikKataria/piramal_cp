@@ -42,6 +42,9 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<BaseProvider>(context, listen: false);
+    if (!provider.showAppbarAndBottomNavigation) provider.showToolTip();
+
     return Scaffold(
       backgroundColor: AppColors.screenBackgroundColor,
       body: Column(
@@ -67,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 verticalSpace(10.0),
-                Text("Customers (53)", style: textStyle20px500w),
+                Text("Customers (${totalCustomerCount()})", style: textStyle20px500w),
                 verticalSpace(6.0),
                 buildTabs(),
                 verticalSpace(18.0),
@@ -290,6 +293,10 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     );
   }
 
+  int totalCustomerCount() {
+    return bookingListWidgets.length + walkInListWidgets.length;
+  }
+
   @override
   void onBookingListFetched(List<BookingResponse> brList) {
     brList.forEach((element) {
@@ -309,7 +316,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
       walkInListWidgets.add(WalkInCardWidget(element, _homePresenter));
     });
     setState(() {});
-    _homePresenter.getBookingList();
+    _homePresenter.getBookingList(context);
   }
 
   @override

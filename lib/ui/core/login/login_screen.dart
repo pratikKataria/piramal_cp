@@ -5,6 +5,7 @@ import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
 import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/res/Strings.dart';
+import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
 import 'package:piramal_channel_partner/ui/core/core_presenter.dart';
 import 'package:piramal_channel_partner/ui/core/login/login_view.dart';
 import 'package:piramal_channel_partner/ui/core/login/model/login_response.dart';
@@ -14,6 +15,7 @@ import 'package:piramal_channel_partner/user/CurrentUser.dart';
 import 'package:piramal_channel_partner/utils/Dialogs.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({Key key}) : super(key: key);
@@ -165,23 +167,20 @@ class _LoginScreenState extends State<LoginScreen> implements LoginView {
       height: 36,
       text: "$text",
       onTap: () {
-        Dialogs.showLoader(context, "Please wait ...");
         if (otp == null)
           sendOTP();
         else
           verifyOTP();
 
-        // var provider = Provider.of<BaseProvider>(context, listen: false);
-        // provider.showToolTip();
         // Navigator.pushNamed(context, Screens.kHomeBase);
       },
     );
   }
 
   void sendOTP() {
+    Dialogs.showLoader(context, "Sending OTP ...");
     CorePresenter presenter = CorePresenter(this);
     presenter.getAccessToken();
-    presenter.sendEmailOtp(emailTextController.text.toString());
   }
 
   void verifyOTP() {
@@ -190,6 +189,7 @@ class _LoginScreenState extends State<LoginScreen> implements LoginView {
       return;
     }
 
+    Dialogs.showLoader(context, "Verifying Email ...");
     CorePresenter presenter = CorePresenter(this);
     presenter.verifyEmail(emailTextController.text.toString());
   }
@@ -233,5 +233,11 @@ class _LoginScreenState extends State<LoginScreen> implements LoginView {
     var currentUser = await AuthUser.getInstance().getCurrentUser();
     currentUser.userCredentials = loginResponse;
     AuthUser.getInstance().login(currentUser);
+
+    Navigator.pop(context);
+    Navigator.pushNamed(context, Screens.kHomeBase);
+
+    var provider = Provider.of<BaseProvider>(context, listen: false);
+    provider.showToolTip();
   }
 }

@@ -23,6 +23,7 @@ import 'package:provider/provider.dart';
 
 import 'ui/core/login/login_screen.dart';
 import 'ui/projectsFlo/projectDetail/project_detail_screen.dart';
+import 'user/AuthUser.dart';
 import 'utils/Utility.dart';
 import 'utils/navigator_gk.dart';
 
@@ -32,12 +33,16 @@ Future<void> main() async {
   Utility.statusBarAndNavigationBarColor();
   Utility.portrait();
 
+  bool authResult = await (AuthUser.getInstance()).isLoggedIn();
+
   await Future.delayed(Duration(seconds: 2));
-  runApp(const MyApp());
+  runApp(MyApp(authResult));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key key}) : super(key: key);
+  final bool authResult;
+
+  const MyApp(this.authResult, {Key key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
@@ -106,8 +111,16 @@ class MyApp extends StatelessWidget {
               break;
           }
         },
-        home: HomeBottomNavigationBaseScreen(),
+        home: checkAuthUser(authResult),
       ),
     );
+  }
+
+  checkAuthUser(authResult) {
+    if (authResult) {
+      return HomeBottomNavigationBaseScreen();
+    } else {
+      return LoginScreen();
+    }
   }
 }

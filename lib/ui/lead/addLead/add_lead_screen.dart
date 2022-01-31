@@ -19,10 +19,21 @@ class AddLeadScreen extends StatefulWidget {
 class _AddLeadScreenState extends State<AddLeadScreen> implements AddLeadView {
   final subTextStyle = textStyleSubText14px500w;
   final mainTextStyle = textStyle14px500w;
-  final List<String> projectList = ["Piramal Mahalaxmi"];
-  final List<String> configurationList = ["2BHK", "3BHK", "4BHK"];
-  final List<String> budgetList = ["INR 5 Crore", "INR 4 Crore", "INR 5 Crore"];
-  final List<String> locationList = ["Navi Mumbai"];
+  final List<String> projectList = ["Piramal Aranya", "Piramal Vaikunth", "Piramal Revanta", "Piramal Mahalaxm"];
+  final List<String> configurationList = ["1 BHK", "2 BHK", "3 BHK"];
+  final List<String> budgetList = [
+    "0.75 Cr - 1.0 Cr",
+    "1.0 Cr - 1.5 Cr",
+    "1.5 Cr - 2.0 Cr",
+    "2.0 Cr - 2.5 Cr",
+    "4 Cr - 6 Cr",
+    "6 Cr – 8 Cr",
+    "8 Cr - 10 Cr",
+    "10 Cr - 12 Cr",
+    "Above 12 Cr",
+    "Other",
+  ];
+  final List<String> locationList = ["Mumbai"];
 
   CreateLeadRequest createLeadRequest = CreateLeadRequest();
   LeadPresenter leadPresenter;
