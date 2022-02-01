@@ -21,4 +21,6 @@ class EndPoints {
   static const String CP_EVENT_AVAILABILITY = BASE_URL + "/CP_Mobile_App/CPEventsAvailability";
   static const String ALL_PROJECT_LIST = BASE_URL + "/CP_Mobile_App/Projects";
   static const String CURRENT_PROMOTIONS = BASE_URL + "/CP_Mobile_App/CurrentPromotionsDetails";
+
+  static const String MY_ASSIST = BASE_URL + "/CP_Mobile_App/MyAssist";
 }

@@ -17,7 +17,9 @@ class PersistentBottomNavigation extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          buildBottomNavigationButton(Images.kIconHome, "Home", () {}, context),
+          buildBottomNavigationButton(Images.kIconHome, "Home", () {
+            // navigatorGk.currentState.popUntil();
+          }, context),
           buildBottomNavigationButton(Images.kIconExplore, "Explore", () {}, context),
           buildBottomNavigationButton(Images.kIconTodayFollowup, "Today's FU", () {}, context),
           buildBottomNavigationButton(Images.kIconNotification, "Notifications", () {}, context),
@@ -28,11 +30,12 @@ class PersistentBottomNavigation extends StatelessWidget {
   }
 
   Consumer buildBottomNavigationButton(String icon, String text, Function() onTap, BuildContext context) {
-     return Consumer<BaseProvider>(
+    return Consumer<BaseProvider>(
       builder: (_, provider, __) {
         return InkWell(
           onTap: () {
             provider.setBottomNavScreen(text);
+            onTap();
           },
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

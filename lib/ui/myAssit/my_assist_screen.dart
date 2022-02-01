@@ -2,13 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
+import 'package:piramal_channel_partner/ui/myAssit/model/my_assist_response.dart';
+import 'package:piramal_channel_partner/ui/myAssit/my_assist_presenter.dart';
+import 'package:piramal_channel_partner/ui/myAssit/my_assist_view.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class MyAssistScreen extends StatelessWidget {
+class MyAssistScreen extends StatefulWidget {
   const MyAssistScreen({Key key}) : super(key: key);
+
+  @override
+  _MyAssistScreenState createState() => _MyAssistScreenState();
+}
+
+class _MyAssistScreenState extends State<MyAssistScreen> implements MyAssistView {
   final subTextStyle = textStyleSubText14px500w;
   final mainTextStyle = textStyle14px500w;
+
+  MyAssistPresenter leadPresenter;
+  MyAssistResponse assistResponse;
+
+  @override
+  void initState() {
+    super.initState();
+    leadPresenter = MyAssistPresenter(this);
+    leadPresenter.getAssistData(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,89 +44,26 @@ class MyAssistScreen extends StatelessWidget {
             verticalSpace(22.0),
             Text("My Assist", style: textStyle24px500w),
             verticalSpace(33.0),
-            Expanded(
-              child: ListView(
-                children: [
-                  Row(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(80.0),
-                        child: Container(
-                          height: 46,
-                          width: 46,
-                          padding: EdgeInsets.all(10.0),
-                          color: AppColors.assistIconBackgroundColor,
-                          child: Image.asset(Images.kIconicAssistPerson),
-                        ),
-                      ),
-                      horizontalSpace(14.0),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Abhinav Jaitly", style: textStyle20px500w),
-                          Text("Relationship Manager", style: textStyleSubText14px500w),
-                        ],
-                      ),
-                      Spacer(),
-                      PmlButton(
-                        height: 32.0,
-                        width: 32.0,
-                        color: AppColors.colorPrimaryLight,
-                        padding: EdgeInsets.all(10.0),
-                        child: Image.asset(Images.kIconPhone),
-                      ),
-                      horizontalSpace(10.0),
-                      PmlButton(
-                        height: 32.0,
-                        width: 32.0,
-                        color: AppColors.colorPrimaryLight,
-                        child: Image.asset(Images.kIconWhatsApp),
-                      ),
-                    ],
-                  ),
-                  verticalSpace(24.0),
-                  line(),
-                  verticalSpace(24.0),
-                  Row(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(80.0),
-                        child: Container(
-                          height: 46,
-                          width: 46,
-                          padding: EdgeInsets.all(10.0),
-                          color: AppColors.assistIconBackgroundColor,
-                          child: Image.asset(Images.kIconicAssistPerson),
-                        ),
-                      ),
-                      horizontalSpace(14.0),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Rishi Jaiswal", style: textStyle20px500w),
-                          Text("Head of Department (HOD)", style: textStyleSubText14px500w),
-                        ],
-                      ),
-                      Spacer(),
-                      PmlButton(
-                        height: 32.0,
-                        width: 32.0,
-                        color: AppColors.colorPrimaryLight,
-                        padding: EdgeInsets.all(10.0),
-                        child: Image.asset(Images.kIconPhone),
-                      ),
-                      horizontalSpace(10.0),
-                      PmlButton(
-                        height: 32.0,
-                        width: 32.0,
-                        color: AppColors.colorPrimaryLight,
-                        child: Image.asset(Images.kIconWhatsApp),
-                      ),
-                    ],
-                  ),
-                ],
+            if (assistResponse != null)
+              Expanded(
+                child: ListView(
+                  children: [
+                    cardViewAssist(
+                      assistResponse?.relationshipManagerName,
+                      assistResponse?.relationshipManagerLabel,
+                      assistResponse?.relationshipManagerMobile,
+                    ),
+                    verticalSpace(24.0),
+                    line(),
+                    verticalSpace(24.0),
+                    cardViewAssist(
+                      assistResponse?.headOfDepartmentName,
+                      assistResponse?.headOfDepartmentLabel,
+                      assistResponse?.headOfDepartmentMobile,
+                    ),
+                  ],
+                ),
               ),
-            ),
             Center(
               child: PmlButton(
                 width: Utility.screenWidth(context) * 0.55,
@@ -120,24 +77,57 @@ class MyAssistScreen extends StatelessWidget {
     );
   }
 
-  Container buildProfileDetailCard(String mText, String sText) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 18.0),
-      margin: EdgeInsets.only(bottom: 18.0),
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(6.0),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            "$mText",
-            style: textStyle14px500w,
+  cardViewAssist(String name, String profile, String number) {
+    return Row(
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(80.0),
+          child: Container(
+            height: 46,
+            width: 46,
+            padding: EdgeInsets.all(10.0),
+            color: AppColors.assistIconBackgroundColor,
+            child: Image.asset(Images.kIconicAssistPerson),
           ),
-          Text("$sText", style: textStyleSubText14px500w),
-        ],
-      ),
+        ),
+        horizontalSpace(14.0),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("$name", style: textStyle20px500w),
+            Text("$profile", style: textStyleSubText14px500w),
+          ],
+        ),
+        Spacer(),
+        PmlButton(
+          onTap: () {
+            launch("tel://$number ?? " "}");
+          },
+          height: 32.0,
+          width: 32.0,
+          color: AppColors.colorPrimaryLight,
+          padding: EdgeInsets.all(10.0),
+          child: Image.asset(Images.kIconPhone),
+        ),
+        horizontalSpace(10.0),
+        PmlButton(
+          height: 32.0,
+          width: 32.0,
+          color: AppColors.colorPrimaryLight,
+          child: Image.asset(Images.kIconWhatsApp),
+        ),
+      ],
     );
+  }
+
+  @override
+  void onAssistDataFetched(MyAssistResponse myAssistResponse) {
+    assistResponse = myAssistResponse;
+    setState(() {});
+  }
+
+  @override
+  onError(String message) {
+    Utility.showErrorToastB(context, message);
   }
 }
