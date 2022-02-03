@@ -2,13 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
+import 'package:piramal_channel_partner/ui/myProfile/model/my_profile_response.dart';
+import 'package:piramal_channel_partner/ui/myProfile/my_profile_presenter.dart';
+import 'package:piramal_channel_partner/ui/myProfile/my_profile_view.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
 
-class MyProfileScreen extends StatelessWidget {
+class MyProfileScreen extends StatefulWidget {
   const MyProfileScreen({Key key}) : super(key: key);
+
+  @override
+  _MyProfileScreenState createState() => _MyProfileScreenState();
+}
+
+class _MyProfileScreenState extends State<MyProfileScreen> implements MyProfileView {
   final subTextStyle = textStyleSubText14px500w;
   final mainTextStyle = textStyle14px500w;
+
+  MyProfilePresenter leadPresenter;
+  MyProfileResponse assistResponse;
+
+  @override
+  void initState() {
+    super.initState();
+    leadPresenter = MyProfilePresenter(this);
+    leadPresenter.getProfileData(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,8 +58,8 @@ class MyProfileScreen extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Mr. Sunil Pant", style: textStyle20px500w),
-                      Text("RERA ID 123456789", style: textStyleSubText14px500w),
+                      Text(assistResponse?.name ?? "", style: textStyle20px500w),
+                      Text("RERA ID ${assistResponse?.reraID ?? ""}", style: textStyleSubText14px500w),
                     ],
                   ),
                   Spacer(),
@@ -52,12 +71,11 @@ class MyProfileScreen extends StatelessWidget {
                 ],
               ),
               verticalSpace(30.0),
-              buildProfileDetailCard("Primary Contact Person", "Raghav Anand"),
-              buildProfileDetailCard("Primary Mobile Number", "+91 87239 48782"),
-              buildProfileDetailCard("Secondary Mobile Number", "+91 47661 48872"),
-              buildProfileDetailCard("Primary Email ID", "sunilpant@piramal.com"),
-              buildProfileDetailCard("Permanent Account Number (PAN)", "9378-4982-9381-2938"),
-
+              buildProfileDetailCard("Primary Contact Person", assistResponse?.primaryContactPerson ?? ""),
+              buildProfileDetailCard("Primary Mobile Number", assistResponse?.primaryMobileNo ?? ""),
+              buildProfileDetailCard("Secondary Mobile Number", assistResponse?.secondaryMobileNo ?? ""),
+              buildProfileDetailCard("Primary Email ID", assistResponse?.primaryEmail ?? ""),
+              buildProfileDetailCard("Permanent Account Number (PAN)", assistResponse?.pan ?? ""),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -98,5 +116,16 @@ class MyProfileScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  @override
+  onError(String message) {
+    Utility.showErrorToastB(context, message);
+  }
+
+  @override
+  void onProfileDataFetch(MyProfileResponse myAssistResponse) {
+    assistResponse = myAssistResponse;
+    setState(() {});
   }
 }

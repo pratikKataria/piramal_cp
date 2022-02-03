@@ -8,7 +8,7 @@ import 'package:piramal_channel_partner/utils/NetworkCheck.dart';
 
 class BasePresenter {
   BaseView _v;
-  final tag = "CorePresenter";
+  final tag = "BasePresenter";
 
   BasePresenter(this._v);
 

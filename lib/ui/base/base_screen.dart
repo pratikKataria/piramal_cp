@@ -22,7 +22,7 @@ class BaseScreen extends StatelessWidget {
     _baseProvider.drawerKey = drawerKey; // set drawer key to provider when any of the navigation tile is clicked
     return Consumer<BaseProvider>(
       builder: (_, provider, __) {
-        print("Base consumer rebuilding ...");
+        print("Base consumer rebuilding ... $child" );
         return Scaffold(
           appBar: provider.showAppbarAndBottomNavigation ? buildAppBar(context) : null,
           drawerScrimColor: Colors.transparent,

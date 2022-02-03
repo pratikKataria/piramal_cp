@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:dio/dio.dart';
 import 'package:piramal_channel_partner/api/api_controller_expo.dart';
 import 'package:piramal_channel_partner/api/api_end_points.dart';
+import 'package:piramal_channel_partner/api/api_error_parser.dart';
 import 'package:piramal_channel_partner/ui/core/core_view.dart';
 import 'package:piramal_channel_partner/ui/core/login/login_view.dart';
 import 'package:piramal_channel_partner/ui/core/login/model/login_response.dart';
@@ -41,7 +42,7 @@ class CorePresenter {
       });
   }
 
-  void sendEmailOtp(String email) async {
+  void sendOTP(String value) async {
     //check for internal token
     if (await AuthUser.getInstance().hasToken()) {
       _v.onError("Token not found");
@@ -51,10 +52,15 @@ class CorePresenter {
     //check network
     if (!await NetworkCheck.check()) return;
 
-    int mobileOtp = _genRandomNumber();
+    //if incoming value is mobile number
+    if (value.length == 10 && checkForMobileNumber(value)) {
+      sendMobileOTP(value);
+      return;
+    }
 
+    int mobileOtp = _genRandomNumber();
     var body = {
-      "EmailId": "$email",
+      "EmailId": "$value",
       "GenOTP": "$mobileOtp",
     };
 
@@ -68,12 +74,87 @@ class CorePresenter {
           loginView.onError(otpResponse.message);
       })
       ..catchError((e) {
+        ApiErrorParser.getResult(e, _v);
+      });
+  }
+
+  bool checkForMobileNumber(String val) {
+    try {
+      int.parse(val);
+      return true;
+    } catch (numberFormatException) {
+      return false;
+    }
+  }
+
+  void sendMobileOTP(String value) async {
+    //check for internal token
+    if (await AuthUser.getInstance().hasToken()) {
+      _v.onError("Token not found");
+      return;
+    }
+
+    //check network
+    if (!await NetworkCheck.check()) return;
+
+    int mobileOtp = _genRandomNumber();
+
+    String queryParams = "username=7506775158&password=Stetig@123&To=$value&senderid=VM-PRLCRM&feedid=372501&Text=Your%20OTP%20for%20MyPiramal%20App%20is%20$mobileOtp%20kindly%20use%20this%20for%20login";
+
+    apiController.get("${EndPoints.SEND_MOBILE_OTP}$queryParams", headers: await Utility.header())
+      ..then((response) {
+        Utility.log(tag, response.data);
+        LoginView loginView = _v as LoginView;
+        loginView.onOtpSent(mobileOtp);
+        // OTPResponse otpResponse = OTPResponse.fromJson(response.data);
+        // LoginView loginView = _v as LoginView;
+        // if (otpResponse.returnCode)
+        //   loginView.onOtpSent(mobileOtp);
+        // else
+        //   loginView.onError(otpResponse.message);
+      })
+      ..catchError((e) {
+        ApiErrorParser.getResult(e, _v);
+      });
+  }
+
+  void verifyEmail(String value) async {
+    //check for internal token
+    if (await AuthUser.getInstance().hasToken()) {
+      _v.onError("Token not found");
+      return;
+    }
+
+    //check network
+    if (!await NetworkCheck.check()) return;
+
+    //if incoming value is mobile number
+    if (value.length == 10 && checkForMobileNumber(value)) {
+      verifyMobile(value);
+      return;
+    }
+
+
+    var body = {
+      "EmailId": "$value",
+    };
+
+    apiController.post(EndPoints.VERIFY_EMAIL, body: body, headers: await Utility.header())
+      ..then((response) {
+        LoginResponse loginResponse = LoginResponse.fromJson(response.data);
+        LoginView loginView = _v as LoginView;
+        if (loginResponse.returnCode)
+          loginView.onEmailVerified(loginResponse);
+        else
+          loginView.onError(loginResponse.message);
+      })
+      ..catchError((e) {
         _v.onError(e.message);
         Utility.log(tag, e.toString());
       });
   }
 
-  void verifyEmail(String email) async {
+  void verifyMobile(String email) async {
     //check for internal token
     if (await AuthUser.getInstance().hasToken()) {
       _v.onError("Token not found");
@@ -84,10 +165,10 @@ class CorePresenter {
     if (!await NetworkCheck.check()) return;
 
     var body = {
-      "EmailId": "$email",
+      "MobileNumber": "$email",
     };
 
-    apiController.post(EndPoints.VERIFY_EMAIL, body: body, headers: await Utility.header())
+    apiController.post(EndPoints.VERIFY_MOBILE, body: body, headers: await Utility.header())
       ..then((response) {
         LoginResponse loginResponse = LoginResponse.fromJson(response.data);
         LoginView loginView = _v as LoginView;

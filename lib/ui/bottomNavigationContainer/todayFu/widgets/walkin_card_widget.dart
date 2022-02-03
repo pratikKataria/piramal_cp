@@ -7,13 +7,10 @@ import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../home_presenter.dart';
-
-class WalkInCardWidget extends StatelessWidget {
+class SvWalkInCardWidget extends StatelessWidget {
   final BookingResponse _bookingResponse;
-  final HomePresenter _presenter;
 
-  const WalkInCardWidget(this._bookingResponse, this._presenter, {Key key}) : super(key: key);
+  const SvWalkInCardWidget(this._bookingResponse, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -208,7 +205,7 @@ class WalkInCardWidget extends StatelessWidget {
     );
 
     if (picked != null) {
-      _presenter.scheduleTime(context, _bookingResponse.sfdcid, datePicked);
+      // _presenter.scheduleTime(context, _bookingResponse.sfdcid, datePicked);
     }
   }
 }

@@ -21,7 +21,7 @@ class _MyAssistScreenState extends State<MyAssistScreen> implements MyAssistView
   final mainTextStyle = textStyle14px500w;
 
   MyAssistPresenter leadPresenter;
-  MyAssistResponse assistResponse;
+  List<MyAssistResponse> assistResponse = [];
 
   @override
   void initState() {
@@ -43,86 +43,89 @@ class _MyAssistScreenState extends State<MyAssistScreen> implements MyAssistView
           children: [
             verticalSpace(22.0),
             Text("My Assist", style: textStyle24px500w),
-            verticalSpace(33.0),
+            verticalSpace(20.0),
             if (assistResponse != null)
               Expanded(
                 child: ListView(
-                  children: [
-                    cardViewAssist(
-                      assistResponse?.relationshipManagerName,
-                      assistResponse?.relationshipManagerLabel,
-                      assistResponse?.relationshipManagerMobile,
-                    ),
-                    verticalSpace(24.0),
-                    line(),
-                    verticalSpace(24.0),
-                    cardViewAssist(
-                      assistResponse?.headOfDepartmentName,
-                      assistResponse?.headOfDepartmentLabel,
-                      assistResponse?.headOfDepartmentMobile,
-                    ),
-                  ],
+                  children: assistResponse
+                      .map<Widget>((e) => cardViewAssist(
+                            e?.relationshipManagerName,
+                            e?.relationshipManagerLabel,
+                            e?.relationshipManagerMobile,
+                            e?.projectName,
+                          ))
+                      .toList(),
                 ),
               ),
+            verticalSpace(10.0),
             Center(
               child: PmlButton(
                 width: Utility.screenWidth(context) * 0.55,
                 text: "Raise Query",
               ),
             ),
-            verticalSpace(50.0),
+            verticalSpace(10.0),
           ],
         ),
       ),
     );
   }
 
-  cardViewAssist(String name, String profile, String number) {
-    return Row(
+  cardViewAssist(String name, String profile, String number, String project) {
+    return Column(
       children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(80.0),
-          child: Container(
-            height: 46,
-            width: 46,
-            padding: EdgeInsets.all(10.0),
-            color: AppColors.assistIconBackgroundColor,
-            child: Image.asset(Images.kIconicAssistPerson),
-          ),
-        ),
-        horizontalSpace(14.0),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        verticalSpace(24.0),
+        Row(
           children: [
-            Text("$name", style: textStyle20px500w),
-            Text("$profile", style: textStyleSubText14px500w),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(80.0),
+              child: Container(
+                height: 46,
+                width: 46,
+                padding: EdgeInsets.all(10.0),
+                color: AppColors.assistIconBackgroundColor,
+                child: Image.asset(Images.kIconicAssistPerson),
+              ),
+            ),
+            horizontalSpace(14.0),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("$name", style: textStyle20px500w),
+                Text("$profile", style: textStyleSubText14px500w),
+                Text("$project", style: textStyleSubText14px500w),
+              ],
+            ),
+            Spacer(),
+            PmlButton(
+              onTap: () {
+                launch("tel://$number ?? " "}");
+              },
+              height: 32.0,
+              width: 32.0,
+              color: AppColors.colorPrimaryLight,
+              padding: EdgeInsets.all(10.0),
+              child: Image.asset(Images.kIconPhone),
+            ),
+            horizontalSpace(10.0),
+            PmlButton(
+              height: 32.0,
+              width: 32.0,
+              color: AppColors.colorPrimaryLight,
+              child: Image.asset(Images.kIconWhatsApp),
+            ),
           ],
         ),
-        Spacer(),
-        PmlButton(
-          onTap: () {
-            launch("tel://$number ?? " "}");
-          },
-          height: 32.0,
-          width: 32.0,
-          color: AppColors.colorPrimaryLight,
-          padding: EdgeInsets.all(10.0),
-          child: Image.asset(Images.kIconPhone),
-        ),
-        horizontalSpace(10.0),
-        PmlButton(
-          height: 32.0,
-          width: 32.0,
-          color: AppColors.colorPrimaryLight,
-          child: Image.asset(Images.kIconWhatsApp),
-        ),
+        verticalSpace(24.0),
+        line(),
       ],
     );
   }
 
   @override
-  void onAssistDataFetched(MyAssistResponse myAssistResponse) {
-    assistResponse = myAssistResponse;
+  void onAssistDataFetched(List<MyAssistResponse> myAssistResponse) {
+    assistResponse.clear();
+    assistResponse.addAll(myAssistResponse);
     setState(() {});
   }
 

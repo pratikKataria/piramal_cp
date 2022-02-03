@@ -1,4 +1,4 @@
 
-import 'package:piramal_channel_partner/api/api_error_view.dart';
+import 'package:piramal_channel_partner/ui/base/BaseView.dart';
 
-abstract class CoreView extends ApiErrorView {}
+abstract class CoreView extends BaseView {}

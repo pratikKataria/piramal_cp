@@ -2,20 +2,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:piramal_channel_partner/api/api_controller_expo.dart';
 import 'package:piramal_channel_partner/api/api_end_points.dart';
 import 'package:piramal_channel_partner/api/api_error_parser.dart';
-import 'package:piramal_channel_partner/ui/myAssit/model/my_assist_response.dart';
-import 'package:piramal_channel_partner/ui/myAssit/my_assist_view.dart';
+import 'package:piramal_channel_partner/ui/myProfile/model/my_profile_response.dart';
 import 'package:piramal_channel_partner/user/AuthUser.dart';
 import 'package:piramal_channel_partner/utils/Dialogs.dart';
 import 'package:piramal_channel_partner/utils/NetworkCheck.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 
-class MyAssistPresenter {
-  MyAssistView _v;
+import 'my_profile_view.dart';
+
+class MyProfilePresenter {
+  MyProfileView _v;
   final tag = "LeadPresenter";
 
-  MyAssistPresenter(this._v);
+  MyProfilePresenter(this._v);
 
-  void getAssistData(BuildContext context) async {
+  void getProfileData(BuildContext context) async {
     //check for internal token
     if (await AuthUser.getInstance().hasToken()) {
       _v.onError("Token not found");
@@ -29,19 +30,15 @@ class MyAssistPresenter {
     }
 
     var body = {
-      "projectList": [{}]
+      "CustomerAccountID":"001p000000y1SqWAAU"
     };
+
     Dialogs.showLoader(context, "Please wait fetching your project list ...");
-    apiController.post(EndPoints.MY_ASSIST, body: body, headers: await Utility.header())
+    apiController.post(EndPoints.MY_PROFILE, body: body, headers: await Utility.header())
       ..then((response) {
         Dialogs.hideLoader(context);
-        List<MyAssistResponse> brList = [];
-        var listOfDynamic = response.data as List;
-        listOfDynamic.forEach((element) {
-          brList.add(MyAssistResponse.fromJson(element));
-        });
-
-        _v.onAssistDataFetched(brList);
+        MyProfileResponse myAssistResponse = MyProfileResponse.fromJson(response.data);
+        _v.onProfileDataFetch(myAssistResponse);
       })
       ..catchError((e) {
         Dialogs.hideLoader(context);

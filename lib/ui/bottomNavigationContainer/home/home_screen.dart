@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:marquee/marquee.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
@@ -10,6 +11,7 @@ import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/home_v
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/booking_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/schedule_visit_response.dart';
 import 'package:piramal_channel_partner/ui/core/login/model/token_response.dart';
+import 'package:piramal_channel_partner/ui/cpEvent/model/cp_event_response.dart';
 import 'package:piramal_channel_partner/user/AuthUser.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
@@ -32,11 +34,14 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   List<Widget> bookingListWidgets = [];
   List<Widget> walkInListWidgets = [];
 
+  String events = "Currently no events available";
+
   @override
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
     _homePresenter = HomePresenter(this);
     _homePresenter.getWalkInList();
+    _homePresenter.getEventList(context);
     super.initState();
   }
 
@@ -265,13 +270,19 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
           height: 45.0,
           padding: EdgeInsets.only(bottom: 6.0),
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.0), color: AppColors.colorPrimary),
-          child: Align(
-            alignment: Alignment.center,
-            child: Text(
-              "Piramal Aranya  •  Piramal Mahalaxmi Tower 3",
-              style: textStyleWhite12px600w,
-              maxLines: 1,
-            ),
+          child: Marquee(
+            text: '\n $events',
+            style: textStyleWhite12px600w,
+            scrollAxis: Axis.horizontal,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            blankSpace: 20.0,
+            velocity: 100.0,
+            pauseAfterRound: Duration(seconds: 1),
+            startPadding: 10.0,
+            accelerationDuration: Duration(seconds: 1),
+            accelerationCurve: Curves.linear,
+            decelerationDuration: Duration(milliseconds: 200),
+            decelerationCurve: Curves.easeOut,
           ),
         ),
         Positioned(
@@ -334,5 +345,13 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   void onSiteVisitScheduled(ScheduleVisitResponse visitResponse) {
     // Navigator.pop(context);
     Utility.showSuccessToastB(context, "Visit Scheduled");
+  }
+
+  @override
+  void onEventFetched(List<CpEventResponse> brList) {
+    events = "";
+    brList.forEach((element) {
+      events = "$events ${element.eventName}      \u2022";
+    });
   }
 }

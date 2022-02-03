@@ -44,6 +44,8 @@ class _LoginScreenState extends State<LoginScreen> implements LoginView {
     // 18% from top
     _context = context;
     final perTop18 = Utility.screenHeight(context) * 0.12;
+    var provider = Provider.of<BaseProvider>(context, listen: false);
+    if (provider.showAppbarAndBottomNavigation) provider.hideToolTip();
     return Scaffold(
       body: Container(
         margin: EdgeInsets.symmetric(horizontal: 20.0),
@@ -189,7 +191,7 @@ class _LoginScreenState extends State<LoginScreen> implements LoginView {
       return;
     }
 
-    Dialogs.showLoader(context, "Verifying Email ...");
+    Dialogs.showLoader(context, "Verifying ...");
     CorePresenter presenter = CorePresenter(this);
     presenter.verifyEmail(emailTextController.text.toString());
   }
@@ -204,7 +206,7 @@ class _LoginScreenState extends State<LoginScreen> implements LoginView {
 
     //sent otp request
     CorePresenter presenter = CorePresenter(this);
-    presenter.sendEmailOtp(emailTextController.text.toString());
+    presenter.sendOTP(emailTextController.text.toString());
   }
 
   @override

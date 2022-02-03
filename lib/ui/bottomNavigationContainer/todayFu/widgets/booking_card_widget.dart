@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
@@ -7,13 +8,10 @@ import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../home_presenter.dart';
-
-class WalkInCardWidget extends StatelessWidget {
+class SvBookingCardWidget extends StatelessWidget {
   final BookingResponse _bookingResponse;
-  final HomePresenter _presenter;
 
-  const WalkInCardWidget(this._bookingResponse, this._presenter, {Key key}) : super(key: key);
+  const SvBookingCardWidget(this._bookingResponse, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +84,7 @@ class WalkInCardWidget extends StatelessWidget {
                   child: Text("Validity: ${_bookingResponse.createdDays} Day", style: textStyle14px500w),
                 ),
                 horizontalSpace(10.0),
-                if (_bookingResponse.revisit)
+                if (_bookingResponse?.revisit??false)
                   Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(6),
@@ -123,7 +121,7 @@ class WalkInCardWidget extends StatelessWidget {
   }
 
   Color getRatingColor(String rating) {
-    switch (rating.toUpperCase()) {
+    switch (rating?.toUpperCase()) {
       case "HOT":
         return AppColors.colorPrimary;
       case "WARM":
@@ -149,6 +147,21 @@ class WalkInCardWidget extends StatelessWidget {
         ),
         padding: EdgeInsets.all(10.0),
         child: Image.asset(Images.kIconCalender),
+      ),
+    );
+  }
+
+  InkWell addButton(BuildContext context) {
+    return InkWell(
+      onTap: () {},
+      child: Container(
+        width: 35,
+        height: 35,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: AppColors.colorSecondary,
+        ),
+        child: Icon(Icons.add, color: AppColors.white),
       ),
     );
   }
@@ -208,7 +221,7 @@ class WalkInCardWidget extends StatelessWidget {
     );
 
     if (picked != null) {
-      _presenter.scheduleTime(context, _bookingResponse.sfdcid, datePicked);
+      // _presenter.scheduleTime(context, _bookingResponse.sfdcid, datePicked);
     }
   }
 }

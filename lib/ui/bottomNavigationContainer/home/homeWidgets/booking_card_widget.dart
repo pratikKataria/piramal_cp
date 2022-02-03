@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
@@ -172,7 +171,7 @@ class BookingCardWidget extends StatelessWidget {
   InkWell whatsApp() {
     return InkWell(
       onTap: () {
-        openWhatsapp();
+        Utility.openWhatsapp(_bookingResponse?.mobilenumber);
       },
       child: Container(
         width: 35,
@@ -202,27 +201,6 @@ class BookingCardWidget extends StatelessWidget {
         child: Image.asset(Images.kIconPhone),
       ),
     );
-  }
-
-  void openWhatsapp() async {
-    var whatsapp = "+91${_bookingResponse?.mobilenumber ?? ""}";
-    var whatsappURl_android = "whatsapp://send?phone=" + whatsapp + "&text=hello";
-    var whatappURL_ios = "https://wa.me/$whatsapp?text=${Uri.parse("hello")}";
-    if (Platform.isIOS) {
-      // for iOS phone only
-      if (await canLaunch(whatappURL_ios)) {
-        await launch(whatappURL_ios, forceSafariVC: false);
-      } else {
-        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: new Text("whatsapp no installed")));
-      }
-    } else {
-      // android , web
-      if (await canLaunch(whatsappURl_android)) {
-        await launch(whatsappURl_android);
-      } else {
-        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: new Text("whatsapp no installed")));
-      }
-    }
   }
 
   Future<void> _selectDate(BuildContext context) async {
