@@ -4,6 +4,7 @@ import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
 import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
+import 'package:piramal_channel_partner/utils/navigator_gk.dart';
 import 'package:provider/provider.dart';
 
 class PersistentBottomNavigation extends StatelessWidget {
@@ -17,9 +18,7 @@ class PersistentBottomNavigation extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          buildBottomNavigationButton(Images.kIconHome, "Home", () {
-            // navigatorGk.currentState.popUntil();
-          }, context),
+          buildBottomNavigationButton(Images.kIconHome, "Home", () {}, context),
           buildBottomNavigationButton(Images.kIconExplore, "Explore", () {}, context),
           buildBottomNavigationButton(Images.kIconTodayFollowup, "Today's FU", () {}, context),
           buildBottomNavigationButton(Images.kIconNotification, "Notifications", () {}, context),
@@ -35,6 +34,7 @@ class PersistentBottomNavigation extends StatelessWidget {
         return InkWell(
           onTap: () {
             provider.setBottomNavScreen(text);
+            navigateToFirstRoute();
             onTap();
           },
           child: Column(
@@ -57,5 +57,9 @@ class PersistentBottomNavigation extends StatelessWidget {
         );
       },
     );
+  }
+
+  void navigateToFirstRoute() {
+    navigatorGk.currentState.popUntil((route) => route.isFirst);
   }
 }

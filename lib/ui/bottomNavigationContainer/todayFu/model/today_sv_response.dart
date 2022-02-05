@@ -17,7 +17,7 @@ class TodaySvResponse {
       dynamic towerFinalized, 
       String stageName, 
       bool revisit, 
-      int returnCode, 
+      bool returnCode,
       String rating, 
       String projectFinalized, 
       String opportunityID, 
@@ -57,7 +57,7 @@ class TodaySvResponse {
   dynamic _towerFinalized;
   String _stageName;
   bool _revisit;
-  int _returnCode;
+  bool _returnCode;
   String _rating;
   String _projectFinalized;
   String _opportunityID;
@@ -70,7 +70,7 @@ class TodaySvResponse {
   dynamic get towerFinalized => _towerFinalized;
   String get stageName => _stageName;
   bool get revisit => _revisit;
-  int get returnCode => _returnCode;
+  bool get returnCode => _returnCode;
   String get rating => _rating;
   String get projectFinalized => _projectFinalized;
   String get opportunityID => _opportunityID;

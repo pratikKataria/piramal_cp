@@ -7,7 +7,7 @@
 
 class ProjectListResponse {
   ProjectListResponse({
-      int returnCode, 
+      bool returnCode,
       String relationshipManager, 
       String projectName, 
       String projectId, 
@@ -29,14 +29,14 @@ class ProjectListResponse {
     _message = json['message'];
     _headOfDepartment = json['Head_of_Department'];
   }
-  int _returnCode;
+  bool _returnCode;
   String _relationshipManager;
   String _projectName;
   String _projectId;
   String _message;
   String _headOfDepartment;
 
-  int get returnCode => _returnCode;
+  bool get returnCode => _returnCode;
   String get relationshipManager => _relationshipManager;
   String get projectName => _projectName;
   String get projectId => _projectId;
