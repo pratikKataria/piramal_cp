@@ -168,7 +168,17 @@ class PersistentSideNavigation extends StatelessWidget {
 
   void closeDrawerAndNavigation(BaseProvider provider, String screen) {
     if (provider.drawerKey.currentState.isDrawerOpen) provider.closeDrawer();
-    navigatorGk.currentState.pushNamed(screen);
+
+    //it stops pushing same screen multiple time
+    //if it already on top it close navigation and nothing happen
+    if (!checkScreenIsAlreadyOnTop(provider, screen)) {
+      navigatorGk.currentState.pushNamed(screen);
+      provider.setBottomNavScreen(screen);
+    }
+  }
+
+  bool checkScreenIsAlreadyOnTop(BaseProvider provider, String screen) {
+    return provider.currentScreen == screen;
   }
 
   void closeDrawerAndLogout(BaseProvider provider, BuildContext context) {
