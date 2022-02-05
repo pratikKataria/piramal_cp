@@ -15,7 +15,7 @@ class CurrentPromoResponse {
       String title, 
       String shortDescription, 
       String sfdcid, 
-      int returnCode, 
+      bool returnCode,
       String project, 
       String name, 
       String mobilenumber, 
@@ -52,7 +52,7 @@ class CurrentPromoResponse {
   String _title;
   String _shortDescription;
   String _sfdcid;
-  int _returnCode;
+  bool _returnCode;
   String _project;
   String _name;
   String _mobilenumber;
@@ -64,7 +64,7 @@ class CurrentPromoResponse {
   String get title => _title;
   String get shortDescription => _shortDescription;
   String get sfdcid => _sfdcid;
-  int get returnCode => _returnCode;
+  bool get returnCode => _returnCode;
   String get project => _project;
   String get name => _name;
   String get mobilenumber => _mobilenumber;

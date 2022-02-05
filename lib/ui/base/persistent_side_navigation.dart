@@ -43,12 +43,12 @@ class PersistentSideNavigation extends StatelessWidget {
               ),
               verticalSpace(40.0),
 
-              //Home
-              line(),
-              verticalSpace(vSpacing),
-              sideNavButton(provider, Screens.kHomeScreen, Images.kIconHome, "Home"),
-              verticalSpace(vSpacing),
-              line(),
+              // //Home
+              // line(),
+              // verticalSpace(vSpacing),
+              // sideNavButton(provider, Screens.kHomeScreen, Images.kIconHome, "Home"),
+              // verticalSpace(vSpacing),
+              // line(),
 
               //Projects
               verticalSpace(vSpacing),
@@ -129,6 +129,7 @@ class PersistentSideNavigation extends StatelessWidget {
     //it stops pushing same screen multiple time
     //if it already on top it close navigation and nothing happen
     if (!checkScreenIsAlreadyOnTop(provider, screen)) {
+      navigatorGk.currentState.popUntil((route) => route.isFirst);
       navigatorGk.currentState.pushNamed(screen);
       provider.setBottomNavScreen(screen);
     }
