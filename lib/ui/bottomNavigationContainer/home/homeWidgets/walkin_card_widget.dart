@@ -44,7 +44,7 @@ class WalkInCardWidget extends StatelessWidget {
             },
             child: Row(
               children: [
-                ClipRRect(
+         /*       ClipRRect(
                   borderRadius: BorderRadius.circular(80.0),
                   child: Container(
                     height: 37,
@@ -52,7 +52,7 @@ class WalkInCardWidget extends StatelessWidget {
                     child: Image.asset(Images.kImgPlaceholder, fit: BoxFit.fill),
                   ),
                 ),
-                horizontalSpace(8.0),
+                horizontalSpace(8.0),*/
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -123,7 +123,7 @@ class WalkInCardWidget extends StatelessWidget {
   }
 
   Color getRatingColor(String rating) {
-    switch (rating.toUpperCase()) {
+    switch (rating?.toUpperCase()) {
       case "HOT":
         return AppColors.colorPrimary;
       case "WARM":

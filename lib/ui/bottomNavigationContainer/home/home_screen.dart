@@ -31,8 +31,8 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   String currentSelectedTab = "Walk in";
   HomePresenter _homePresenter;
 
-  List<Widget> bookingListWidgets = [];
-  List<Widget> walkInListWidgets = [];
+  List bookingListWidgets = [];
+  List walkInListWidgets = [];
 
   String events = "Currently no events available";
 
@@ -88,20 +88,11 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                 controller: _tabController,
                 physics: NeverScrollableScrollPhysics(),
                 children: [
-                  // ListView(
-                  //   children: [
-                  //     //Card one
-                  //     buildFirstCard(),
-                  //
-                  //     //Card Two
-                  //     buildSecondCard(),
-                  //   ],
-                  // ),
                   ListView(
-                    children: walkInListWidgets,
+                    children: walkInListWidgets.map<Widget>((e) => WalkInCardWidget(e, _homePresenter)).toList(),
                   ),
                   ListView(
-                    children: bookingListWidgets,
+                    children: bookingListWidgets.map<Widget>((e) => BookingCardWidget(e, _homePresenter)).toList(),
                   ),
                 ],
               ),
@@ -310,9 +301,8 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 
   @override
   void onBookingListFetched(List<BookingResponse> brList) {
-    brList.forEach((element) {
-      bookingListWidgets.add(BookingCardWidget(element, _homePresenter));
-    });
+    bookingListWidgets.clear();
+    bookingListWidgets.addAll(brList);
     setState(() {});
   }
 
@@ -323,11 +313,10 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 
   @override
   void onWalkInListFetched(List<BookingResponse> wList) {
-    wList.forEach((element) {
-      walkInListWidgets.add(WalkInCardWidget(element, _homePresenter));
-    });
-    setState(() {});
+    walkInListWidgets.clear();
+    walkInListWidgets.addAll(wList);
     _homePresenter.getBookingList(context);
+    setState(() {});
   }
 
   @override
