@@ -11,7 +11,7 @@
 
 class MyAssistResponse {
   MyAssistResponse({
-      int returnCode, 
+      bool returnCode,
       String relationshipManagerName, 
       String relationshipManagerMobile, 
       String relationshipManagerLabel, 
@@ -45,7 +45,7 @@ class MyAssistResponse {
     _headOfDepartmentMobile = json['HeadOfDepartmentMobile'];
     _headOfDepartmentLabel = json['HeadOfDepartmentLabel'];
   }
-  int _returnCode;
+  bool _returnCode;
   String _relationshipManagerName;
   String _relationshipManagerMobile;
   String _relationshipManagerLabel;
@@ -56,7 +56,7 @@ class MyAssistResponse {
   String _headOfDepartmentMobile;
   String _headOfDepartmentLabel;
 
-  int get returnCode => _returnCode;
+  bool get returnCode => _returnCode;
   String get relationshipManagerName => _relationshipManagerName;
   String get relationshipManagerMobile => _relationshipManagerMobile;
   String get relationshipManagerLabel => _relationshipManagerLabel;
