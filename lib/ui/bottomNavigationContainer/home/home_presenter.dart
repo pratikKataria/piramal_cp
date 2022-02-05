@@ -106,9 +106,8 @@ class HomePresenter {
     }
 
     var body = {
-      "CustomerAccountId": "001p000000y1SqW",
-      "CustomerOpportunityId": otyId,
-      "Dateofvisit": visitDate //2022-1-21
+      "OpportunityId":"001p000000y1SqWAAU",
+      "scheduleDateTime":"${visitDate}T10:06:00.000Z"
     };
 
     Dialogs.showLoader(context, "Please wait scheduling your visit ...");
