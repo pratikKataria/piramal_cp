@@ -15,6 +15,7 @@ class PersistentSideNavigation extends StatelessWidget {
   final textStyle = textStyleRegular18pxW500;
   final iconSize = 20.0;
   final iconPadding = 20.0;
+  final vSpacing = 10.0;
 
   @override
   Widget build(BuildContext context) {
@@ -44,123 +45,79 @@ class PersistentSideNavigation extends StatelessWidget {
 
               //Home
               line(),
-              verticalSpace(20.0),
-              InkWell(
-                onTap: () => closeDrawerAndNavigation(provider, Screens.kHomeScreen),
-                child: Row(
-                  children: [
-                    Image.asset(Images.kIconHome, width: iconSize),
-                    horizontalSpace(iconPadding),
-                    Text("Home", style: textStyle),
-                  ],
-                ),
-              ),
-              verticalSpace(20.0),
+              verticalSpace(vSpacing),
+              sideNavButton(provider, Screens.kHomeScreen, Images.kIconHome, "Home"),
+              verticalSpace(vSpacing),
               line(),
 
               //Projects
-              verticalSpace(20.0),
-              InkWell(
-                onTap: () => closeDrawerAndNavigation(provider, Screens.kProjectScreen),
-                child: Row(
-                  children: [
-                    Image.asset(Images.kIconProjects, width: iconSize),
-                    horizontalSpace(iconPadding),
-                    Text("Projects", style: textStyle),
-                  ],
-                ),
-              ),
-              verticalSpace(20.0),
+              verticalSpace(vSpacing),
+              sideNavButton(provider, Screens.kProjectScreen, Images.kIconProjects, "Projects"),
+              verticalSpace(vSpacing),
               line(),
 
               //Current Promotions
-              verticalSpace(20.0),
-              InkWell(
-                onTap: () => closeDrawerAndNavigation(provider, Screens.kCurrentPromotionsScreen),
-                child: Row(
-                  children: [
-                    Image.asset(Images.kIconCurrentPromotion, width: iconSize),
-                    horizontalSpace(iconPadding),
-                    Text("Current Promotions", style: textStyle),
-                  ],
-                ),
-              ),
-              verticalSpace(20.0),
+              verticalSpace(vSpacing),
+              sideNavButton(provider, Screens.kCurrentPromotionsScreen, Images.kIconCurrentPromotion, "Current Promotions"),
+              verticalSpace(vSpacing),
               line(),
 
               //View/Add Leads
-              verticalSpace(20.0),
-              InkWell(
-                onTap: () => closeDrawerAndNavigation(provider, Screens.kLeadScreen),
-                child: Row(
-                  children: [
-                    Image.asset(Images.kIconLeads, width: iconSize),
-                    horizontalSpace(iconPadding),
-                    Text("View/Add Leads", style: textStyle),
-                  ],
-                ),
-              ),
-              verticalSpace(20.0),
+              verticalSpace(vSpacing),
+              sideNavButton(provider, Screens.kLeadScreen, Images.kIconLeads, "View/Add Leads"),
+              verticalSpace(vSpacing),
               line(),
 
               //CP Events
-              verticalSpace(20.0),
-              InkWell(
-                onTap: () => closeDrawerAndNavigation(provider, Screens.kCPEventScreen),
-                child: Row(
-                  children: [
-                    Image.asset(Images.kIconCpEvents, width: iconSize),
-                    horizontalSpace(iconPadding),
-                    Text("CP Events", style: textStyle),
-                  ],
-                ),
-              ),
-              verticalSpace(20.0),
+              verticalSpace(vSpacing),
+              sideNavButton(provider, Screens.kCPEventScreen, Images.kIconCpEvents, "CP Events"),
+              verticalSpace(vSpacing),
               line(),
 
               //My Assists
-              verticalSpace(20.0),
-              InkWell(
-                onTap: () => closeDrawerAndNavigation(provider, Screens.kMyAssistScreen),
-                child: Row(
-                  children: [
-                    Image.asset(Images.kIconAssist, width: iconSize),
-                    horizontalSpace(iconPadding),
-                    Text("My Assists", style: textStyle),
-                  ],
-                ),
-              ),
-              verticalSpace(20.0),
+              verticalSpace(vSpacing),
+              sideNavButton(provider, Screens.kMyAssistScreen, Images.kIconAssist, "My Assists"),
+              verticalSpace(vSpacing),
               line(),
 
               //Settings
-              verticalSpace(20.0),
-              InkWell(
-                onTap: () => closeDrawerAndNavigation(provider, Screens.kSettingsScreen),
-                child: Row(
-                  children: [
-                    Image.asset(Images.kIconSetting, width: iconSize),
-                    horizontalSpace(iconPadding),
-                    Text("Profile", style: textStyle),
-                  ],
-                ),
-              ),
-              verticalSpace(20.0),
+              verticalSpace(vSpacing),
+              sideNavButton(provider, Screens.kSettingsScreen, Images.kIconSetting, "Profile"),
+              verticalSpace(vSpacing),
               line(),
 
-              verticalSpace(20.0),
+              verticalSpace(vSpacing),
               InkWell(
                 onTap: () => closeDrawerAndLogout(provider, context),
-                child: Row(
-                  children: [
-                    Image.asset(Images.kIconSetting, width: iconSize),
-                    horizontalSpace(iconPadding),
-                    Text("Logout", style: textStyle),
-                  ],
+                child: Container(
+                  height: 45,
+                  child: Row(
+                    children: [
+                      Image.asset(Images.kIconSetting, width: iconSize),
+                      horizontalSpace(iconPadding),
+                      Text("Logout", style: textStyle),
+                    ],
+                  ),
                 ),
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  InkWell sideNavButton(BaseProvider provider, String screenName, String icon, String displayText) {
+    return InkWell(
+      onTap: () => closeDrawerAndNavigation(provider, screenName),
+      child: Container(
+        height: 45,
+        child: Row(
+          children: [
+            Image.asset(icon, width: iconSize),
+            horizontalSpace(iconPadding),
+            Text("$displayText", style: textStyle),
+          ],
         ),
       ),
     );
