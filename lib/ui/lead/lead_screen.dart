@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
-import 'package:piramal_channel_partner/res/Images.dart';
 import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/ui/lead/lead_presenter.dart';
 import 'package:piramal_channel_partner/ui/lead/lead_view.dart';
@@ -95,7 +94,7 @@ class _LeadScreenState extends State<LeadScreen> implements LeadView {
         children: [
           Row(
             children: [
-              ClipRRect(
+        /*      ClipRRect(
                 borderRadius: BorderRadius.circular(80.0),
                 child: Container(
                   height: 46,
@@ -103,7 +102,7 @@ class _LeadScreenState extends State<LeadScreen> implements LeadView {
                   child: Image.asset(Images.kImgPlaceholder, fit: BoxFit.fill),
                 ),
               ),
-              horizontalSpace(14.0),
+              horizontalSpace(14.0),*/
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
