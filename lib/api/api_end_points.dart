@@ -27,4 +27,5 @@ class EndPoints {
   static const String MY_ASSIST = BASE_URL + "/CP_Mobile_App/MyAssist";
   static const String MY_PROFILE = BASE_URL + "/CP_Mobile_App/ProfileDetails";
   static const String TODAY_SV = BASE_URL + "/CP_Mobile_App/TodaysScheduleSite";
+  static const String GET_PICK_LIST = BASE_URL + "/CP_Mobile_App/CPPicklistVal";
 }

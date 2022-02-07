@@ -7,6 +7,7 @@ import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/pages/proje
 import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/pages/project_detail_downloads_page.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/pages/project_detail_overview_page.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/pages/project_detail_towers_page.dart';
+import 'package:piramal_channel_partner/ui/projectsFlo/project_marker_interface.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 
 class ProjectDetailScreen extends StatefulWidget {
@@ -19,11 +20,20 @@ class ProjectDetailScreen extends StatefulWidget {
 class _ProjectDetailScreenState extends State<ProjectDetailScreen> with SingleTickerProviderStateMixin {
   TabController _tabController;
   List<String> listOfImages = [Images.kImgPlaceholderCarousel1, Images.kImgPlaceholderCarousel2, Images.kImgPlaceholderCarousel3];
+  List listOfPages = [
+    ProjectDetailOverviewPage(),
+    ProjectDetailTowerPage(),
+    ProjectDetailDownloadPage(),
+    ProjectDetailAmentiesPage(),
+  ];
+
+  ProjectMarkerInterface currentPage;
 
   @override
   void initState() {
     _tabController = TabController(length: 4, vsync: this);
     _tabController.addListener(onTabChangeListener);
+    currentPage = listOfPages[0];
     super.initState();
   }
 
@@ -64,12 +74,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> with SingleTi
           Expanded(
             child: TabBarView(
               controller: _tabController,
-              children: [
-                ProjectDetailOverviewPage(),
-                ProjectDetailTowerPage(),
-                ProjectDetailDownloadPage(),
-                ProjectDetailAmentiesPage(),
-              ],
+              children: [...listOfPages],
             ),
           ),
         ],
@@ -123,6 +128,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> with SingleTi
   }
 
   void onTabChangeListener() {
+    currentPage = listOfPages[_tabController.index];
     setState(() {});
   }
 }

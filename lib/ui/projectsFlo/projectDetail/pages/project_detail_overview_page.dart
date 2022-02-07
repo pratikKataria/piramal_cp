@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
+import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/project_detail_overview_view.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 
-class ProjectDetailOverviewPage extends StatelessWidget {
+class ProjectDetailOverviewPage extends StatefulWidget {
   const ProjectDetailOverviewPage({Key key}) : super(key: key);
 
+  @override
+  _ProjectDetailOverviewPageState createState() => _ProjectDetailOverviewPageState();
+}
+
+class _ProjectDetailOverviewPageState extends State<ProjectDetailOverviewPage> implements ProjectDetailOverviewView {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -26,17 +32,23 @@ class ProjectDetailOverviewPage extends StatelessWidget {
             ],
           ),
           verticalSpace(10.0),
-
           Row(
             children: [
               Text("3D Tour:  ", style: textStyleSubText14px500w),
               Text("piramalmahalaxmi.com/e-tour ↗", style: textStylePrimary14px500w),
             ],
           ),
-          
           Image.asset(Images.kImgPlaceholderMap, height: 178),
         ],
       ),
     );
+  }
+
+  @override
+  onError(String message) {}
+
+  @override
+  void onProjectOverviewDetailsFetched() {
+    print("value called");
   }
 }

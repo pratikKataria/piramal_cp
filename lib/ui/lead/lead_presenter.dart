@@ -5,6 +5,7 @@ import 'package:piramal_channel_partner/api/api_error_parser.dart';
 import 'package:piramal_channel_partner/ui/lead/addLead/add_lead_view.dart';
 import 'package:piramal_channel_partner/ui/lead/addLead/model/create_lead_request.dart';
 import 'package:piramal_channel_partner/ui/lead/addLead/model/create_lead_response.dart';
+import 'package:piramal_channel_partner/ui/lead/addLead/model/pick_list_response.dart';
 import 'package:piramal_channel_partner/ui/lead/lead_marker_interface.dart';
 import 'package:piramal_channel_partner/ui/lead/model/all_lead_response.dart';
 import 'package:piramal_channel_partner/ui/lead/model/delete_lead_response.dart';
@@ -111,6 +112,38 @@ class LeadPresenter {
         // DeleteLeadResponse deleteLeadResponse = DeleteLeadResponse.fromJson(response.data);
         // deleteLeadResponse.leadId = leadData.sfdcid;
         // (_v as LeadView).onLeadDeleted(leadData);
+      })
+      ..catchError((e) {
+        Dialogs.hideLoader(context);
+        ApiErrorParser.getResult(e, _v);
+      });
+  }
+
+  void fetchDropDownValues(BuildContext context) async {
+    //check for internal token
+    if (await AuthUser.getInstance().hasToken()) {
+      _v.onError("Token not found");
+      return;
+    }
+
+    //check network
+    if (!await NetworkCheck.check()) {
+      _v.onError("Network Error");
+      return;
+    }
+
+
+    Dialogs.showLoader(context, "Please wait getting picklist ...");
+    apiController.post(EndPoints.GET_PICK_LIST,  headers: await Utility.header())
+      ..then((response) {
+        Dialogs.hideLoader(context);
+        List<PickListResponse> brList = [];
+        var listOfDynamic = response.data as List;
+        listOfDynamic.forEach((element) {
+          brList.add(PickListResponse.fromJson(element));
+        });
+
+        (_v as AddLeadView).onPickListFetched(brList);
       })
       ..catchError((e) {
         Dialogs.hideLoader(context);

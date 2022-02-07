@@ -5,6 +5,7 @@ import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
 import 'package:piramal_channel_partner/ui/lead/addLead/add_lead_view.dart';
 import 'package:piramal_channel_partner/ui/lead/addLead/model/create_lead_request.dart';
+import 'package:piramal_channel_partner/ui/lead/addLead/model/pick_list_response.dart';
 import 'package:piramal_channel_partner/ui/lead/lead_presenter.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
@@ -33,6 +34,7 @@ class _AddLeadScreenState extends State<AddLeadScreen> implements AddLeadView {
     "Above 12 Cr",
     "Other",
   ];
+
   final List<String> locationList = ["Mumbai"];
 
   CreateLeadRequest createLeadRequest = CreateLeadRequest();
@@ -42,6 +44,7 @@ class _AddLeadScreenState extends State<AddLeadScreen> implements AddLeadView {
   void initState() {
     super.initState();
     leadPresenter = LeadPresenter(this);
+    leadPresenter.fetchDropDownValues(context);
     createLeadRequest.projectInterested = projectList[0];
     createLeadRequest.configuration = configurationList[0];
     createLeadRequest.budget = budgetList[0];
@@ -272,5 +275,37 @@ class _AddLeadScreenState extends State<AddLeadScreen> implements AddLeadView {
   @override
   void onLeadCreated() {
     Navigator.pop(context, true);
+  }
+
+  @override
+  void onPickListFetched(List<PickListResponse> pickList) {
+    pickList.forEach((element) => _(element));
+    setState(() {});
+  }
+
+  void _(PickListResponse element) {
+    switch (element?.fieldName) {
+      case "Configuration__c":
+        _v(configurationList, element.values);
+        break;
+      case "Project_Interested__c":
+        _v(projectList, element.values);
+        break;
+      case "Budget__c":
+        _v(budgetList, element.values);
+        break;
+      case "Location__c":
+        _v(locationList, element.values);
+        break;
+    }
+  }
+
+  void _v(List<String> list, String val) {
+    if (val != null && val.isNotEmpty) {
+      list.clear();
+      List<String> stringList = val.split(",").toList();
+      stringList.removeLast();
+      list.addAll(stringList);
+    }
   }
 }
