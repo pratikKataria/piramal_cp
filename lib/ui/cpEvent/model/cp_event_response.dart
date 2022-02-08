@@ -4,6 +4,7 @@
 /// EventImage : "this is a test image "
 /// EventDatetime : "2022-01-25T10:06:00.000Z"
 /// cpeventId : "a2yp0000000fOXZAA2"
+/// Availabilitystatus : "Tentative"
 
 class CpEventResponse {
   CpEventResponse({
@@ -12,13 +13,15 @@ class CpEventResponse {
       String eventName, 
       String eventImage, 
       String eventDatetime, 
-      String cpeventId,}){
+      String cpeventId, 
+      String availabilitystatus,}){
     _returnCode = returnCode;
     _message = message;
     _eventName = eventName;
     _eventImage = eventImage;
     _eventDatetime = eventDatetime;
     _cpeventId = cpeventId;
+    _availabilitystatus = availabilitystatus;
 }
 
   CpEventResponse.fromJson(dynamic json) {
@@ -28,6 +31,7 @@ class CpEventResponse {
     _eventImage = json['EventImage'];
     _eventDatetime = json['EventDatetime'];
     _cpeventId = json['cpeventId'];
+    _availabilitystatus = json['Availabilitystatus'];
   }
   bool _returnCode;
   String _message;
@@ -35,6 +39,7 @@ class CpEventResponse {
   String _eventImage;
   String _eventDatetime;
   String _cpeventId;
+  String _availabilitystatus;
 
   bool get returnCode => _returnCode;
   String get message => _message;
@@ -42,6 +47,7 @@ class CpEventResponse {
   String get eventImage => _eventImage;
   String get eventDatetime => _eventDatetime;
   String get cpeventId => _cpeventId;
+  String get availabilitystatus => _availabilitystatus;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -51,6 +57,7 @@ class CpEventResponse {
     map['EventImage'] = _eventImage;
     map['EventDatetime'] = _eventDatetime;
     map['cpeventId'] = _cpeventId;
+    map['Availabilitystatus'] = _availabilitystatus;
     return map;
   }
 

@@ -21,6 +21,8 @@ class CPEventScreen extends StatefulWidget {
 class _CPEventScreenState extends State<CPEventScreen> implements CPEventView {
   final subTextStyle = textStyleSubText14px500w;
   final mainTextStyle = textStyle14px500w;
+  final ATTEND = "Attend";
+  final TENTATIVE = "Tentative";
   final List<CpEventResponse> cpEventList = [];
   CPEventPresenter presenter;
 
@@ -105,7 +107,14 @@ class _CPEventScreenState extends State<CPEventScreen> implements CPEventView {
                   ],
                 ),
                 verticalSpace(20.0),
-                Row(
+                if (cpEventData.availabilitystatus != null)
+                  Container(
+                    height: 25.0,
+                    color: cpEventData.availabilitystatus == ATTEND ? AppColors.attendButtonColor : AppColors.tentativeButtonColor,
+                    child: Center(child: Text("${eventText(cpEventData.availabilitystatus)}", style: textStyleWhite14px500w)),
+                  ),
+                if (cpEventData.availabilitystatus == null)
+                  Row(
                   children: [
                     PmlButton(
                       height: 32.0,
@@ -165,6 +174,9 @@ class _CPEventScreenState extends State<CPEventScreen> implements CPEventView {
   void onCpEventStatusUpdated(CpEventStatusUpdateResponse response) {
     Utility.showSuccessToastB(context, response.availabilityStatus);
   }
+
+  String eventText(String eventStatus) =>
+      eventStatus == ATTEND ? "You are Attending event" : "You have tentatively accepted for event";
 }
 
 /*
