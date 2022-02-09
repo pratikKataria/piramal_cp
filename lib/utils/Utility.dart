@@ -184,6 +184,20 @@ class Utility {
         fontSize: 16.0);
   }
 
+  static Color getRatingColor(String rating) {
+    switch (rating?.toUpperCase()) {
+      case "HOT":
+        return AppColors.colorPrimary;
+      case "WARM":
+        return AppColors.colorPrimaryLight;
+      case "COLD":
+        return AppColors.textColorBlue;
+      default:
+        return AppColors.colorPrimary;
+    }
+  }
+
+
 /*  static Future<String> getFilePath() async {
     Directory storageDirectory = await getApplicationDocumentsDirectory();
     String sdPath = storageDirectory.path + "/record";
@@ -328,6 +342,7 @@ class Utility {
       }
     }
   }
+
 }
 
 Widget verticalSpace(double height) => SizedBox(

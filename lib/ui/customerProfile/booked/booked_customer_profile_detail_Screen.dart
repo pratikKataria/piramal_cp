@@ -7,10 +7,12 @@ import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
 import 'package:piramal_channel_partner/widgets/whats_app_button.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class BookedCustomerProfileDetailScreen extends StatelessWidget {
-  final BookingResponse bookingResponse;
-  BookedCustomerProfileDetailScreen(this.bookingResponse, {Key key}) : super(key: key);
+  final BookingResponse response;
+
+  BookedCustomerProfileDetailScreen(this.response, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +38,8 @@ class BookedCustomerProfileDetailScreen extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Narayana Patel", style: textStyleRegular18pxW500),
-                      Text("Next Follow up: March 27th", style: textStyleSubText14px500w),
+                      Text("${response?.name}", style: textStyleRegular18pxW500),
+                      Text("Next Follow up: -", style: textStyleSubText14px500w),
                     ],
                   ),
                 ],
@@ -58,18 +60,23 @@ class BookedCustomerProfileDetailScreen extends StatelessWidget {
                     child: Image.asset(Images.kIconCalender),
                   ),
                   horizontalSpace(8.0),
-                  Container(
-                    width: 35,
-                    height: 35,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppColors.colorPrimaryLight,
+                  InkWell(
+                    onTap: () {
+                      launch("tel://${response?.name ?? ""}");
+                    },
+                    child: Container(
+                      width: 35,
+                      height: 35,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppColors.colorPrimaryLight,
+                      ),
+                      padding: EdgeInsets.all(10.0),
+                      child: Image.asset(Images.kIconPhone),
                     ),
-                    padding: EdgeInsets.all(10.0),
-                    child: Image.asset(Images.kIconPhone),
                   ),
                   horizontalSpace(8.0),
-                  WhatsAppButton(null),
+                  WhatsAppButton("${response?.mobilenumber}"),
                 ],
               ),
 
@@ -83,10 +90,10 @@ class BookedCustomerProfileDetailScreen extends StatelessWidget {
                     Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(6),
-                        color: AppColors.attendButtonColor,
+                        color: Utility.getRatingColor(response?.newRating),
                       ),
                       padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-                      child: Text("Booked", style: textStyleWhite14px500w),
+                      child: Text("${response?.newRating}", style: textStyleWhite14px500w),
                     ),
                     horizontalSpace(10.0),
                     Container(
@@ -95,17 +102,18 @@ class BookedCustomerProfileDetailScreen extends StatelessWidget {
                         color: AppColors.chipColor,
                       ),
                       padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-                      child: Text("Validity: 23 Day", style: textStyle14px500w),
+                      child: Text("Validity: ${response?.createdDays} Days", style: textStyle14px500w),
                     ),
                     horizontalSpace(10.0),
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6),
-                        color: AppColors.chipColor,
+                    if (response.revisit)
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                          color: AppColors.chipColor,
+                        ),
+                        padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+                        child: Text("Revisit", style: textStyle14px500w),
                       ),
-                      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-                      child: Text("Revisit", style: textStyle14px500w),
-                    ),
                   ],
                 ),
               ),
