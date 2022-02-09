@@ -111,7 +111,7 @@ class MyApp extends StatelessWidget {
               break;
           }
         },
-        home: ProjectScreen(),
+        home: checkAuthUser(authResult),
       ),
     );
   }

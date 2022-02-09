@@ -59,8 +59,8 @@ class _LoginScreenState extends State<LoginScreen> implements LoginView {
               verticalSpace(10.0),
               if (otp != null) passwordField(),
               verticalSpace(18.0),
-              Text(kForgotPasswordText, style: subTextStyle),
-              verticalSpace(50.0),
+              // Text(kForgotPasswordText, style: subTextStyle),
+              verticalSpace(30.0),
               loginButton(otp != null ? "Log In" : "Send OTP"),
               verticalSpace(10.0),
               InkWell(
@@ -93,7 +93,7 @@ class _LoginScreenState extends State<LoginScreen> implements LoginView {
           Container(
             width: 65,
             margin: EdgeInsets.symmetric(horizontal: 12.0),
-            child: Text("Email /Mobile", style: mainTextStyle),
+            child: Text("Email/Phone", style: mainTextStyle),
           ),
           Expanded(
             child: TextFormField(
@@ -107,6 +107,7 @@ class _LoginScreenState extends State<LoginScreen> implements LoginView {
                 border: InputBorder.none,
                 hintText: "Enter email address",
                 hintStyle: subTextStyle,
+                isDense: true,
                 suffixStyle: TextStyle(color: AppColors.textColor),
               ),
               onChanged: (String val) {
@@ -148,8 +149,9 @@ class _LoginScreenState extends State<LoginScreen> implements LoginView {
               style: subTextStyle,
               decoration: InputDecoration(
                 border: InputBorder.none,
-                hintText: "Enter password",
+                hintText: "Enter otp",
                 hintStyle: subTextStyle,
+                isDense: true,
                 suffixStyle: TextStyle(color: AppColors.textColor),
               ),
               onChanged: (String val) {
