@@ -5,6 +5,7 @@ import 'package:piramal_channel_partner/res/Images.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/widget/left_chat_widget.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/widget/right_chat_widget.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
+import 'package:piramal_channel_partner/widgets/whats_app_button.dart';
 
 class WalkinCustomerProfileDetailScreen extends StatelessWidget {
   const WalkinCustomerProfileDetailScreen({Key key}) : super(key: key);
@@ -64,15 +65,7 @@ class WalkinCustomerProfileDetailScreen extends StatelessWidget {
                 child: Image.asset(Images.kIconPhone),
               ),
               horizontalSpace(8.0),
-              Container(
-                width: 35,
-                height: 35,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.colorPrimaryLight,
-                ),
-                child: Image.asset(Images.kIconWhatsApp),
-              ),
+              WhatsAppButton(""),
             ],
           ),
 
@@ -109,7 +102,6 @@ class WalkinCustomerProfileDetailScreen extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
                   child: Text("Revisit", style: textStyle14px500w),
                 ),
-
               ],
             ),
           ),
@@ -127,16 +119,21 @@ class WalkinCustomerProfileDetailScreen extends StatelessWidget {
             ],
           ),
 
-         //Chat
+          //Chat
           verticalSpace(20.0),
-          LeftChatWidget(name: "Hariom Anand(CM)", chatText: "Client has to get his eligibility checked",),
+          LeftChatWidget(
+            name: "Hariom Anand(CM)",
+            chatText: "Client has to get his eligibility checked",
+          ),
 
           verticalSpace(10.0),
-          LeftChatWidget(name: "Maryam Kapur (SM)", chatText: "Yes, client mentioned kiya tha",),
+          LeftChatWidget(
+            name: "Maryam Kapur (SM)",
+            chatText: "Yes, client mentioned kiya tha",
+          ),
 
           verticalSpace(10.0),
           Align(alignment: Alignment.centerRight, child: RightChatWidget()),
-
 
           //Second visit
           verticalSpace(25.0),
@@ -153,10 +150,16 @@ class WalkinCustomerProfileDetailScreen extends StatelessWidget {
 
           //Chat
           verticalSpace(20.0),
-          LeftChatWidget(name: "Hariom Anand(CM)", chatText: "Client has to get his eligibility checked",),
+          LeftChatWidget(
+            name: "Hariom Anand(CM)",
+            chatText: "Client has to get his eligibility checked",
+          ),
 
           verticalSpace(10.0),
-          LeftChatWidget(name: "Maryam Kapur (SM)", chatText: "Yes, client mentioned kiya tha",),
+          LeftChatWidget(
+            name: "Maryam Kapur (SM)",
+            chatText: "Yes, client mentioned kiya tha",
+          ),
 
           verticalSpace(10.0),
           Align(alignment: Alignment.centerRight, child: RightChatWidget()),

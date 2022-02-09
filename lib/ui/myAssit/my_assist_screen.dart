@@ -7,6 +7,7 @@ import 'package:piramal_channel_partner/ui/myAssit/my_assist_presenter.dart';
 import 'package:piramal_channel_partner/ui/myAssit/my_assist_view.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
+import 'package:piramal_channel_partner/widgets/whats_app_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MyAssistScreen extends StatefulWidget {
@@ -108,12 +109,7 @@ class _MyAssistScreenState extends State<MyAssistScreen> implements MyAssistView
               child: Image.asset(Images.kIconPhone),
             ),
             horizontalSpace(10.0),
-            PmlButton(
-              height: 32.0,
-              width: 32.0,
-              color: AppColors.colorPrimaryLight,
-              child: Image.asset(Images.kIconWhatsApp),
-            ),
+            WhatsAppButton(number),
           ],
         ),
         verticalSpace(24.0),

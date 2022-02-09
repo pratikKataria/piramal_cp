@@ -9,6 +9,7 @@ import 'package:piramal_channel_partner/ui/currentPromotions/current_promo_prese
 import 'package:piramal_channel_partner/ui/currentPromotions/current_promo_view.dart';
 import 'package:piramal_channel_partner/ui/currentPromotions/model/current_promo_response.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
+import 'package:piramal_channel_partner/widgets/whats_app_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CurrentPromotionScreen extends StatefulWidget {
@@ -98,20 +99,7 @@ class _CurrentPromotionScreenState extends State<CurrentPromotionScreen> impleme
                     Expanded(child: Text("${currentPromoData.name}", style: textStyle24px500w)),
                     Row(
                       children: [
-                        InkWell(
-                          onTap: () {
-
-                          },
-                          child: Container(
-                            width: 30,
-                            height: 30,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: AppColors.colorPrimaryLight,
-                            ),
-                            child: Image.asset(Images.kIconWhatsApp),
-                          ),
-                        ),
+                        WhatsAppButton(currentPromoData?.mobilenumber),
                         horizontalSpace(8.0),
                         InkWell(
                           onTap: () {
@@ -163,7 +151,7 @@ class _CurrentPromotionScreenState extends State<CurrentPromotionScreen> impleme
   }
 
   void openWhatsapp(String mobileNumber) async {
-    var whatsapp = "+91${mobileNumber?? ""}";
+    var whatsapp = "+91${mobileNumber ?? ""}";
     var whatsappURl_android = "whatsapp://send?phone=" + whatsapp + "&text=hello";
     var whatappURL_ios = "https://wa.me/$whatsapp?text=${Uri.parse("hello")}";
     if (Platform.isIOS) {

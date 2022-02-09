@@ -5,6 +5,7 @@ import 'package:piramal_channel_partner/res/Images.dart';
 import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/booking_response.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
+import 'package:piramal_channel_partner/widgets/whats_app_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SvWalkInCardWidget extends StatelessWidget {
@@ -101,7 +102,7 @@ class SvWalkInCardWidget extends StatelessWidget {
               horizontalSpace(8.0),
               callButton(),
               horizontalSpace(8.0),
-              whatsApp(),
+              WhatsAppButton(_bookingResponse?.mobilenumber),
               Spacer(),
               Container(
                 width: 35,
@@ -146,23 +147,6 @@ class SvWalkInCardWidget extends StatelessWidget {
         ),
         padding: EdgeInsets.all(10.0),
         child: Image.asset(Images.kIconCalender),
-      ),
-    );
-  }
-
-  InkWell whatsApp() {
-    return InkWell(
-      onTap: () {
-        Utility.openWhatsapp(_bookingResponse?.mobilenumber);
-      },
-      child: Container(
-        width: 35,
-        height: 35,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: AppColors.colorPrimaryLight,
-        ),
-        child: Image.asset(Images.kIconWhatsApp),
       ),
     );
   }
