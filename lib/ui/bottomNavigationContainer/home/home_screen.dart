@@ -28,14 +28,14 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin implements HomeView {
   TabController _tabController;
-  bool filterIsOpen = true;
-  String currentSelectedTab = "Walk in";
   HomePresenter _homePresenter;
 
-  List bookingListWidgets = [];
-  List walkInListWidgets = [];
+  List<BookingResponse> bookingList = [];
+  List<BookingResponse> walkInList = [];
+  List<String> projectList = [];
 
   String events = "Currently no events available";
+  String currentSelectedTab = "Walk in";
 
   @override
   void initState() {
@@ -83,17 +83,17 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
               ],
             ),
           ),
-          if (walkInListWidgets.isNotEmpty)
+          if (walkInList.isNotEmpty)
             Expanded(
               child: TabBarView(
                 controller: _tabController,
                 physics: NeverScrollableScrollPhysics(),
                 children: [
                   ListView(
-                    children: walkInListWidgets.map<Widget>((e) => WalkInCardWidget(e, _homePresenter)).toList(),
+                    children: walkInList.map<Widget>((e) => WalkInCardWidget(e, _homePresenter)).toList(),
                   ),
                   ListView(
-                    children: bookingListWidgets.map<Widget>((e) => BookingCardWidget(e, _homePresenter)).toList(),
+                    children: bookingList.map<Widget>((e) => BookingCardWidget(e, _homePresenter)).toList(),
                   ),
                 ],
               ),
@@ -111,29 +111,20 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
         children: [
           Text("Project", style: textStyleRegular16px400w),
           verticalSpace(8.0),
-          Row(
-            children: [
-              PmlOutlineButton(
-                text: "Aranya",
-                padding: EdgeInsets.symmetric(horizontal: 15.0),
-                height: 25.0,
-                textStyle: textStyle12px500w,
-              ),
-              horizontalSpace(10.0),
-              PmlOutlineButton(
-                text: "Mahalaximi",
-                padding: EdgeInsets.symmetric(horizontal: 15.0),
-                height: 25.0,
-                textStyle: textStyle12px500w,
-              ),
-              horizontalSpace(10.0),
-              PmlOutlineButton(
-                text: "Revanta",
-                padding: EdgeInsets.symmetric(horizontal: 15.0),
-                height: 25.0,
-                textStyle: textStyle12px500w,
-              ),
-            ],
+          Container(
+            height: 25.0,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: projectList
+                  .map<Widget>((e) => PmlOutlineButton(
+                        text: "${e}",
+                        padding: EdgeInsets.symmetric(horizontal: 15.0),
+                        margin: EdgeInsets.only(left: 20.0),
+                        height: 25.0,
+                        textStyle: textStyle12px500w,
+                      ))
+                  .toList(),
+            ),
           ),
           verticalSpace(14.0),
           Text("Lead Status", style: textStyleRegular16px400w),
@@ -296,15 +287,21 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     );
   }
 
-  int totalCustomerCount() {
-    return bookingListWidgets.length + walkInListWidgets.length;
-  }
-
-  @override
-  void onBookingListFetched(List<BookingResponse> brList) {
-    bookingListWidgets.clear();
-    bookingListWidgets.addAll(brList);
-    setState(() {});
+  Column buildDialogRow(String s, String m) {
+    return Column(
+      children: [
+        verticalSpace(16.0),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text("$s", style: textStyleSubText12px400w),
+            Text("$m", style: textStyle12px500w),
+          ],
+        ),
+        verticalSpace(16.0),
+        line()
+      ],
+    );
   }
 
   @override
@@ -313,15 +310,31 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   }
 
   @override
-  void onWalkInListFetched(List<BookingResponse> wList) {
-    walkInListWidgets.clear();
-    walkInListWidgets.addAll(wList);
-    _homePresenter.getBookingList(context);
+  void onBookingListFetched(List<BookingResponse> brList) {
+    bookingList.clear();
+    bookingList.addAll(brList);
+    //filter project form the response and add it to the project list
+    bookingList.forEach((booking) {
+      if (!projectList.contains(booking?.projectFinalized)) projectList.add(booking?.projectFinalized);
+    });
     setState(() {});
   }
 
   @override
-  Future<void> onTokenRegenerated(TokenResponse tokenResponse) async {
+  void onWalkInListFetched(List<BookingResponse> wList) {
+    walkInList.clear();
+    walkInList.addAll(wList);
+    //call Booking list api
+    _homePresenter.getBookingList(context);
+    //filter project form the response and add it to the project list
+    bookingList.forEach((booking) {
+      if (!projectList.contains(booking?.projectFinalized)) projectList.add(booking?.projectFinalized);
+    });
+    setState(() {});
+  }
+
+  @override
+  void onTokenRegenerated(TokenResponse tokenResponse) async {
     //Save token
     var currentUser = await AuthUser.getInstance().getCurrentUser();
     currentUser.tokenResponse = tokenResponse;
@@ -399,20 +412,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     );
   }
 
-  Column buildDialogRow(String s, String m) {
-    return Column(
-      children: [
-        verticalSpace(16.0),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text("$s", style: textStyleSubText12px400w),
-            Text("$m", style: textStyle12px500w),
-          ],
-        ),
-        verticalSpace(16.0),
-        line()
-      ],
-    );
+  int totalCustomerCount() {
+    return bookingList.length + walkInList.length;
   }
 }
