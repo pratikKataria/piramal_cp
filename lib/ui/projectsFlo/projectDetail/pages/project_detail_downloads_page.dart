@@ -3,10 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
+import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/model/project_download_response.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 
 class ProjectDetailDownloadPage extends StatelessWidget {
-  const ProjectDetailDownloadPage({Key key}) : super(key: key);
+  final List<ProjectDownloadResponse> projectDownloadResponse = [];
+
+  ProjectDetailDownloadPage(List<ProjectDownloadResponse> projectDownloadResponse, {Key key}) : super(key: key) {
+    if (projectDownloadResponse != null) {
+      this.projectDownloadResponse.clear();
+      this.projectDownloadResponse.addAll(projectDownloadResponse);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +56,6 @@ class ProjectDetailDownloadPage extends StatelessWidget {
               ),
             ],
           ),
-
           verticalSpace(20.0),
           line(),
           verticalSpace(20.0),
@@ -84,7 +91,6 @@ class ProjectDetailDownloadPage extends StatelessWidget {
               ),
             ],
           ),
-
           verticalSpace(20.0),
           line(),
           verticalSpace(20.0),
@@ -120,7 +126,6 @@ class ProjectDetailDownloadPage extends StatelessWidget {
               ),
             ],
           ),
-
           verticalSpace(20.0),
           line(),
           verticalSpace(20.0),

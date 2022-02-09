@@ -3,11 +3,15 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
+import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/model/project_amenities_response.dart';
+import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/model/project_download_response.dart';
+import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/model/project_overview_response.dart';
+import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/model/project_tower_response.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/pages/project_detail_amenities_page.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/pages/project_detail_downloads_page.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/pages/project_detail_overview_page.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/pages/project_detail_towers_page.dart';
-import 'package:piramal_channel_partner/ui/projectsFlo/project_marker_interface.dart';
+import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/project_detail_view.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/project_presenter.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 
@@ -18,18 +22,18 @@ class ProjectDetailScreen extends StatefulWidget {
   _ProjectDetailScreenState createState() => _ProjectDetailScreenState();
 }
 
-class _ProjectDetailScreenState extends State<ProjectDetailScreen> with SingleTickerProviderStateMixin {
+class _ProjectDetailScreenState extends State<ProjectDetailScreen>
+    with SingleTickerProviderStateMixin
+    implements ProjectDetailView {
   TabController _tabController;
   List<String> listOfImages = [Images.kImgPlaceholderCarousel1, Images.kImgPlaceholderCarousel2, Images.kImgPlaceholderCarousel3];
-  List listOfPages = [
-    ProjectDetailOverviewPage(),
-    ProjectDetailTowerPage(),
-    ProjectDetailDownloadPage(),
-    ProjectDetailAmentiesPage(),
-  ];
+
+  ProjectOverviewResponse projectOverviewResponse;
+  ProjectAmenitiesResponse projectAmenitiesResponse;
+  List<ProjectTowerResponse> projectTowerResponse;
+  List<ProjectDownloadResponse> projectDownloadResponse;
 
   ProjectPresenter projectPresenter;
-  ProjectMarkerInterface currentPage;
 
   @override
   void initState() {
@@ -37,9 +41,12 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> with SingleTi
     _tabController = TabController(length: 4, vsync: this);
     _tabController.addListener(onTabChangeListener);
 
-    // init current view and project present
-    currentPage = listOfPages[0];
-    projectPresenter = ProjectPresenter(currentPage);
+    // project present
+    projectPresenter = ProjectPresenter(this);
+    projectPresenter.getProjectOverview(context);
+    projectPresenter.getTowerList(context);
+    projectPresenter.getDownloadList(context);
+    projectPresenter.getProjectAmenities(context);
 
     super.initState();
   }
@@ -69,11 +76,11 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> with SingleTi
           verticalSpace(20.0),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Text("Piramal Mahalaxmi", style: textStyle24px500w),
+            child: Text("${projectOverviewResponse?.projectName ?? ""}", style: textStyle24px500w),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Text("South Mumbai - India", style: textStyleSubText14px500w),
+            child: Text("${projectOverviewResponse?.projectCity ?? ""}", style: textStyleSubText14px500w),
           ),
           verticalSpace(20.0),
           buildTabs(),
@@ -81,7 +88,12 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> with SingleTi
           Expanded(
             child: TabBarView(
               controller: _tabController,
-              children: [...listOfPages],
+              children: [
+                ProjectDetailOverviewPage(projectOverviewResponse),
+                ProjectDetailTowerPage(projectTowerResponse),
+                ProjectDetailDownloadPage(projectDownloadResponse),
+                ProjectDetailAmenitiesPage(projectAmenitiesResponse),
+              ],
             ),
           ),
         ],
@@ -136,7 +148,37 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> with SingleTi
 
   void onTabChangeListener() {
     //update currentPage view
-    currentPage = listOfPages[_tabController.index];
+    // currentPage = listOfPages[_tabController.index];
+    // projectPresenter.getProjectAmenities(context);
+    // setState(() {});
+  }
+
+  @override
+  onError(String message) {
+    Utility.showErrorToastB(context, message);
+  }
+
+  @override
+  void onProjectAmenitiesFetched(ProjectAmenitiesResponse projectAmenitiesResponse) {
+    this.projectAmenitiesResponse = projectAmenitiesResponse;
+    setState(() {});
+  }
+
+  @override
+  void onProjectOverviewDetailsFetched(ProjectOverviewResponse projectOverviewResponse) {
+    this.projectOverviewResponse = projectOverviewResponse;
+    setState(() {});
+  }
+
+  @override
+  void onProjectTowerListFetched(List<ProjectTowerResponse> projectListResponse) {
+    this.projectTowerResponse = projectListResponse;
+    setState(() {});
+  }
+
+  @override
+  void onProjectDownloadListFetched(List<ProjectDownloadResponse> projectDownloadResponse) {
+    this.projectDownloadResponse = projectDownloadResponse;
     setState(() {});
   }
 }

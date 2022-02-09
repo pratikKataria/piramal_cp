@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
+import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/model/project_amenities_response.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 
-class ProjectDetailAmentiesPage extends StatelessWidget  {
-  const ProjectDetailAmentiesPage({Key key}) : super(key: key);
+class ProjectDetailAmenitiesPage extends StatelessWidget {
+  final ProjectAmenitiesResponse projectAmenitiesResponse;
+  const ProjectDetailAmenitiesPage(this.projectAmenitiesResponse, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,16 +20,16 @@ class ProjectDetailAmentiesPage extends StatelessWidget  {
             children: [
               Expanded(
                 child: Text(
-                  "1. Tower Lobby Entry\n2. Pets Park\n3. Sitting Planter & Garden\n4. Jogging track\n5. Grand Lawn\n6. Swimming Pool\n7. Basketball Court\n8. Children’s Meadow",
+                  "${projectAmenitiesResponse?.projectAmenitiesList??""}",
                   style: textStyle14px500w20H,
                 ),
               ),
-              Expanded(
-                child: Text(
-                  "15. Reading Corner\n16. Children’s Pool\n17. Pool Pavilion\n18. 5-Lane Lap Pool\n19. Jacuzzi\n20. Climbing\n21. Helix Club House Entry\n22. Amphitheatre",
-                  style: textStyle14px500w20H,
-                ),
-              ),
+              // Expanded(
+              //   child: Text(
+              //     "15. Reading Corner\n16. Children’s Pool\n17. Pool Pavilion\n18. 5-Lane Lap Pool\n19. Jacuzzi\n20. Climbing\n21. Helix Club House Entry\n22. Amphitheatre",
+              //     style: textStyle14px500w20H,
+              //   ),
+              // ),
             ],
           )
         ],

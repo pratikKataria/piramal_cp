@@ -3,9 +3,10 @@ import 'package:piramal_channel_partner/api/api_controller_expo.dart';
 import 'package:piramal_channel_partner/api/api_end_points.dart';
 import 'package:piramal_channel_partner/api/api_error_parser.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/model/project_amenities_response.dart';
+import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/model/project_download_response.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/model/project_overview_response.dart';
-import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/pageViews/project_detail_amenities_view.dart';
-import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/pageViews/project_detail_overview_view.dart';
+import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/model/project_tower_response.dart';
+import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/project_detail_view.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/projectList/model/project_list_response.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/projectList/project_view.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/project_marker_interface.dart';
@@ -54,6 +55,13 @@ class ProjectPresenter {
       });
   }
 
+  /*
+  *
+  *
+  *
+  * Project detail
+  * */
+
   void getProjectOverview(BuildContext context) async {
     //check for internal token
     if (await AuthUser.getInstance().hasToken()) {
@@ -67,15 +75,13 @@ class ProjectPresenter {
       return;
     }
 
-    var body = {
-      "projectList": [{}]
-    };
-    Dialogs.showLoader(context, "Please wait fetching your project list ...");
+    var body = {"ProjectID": "a03N0000005NHiTIAW"};
+    Dialogs.showLoader(context, "Please wait fetching your project details ...");
     apiController.post(EndPoints.PROJECT_OVERVIEW, body: body, headers: await Utility.header())
       ..then((response) {
         Dialogs.hideLoader(context);
         ProjectOverviewResponse projectOverviewResponse = ProjectOverviewResponse.fromJson(response.data);
-        (_v as ProjectDetailOverviewView).onProjectOverviewDetailsFetched(projectOverviewResponse);
+        (_v as ProjectDetailView).onProjectOverviewDetailsFetched(projectOverviewResponse);
       })
       ..catchError((e) {
         Dialogs.hideLoader(context);
@@ -97,16 +103,81 @@ class ProjectPresenter {
     }
 
     var body = {"ProjectID": "a03N0000005NHiTIAW"};
-    Dialogs.showLoader(context, "Please wait fetching your project list ...");
+    // Dialogs.showLoader(context, "Please wait fetching your project list ...");
     apiController.post(EndPoints.PROJECT_AMENITIES, body: body, headers: await Utility.header())
       ..then((response) {
-        Dialogs.hideLoader(context);
+        // Dialogs.hideLoader(context);
         ProjectAmenitiesResponse projectAmenitiesResponse = ProjectAmenitiesResponse.fromJson(response.data);
-
-        (_v as ProjectDetailAmenitiesView).onProjectAmenitiesFetched(projectAmenitiesResponse);
+        (_v as ProjectDetailView).onProjectAmenitiesFetched(projectAmenitiesResponse);
       })
       ..catchError((e) {
-        Dialogs.hideLoader(context);
+        // Dialogs.hideLoader(context);
+        ApiErrorParser.getResult(e, _v);
+      });
+  }
+
+  void getTowerList(BuildContext context) async {
+    //check for internal token
+    if (await AuthUser.getInstance().hasToken()) {
+      _v.onError("Token not found");
+      return;
+    }
+
+    //check network
+    if (!await NetworkCheck.check()) {
+      _v.onError("Network Error");
+      return;
+    }
+
+    var body = {"ProjectID": "a03N0000005NHiTIAW"};
+    // Dialogs.showLoader(context, "Please wait fetching your project list ...");
+    apiController.post(EndPoints.PROJECT_TOWER, body: body, headers: await Utility.header())
+      ..then((response) {
+        // Dialogs.hideLoader(context);
+
+        List<ProjectTowerResponse> projectListResponse = [];
+        var listOfDynamic = response.data as List;
+        listOfDynamic.forEach((element) {
+          projectListResponse.add(ProjectTowerResponse.fromJson(element));
+        });
+
+        (_v as ProjectDetailView).onProjectTowerListFetched(projectListResponse);
+      })
+      ..catchError((e) {
+        // Dialogs.hideLoader(context);
+        ApiErrorParser.getResult(e, _v);
+      });
+  }
+
+  void getDownloadList(BuildContext context) async {
+    //check for internal token
+    if (await AuthUser.getInstance().hasToken()) {
+      _v.onError("Token not found");
+      return;
+    }
+
+    //check network
+    if (!await NetworkCheck.check()) {
+      _v.onError("Network Error");
+      return;
+    }
+
+    var body = {"ProjectID": "a03N0000005NHiTIAW"};
+    // Dialogs.showLoader(context, "Please wait fetching your project list ...");
+    apiController.post(EndPoints.PROJECT_GALLERY, body: body, headers: await Utility.header())
+      ..then((response) {
+        // Dialogs.hideLoader(context);
+
+        List<ProjectDownloadResponse> projectListResponse = [];
+        var listOfDynamic = response.data as List;
+        listOfDynamic.forEach((element) {
+          projectListResponse.add(ProjectDownloadResponse.fromJson(element));
+        });
+
+        (_v as ProjectDetailView).onProjectDownloadListFetched(projectListResponse);
+      })
+      ..catchError((e) {
+        // Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }

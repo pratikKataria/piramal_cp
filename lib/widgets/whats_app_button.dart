@@ -34,6 +34,11 @@ class WhatsAppButton extends StatelessWidget {
     var whatsappURl_android = "https://wa.me/$whatsapp/?text=hi";
     var whatappURL_ios = "https://wa.me/$whatsapp?text=${Uri.parse("hello")}";
 
+    if (mobileNumber == null) {
+      Utility.showErrorToastB(context, "Mobile number not found");
+      return;
+    }
+
     if (Platform.isIOS) {
       // for iOS phone only
       if (await canLaunch(whatappURL_ios)) {
