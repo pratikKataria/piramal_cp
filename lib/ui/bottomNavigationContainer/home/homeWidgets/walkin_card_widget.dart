@@ -41,11 +41,11 @@ class WalkInCardWidget extends StatelessWidget {
         children: [
           InkWell(
             onTap: () {
-              Navigator.pushNamed(context, Screens.kCustomerProfileDetailBooking);
+              Navigator.pushNamed(context, Screens.kCustomerProfileDetailWalkin, arguments: _bookingResponse);
             },
             child: Row(
               children: [
-         /*       ClipRRect(
+                /*       ClipRRect(
                   borderRadius: BorderRadius.circular(80.0),
                   child: Container(
                     height: 37,
@@ -200,5 +200,4 @@ class WalkInCardWidget extends StatelessWidget {
       _presenter.scheduleTime(context, _bookingResponse.sfdcid, datePicked);
     }
   }
-
 }

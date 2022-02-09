@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
+import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/booking_response.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/widget/left_chat_widget.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/widget/right_chat_widget.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/whats_app_button.dart';
 
 class WalkinCustomerProfileDetailScreen extends StatelessWidget {
-  const WalkinCustomerProfileDetailScreen({Key key}) : super(key: key);
+  final BookingResponse response;
+
+  WalkinCustomerProfileDetailScreen(this.response, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
