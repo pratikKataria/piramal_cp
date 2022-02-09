@@ -8,6 +8,7 @@ import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/pages/proje
 import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/pages/project_detail_overview_page.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/pages/project_detail_towers_page.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/project_marker_interface.dart';
+import 'package:piramal_channel_partner/ui/projectsFlo/project_presenter.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 
 class ProjectDetailScreen extends StatefulWidget {
@@ -27,13 +28,19 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> with SingleTi
     ProjectDetailAmentiesPage(),
   ];
 
+  ProjectPresenter projectPresenter;
   ProjectMarkerInterface currentPage;
 
   @override
   void initState() {
+    //Setup tab controller and listener
     _tabController = TabController(length: 4, vsync: this);
     _tabController.addListener(onTabChangeListener);
+
+    // init current view and project present
     currentPage = listOfPages[0];
+    projectPresenter = ProjectPresenter(currentPage);
+
     super.initState();
   }
 
@@ -128,6 +135,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> with SingleTi
   }
 
   void onTabChangeListener() {
+    //update currentPage view
     currentPage = listOfPages[_tabController.index];
     setState(() {});
   }

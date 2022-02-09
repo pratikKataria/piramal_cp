@@ -1,17 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
-import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/project_detail_overview_view.dart';
+import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/model/project_overview_response.dart';
+import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/pageViews/project_detail_overview_view.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 
-class ProjectDetailOverviewPage extends StatefulWidget {
-  const ProjectDetailOverviewPage({Key key}) : super(key: key);
-
-  @override
-  _ProjectDetailOverviewPageState createState() => _ProjectDetailOverviewPageState();
-}
-
-class _ProjectDetailOverviewPageState extends State<ProjectDetailOverviewPage> implements ProjectDetailOverviewView {
+class ProjectDetailOverviewPage extends StatelessWidget implements ProjectDetailOverviewView {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -48,7 +42,7 @@ class _ProjectDetailOverviewPageState extends State<ProjectDetailOverviewPage> i
   onError(String message) {}
 
   @override
-  void onProjectOverviewDetailsFetched() {
-    print("value called");
+  void onProjectOverviewDetailsFetched(ProjectOverviewResponse response) {
+    print("onProjectOverviewDetailsFetched called");
   }
 }

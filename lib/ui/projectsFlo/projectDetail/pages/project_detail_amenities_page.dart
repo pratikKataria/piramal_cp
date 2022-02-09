@@ -3,7 +3,7 @@ import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 
-class ProjectDetailAmentiesPage extends StatelessWidget {
+class ProjectDetailAmentiesPage extends StatelessWidget  {
   const ProjectDetailAmentiesPage({Key key}) : super(key: key);
 
   @override
