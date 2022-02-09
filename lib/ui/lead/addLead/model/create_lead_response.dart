@@ -5,7 +5,7 @@
 
 class CreateLeadResponse {
   CreateLeadResponse({
-    int returnCode,
+    bool returnCode,
     String recordid,
     String message,
     dynamic l,
@@ -23,15 +23,13 @@ class CreateLeadResponse {
     _l = json['l'];
   }
 
-  int _returnCode;
+  bool _returnCode;
   String _recordid;
   String _message;
   dynamic _l;
 
-  int get returnCode => _returnCode;
-
+  bool get returnCode => _returnCode;
   String get recordid => _recordid;
-
   String get message => _message;
 
   dynamic get l => _l;

@@ -3,6 +3,7 @@ import 'package:piramal_channel_partner/api/api_controller_expo.dart';
 import 'package:piramal_channel_partner/api/api_end_points.dart';
 import 'package:piramal_channel_partner/api/api_error_parser.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/booking_response.dart';
+import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/project_unit_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/schedule_visit_response.dart';
 import 'package:piramal_channel_partner/ui/cpEvent/model/cp_event_response.dart';
 import 'package:piramal_channel_partner/user/AuthUser.dart';
@@ -105,10 +106,7 @@ class HomePresenter {
       return;
     }
 
-    var body = {
-      "OpportunityId":"001p000000y1SqWAAU",
-      "scheduleDateTime":"${visitDate}T10:06:00.000Z"
-    };
+    var body = {"OpportunityId": "001p000000y1SqWAAU", "scheduleDateTime": "${visitDate}T10:06:00.000Z"};
 
     Dialogs.showLoader(context, "Please wait scheduling your visit ...");
 
@@ -157,6 +155,34 @@ class HomePresenter {
       })
       ..catchError((e) {
         // Dialogs.hideLoader(context);
+        ApiErrorParser.getResult(e, _v);
+      });
+  }
+
+  void getCustomerUnitDetail(BuildContext context) async {
+    //check for internal token
+    if (await AuthUser.getInstance().hasToken()) {
+      _v.onError("Token not found");
+      return;
+    }
+
+    //check network
+    if (!await NetworkCheck.check()) {
+      _v.onError("Network Error");
+      return;
+    }
+
+    var body = {"CustomerAccountId": "001N000001S7nkd", "CustomerOpportunityId": "006N000000DuA69"};
+
+    Dialogs.showLoader(context, "Fetching unit details ...");
+    apiController.post(EndPoints.PROJECT_UNIT_DETAILS, body: body, headers: await Utility.header())
+      ..then((response) {
+        Dialogs.hideLoader(context);
+        ProjectUnitResponse projectUnitResponse = ProjectUnitResponse.fromJson(response.data);
+        _v.onProjectUnitResponseFetched(projectUnitResponse);
+      })
+      ..catchError((e) {
+        Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }

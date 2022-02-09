@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<BaseProvider>(
-      create: (_) => BaseProvider(),
+      create: (_) => BaseProvider(authResult),
       child: MaterialApp(
         title: kAppName,
         theme: ThemeData(primarySwatch: Colors.deepOrange, scaffoldBackgroundColor: AppColors.white),

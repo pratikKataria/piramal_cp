@@ -27,6 +27,7 @@ class EndPoints {
   static const String PROJECT_OVERVIEW = BASE_URL + "/CP_Mobile_App/ProjectOverview";
   static const String PROJECT_TOWER = BASE_URL + "/CP_Mobile_App/ProjectTowers";
   static const String PROJECT_GALLERY = BASE_URL + "/CP_Mobile_App/ProjectGallery";
+  static const String PROJECT_UNIT_DETAILS = BASE_URL + "/CP_Mobile_App/CustomerUnitdetails";
 
   static const String MY_ASSIST = BASE_URL + "/CP_Mobile_App/MyAssist";
   static const String MY_PROFILE = BASE_URL + "/CP_Mobile_App/ProfileDetails";

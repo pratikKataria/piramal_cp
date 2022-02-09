@@ -107,14 +107,19 @@ class BookingCardWidget extends StatelessWidget {
               horizontalSpace(8.0),
               WhatsAppButton(_bookingResponse?.mobilenumber),
               Spacer(),
-              Container(
-                width: 35,
-                height: 35,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.colorSecondary,
+              InkWell(
+                onTap: () {
+                  _presenter.getCustomerUnitDetail(context);
+                },
+                child: Container(
+                  width: 35,
+                  height: 35,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppColors.colorSecondary,
+                  ),
+                  child: Icon(Icons.add, color: AppColors.white),
                 ),
-                child: Icon(Icons.add, color: AppColors.white),
               ),
             ],
           ),

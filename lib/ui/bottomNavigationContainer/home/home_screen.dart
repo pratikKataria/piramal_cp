@@ -9,6 +9,7 @@ import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/homeWi
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/home_presenter.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/home_view.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/booking_response.dart';
+import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/project_unit_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/schedule_visit_response.dart';
 import 'package:piramal_channel_partner/ui/core/login/model/token_response.dart';
 import 'package:piramal_channel_partner/ui/cpEvent/model/cp_event_response.dart';
@@ -204,21 +205,21 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
         // ),
         Tab(
           child: currentSelectedTab == "Walk in"
-              ? PmlOutlineButton(
+              ? PmlButton(
                   text: "Walk in",
                   height: 28.0,
-                  textStyle: textStyle12px500w,
+                  textStyle: textStyleWhite12px500w,
+                  color: AppColors.colorSecondary,
                   onTap: () {
                     currentSelectedTab = "Walk in";
                     _tabController.index = 0;
                     setState(() {});
                   },
                 )
-              : PmlButton(
+              : PmlOutlineButton(
                   text: "Walk in",
                   height: 28.0,
-                  textStyle: textStyleWhite12px500w,
-                  color: AppColors.colorSecondary,
+                  textStyle: textStyle12px500w,
                   onTap: () {
                     currentSelectedTab = "Walk in";
                     _tabController.index = 0;
@@ -228,21 +229,21 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
         ),
         Tab(
           child: currentSelectedTab == "Booking"
-              ? PmlOutlineButton(
+              ? PmlButton(
                   text: "Booking",
                   height: 28.0,
-                  textStyle: textStyle12px500w,
+                  textStyle: textStyleWhite12px500w,
+                  color: AppColors.colorSecondary,
                   onTap: () {
                     currentSelectedTab = "Booking";
                     _tabController.index = 1;
                     setState(() {});
                   },
                 )
-              : PmlButton(
+              : PmlOutlineButton(
                   text: "Booking",
                   height: 28.0,
-                  textStyle: textStyleWhite12px500w,
-                  color: AppColors.colorSecondary,
+                  textStyle: textStyle12px500w,
                   onTap: () {
                     currentSelectedTab = "Booking";
                     _tabController.index = 1;
@@ -342,5 +343,76 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     brList.forEach((element) {
       events = "$events ${element.eventName}      \u2022";
     });
+    setState(() {});
+  }
+
+  @override
+  void onProjectUnitResponseFetched(ProjectUnitResponse projectUnitResponse) {
+    showDetailDialog(context, projectUnitResponse);
+  }
+
+  void showDetailDialog(BuildContext context, ProjectUnitResponse projectUnitResponse) {
+    AlertDialog alert = AlertDialog(
+      contentPadding: EdgeInsets.all(0.0),
+      backgroundColor: Colors.transparent,
+      content: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(6),
+            ),
+            margin: EdgeInsets.all(10.0),
+            padding: EdgeInsets.all(10.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                buildDialogRow("Unit Number", "${projectUnitResponse?.apartmentFinalized}"),
+                buildDialogRow("Tower", "${projectUnitResponse?.towerFinalized}"),
+                buildDialogRow("Carpet Area", "${projectUnitResponse?.carpetarea}"),
+                buildDialogRow("Agreement Value", "${projectUnitResponse?.totalAgreementValue}"),
+              ],
+            ),
+          ),
+          Positioned(
+            right: 0,
+            top: 0,
+            child: PmlButton(
+              width: 30,
+              height: 30,
+              color: AppColors.colorPrimary,
+              child: Icon(Icons.close, color: AppColors.white, size: 16.0),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  Column buildDialogRow(String s, String m) {
+    return Column(
+      children: [
+        verticalSpace(16.0),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text("$s", style: textStyleSubText12px400w),
+            Text("$m", style: textStyle12px500w),
+          ],
+        ),
+        verticalSpace(16.0),
+        line()
+      ],
+    );
   }
 }

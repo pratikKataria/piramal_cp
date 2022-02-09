@@ -5,6 +5,7 @@ import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
+import 'package:piramal_channel_partner/widgets/whats_app_button.dart';
 
 class BookedCustomerProfileDetailScreen extends StatelessWidget {
   const BookedCustomerProfileDetailScreen({Key key}) : super(key: key);
@@ -66,15 +67,8 @@ class BookedCustomerProfileDetailScreen extends StatelessWidget {
                     child: Image.asset(Images.kIconPhone),
                   ),
                   horizontalSpace(8.0),
-                  Container(
-                    width: 35,
-                    height: 35,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppColors.colorPrimaryLight,
-                    ),
-                    child: Image.asset(Images.kIconWhatsApp),
-                  ),
+                  WhatsAppButton(null),
+
                 ],
               ),
 

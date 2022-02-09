@@ -29,18 +29,20 @@ class PersistentSideNavigation extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: ListView(
             children: [
-              Text("Login to view your profile.", style: textStyle20px500w),
-              verticalSpace(15.0),
-              PmlButton(
-                text: "Log In",
-                width: 50.0,
-                height: 36.0,
-                margin: EdgeInsets.only(right: Utility.screenWidth(context) * 0.65),
-                onTap: () {
-                  provider.hideToolTip();
-                  closeDrawerAndNavigation(provider, Screens.kLoginScreen);
-                },
-              ),
+              if (!(provider.isLogin?? false)) ...[
+                Text("Login to view your profile.", style: textStyle20px500w),
+                verticalSpace(15.0),
+                PmlButton(
+                  text: "Log In",
+                  width: 50.0,
+                  height: 36.0,
+                  margin: EdgeInsets.only(right: Utility.screenWidth(context) * 0.65),
+                  onTap: () {
+                    provider.hideToolTip();
+                    closeDrawerAndNavigation(provider, Screens.kLoginScreen);
+                  },
+                ),
+              ],
               verticalSpace(40.0),
 
               // //Home
