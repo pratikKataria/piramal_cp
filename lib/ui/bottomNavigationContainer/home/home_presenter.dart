@@ -34,10 +34,8 @@ class HomePresenter {
     }
 
     var body = {"CustomerAccountId": "001p000000y1SqW"};
-    Dialogs.showLoader(context, "Please wait fetching your data ...");
     apiController.post(EndPoints.GET_BOOKING, body: body, headers: await Utility.header())
       ..then((response) {
-        Dialogs.hideLoader(context);
         List<BookingResponse> brList = [];
         var listOfDynamic = response.data as List;
         listOfDynamic.forEach((element) {
@@ -45,20 +43,14 @@ class HomePresenter {
         });
 
         _v.onBookingListFetched(brList);
-
-        // if (otpResponse.returnCode)
-        //   loginView.onOtpSent(mobileOtp);
-        // else
-        //   loginView.onError(otpResponse.message);
       })
       ..catchError((e) {
         _v.onError(e.message);
-        Dialogs.hideLoader(context);
         Utility.log(tag, e.toString());
       });
   }
 
-  void getWalkInList() async {
+  void getWalkInList(BuildContext context) async {
     //check for internal token
     if (await AuthUser.getInstance().hasToken()) {
       _v.onError("Token not found");
@@ -73,8 +65,10 @@ class HomePresenter {
 
     var body = {"CustomerAccountId": "001p000000y1SqW"};
 
+    Dialogs.showLoader(context, "Please wait fetching your data ...");
     apiController.post(EndPoints.GET_WALK_IN, body: body, headers: await Utility.header())
       ..then((response) {
+        Dialogs.hideLoader(context);
         List<BookingResponse> brList = [];
         var listOfDynamic = response.data as List;
         listOfDynamic.forEach((element) {
@@ -82,14 +76,40 @@ class HomePresenter {
         });
 
         _v.onWalkInListFetched(brList);
-
-        // if (otpResponse.returnCode)
-        //   loginView.onOtpSent(mobileOtp);
-        // else
-        //   loginView.onError(otpResponse.message);
       })
       ..catchError((e) {
+        Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
+      });
+  }
+
+  void getWalkInListV2(BuildContext context) async {
+    //check for internal token
+    if (await AuthUser.getInstance().hasToken()) {
+      _v.onError("Token not found");
+      return;
+    }
+
+    //check network
+    if (!await NetworkCheck.check()) {
+      _v.onError("Network Error");
+      return;
+    }
+
+    var body = {"CustomerAccountId": "001p000000y1SqW"};
+
+     apiController.post(EndPoints.GET_WALK_IN, body: body, headers: await Utility.header())
+      ..then((response) {
+         List<BookingResponse> brList = [];
+        var listOfDynamic = response.data as List;
+        listOfDynamic.forEach((element) {
+          brList.add(BookingResponse.fromJson(element));
+        });
+
+        _v.onWalkInListFetched(brList);
+      })
+      ..catchError((e) {
+         ApiErrorParser.getResult(e, _v);
       });
   }
 

@@ -17,6 +17,7 @@ import 'package:piramal_channel_partner/user/AuthUser.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
 import 'package:piramal_channel_partner/widgets/pml_outline_button.dart';
+import 'package:piramal_channel_partner/widgets/refresh_list_view.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -41,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
     _homePresenter = HomePresenter(this);
-    _homePresenter.getWalkInList();
+    _homePresenter.getWalkInList(context);
     _homePresenter.getEventList(context);
     super.initState();
   }
@@ -89,11 +90,20 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                 controller: _tabController,
                 physics: NeverScrollableScrollPhysics(),
                 children: [
-                  ListView(
+                  RefreshListView(
                     children: walkInList.map<Widget>((e) => WalkInCardWidget(e, _homePresenter)).toList(),
+                    onRefresh: () {
+                      print ("function called");
+                      _homePresenter.getWalkInListV2(context);
+                      _homePresenter.getEventList(context);
+                    },
                   ),
-                  ListView(
+                  RefreshListView(
                     children: bookingList.map<Widget>((e) => BookingCardWidget(e, _homePresenter)).toList(),
+                    onRefresh: () {
+                      _homePresenter.getWalkInListV2(context);
+                      _homePresenter.getEventList(context);
+                    },
                   ),
                 ],
               ),
@@ -341,7 +351,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     AuthUser.getInstance().updateUser(currentUser);
 
     //sent request again
-    _homePresenter.getWalkInList();
+    _homePresenter.getWalkInList(context);
   }
 
   @override

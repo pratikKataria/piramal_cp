@@ -39,6 +39,7 @@ class Assets {
   static const String imagesImgCarousel1 = 'assets/images/img_carousel_1.png';
   static const String imagesImgCarousel2 = 'assets/images/img_carousel_2.png';
   static const String imagesImgCarousel3 = 'assets/images/img_carousel_3.png';
+  static const String imagesImgCommingSoon = 'assets/images/img_comming_soon.png';
   static const String imagesImgEventPlaceholder = 'assets/images/img_event_placeholder.png';
   static const String imagesImgEventPlaceholder1 = 'assets/images/img_event_placeholder_1.png';
   static const String imagesImgPlace = 'assets/images/img_place.png';

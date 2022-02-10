@@ -40,6 +40,8 @@ class Images {
   static const kIconClose = base + "ic_close.png";
   static const kIconUpload = base + "ic_upload.png";
 
+  static const kImageComingSoon = base + "img_comming_soon.png";
+
 
   static const kImgPlaceholder = base + "img_placeholder.png";
   static const kImgPlaceholder1 = base + "img_placeholder_1.png";
