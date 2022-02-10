@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 import 'package:piramal_channel_partner/api/api_controller_expo.dart';
 import 'package:piramal_channel_partner/api/api_end_points.dart';
 import 'package:piramal_channel_partner/api/api_error_parser.dart';
@@ -98,9 +99,9 @@ class HomePresenter {
 
     var body = {"CustomerAccountId": "001p000000y1SqW"};
 
-     apiController.post(EndPoints.GET_WALK_IN, body: body, headers: await Utility.header())
+    apiController.post(EndPoints.GET_WALK_IN, body: body, headers: await Utility.header())
       ..then((response) {
-         List<BookingResponse> brList = [];
+        List<BookingResponse> brList = [];
         var listOfDynamic = response.data as List;
         listOfDynamic.forEach((element) {
           brList.add(BookingResponse.fromJson(element));
@@ -109,11 +110,11 @@ class HomePresenter {
         _v.onWalkInListFetched(brList);
       })
       ..catchError((e) {
-         ApiErrorParser.getResult(e, _v);
+        ApiErrorParser.getResult(e, _v);
       });
   }
 
-  void scheduleTime(BuildContext context, String otyId, String visitDate) async {
+  void scheduleTime(BuildContext context, String otyId, DateTime visitDate) async {
     //check for internal token
     if (await AuthUser.getInstance().hasToken()) {
       _v.onError("Token not found");
@@ -126,10 +127,9 @@ class HomePresenter {
       return;
     }
 
-    var body = {"OpportunityId": "001p000000y1SqWAAU", "scheduleDateTime": "${visitDate}T10:06:00.000Z"};
-
+    String formattedDate = DateFormat("yyyy-MM-ddTHH:mm:ss").format(visitDate);
+    var body = {"OpportunityId": "$otyId", "scheduleDateTime": "$formattedDate"};
     Dialogs.showLoader(context, "Please wait scheduling your visit ...");
-
     apiController.post(EndPoints.SCHEDULE_VISIT, body: body, headers: await Utility.header())
       ..then((response) {
         Dialogs.hideLoader(context);

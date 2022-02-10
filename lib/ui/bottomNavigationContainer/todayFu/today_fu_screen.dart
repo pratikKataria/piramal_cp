@@ -124,50 +124,50 @@ class _TodayFollowUpScreenState extends State<TodayFollowUpScreen> with SingleTi
         Tab(
           child: currentSelectedTab == "Walk in"
               ? PmlOutlineButton(
-                  text: "Walk in",
-                  height: 28.0,
-                  textStyle: textStyle12px500w,
-                  onTap: () {
-                    currentSelectedTab = "Walk in";
-                    _tabController.index = 0;
-                    setState(() {});
-                  },
-                )
+            text: "Walk in",
+            height: 28.0,
+            textStyle: textStyle12px500w,
+            onTap: () {
+              currentSelectedTab = "Walk in";
+              _tabController.index = 0;
+              setState(() {});
+            },
+          )
               : PmlButton(
-                  text: "Walk in",
-                  height: 28.0,
-                  textStyle: textStyleWhite12px500w,
-                  color: AppColors.colorSecondary,
-                  onTap: () {
-                    currentSelectedTab = "Walk in";
-                    _tabController.index = 0;
-                    setState(() {});
-                  },
-                ),
+            text: "Walk in",
+            height: 28.0,
+            textStyle: textStyleWhite12px500w,
+            color: AppColors.colorSecondary,
+            onTap: () {
+              currentSelectedTab = "Walk in";
+              _tabController.index = 0;
+              setState(() {});
+            },
+          ),
         ),
         Tab(
           child: currentSelectedTab == "Booking"
               ? PmlOutlineButton(
-                  text: "Booking",
-                  height: 28.0,
-                  textStyle: textStyle12px500w,
-                  onTap: () {
-                    currentSelectedTab = "Booking";
-                    _tabController.index = 1;
-                    setState(() {});
-                  },
-                )
+            text: "Booking",
+            height: 28.0,
+            textStyle: textStyle12px500w,
+            onTap: () {
+              currentSelectedTab = "Booking";
+              _tabController.index = 1;
+              setState(() {});
+            },
+          )
               : PmlButton(
-                  text: "Booking",
-                  height: 28.0,
-                  textStyle: textStyleWhite12px500w,
-                  color: AppColors.colorSecondary,
-                  onTap: () {
-                    currentSelectedTab = "Booking";
-                    _tabController.index = 1;
-                    setState(() {});
-                  },
-                ),
+            text: "Booking",
+            height: 28.0,
+            textStyle: textStyleWhite12px500w,
+            color: AppColors.colorSecondary,
+            onTap: () {
+              currentSelectedTab = "Booking";
+              _tabController.index = 1;
+              setState(() {});
+            },
+          ),
         ),
       ],
     );
@@ -219,8 +219,12 @@ class _TodayFollowUpScreenState extends State<TodayFollowUpScreen> with SingleTi
 
   @override
   void onSvListFetched(List<TodaySvResponse> brList) {
-
     brList.forEach((element) {
+      if (element.returnCode) {
+        onError(element.message);
+        return;
+      }
+
       BookingResponse bookingResponse = BookingResponse()
         ..stageName = element.stageName
         ..name = element.name

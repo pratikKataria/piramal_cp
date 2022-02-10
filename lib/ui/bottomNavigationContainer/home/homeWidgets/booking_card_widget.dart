@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
@@ -45,7 +44,7 @@ class BookingCardWidget extends StatelessWidget {
             },
             child: Row(
               children: [
-         /*       ClipRRect(
+                /*       ClipRRect(
                   borderRadius: BorderRadius.circular(80.0),
                   child: Container(
                     height: 37,
@@ -135,7 +134,7 @@ class BookingCardWidget extends StatelessWidget {
       case "WARM":
         return AppColors.colorPrimaryLight;
       case "COLD":
-        return AppColors.textColorBlue;
+        return AppColors.colorCOLD;
       default:
         return AppColors.colorPrimary;
     }
@@ -174,7 +173,6 @@ class BookingCardWidget extends StatelessWidget {
     );
   }
 
-
   InkWell callButton() {
     return InkWell(
       onTap: () {
@@ -201,19 +199,29 @@ class BookingCardWidget extends StatelessWidget {
       lastDate: DateTime(2100),
     );
     if (picked != null) {
-      String date = "${picked.year}-${picked.month}-${picked.day}";
-      _selectTime(context, date);
+      _selectTime(context, picked);
     }
   }
 
-  Future<Null> _selectTime(BuildContext context, String datePicked) async {
+  Future<Null> _selectTime(BuildContext context, DateTime datePicked) async {
     final TimeOfDay picked = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
     );
 
+    DateTime x = DateTime(
+      datePicked.year,
+      datePicked.month,
+      datePicked.day,
+      picked.hour,
+      picked.minute,
+      datePicked.second,
+      datePicked.millisecond,
+      datePicked.microsecond,
+    );
+
     if (picked != null) {
-      _presenter.scheduleTime(context, _bookingResponse.sfdcid, datePicked);
+      _presenter.scheduleTime(context, _bookingResponse.sfdcid, x);
     }
   }
 }

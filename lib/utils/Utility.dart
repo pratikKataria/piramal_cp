@@ -191,12 +191,11 @@ class Utility {
       case "WARM":
         return AppColors.colorPrimaryLight;
       case "COLD":
-        return AppColors.textColorBlue;
+        return AppColors.colorCOLD;
       default:
         return AppColors.colorPrimary;
     }
   }
-
 
 /*  static Future<String> getFilePath() async {
     Directory storageDirectory = await getApplicationDocumentsDirectory();
@@ -314,6 +313,10 @@ class Utility {
     return {'Authorization': await AuthUser.getInstance().token()};
   }
 
+  static Future<String> uID() async {
+    return (await AuthUser.getInstance().getCurrentUser()).userCredentials.accountId;
+  }
+
   static openWhatsapp(String mobileNumber) async {
     var whatsapp = "+91${mobileNumber ?? ""}";
     var whatsappURl_android = "https://wa.me/$whatsapp/?text=hi";
@@ -342,7 +345,6 @@ class Utility {
       }
     }
   }
-
 }
 
 Widget verticalSpace(double height) => SizedBox(

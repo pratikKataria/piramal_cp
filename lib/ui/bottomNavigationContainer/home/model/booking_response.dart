@@ -13,18 +13,20 @@
 
 class BookingResponse {
   BookingResponse({
-      dynamic towerFinalized, 
-      String stageName, 
-      String sfdcid, 
-      bool revisit, 
-      bool returnCode, 
-      dynamic projectFinalized, 
-      dynamic newRating, 
-      String name, 
-      String mobilenumber, 
-      String message, 
-      int createdDays, 
-      dynamic apartmentFinalized,}){
+    dynamic towerFinalized,
+    String stageName,
+    String sfdcid,
+    bool revisit,
+    bool returnCode,
+    dynamic projectFinalized,
+    dynamic newRating,
+    String name,
+    String mobilenumber,
+    String message,
+    int createdDays,
+    String projectInterested,
+    dynamic apartmentFinalized,
+  }) {
     _towerFinalized = towerFinalized;
     _stageName = stageName;
     _sfdcid = sfdcid;
@@ -37,7 +39,8 @@ class BookingResponse {
     _message = message;
     _createdDays = createdDays;
     _apartmentFinalized = apartmentFinalized;
-}
+    _projectInterested = projectInterested;
+  }
 
   BookingResponse.fromJson(dynamic json) {
     _towerFinalized = json['TowerFinalized'];
@@ -52,11 +55,14 @@ class BookingResponse {
     _message = json['message'];
     _createdDays = json['CreatedDays'];
     _apartmentFinalized = json['ApartmentFinalized'];
+    _projectInterested = json['ProjectInterested'];
   }
+
   dynamic _towerFinalized;
   String _stageName;
   String _sfdcid;
-  bool _revisit;
+  String _projectInterested;
+  bool _revisit = false;
   bool _returnCode;
   dynamic _projectFinalized;
   dynamic _newRating;
@@ -67,16 +73,27 @@ class BookingResponse {
   dynamic _apartmentFinalized;
 
   dynamic get towerFinalized => _towerFinalized;
+
   String get stageName => _stageName;
+
   String get sfdcid => _sfdcid;
-  bool get revisit => _revisit;
+
+  bool get revisit => _revisit ?? false;
+
   bool get returnCode => _returnCode;
+
   dynamic get projectFinalized => _projectFinalized;
+
   dynamic get newRating => _newRating;
+
   String get name => _name;
+
   String get mobilenumber => _mobilenumber;
+
   String get message => _message;
+
   int get createdDays => _createdDays;
+
   dynamic get apartmentFinalized => _apartmentFinalized;
 
   Map<String, dynamic> toJson() {
@@ -93,6 +110,7 @@ class BookingResponse {
     map['message'] = _message;
     map['CreatedDays'] = _createdDays;
     map['ApartmentFinalized'] = _apartmentFinalized;
+    map['ProjectInterested'] = _projectInterested;
     return map;
   }
 
@@ -143,4 +161,6 @@ class BookingResponse {
   set towerFinalized(dynamic value) {
     _towerFinalized = value;
   }
+
+  String get projectInterested => _projectInterested;
 }

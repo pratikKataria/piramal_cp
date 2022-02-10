@@ -37,4 +37,6 @@ abstract class AppColors {
   static const assistIconBackgroundColor = Color(0xFFD5DADC);
   static const tentativeButtonColor = Color(0xFFFF6F4E);
   static const attendButtonColor = Color(0xFF40C14D);
+
+  static const colorCOLD = Color(0xFF007CFF);
 }

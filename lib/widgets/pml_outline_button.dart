@@ -33,6 +33,7 @@ class PmlOutlineButton extends StatelessWidget {
         width: width,
         height: height ?? 54.0,
         padding: padding,
+        margin: margin,
         decoration: BoxDecoration(
           color: fillColor?? Colors.transparent,
           borderRadius: BorderRadius.circular(20.0),

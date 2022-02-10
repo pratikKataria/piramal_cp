@@ -37,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 
   String events = "Currently no events available";
   String currentSelectedTab = "Walk in";
+  String filterValue;
 
   @override
   void initState() {
@@ -93,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                   RefreshListView(
                     children: walkInList.map<Widget>((e) => WalkInCardWidget(e, _homePresenter)).toList(),
                     onRefresh: () {
-                      print ("function called");
+                      print("function called");
                       _homePresenter.getWalkInListV2(context);
                       _homePresenter.getEventList(context);
                     },
@@ -127,17 +128,21 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
               scrollDirection: Axis.horizontal,
               children: projectList
                   .map<Widget>((e) => PmlOutlineButton(
+                        onTap: () {
+                          filterValue = e;
+                          setState(() {});
+                        },
                         text: "${e}",
                         padding: EdgeInsets.symmetric(horizontal: 15.0),
-                        margin: EdgeInsets.only(left: 20.0),
+                        margin: EdgeInsets.only(right: 10.0),
                         height: 25.0,
+                        // color: filterValue == e ? AppColors.colorSecondary :AppColors.screenBackgroundColor,
                         textStyle: textStyle12px500w,
                       ))
                   .toList(),
             ),
           ),
-          verticalSpace(14.0),
-       /*   Text("Lead Status", style: textStyleRegular16px400w),
+          /*   Text("Lead Status", style: textStyleRegular16px400w),
           verticalSpace(8.0),
           Row(
             children: [
@@ -324,9 +329,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     bookingList.clear();
     bookingList.addAll(brList);
     //filter project form the response and add it to the project list
-    bookingList.forEach((booking) {
-      if (!projectList.contains(booking?.projectFinalized)) projectList.add(booking?.projectFinalized);
-    });
+    bookingList.forEach((booking) => addProjectListValue(booking.projectFinalized));
     setState(() {});
   }
 
@@ -337,9 +340,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     //call Booking list api
     _homePresenter.getBookingList(context);
     //filter project form the response and add it to the project list
-    bookingList.forEach((booking) {
-      if (!projectList.contains(booking?.projectFinalized)) projectList.add(booking?.projectFinalized);
-    });
+    walkInList.forEach((booking) => addProjectListValue(booking.projectInterested));
     setState(() {});
   }
 
@@ -363,9 +364,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   @override
   void onEventFetched(List<CpEventResponse> brList) {
     events = "";
-    brList.forEach((element) {
-      events = "$events ${element.eventName}      \u2022";
-    });
+    brList.forEach((element) => events = "$events ${element.eventName}      \u2022");
     setState(() {});
   }
 
@@ -424,5 +423,11 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 
   int totalCustomerCount() {
     return bookingList.length + walkInList.length;
+  }
+
+  void addProjectListValue(String val) {
+    if (val != null && projectList.contains(val) == false) {
+      projectList.add(val);
+    }
   }
 }

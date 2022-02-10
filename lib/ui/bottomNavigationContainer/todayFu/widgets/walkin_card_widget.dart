@@ -127,7 +127,7 @@ class SvWalkInCardWidget extends StatelessWidget {
       case "WARM":
         return AppColors.colorPrimaryLight;
       case "COLD":
-        return AppColors.textColorBlue;
+        return AppColors.colorCOLD;
       default:
         return AppColors.colorPrimary;
     }

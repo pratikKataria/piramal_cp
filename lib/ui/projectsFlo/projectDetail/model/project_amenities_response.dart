@@ -6,7 +6,7 @@
 
 class ProjectAmenitiesResponse {
   ProjectAmenitiesResponse({
-    int returnCode,
+    bool returnCode,
     String recordid,
     String projectAmenitiesList,
     String projectAmenitiesImage,
@@ -27,13 +27,13 @@ class ProjectAmenitiesResponse {
     _message = json['message'];
   }
 
-  int _returnCode;
+  bool _returnCode;
   String _recordid;
   String _projectAmenitiesList;
   String _projectAmenitiesImage;
   String _message;
 
-  int get returnCode => _returnCode;
+  bool get returnCode => _returnCode;
 
   String get recordid => _recordid;
 

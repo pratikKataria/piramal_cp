@@ -91,7 +91,7 @@ class _LoginScreenState extends State<LoginScreen> implements LoginView {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            width: 65,
+            width: 75,
             margin: EdgeInsets.symmetric(horizontal: 12.0),
             child: Text("Email/Phone", style: mainTextStyle),
           ),
@@ -134,7 +134,7 @@ class _LoginScreenState extends State<LoginScreen> implements LoginView {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            width: 65,
+            width: 75,
             margin: EdgeInsets.symmetric(horizontal: 12.0),
             child: Text("OTP", style: mainTextStyle),
           ),

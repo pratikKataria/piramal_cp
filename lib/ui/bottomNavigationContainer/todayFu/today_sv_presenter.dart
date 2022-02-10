@@ -26,7 +26,8 @@ class TodaySVPresenter {
       return;
     }
 
-    var body = {"CustomerAccountID": "001p000000y1SqW"};
+    String userId = await Utility.uID();
+    var body = {"CustomerAccountID": "$userId"};
     apiController.post(EndPoints.TODAY_SV, body: body, headers: await Utility.header())
       ..then((response) {
         List<TodaySvResponse> brList = [];
@@ -36,11 +37,6 @@ class TodaySVPresenter {
         });
 
         _v.onSvListFetched(brList);
-
-        // if (otpResponse.returnCode)
-        //   loginView.onOtpSent(mobileOtp);
-        // else
-        //   loginView.onError(otpResponse.message);
       })
       ..catchError((e) {
         _v.onError(e.message);
