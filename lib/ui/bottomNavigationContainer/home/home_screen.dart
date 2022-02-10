@@ -137,7 +137,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
             ),
           ),
           verticalSpace(14.0),
-          Text("Lead Status", style: textStyleRegular16px400w),
+       /*   Text("Lead Status", style: textStyleRegular16px400w),
           verticalSpace(8.0),
           Row(
             children: [
@@ -162,7 +162,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                 textStyle: textStyleBlue12px500w,
               ),
             ],
-          ),
+          ),*/
         ],
       ),
     );
