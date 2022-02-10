@@ -8,8 +8,8 @@ class PmlOutlineButton extends StatelessWidget {
   final EdgeInsets padding;
   final EdgeInsets margin;
   final TextStyle textStyle;
-  final Colors color;
-  final Colors fillColor;
+  final Color color;
+  final Color fillColor;
   final double height;
   final double width;
 

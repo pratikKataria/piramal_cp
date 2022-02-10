@@ -4,7 +4,6 @@ import 'package:marquee/marquee.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
-import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/homeWidgets/booking_card_widget.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/homeWidgets/walkin_card_widget.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/home_presenter.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/home_view.dart';
@@ -92,15 +91,14 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                 physics: NeverScrollableScrollPhysics(),
                 children: [
                   RefreshListView(
-                    children: walkInList.map<Widget>((e) => WalkInCardWidget(e, _homePresenter)).toList(),
+                    children: getWalkInListByFilterValue(),
                     onRefresh: () {
-                      print("function called");
                       _homePresenter.getWalkInListV2(context);
                       _homePresenter.getEventList(context);
                     },
                   ),
                   RefreshListView(
-                    children: bookingList.map<Widget>((e) => BookingCardWidget(e, _homePresenter)).toList(),
+                    children: getBookingListByFilterValue(),
                     onRefresh: () {
                       _homePresenter.getWalkInListV2(context);
                       _homePresenter.getEventList(context);
@@ -129,45 +127,19 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
               children: projectList
                   .map<Widget>((e) => PmlOutlineButton(
                         onTap: () {
-                          filterValue = e;
+                          filterValue = e == filterValue ? null : e;
                           setState(() {});
                         },
                         text: "${e}",
                         padding: EdgeInsets.symmetric(horizontal: 15.0),
                         margin: EdgeInsets.only(right: 10.0),
                         height: 25.0,
-                        // color: filterValue == e ? AppColors.colorSecondary :AppColors.screenBackgroundColor,
-                        textStyle: textStyle12px500w,
+                        fillColor: filterValue == e ? AppColors.colorSecondary : AppColors.screenBackgroundColor,
+                        textStyle: filterValue == e ? textStyleWhite12px500w : textStyle12px500w,
                       ))
                   .toList(),
             ),
           ),
-          /*   Text("Lead Status", style: textStyleRegular16px400w),
-          verticalSpace(8.0),
-          Row(
-            children: [
-              PmlOutlineButton(
-                text: "Hot",
-                padding: EdgeInsets.symmetric(horizontal: 15.0),
-                height: 25.0,
-                textStyle: textStylePrimary12px500w,
-              ),
-              horizontalSpace(10.0),
-              PmlOutlineButton(
-                text: "Warm",
-                padding: EdgeInsets.symmetric(horizontal: 15.0),
-                height: 25.0,
-                textStyle: textStylePrimary12px500w,
-              ),
-              horizontalSpace(10.0),
-              PmlOutlineButton(
-                text: "Cold",
-                padding: EdgeInsets.symmetric(horizontal: 15.0),
-                height: 25.0,
-                textStyle: textStyleBlue12px500w,
-              ),
-            ],
-          ),*/
         ],
       ),
     );
@@ -185,30 +157,6 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
         setState(() {});
       },
       tabs: [
-        // Tab(
-        //   child: currentSelectedTab == "All"
-        //       ? PmlOutlineButton(
-        //           text: "All",
-        //           height: 28.0,
-        //           textStyle: textStyle12px500w,
-        //           onTap: () {
-        //             currentSelectedTab = "All";
-        //             _tabController.index = 0;
-        //             setState(() {});
-        //           },
-        //         )
-        //       : PmlButton(
-        //           text: "All",
-        //           height: 28.0,
-        //           textStyle: textStyleWhite12px500w,
-        //           color: AppColors.colorSecondary,
-        //           onTap: () {
-        //             currentSelectedTab = "All";
-        //             _tabController.index = 0;
-        //             setState(() {});
-        //           },
-        //         ),
-        // ),
         Tab(
           child: currentSelectedTab == "Walk in"
               ? PmlButton(
@@ -430,4 +378,84 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
       projectList.add(val);
     }
   }
+
+  getWalkInListByFilterValue() {
+    List<Widget> walkInWidgetList = [];
+
+    if (filterValue == null) {
+      walkInList.forEach((element) => walkInWidgetList.add(WalkInCardWidget(element, _homePresenter)));
+    } else {
+      walkInList.forEach((element) {
+        if (filterValue == element.projectInterested) walkInWidgetList.add(WalkInCardWidget(element, _homePresenter));
+      });
+    }
+
+    return walkInWidgetList;
+  }
+
+  getBookingListByFilterValue() {
+    List<Widget> bookingWidgetList = [];
+
+    if (filterValue == null) {
+      bookingList.forEach((element) => bookingWidgetList.add(WalkInCardWidget(element, _homePresenter)));
+    } else {
+      bookingList.forEach((element) {
+        if (filterValue == element.projectInterested) bookingWidgetList.add(WalkInCardWidget(element, _homePresenter));
+      });
+    }
+
+    return bookingWidgetList;
+  }
 }
+
+/*   Text("Lead Status", style: textStyleRegular16px400w),
+          verticalSpace(8.0),
+          Row(
+            children: [
+              PmlOutlineButton(
+                text: "Hot",
+                padding: EdgeInsets.symmetric(horizontal: 15.0),
+                height: 25.0,
+                textStyle: textStylePrimary12px500w,
+              ),
+              horizontalSpace(10.0),
+              PmlOutlineButton(
+                text: "Warm",
+                padding: EdgeInsets.symmetric(horizontal: 15.0),
+                height: 25.0,
+                textStyle: textStylePrimary12px500w,
+              ),
+              horizontalSpace(10.0),
+              PmlOutlineButton(
+                text: "Cold",
+                padding: EdgeInsets.symmetric(horizontal: 15.0),
+                height: 25.0,
+                textStyle: textStyleBlue12px500w,
+              ),
+            ],
+          ),*/
+
+// Tab(
+//   child: currentSelectedTab == "All"
+//       ? PmlOutlineButton(
+//           text: "All",
+//           height: 28.0,
+//           textStyle: textStyle12px500w,
+//           onTap: () {
+//             currentSelectedTab = "All";
+//             _tabController.index = 0;
+//             setState(() {});
+//           },
+//         )
+//       : PmlButton(
+//           text: "All",
+//           height: 28.0,
+//           textStyle: textStyleWhite12px500w,
+//           color: AppColors.colorSecondary,
+//           onTap: () {
+//             currentSelectedTab = "All";
+//             _tabController.index = 0;
+//             setState(() {});
+//           },
+//         ),
+// ),
