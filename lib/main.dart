@@ -15,13 +15,14 @@ import 'package:piramal_channel_partner/ui/customerProfile/booked/booked_custome
 import 'package:piramal_channel_partner/ui/customerProfile/walkin/walkin_customer_profile_detail_Screen.dart';
 import 'package:piramal_channel_partner/ui/lead/addLead/add_lead_screen.dart';
 import 'package:piramal_channel_partner/ui/lead/lead_screen.dart';
-import 'package:piramal_channel_partner/ui/myAssit/my_assist_screen.dart';
+import 'package:piramal_channel_partner/ui/myAssit/projectList/project_screen.dart';
 import 'package:piramal_channel_partner/ui/myProfile/my_profile.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/projectList/project_screen.dart';
 import 'package:piramal_channel_partner/utils/scroll_behavior.dart';
 import 'package:provider/provider.dart';
 
 import 'ui/core/login/login_screen.dart';
+import 'ui/myAssit/assist/my_assist_screen.dart';
 import 'ui/projectsFlo/projectDetail/project_detail_screen.dart';
 import 'user/AuthUser.dart';
 import 'utils/Utility.dart';
@@ -86,7 +87,10 @@ class MyApp extends StatelessWidget {
               return RouteTransition(widget: CPEventScreen());
               break;
             case Screens.kMyAssistScreen:
-              return RouteTransition(widget: MyAssistScreen());
+              return RouteTransition(widget: MyAssistScreen(settings.arguments));
+              break;
+            case Screens.kMyAssistProjectScreen:
+              return RouteTransition(widget: ProjectScreenMyAssist());
               break;
             case Screens.kSettingsScreen:
               return RouteTransition(widget: MyProfileScreen());

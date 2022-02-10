@@ -17,6 +17,7 @@ abstract class Screens {
    static const kAddLeadScreen = "kAddLead";
    static const kCPEventScreen = "kCpEventScreen";
    static const kMyAssistScreen = "kMyAssistScreen";
+   static const kMyAssistProjectScreen = "kMyAssistProjectScreen";
    static const kSettingsScreen = "kSettings";
    static const kProjectDetailScreen = "kProjectDetailScreen";
    static const kLoginScreen = "kLoginScreen";
