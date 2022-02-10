@@ -34,13 +34,12 @@ class MyAssistPresenter {
     apiController.post(EndPoints.MY_ASSIST, body: body, headers: await Utility.header())
       ..then((response) {
         Dialogs.hideLoader(context);
-        List<MyAssistResponse> brList = [];
-        var listOfDynamic = response.data as List;
-        listOfDynamic.forEach((element) {
-          brList.add(MyAssistResponse.fromJson(element));
-        });
-
-        _v.onAssistDataFetched(brList);
+        MyAssistResponse m = MyAssistResponse.fromJson(response.data);
+        if (m.returnCode) {
+          _v.onAssistDataFetched(m);
+        } else {
+          _v.onError(m.message);
+        }
       })
       ..catchError((e) {
         Dialogs.hideLoader(context);

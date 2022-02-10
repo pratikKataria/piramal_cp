@@ -1,9 +1,9 @@
-/// returnCode : 2
+/// returnCode : true
 /// RelationshipManagerName : "Devashish Nagapure"
 /// RelationshipManagerMobile : "9881560816"
 /// RelationshipManagerLabel : "Relationship Manager"
-/// ProjectName : "Piramal Revanta"
-/// ProjectID : "a03N000000J4W34IAF"
+/// ProjectName : "Piramal Vaikunth"
+/// ProjectID : "a03N0000005NHiTIAW"
 /// message : "Success"
 /// HeadOfDepartmentName : "Devashish Nagapure"
 /// HeadOfDepartmentMobile : "9881560816"
@@ -11,7 +11,7 @@
 
 class MyAssistResponse {
   MyAssistResponse({
-      bool returnCode,
+      bool returnCode, 
       String relationshipManagerName, 
       String relationshipManagerMobile, 
       String relationshipManagerLabel, 

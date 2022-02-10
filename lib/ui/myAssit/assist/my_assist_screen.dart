@@ -13,6 +13,7 @@ import 'my_assist_view.dart';
 
 class MyAssistScreen extends StatefulWidget {
   final String id;
+
   const MyAssistScreen(this.id, {Key key}) : super(key: key);
 
   @override
@@ -24,7 +25,7 @@ class _MyAssistScreenState extends State<MyAssistScreen> implements MyAssistView
   final mainTextStyle = textStyle14px500w;
 
   MyAssistPresenter leadPresenter;
-  List<MyAssistResponse> assistResponse = [];
+  MyAssistResponse assistResponse;
 
   @override
   void initState() {
@@ -50,14 +51,21 @@ class _MyAssistScreenState extends State<MyAssistScreen> implements MyAssistView
             if (assistResponse != null)
               Expanded(
                 child: ListView(
-                  children: assistResponse
-                      .map<Widget>((e) => cardViewAssist(
-                            e?.relationshipManagerName,
-                            e?.relationshipManagerLabel,
-                            e?.relationshipManagerMobile,
-                            e?.projectName,
-                          ))
-                      .toList(),
+                  children: [
+                    cardViewAssist(
+                      assistResponse?.relationshipManagerName,
+                      assistResponse?.relationshipManagerLabel,
+                      assistResponse?.relationshipManagerMobile,
+                      assistResponse?.projectName,
+                    ),
+
+                    cardViewAssist(
+                      assistResponse?.headOfDepartmentName,
+                      assistResponse?.headOfDepartmentLabel,
+                      assistResponse?.headOfDepartmentMobile,
+                      assistResponse?.projectName,
+                    )
+                  ],
                 ),
               ),
             verticalSpace(10.0),
@@ -121,9 +129,8 @@ class _MyAssistScreenState extends State<MyAssistScreen> implements MyAssistView
   }
 
   @override
-  void onAssistDataFetched(List<MyAssistResponse> myAssistResponse) {
-    assistResponse.clear();
-    assistResponse.addAll(myAssistResponse);
+  void onAssistDataFetched(MyAssistResponse myAssistResponse) {
+    assistResponse = myAssistResponse;
     setState(() {});
   }
 

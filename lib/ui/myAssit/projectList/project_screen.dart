@@ -55,7 +55,7 @@ class _ProjectScreenMyAssistState extends State<ProjectScreenMyAssist> implement
   cardViewProjects(ProjectListResponse projectData) {
     return InkWell(
       onTap: () {
-        Navigator.pushNamed(context, Screens.kMyAssistScreen);
+        Navigator.pushNamed(context, Screens.kMyAssistScreen, arguments: projectData.projectId);
       },
       child: Container(
         margin: EdgeInsets.only(bottom: 18.0),
