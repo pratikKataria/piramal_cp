@@ -1,3 +1,4 @@
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -83,7 +84,7 @@ class _CPEventScreenState extends State<CPEventScreen> implements CPEventView {
             height: 130.0,
             decoration: BoxDecoration(
                 image: DecorationImage(
-              image: AssetImage(Images.kImgEventPlaceholder1),
+              image: MemoryImage(Utility.convertMemoryImage(cpEventData.eventImage)),
               fit: BoxFit.fill,
             )),
           ),

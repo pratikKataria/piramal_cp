@@ -9,6 +9,7 @@ import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
+import 'package:piramal_channel_partner/res/Strings.dart';
 import 'package:piramal_channel_partner/user/AuthUser.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -357,6 +358,15 @@ class Utility {
     print("${output.path}/example.pdf");
     await OpenFile.open("${output.path}/example.pdf");
     return file;
+  }
+
+  static convertMemoryImage(String source) {
+    if (source == null) return base64Decode(kDefImage);
+    try {
+      return base64Decode(source);
+    } catch (e) {
+      return base64Decode(kDefImage);
+    }
   }
 }
 

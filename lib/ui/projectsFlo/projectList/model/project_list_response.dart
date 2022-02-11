@@ -11,6 +11,7 @@ class ProjectListResponse {
     String relationshipManager,
     String projectName,
     String projectImage,
+    String projectWebsite,
     String projectId,
     String message,
     String headOfDepartment,
@@ -20,6 +21,7 @@ class ProjectListResponse {
     _projectName = projectName;
     _projectImage = projectImage;
     _projectId = projectId;
+    _projectWebsite = projectWebsite;
     _message = message;
     _headOfDepartment = headOfDepartment;
   }
@@ -29,6 +31,7 @@ class ProjectListResponse {
     _relationshipManager = json['RelationshipManager'];
     _projectName = json['ProjectName'];
     _projectImage = json['ProjectImage'];
+    _projectWebsite = json['ProjectWebsite'];
     _projectId = json['ProjectId'];
     _message = json['message'];
     _headOfDepartment = json['Head_of_Department'];
@@ -38,6 +41,7 @@ class ProjectListResponse {
   String _relationshipManager;
   String _projectName;
   String _projectImage;
+  String _projectWebsite;
   String _projectId;
   String _message;
   String _headOfDepartment;
@@ -54,8 +58,9 @@ class ProjectListResponse {
 
   String get headOfDepartment => _headOfDepartment;
 
-
   String get projectImage => _projectImage;
+
+  String get projectWebsite => _projectWebsite;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -64,6 +69,7 @@ class ProjectListResponse {
     map['ProjectName'] = _projectName;
     map['ProjectId'] = _projectId;
     map['ProjectImage'] = _projectImage;
+    map['ProjectWebsite'] = _projectWebsite;
     map['message'] = _message;
     map['Head_of_Department'] = _headOfDepartment;
     return map;

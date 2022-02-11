@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -83,7 +82,7 @@ class _CurrentPromotionScreenState extends State<CurrentPromotionScreen> impleme
             height: 130.0,
             decoration: BoxDecoration(
                 image: DecorationImage(
-              image: MemoryImage(base64Decode(currentPromoData.image)),
+              image: MemoryImage(Utility.convertMemoryImage(currentPromoData.image)),
               fit: BoxFit.fill,
             )),
           ),

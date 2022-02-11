@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
@@ -10,6 +8,7 @@ import 'package:piramal_channel_partner/ui/projectsFlo/projectList/model/project
 import 'package:piramal_channel_partner/ui/projectsFlo/projectList/project_view.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/project_presenter.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProjectScreen extends StatefulWidget {
   const ProjectScreen({Key key}) : super(key: key);
@@ -79,15 +78,37 @@ class _ProjectScreenState extends State<ProjectScreen> implements ProjectView {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Container(
-              height: 130.0,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                image: projectData?.projectImage != null
-                    ? MemoryImage(base64Decode(projectData.projectImage))
-                    : AssetImage(Images.kImgEventPlaceholder1),
-                fit: BoxFit.fill,
-              )),
+            Stack(
+              children: [
+                Container(
+                  height: 130.0,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                    image: MemoryImage(Utility.convertMemoryImage(projectData.projectImage)),
+                    fit: BoxFit.fill,
+                  )),
+                ),
+                Positioned(
+                  right: 10,
+                  top: 10,
+                  child: InkWell(
+                    onTap: () {
+                      if (projectData?.projectWebsite == null) onError("Project link not found");
+                      else launch("https://${projectData.projectWebsite}");
+                    },
+                    child: Container(
+                      width: 30,
+                      height: 30,
+                      padding: EdgeInsets.all(10.0),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppColors.black.withOpacity(0.5),
+                      ),
+                      child: Image.asset(Images.kIconRedirect),
+                    ),
+                  ),
+                ),
+              ],
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
