@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -83,7 +83,7 @@ class _CurrentPromotionScreenState extends State<CurrentPromotionScreen> impleme
             height: 130.0,
             decoration: BoxDecoration(
                 image: DecorationImage(
-              image: AssetImage(Images.kImgEventPlaceholder1),
+              image: MemoryImage(base64Decode(currentPromoData.image)),
               fit: BoxFit.fill,
             )),
           ),
@@ -117,17 +117,22 @@ class _CurrentPromotionScreenState extends State<CurrentPromotionScreen> impleme
                           ),
                         ),
                         horizontalSpace(8.0),
-                        Container(
-                          width: 30,
-                          height: 30,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: AppColors.colorPrimary,
-                          ),
-                          child: Icon(
-                            Icons.download_rounded,
-                            color: AppColors.white,
-                            size: 16,
+                        InkWell(
+                          onTap: () {
+                            Utility.getPdfFromBlob(currentPromoData.download);
+                          },
+                          child: Container(
+                            width: 30,
+                            height: 30,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: AppColors.colorPrimary,
+                            ),
+                            child: Icon(
+                              Icons.download_rounded,
+                              color: AppColors.white,
+                              size: 16,
+                            ),
                           ),
                         ),
                       ],
@@ -148,27 +153,6 @@ class _CurrentPromotionScreenState extends State<CurrentPromotionScreen> impleme
         ],
       ),
     );
-  }
-
-  void openWhatsapp(String mobileNumber) async {
-    var whatsapp = "+91${mobileNumber ?? ""}";
-    var whatsappURl_android = "whatsapp://send?phone=" + whatsapp + "&text=hello";
-    var whatappURL_ios = "https://wa.me/$whatsapp?text=${Uri.parse("hello")}";
-    if (Platform.isIOS) {
-      // for iOS phone only
-      if (await canLaunch(whatappURL_ios)) {
-        await launch(whatappURL_ios, forceSafariVC: false);
-      } else {
-        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: new Text("whatsapp no installed")));
-      }
-    } else {
-      // android , web
-      if (await canLaunch(whatsappURl_android)) {
-        await launch(whatsappURl_android);
-      } else {
-        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: new Text("whatsapp no installed")));
-      }
-    }
   }
 
   @override

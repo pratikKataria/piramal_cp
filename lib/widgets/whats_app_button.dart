@@ -18,8 +18,8 @@ class WhatsAppButton extends StatelessWidget {
         openWhatsapp(context);
       },
       child: Container(
-        width: 35,
-        height: 35,
+        width: 32,
+        height: 32,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: AppColors.colorPrimaryLight,
