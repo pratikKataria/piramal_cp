@@ -7,7 +7,7 @@ class RefreshListView extends StatelessWidget {
 
   // var refreshKey = GlobalKey<RefreshIndicatorState>();
 
-  RefreshListView({Key key, List<Widget> children, Function onRefresh, EdgeInsets margin}) : super(key: key) {
+  RefreshListView({Key key, List<Widget> children, @required Function onRefresh, EdgeInsets margin}) : super(key: key) {
     this.children = children;
     this.margin = margin;
     this.onRefresh = onRefresh;

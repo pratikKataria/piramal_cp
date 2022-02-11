@@ -214,7 +214,7 @@ class _LoginScreenState extends State<LoginScreen> implements LoginView {
   @override
   onOtpSent(int otp) {
     Dialogs.hideLoader(context);
-    Utility.showSuccessToastB(_context, "OTP sent");
+    Utility.showSuccessToastB(_context, "OTP Sent Successfully");
     this.otp = otp;
     setState(() {});
   }

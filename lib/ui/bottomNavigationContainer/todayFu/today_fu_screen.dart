@@ -11,6 +11,7 @@ import 'package:piramal_channel_partner/ui/bottomNavigationContainer/todayFu/wid
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
 import 'package:piramal_channel_partner/widgets/pml_outline_button.dart';
+import 'package:piramal_channel_partner/widgets/refresh_list_view.dart';
 
 class TodayFollowUpScreen extends StatefulWidget {
   const TodayFollowUpScreen({Key key}) : super(key: key);
@@ -71,10 +72,16 @@ class _TodayFollowUpScreenState extends State<TodayFollowUpScreen> with SingleTi
                   //     buildSecondCard(),
                   //   ],
                   // ),
-                  ListView(
+                  RefreshListView(
+                    onRefresh: () {
+                      _homePresenter.getSvList(context);
+                    },
                     children: walkInListWidgets.map<Widget>((e) => SvWalkInCardWidget(e)).toList(),
                   ),
-                  ListView(
+                  RefreshListView(
+                    onRefresh: () {
+                      _homePresenter.getSvList(context);
+                    },
                     children: bookingListWidgets.map<Widget>((e) => SvBookingCardWidget(e)).toList(),
                   ),
                 ],
@@ -124,50 +131,50 @@ class _TodayFollowUpScreenState extends State<TodayFollowUpScreen> with SingleTi
         Tab(
           child: currentSelectedTab == "Walk in"
               ? PmlOutlineButton(
-            text: "Walk in",
-            height: 28.0,
-            textStyle: textStyle12px500w,
-            onTap: () {
-              currentSelectedTab = "Walk in";
-              _tabController.index = 0;
-              setState(() {});
-            },
-          )
+                  text: "Walk in",
+                  height: 28.0,
+                  textStyle: textStyle12px500w,
+                  onTap: () {
+                    currentSelectedTab = "Walk in";
+                    _tabController.index = 0;
+                    setState(() {});
+                  },
+                )
               : PmlButton(
-            text: "Walk in",
-            height: 28.0,
-            textStyle: textStyleWhite12px500w,
-            color: AppColors.colorSecondary,
-            onTap: () {
-              currentSelectedTab = "Walk in";
-              _tabController.index = 0;
-              setState(() {});
-            },
-          ),
+                  text: "Walk in",
+                  height: 28.0,
+                  textStyle: textStyleWhite12px500w,
+                  color: AppColors.colorSecondary,
+                  onTap: () {
+                    currentSelectedTab = "Walk in";
+                    _tabController.index = 0;
+                    setState(() {});
+                  },
+                ),
         ),
         Tab(
           child: currentSelectedTab == "Booking"
               ? PmlOutlineButton(
-            text: "Booking",
-            height: 28.0,
-            textStyle: textStyle12px500w,
-            onTap: () {
-              currentSelectedTab = "Booking";
-              _tabController.index = 1;
-              setState(() {});
-            },
-          )
+                  text: "Booking",
+                  height: 28.0,
+                  textStyle: textStyle12px500w,
+                  onTap: () {
+                    currentSelectedTab = "Booking";
+                    _tabController.index = 1;
+                    setState(() {});
+                  },
+                )
               : PmlButton(
-            text: "Booking",
-            height: 28.0,
-            textStyle: textStyleWhite12px500w,
-            color: AppColors.colorSecondary,
-            onTap: () {
-              currentSelectedTab = "Booking";
-              _tabController.index = 1;
-              setState(() {});
-            },
-          ),
+                  text: "Booking",
+                  height: 28.0,
+                  textStyle: textStyleWhite12px500w,
+                  color: AppColors.colorSecondary,
+                  onTap: () {
+                    currentSelectedTab = "Booking";
+                    _tabController.index = 1;
+                    setState(() {});
+                  },
+                ),
         ),
       ],
     );
@@ -219,8 +226,10 @@ class _TodayFollowUpScreenState extends State<TodayFollowUpScreen> with SingleTi
 
   @override
   void onSvListFetched(List<TodaySvResponse> brList) {
+    bookingListWidgets.clear();
+    walkInListWidgets.clear();
     brList.forEach((element) {
-      if (element.returnCode) {
+      if (!element.returnCode) {
         onError(element.message);
         return;
       }
