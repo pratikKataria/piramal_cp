@@ -86,8 +86,8 @@ class WalkInCardWidget extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
                   child: Text("Validity: ${_bookingResponse.createdDays} Day", style: textStyle14px500w),
                 ),
-                horizontalSpace(10.0),
-                if (_bookingResponse.revisit)
+                if (_bookingResponse.revisit) ...[
+                  horizontalSpace(10.0),
                   Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(6),
@@ -95,7 +95,17 @@ class WalkInCardWidget extends StatelessWidget {
                     ),
                     padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
                     child: Text("Revisit", style: textStyle14px500w),
+                  )
+                ],
+                horizontalSpace(10.0),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(6),
+                    color: AppColors.chipColor,
                   ),
+                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+                  child: Text("${_bookingResponse?.projectInterested??_bookingResponse?.projectFinalized} ", style: textStyle14px500w),
+                ),
               ],
             ),
           ),
@@ -185,7 +195,7 @@ class WalkInCardWidget extends StatelessWidget {
       lastDate: DateTime(2100),
     );
     if (picked != null) {
-       _selectTime(context, picked);
+      _selectTime(context, picked);
     }
   }
 
@@ -207,7 +217,7 @@ class WalkInCardWidget extends StatelessWidget {
     );
 
     if (picked != null) {
-       _presenter.scheduleTime(context, _bookingResponse.sfdcid, x);
+      _presenter.scheduleTime(context, _bookingResponse.sfdcid, x);
     }
   }
 }

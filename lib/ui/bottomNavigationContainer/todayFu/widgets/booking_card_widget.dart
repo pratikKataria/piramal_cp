@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
@@ -84,8 +83,8 @@ class SvBookingCardWidget extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
                   child: Text("Validity: ${_bookingResponse.createdDays} Day", style: textStyle14px500w),
                 ),
-                horizontalSpace(10.0),
-                if (_bookingResponse?.revisit??false)
+                if (_bookingResponse?.revisit ?? false) ...[
+                  horizontalSpace(10.0),
                   Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(6),
@@ -93,7 +92,20 @@ class SvBookingCardWidget extends StatelessWidget {
                     ),
                     padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
                     child: Text("Revisit", style: textStyle14px500w),
+                  )
+                ],
+                horizontalSpace(10.0),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(6),
+                    color: AppColors.chipColor,
                   ),
+                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+                  child: Text(
+                    "${_bookingResponse?.projectFinalized ?? _bookingResponse?.projectInterested} ",
+                    style: textStyle14px500w,
+                  ),
+                ),
               ],
             ),
           ),

@@ -4,6 +4,7 @@ import 'package:marquee/marquee.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
+import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/homeWidgets/booking_card_widget.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/homeWidgets/walkin_card_widget.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/home_presenter.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/home_view.dart';
@@ -397,10 +398,10 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     List<Widget> bookingWidgetList = [];
 
     if (filterValue == null) {
-      bookingList.forEach((element) => bookingWidgetList.add(WalkInCardWidget(element, _homePresenter)));
+      bookingList.forEach((element) => bookingWidgetList.add(BookingCardWidget(element, _homePresenter)));
     } else {
       bookingList.forEach((element) {
-        if (filterValue == element.projectInterested) bookingWidgetList.add(WalkInCardWidget(element, _homePresenter));
+        if (filterValue == element.projectInterested) bookingWidgetList.add(BookingCardWidget(element, _homePresenter));
       });
     }
 

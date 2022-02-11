@@ -34,8 +34,8 @@ class HomePresenter {
       return;
     }
     String uID = await Utility.uID();
-    var body = {"CustomerAccountId": "$uID"};
-
+    // var body = {"CustomerAccountId": "$uID"};
+    var body = {"CustomerAccountId": "001p000000y1SqW"};
     apiController.post(EndPoints.GET_BOOKING, body: body, headers: await Utility.header())
       ..then((response) {
         List<BookingResponse> brList = [];
@@ -66,7 +66,8 @@ class HomePresenter {
     }
 
     String uID = await Utility.uID();
-    var body = {"CustomerAccountId": "$uID"};
+    // var body = {"CustomerAccountId": "$uID"};
+    var body = {"CustomerAccountId": "001p000000y1SqW"};
 
     Dialogs.showLoader(context, "Please wait fetching your data ...");
     apiController.post(EndPoints.GET_WALK_IN, body: body, headers: await Utility.header())
@@ -100,7 +101,8 @@ class HomePresenter {
     }
 
     String uID = await Utility.uID();
-    var body = {"CustomerAccountId": "$uID"};
+    // var body = {"CustomerAccountId": "$uID"};
+    var body = {"CustomerAccountId": "001p000000y1SqW"};
 
     apiController.post(EndPoints.GET_WALK_IN, body: body, headers: await Utility.header())
       ..then((response) {

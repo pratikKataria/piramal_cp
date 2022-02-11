@@ -69,10 +69,8 @@ class BookingCardWidget extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               children: [
                 Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    color: getRatingColor(_bookingResponse.newRating),
-                  ),
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(6), color: getRatingColor(_bookingResponse.newRating)),
                   padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
                   child: Text("${_bookingResponse.newRating}", style: textStyleWhite14px500w),
                 ),
@@ -85,8 +83,8 @@ class BookingCardWidget extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
                   child: Text("Validity: ${_bookingResponse.createdDays} Day", style: textStyle14px500w),
                 ),
-                horizontalSpace(10.0),
-                if (_bookingResponse.revisit)
+                if (_bookingResponse.revisit) ...[
+                  horizontalSpace(10.0),
                   Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(6),
@@ -94,7 +92,17 @@ class BookingCardWidget extends StatelessWidget {
                     ),
                     padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
                     child: Text("Revisit", style: textStyle14px500w),
+                  )
+                ],
+                horizontalSpace(10.0),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(6),
+                    color: AppColors.chipColor,
                   ),
+                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+                  child: Text("${_bookingResponse?.projectFinalized}", style: textStyle14px500w),
+                ),
               ],
             ),
           ),

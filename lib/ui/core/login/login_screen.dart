@@ -149,7 +149,7 @@ class _LoginScreenState extends State<LoginScreen> implements LoginView {
               style: subTextStyle,
               decoration: InputDecoration(
                 border: InputBorder.none,
-                hintText: "Enter otp",
+                hintText: "Enter OTP",
                 hintStyle: subTextStyle,
                 isDense: true,
                 suffixStyle: TextStyle(color: AppColors.textColor),
