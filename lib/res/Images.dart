@@ -41,7 +41,10 @@ class Images {
   static const kIconUpload = base + "ic_upload.png";
 
   static const kImageComingSoon = base + "img_comming_soon.png";
-
+  static const kImagePD1 = base + "img_pd_1.png";
+  static const kImagePD2 = base + "img_pd_2.png";
+  static const kImagePD3 = base + "img_pd_3.png";
+  static const kImagePD4 = base + "img_pd_4.png";
 
   static const kImgPlaceholder = base + "img_placeholder.png";
   static const kImgPlaceholder1 = base + "img_placeholder_1.png";

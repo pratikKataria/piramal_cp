@@ -1,9 +1,12 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/user/AuthUser.dart';
@@ -344,6 +347,16 @@ class Utility {
         // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: new Text("whatsapp no installed")));
       }
     }
+  }
+
+  static Future<void> getPdfFromBlob(String blob) async {
+    var bytes = base64Decode(blob.replaceAll('\n', ''));
+    final output = await getTemporaryDirectory();
+    final file = File("${output.path}/example.pdf");
+    await file.writeAsBytes(bytes.buffer.asUint8List());
+    print("${output.path}/example.pdf");
+    await OpenFile.open("${output.path}/example.pdf");
+    return file;
   }
 }
 

@@ -1,18 +1,40 @@
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/booking_response.dart';
+import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/project_unit_response.dart';
+import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/schedule_visit_response.dart';
+import 'package:piramal_channel_partner/ui/customerProfile/booked/model/invoice_response.dart';
+import 'package:piramal_channel_partner/ui/customerProfile/customer_profile_presenter.dart';
+import 'package:piramal_channel_partner/ui/customerProfile/customer_profile_view.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
 import 'package:piramal_channel_partner/widgets/whats_app_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class BookedCustomerProfileDetailScreen extends StatelessWidget {
+class BookedCustomerProfileDetailScreen extends StatefulWidget {
   final BookingResponse response;
 
   BookedCustomerProfileDetailScreen(this.response, {Key key}) : super(key: key);
+
+  @override
+  _BookedCustomerProfileDetailScreenState createState() => _BookedCustomerProfileDetailScreenState();
+}
+
+class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfileDetailScreen> implements CustomerProfileView {
+  CustomerProfilePresenter _homePresenter;
+  InvoiceResponse response;
+
+  @override
+  void initState() {
+    _homePresenter = CustomerProfilePresenter(this);
+    // _homePresenter.getWalkInList(context);
+    _homePresenter.getInvoice(context);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,48 +43,36 @@ class BookedCustomerProfileDetailScreen extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               verticalSpace(20.0),
               //customer pic with name and time
-              Row(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(80.0),
-                    child: Container(
-                      height: 37,
-                      width: 37,
-                      child: Image.asset(Images.kImgPlaceholder, fit: BoxFit.fill),
-                    ),
-                  ),
-                  horizontalSpace(8.0),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("${response?.name}", style: textStyleRegular18pxW500),
-                      Text("Next Follow up: -", style: textStyleSubText14px500w),
-                    ],
-                  ),
-                ],
-              ),
+              Text("${widget.response?.name}", style: textStyleRegular18pxW500),
+              Text("Next Follow up: -", style: textStyleSubText14px500w),
 
               //calender call whatsapp
               verticalSpace(12.0),
               Row(
                 children: [
-                  Container(
-                    width: 35,
-                    height: 35,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppColors.colorPrimaryLight,
+                  InkWell(
+                    onTap: () {
+                      _selectDate(context);
+                    },
+                    child: Container(
+                      width: 35,
+                      height: 35,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppColors.colorPrimaryLight,
+                      ),
+                      padding: EdgeInsets.all(10.0),
+                      child: Image.asset(Images.kIconCalender),
                     ),
-                    padding: EdgeInsets.all(10.0),
-                    child: Image.asset(Images.kIconCalender),
                   ),
                   horizontalSpace(8.0),
                   InkWell(
                     onTap: () {
-                      launch("tel://${response?.name ?? ""}");
+                      launch("tel://${widget.response?.name ?? ""}");
                     },
                     child: Container(
                       width: 35,
@@ -76,7 +86,7 @@ class BookedCustomerProfileDetailScreen extends StatelessWidget {
                     ),
                   ),
                   horizontalSpace(8.0),
-                  WhatsAppButton("${response?.mobilenumber}"),
+                  WhatsAppButton("${widget.response?.mobilenumber}"),
                 ],
               ),
 
@@ -90,10 +100,10 @@ class BookedCustomerProfileDetailScreen extends StatelessWidget {
                     Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(6),
-                        color: Utility.getRatingColor(response?.newRating),
+                        color: Utility.getRatingColor(widget.response?.newRating),
                       ),
                       padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-                      child: Text("${response?.newRating}", style: textStyleWhite14px500w),
+                      child: Text("${widget.response?.newRating}", style: textStyleWhite14px500w),
                     ),
                     horizontalSpace(10.0),
                     Container(
@@ -102,10 +112,10 @@ class BookedCustomerProfileDetailScreen extends StatelessWidget {
                         color: AppColors.chipColor,
                       ),
                       padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-                      child: Text("Validity: ${response?.createdDays} Days", style: textStyle14px500w),
+                      child: Text("Validity: ${widget.response?.createdDays} Days", style: textStyle14px500w),
                     ),
-                    horizontalSpace(10.0),
-                    if (response.revisit)
+                    if (widget.response.revisit) ...[
+                      horizontalSpace(10.0),
                       Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(6),
@@ -113,7 +123,17 @@ class BookedCustomerProfileDetailScreen extends StatelessWidget {
                         ),
                         padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
                         child: Text("Revisit", style: textStyle14px500w),
+                      )
+                    ],
+                    horizontalSpace(10.0),
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(6),
+                        color: AppColors.chipColor,
                       ),
+                      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+                      child: Text("Validity: ${widget.response?.projectFinalized} Days", style: textStyle14px500w),
+                    ),
                   ],
                 ),
               ),
@@ -143,22 +163,29 @@ class BookedCustomerProfileDetailScreen extends StatelessWidget {
                     color: AppColors.colorSecondary,
                     child: Icon(Icons.add, color: AppColors.white, size: 16.0),
                     onTap: () {
-                      showDetailDialog(context);
+                      _homePresenter.getCustomerUnitDetail(context);
                     },
                   ),
                 ],
               ),
               verticalSpace(25.0),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 6.0),
-                color: AppColors.screenBackgroundColor,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("Download Invoice", style: textStyleRegular16px500px),
-                    Icon(Icons.arrow_circle_down_outlined, size: 14.0, color: AppColors.colorSecondary),
-                  ],
+              InkWell(
+                onTap: () async {
+                  String blob = response.file;
+                  if (blob != null) Utility.getPdfFromBlob(blob);
+                  else onError("File not found");
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 6.0),
+                  color: AppColors.screenBackgroundColor,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Download Invoice", style: textStyleRegular16px500px),
+                      Icon(Icons.arrow_circle_down_outlined, size: 14.0, color: AppColors.colorSecondary),
+                    ],
+                  ),
                 ),
               ),
               verticalSpace(25.0),
@@ -184,7 +211,7 @@ class BookedCustomerProfileDetailScreen extends StatelessWidget {
             children: [
               Text("Status", style: textStyle20px500w),
               horizontalSpace(12.0),
-              Text("On March 21th, 2021", style: textStyleSubText14px500w),
+              // Text("On March 21th, 2021", style: textStyleSubText14px500w),
             ],
           ),
         ),
@@ -192,13 +219,30 @@ class BookedCustomerProfileDetailScreen extends StatelessWidget {
         verticalSpace(30.0),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Image.asset(Images.kIconProject),
+          child: Image.asset(getInvoiceProgress()),
         ),
 
         verticalSpace(30.0),
         line(),
       ],
     );
+  }
+
+  String getInvoiceProgress() {
+    switch (response?.status) {
+      case "Invoice Approved":
+        return Images.kImagePD3;
+        return "";
+      case "":
+        return "";
+      case "":
+        return "";
+      case "":
+        return "";
+      default:
+        return Images.kImagePD1;
+        break;
+    }
   }
 
   Column buildDialogRow(String s, String m) {
@@ -218,7 +262,56 @@ class BookedCustomerProfileDetailScreen extends StatelessWidget {
     );
   }
 
-  void showDetailDialog(BuildContext context) {
+  @override
+  onError(String message) {
+    Utility.showErrorToastB(context, message);
+  }
+
+  @override
+  void onSiteVisitScheduled(ScheduleVisitResponse visitResponse) {
+    Utility.showSuccessToastB(context, "Visit Scheduled");
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2100),
+    );
+    if (picked != null) {
+      _selectTime(context, picked);
+    }
+  }
+
+  Future<Null> _selectTime(BuildContext context, DateTime datePicked) async {
+    final TimeOfDay picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+
+    DateTime x = DateTime(
+      datePicked.year,
+      datePicked.month,
+      datePicked.day,
+      picked.hour,
+      picked.minute,
+      datePicked.second,
+      datePicked.millisecond,
+      datePicked.microsecond,
+    );
+
+    if (picked != null) {
+      _homePresenter.scheduleTime(context, widget.response.sfdcid, x);
+    }
+  }
+
+  @override
+  void onProjectUnitResponseFetched(ProjectUnitResponse projectUnitResponse) {
+    showDetailDialog(projectUnitResponse);
+  }
+
+  void showDetailDialog(ProjectUnitResponse projectUnitResponse) {
     AlertDialog alert = AlertDialog(
       contentPadding: EdgeInsets.all(0.0),
       backgroundColor: Colors.transparent,
@@ -234,10 +327,10 @@ class BookedCustomerProfileDetailScreen extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                buildDialogRow("Unit Number", "1102"),
-                buildDialogRow("Tower", "North Tower / Tower 3"),
-                buildDialogRow("Carpet Area", "1152 Sq.Ft."),
-                buildDialogRow("Agreement Value", "INR 3.2 Cr."),
+                buildDialogRow("Unit Number", "${projectUnitResponse?.apartmentFinalized}"),
+                buildDialogRow("Tower", "${projectUnitResponse?.towerFinalized}"),
+                buildDialogRow("Carpet Area", "${projectUnitResponse?.carpetarea}"),
+                buildDialogRow("Agreement Value", "${projectUnitResponse?.totalAgreementValue}"),
               ],
             ),
           ),
@@ -264,5 +357,11 @@ class BookedCustomerProfileDetailScreen extends StatelessWidget {
         return alert;
       },
     );
+  }
+
+  @override
+  void onInvoiceDetailFetched(InvoiceResponse projectUnitResponse) {
+    response = projectUnitResponse;
+    setState(() {});
   }
 }

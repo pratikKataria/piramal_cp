@@ -3,11 +3,12 @@ import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/booking_response.dart';
-import 'package:piramal_channel_partner/ui/customerProfile/widget/left_chat_widget.dart';
-import 'package:piramal_channel_partner/ui/customerProfile/widget/right_chat_widget.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/whats_app_button.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import 'widget/left_chat_widget.dart';
+import 'widget/right_chat_widget.dart';
 
 class WalkinCustomerProfileDetailScreen extends StatelessWidget {
   final BookingResponse response;
