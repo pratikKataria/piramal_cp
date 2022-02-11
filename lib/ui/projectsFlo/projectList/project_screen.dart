@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
@@ -81,7 +83,9 @@ class _ProjectScreenState extends State<ProjectScreen> implements ProjectView {
               height: 130.0,
               decoration: BoxDecoration(
                   image: DecorationImage(
-                image: AssetImage(Images.kImgEventPlaceholder1),
+                image: projectData?.projectImage != null
+                    ? MemoryImage(base64Decode(projectData.projectImage))
+                    : AssetImage(Images.kImgEventPlaceholder1),
                 fit: BoxFit.fill,
               )),
             ),
