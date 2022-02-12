@@ -11,6 +11,7 @@ import 'package:piramal_channel_partner/ui/cpEvent/model/cp_event_response.dart'
 import 'package:piramal_channel_partner/ui/cpEvent/model/cp_event_status_update_response.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
+import 'package:piramal_channel_partner/widgets/refresh_list_view.dart';
 
 class CPEventScreen extends StatefulWidget {
   const CPEventScreen({Key key}) : super(key: key);
@@ -50,7 +51,10 @@ class _CPEventScreenState extends State<CPEventScreen> implements CPEventView {
             Text("CP Events (${cpEventList.length})", style: textStyle24px500w),
             verticalSpace(33.0),
             Expanded(
-              child: ListView(
+              child: RefreshListView(
+                onRefresh: () {
+                  presenter.getEventList(context);
+                },
                 children: cpEventList.map<Widget>((e) => eventCardView(e)).toList(),
               ),
             ),

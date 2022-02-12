@@ -274,6 +274,7 @@ class _AddLeadScreenState extends State<AddLeadScreen> implements AddLeadView {
 
   @override
   void onLeadCreated() {
+    Utility.showSuccessToastB(context, "Lead created");
     Navigator.pop(context, true);
   }
 

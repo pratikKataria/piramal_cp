@@ -5,6 +5,7 @@ import 'package:piramal_channel_partner/res/Images.dart';
 import 'package:piramal_channel_partner/ui/myAssit/assist/my_assist_presenter.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
+import 'package:piramal_channel_partner/widgets/refresh_list_view.dart';
 import 'package:piramal_channel_partner/widgets/whats_app_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -50,7 +51,10 @@ class _MyAssistScreenState extends State<MyAssistScreen> implements MyAssistView
             verticalSpace(20.0),
             if (assistResponse != null)
               Expanded(
-                child: ListView(
+                child: RefreshListView(
+                  onRefresh: () {
+                    leadPresenter.getAssistData(context, widget.id);
+                  },
                   children: [
                     cardViewAssist(
                       assistResponse?.relationshipManagerName,

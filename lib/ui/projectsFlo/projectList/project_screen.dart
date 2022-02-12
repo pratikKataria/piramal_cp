@@ -8,6 +8,7 @@ import 'package:piramal_channel_partner/ui/projectsFlo/projectList/model/project
 import 'package:piramal_channel_partner/ui/projectsFlo/projectList/project_view.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/project_presenter.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
+import 'package:piramal_channel_partner/widgets/refresh_list_view.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProjectScreen extends StatefulWidget {
@@ -44,7 +45,10 @@ class _ProjectScreenState extends State<ProjectScreen> implements ProjectView {
             Text("Projects (${listOfProjects.length})", style: textStyle24px500w),
             verticalSpace(33.0),
             Expanded(
-              child: ListView(
+              child: RefreshListView(
+                onRefresh: () {
+                  projectPresenter.getProjectList(context);
+                },
                 children: listOfProjects.map<Widget>((e) => cardViewProjects(e)).toList(),
               ),
             ),
@@ -93,8 +97,10 @@ class _ProjectScreenState extends State<ProjectScreen> implements ProjectView {
                   top: 10,
                   child: InkWell(
                     onTap: () {
-                      if (projectData?.projectWebsite == null) onError("Project link not found");
-                      else launch("https://${projectData.projectWebsite}");
+                      if (projectData?.projectWebsite == null)
+                        onError("Project link not found");
+                      else
+                        launch("https://${projectData.projectWebsite}");
                     },
                     child: Container(
                       width: 30,

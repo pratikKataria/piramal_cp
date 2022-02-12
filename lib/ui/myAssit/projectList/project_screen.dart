@@ -7,6 +7,7 @@ import 'package:piramal_channel_partner/ui/projectsFlo/projectList/model/project
 import 'package:piramal_channel_partner/ui/projectsFlo/projectList/project_view.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/project_presenter.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
+import 'package:piramal_channel_partner/widgets/refresh_list_view.dart';
 
 class ProjectScreenMyAssist extends StatefulWidget {
   const ProjectScreenMyAssist({Key key}) : super(key: key);
@@ -42,7 +43,10 @@ class _ProjectScreenMyAssistState extends State<ProjectScreenMyAssist> implement
             Text("Projects (${listOfProjects.length})", style: textStyle24px500w),
             verticalSpace(33.0),
             Expanded(
-              child: ListView(
+              child: RefreshListView(
+                onRefresh: () {
+                  projectPresenter.getProjectList(context);
+                },
                 children: listOfProjects.map<Widget>((e) => cardViewProjects(e)).toList(),
               ),
             ),

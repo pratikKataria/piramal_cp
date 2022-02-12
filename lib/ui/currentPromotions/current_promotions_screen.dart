@@ -8,6 +8,7 @@ import 'package:piramal_channel_partner/ui/currentPromotions/current_promo_prese
 import 'package:piramal_channel_partner/ui/currentPromotions/current_promo_view.dart';
 import 'package:piramal_channel_partner/ui/currentPromotions/model/current_promo_response.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
+import 'package:piramal_channel_partner/widgets/refresh_list_view.dart';
 import 'package:piramal_channel_partner/widgets/whats_app_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -29,7 +30,7 @@ class _CurrentPromotionScreenState extends State<CurrentPromotionScreen> impleme
   void initState() {
     super.initState();
     promoPresenter = CurrentPromoPresenter(this);
-    promoPresenter.getProjectList(context);
+    promoPresenter.getPromoList(context);
   }
 
   @override
@@ -48,7 +49,10 @@ class _CurrentPromotionScreenState extends State<CurrentPromotionScreen> impleme
             Text("Current Promotions (${listOfPromos.length})", style: textStyle24px500w),
             verticalSpace(33.0),
             Expanded(
-              child: ListView(
+              child: RefreshListView(
+                onRefresh: () {
+                  promoPresenter.getPromoList(context);
+                },
                 children: listOfPromos.map<Widget>((e) => cardViewPromo(e)).toList(),
               ),
             ),

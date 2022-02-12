@@ -8,6 +8,7 @@ import 'package:piramal_channel_partner/ui/lead/lead_view.dart';
 import 'package:piramal_channel_partner/ui/lead/model/all_lead_response.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
+import 'package:piramal_channel_partner/widgets/refresh_list_view.dart';
 
 class LeadScreen extends StatefulWidget {
   const LeadScreen({Key key}) : super(key: key);
@@ -60,7 +61,10 @@ class _LeadScreenState extends State<LeadScreen> implements LeadView {
             ),
             verticalSpace(33.0),
             Expanded(
-              child: ListView(
+              child: RefreshListView(
+                onRefresh: () {
+                  leadPresenter.getLeadList(context);
+                },
                 children: listOfList.map<Widget>((e) => cardViewLead(e)).toList(),
               ),
             ),

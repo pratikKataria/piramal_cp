@@ -15,7 +15,7 @@ class CurrentPromoPresenter {
 
   CurrentPromoPresenter(this._v);
 
-  void getProjectList(BuildContext context) async {
+  void getPromoList(BuildContext context) async {
     //check for internal token
     if (await AuthUser.getInstance().hasToken()) {
       _v.onError("Token not found");

@@ -13,7 +13,7 @@ class ProjectOverviewResponse {
   ProjectOverviewResponse({
       String website, 
       dynamic threeDtoururl, 
-      int returnCode, 
+      bool returnCode,
       String recordid, 
       dynamic projectphotos, 
       String projectName, 
@@ -47,7 +47,7 @@ class ProjectOverviewResponse {
   }
   String _website;
   dynamic _threeDtoururl;
-  int _returnCode;
+  bool _returnCode;
   String _recordid;
   dynamic _projectphotos;
   String _projectName;
@@ -58,7 +58,7 @@ class ProjectOverviewResponse {
 
   String get website => _website;
   dynamic get threeDtoururl => _threeDtoururl;
-  int get returnCode => _returnCode;
+  bool get returnCode => _returnCode;
   String get recordid => _recordid;
   dynamic get projectphotos => _projectphotos;
   String get projectName => _projectName;

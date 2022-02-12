@@ -43,7 +43,7 @@ class ProjectDetailOverviewPage extends StatelessWidget {
                   onTap: () async {
                     String url = projectOverviewResponse?.threeDtoururl ?? "";
                     if (url.isNotEmpty) {
-                      await launch(projectOverviewResponse?.website ?? "", forceSafariVC: false);
+                      await launch(url ?? "", forceSafariVC: false);
                     }
                   },
                   child: Text("${projectOverviewResponse?.threeDtoururl ?? "Not found"} ↗", style: textStylePrimary14px500w)),
