@@ -5,6 +5,7 @@ import 'package:piramal_channel_partner/ui/base/BaseView.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/home_view.dart';
 import 'package:piramal_channel_partner/ui/core/login/model/token_response.dart';
 import 'package:piramal_channel_partner/utils/NetworkCheck.dart';
+import 'package:piramal_channel_partner/utils/Utility.dart';
 
 class BasePresenter {
   BaseView _v;
@@ -33,8 +34,22 @@ class BasePresenter {
         HomeView loginView = _v as HomeView;
         loginView.onTokenRegenerated(tokenResponse);
       })
-      ..catchError((e) {
+      ..catchError((e) {});
+  }
 
-      });
+  void downloadFile(String link) async {
+    if (!await NetworkCheck.check()) {
+      _v.onError("No Network Found");
+      return;
+    }
+
+    apiController.get(link)
+      ..then((response) {
+        Utility.log(tag, response);
+        // TokenResponse tokenResponse = TokenResponse.fromJson(response.data);
+        // HomeView loginView = _v as HomeView;
+        // loginView.onTokenRegenerated(tokenResponse);
+      })
+      ..catchError((e) {});
   }
 }

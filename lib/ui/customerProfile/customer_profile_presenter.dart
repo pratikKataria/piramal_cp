@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:piramal_channel_partner/api/api_controller_expo.dart';
 import 'package:piramal_channel_partner/api/api_end_points.dart';
 import 'package:piramal_channel_partner/api/api_error_parser.dart';
+import 'package:piramal_channel_partner/ui/base/base_presenter.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/project_unit_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/schedule_visit_response.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/booked/model/invoice_response.dart';
@@ -12,11 +13,11 @@ import 'package:piramal_channel_partner/utils/Dialogs.dart';
 import 'package:piramal_channel_partner/utils/NetworkCheck.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 
-class CustomerProfilePresenter {
+class CustomerProfilePresenter extends BasePresenter {
   CustomerProfileView _v;
   final tag = "HomePresenter";
 
-  CustomerProfilePresenter(this._v);
+  CustomerProfilePresenter(this._v) : super(_v);
 
   void scheduleTime(BuildContext context, String otyId, DateTime visitDate) async {
     //check for internal token

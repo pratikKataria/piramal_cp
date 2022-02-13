@@ -67,6 +67,7 @@ class SignupRequest {
     map['Pan'] = _pan;
     map['ReraID'] = _reraID;
     map['Typeoffirm'] = "Private Ltd Co.";
+    map['TnCFlag'] = true;
     return map;
   }
 

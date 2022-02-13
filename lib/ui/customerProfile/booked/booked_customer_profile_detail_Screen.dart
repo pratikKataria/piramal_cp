@@ -172,8 +172,9 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
               InkWell(
                 onTap: () async {
                   String blob = response.file;
-                  if (blob != null) Utility.getPdfFromBlob(blob);
-                  else onError("File not found");
+                  // if (blob != null) Utility.getPdfFromBlob(blob);
+                  // else onError("File not found");
+                  _homePresenter.downloadFile(response.file);
                 },
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 6.0),

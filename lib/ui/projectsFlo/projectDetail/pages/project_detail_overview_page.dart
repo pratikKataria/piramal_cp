@@ -49,7 +49,17 @@ class ProjectDetailOverviewPage extends StatelessWidget {
                   child: Text("${projectOverviewResponse?.threeDtoururl ?? "Not found"} ↗", style: textStylePrimary14px500w)),
             ],
           ),
-          Image.asset(Images.kImgPlaceholderMap, height: 178),
+          InkWell(
+            onTap: () async {
+              String url = projectOverviewResponse?.projectmap ?? "";
+              if (url.isNotEmpty) {
+                await launch(url ?? "", forceSafariVC: false);
+              }
+            },
+            child: Image.asset(Images.kImgPlaceholderMap, height: 178),
+          ),
+          verticalSpace(10.0),
+          Image.memory(Utility.convertMemoryImage(projectOverviewResponse?.projectphotos)),
         ],
       ),
     );

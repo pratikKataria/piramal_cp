@@ -27,7 +27,7 @@ class InvoiceResponse {
     _name = json['Name'];
     _message = json['message'];
     _fileID = json['FileID'];
-    _file = json['File'];
+    _file = json['InvoiceDownloadlink'];
   }
   String _status;
   bool _returnCode;
@@ -50,7 +50,7 @@ class InvoiceResponse {
     map['Name'] = _name;
     map['message'] = _message;
     map['FileID'] = _fileID;
-    map['File'] = _file;
+    map['InvoiceDownloadlink'] = _file;
     return map;
   }
 

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
-import 'package:piramal_channel_partner/res/Images.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/model/project_amenities_response.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 
@@ -14,7 +13,7 @@ class ProjectDetailAmenitiesPage extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 20.0),
       child: ListView(
         children: [
-          Image.asset(Images.kImgPlaceholderAmenities),
+          Image.memory(Utility.convertMemoryImage(projectAmenitiesResponse?.projectAmenitiesImage)),
           verticalSpace(10.0),
           Row(
             children: [

@@ -148,4 +148,26 @@ class ApiController {
     Utility.log(tag, response.toString());
     return response;
   }
+
+  Future<Response> download(String url, {Map headers, body, encoding, payload}) async {
+    Map<String, String> headerMap = headers ?? {};
+    // headerMap["NoEncryption"] = 'true';
+    Utility.log(tag, "Api Call :\n $url \n Inputs :\n ${body.toString()} \n Payload :\n ${payload}  \n Header :\n $headers");
+
+    Response response = await dio.get(url,
+        queryParameters: payload,
+        options: Options(
+          responseType: ResponseType.bytes,
+          followRedirects: false,
+          contentType: ContentType.json.toString(),
+          receiveTimeout: 300000,
+          sendTimeout: 300000,
+          method: "GET",
+          headers: headerMap,
+        ));
+
+    Utility.log(tag, response.toString());
+    return response;
+  }
+
 }

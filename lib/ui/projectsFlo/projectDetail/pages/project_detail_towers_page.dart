@@ -4,6 +4,7 @@ import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/model/project_tower_response.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProjectDetailTowerPage extends StatelessWidget {
   final List<ProjectTowerResponse> projectTowerResponse = [];
@@ -45,14 +46,41 @@ class ProjectDetailTowerPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Container(
-            height: 130.0,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-              image: AssetImage(Images.kImgEventPlaceholder1),
-              fit: BoxFit.fill,
-            )),
+          Stack(
+            children: [
+              Container(
+                height: 130.0,
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: MemoryImage(Utility.convertMemoryImage(response.towerImage)),
+                      fit: BoxFit.fill,
+                    )),
+              ),
+              Positioned(
+                right: 10,
+                top: 10,
+                child: InkWell(
+                  onTap: () {
+                /*    if (response?.towerWebsite == null)
+                      Utility.showErrorToastB(context, "Project link not found");
+                    else*/
+                      launch("https://${response.towerWebsite}");
+                  },
+                  child: Container(
+                    width: 30,
+                    height: 30,
+                    padding: EdgeInsets.all(10.0),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppColors.black.withOpacity(0.5),
+                    ),
+                    child: Image.asset(Images.kIconRedirect),
+                  ),
+                ),
+              ),
+            ],
           ),
+
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
             child: Column(

@@ -9,6 +9,8 @@ import 'package:piramal_channel_partner/ui/core/signup/model/relation_manager_li
 import 'package:piramal_channel_partner/ui/core/signup/model/signup_request.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/signup_response.dart';
 import 'package:piramal_channel_partner/ui/core/signup/signup_view.dart';
+import 'package:piramal_channel_partner/user/AuthUser.dart';
+import 'package:piramal_channel_partner/user/CurrentUser.dart';
 import 'package:piramal_channel_partner/utils/Dialogs.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
@@ -27,8 +29,8 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
   SignupRequest signupRequest = SignupRequest();
   CorePresenter corePresenter;
 
-  List<RelationManagerListResponse> rmList = [];
-  RelationManagerListResponse relationManagerListResponse;
+  List<String> rmList = [];
+  String relationManagerListResponse;
 
   bool mobileOTPVerified = false;
   bool emailOTPVerified = false;
@@ -40,7 +42,7 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
   void initState() {
     super.initState();
     corePresenter = CorePresenter(this);
-    corePresenter.getRmList(context, "");
+    corePresenter.getAccessToken();
   }
 
   @override
@@ -150,20 +152,20 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
                   borderRadius: BorderRadius.circular(6.0),
                 ),
                 padding: EdgeInsets.symmetric(horizontal: 10.0),
-                child: DropdownButton<RelationManagerListResponse>(
+                child: DropdownButton<String>(
                   isExpanded: true,
                   hint: Text("Select Relation Manager", style: subTextStyle),
                   value: relationManagerListResponse,
                   underline: Container(),
-                  items: <RelationManagerListResponse>[...rmList].map((RelationManagerListResponse value) {
-                    return DropdownMenuItem<RelationManagerListResponse>(
+                  items: <String>[...rmList].map((String value) {
+                    return DropdownMenuItem<String>(
                       value: value,
-                      child: Text(value.fieldName, style: subTextStyle),
+                      child: Text(value, style: subTextStyle),
                     );
                   }).toList(),
                   onChanged: (value) {
                     relationManagerListResponse = value;
-                    signupRequest.relationshipManager = value.fieldName;
+                    signupRequest.relationshipManager = value;
                     // signupRequest.typeoffirm = value.
                     setState(() {});
                   },
@@ -278,12 +280,17 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
   @override
   void onRelationManagerListFetched(List<RelationManagerListResponse> relationManagerListResponse) {
     rmList.clear();
-    relationManagerListResponse.forEach((element) {
-      if (element.returnCode)
-        rmList.add(element);
-      else
-        onError(element.message);
+    RelationManagerListResponse s = relationManagerListResponse.first;
+    s.values.split(",").forEach((element) {
+      rmList.add(element);
     });
+
+    // relationManagerListResponse.forEach((element) {
+    //   if (element.returnCode)
+    //     rmList.add(element);
+    //   else
+    //     onError(element.message);
+    // });
 
     setState(() {});
   }
@@ -292,7 +299,16 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
   void onSignupSuccessfully(SignupResponse signupResponse) {}
 
   @override
-  void onTokenGenerated(TokenResponse tokenResponse) {}
+  void onTokenGenerated(TokenResponse tokenResponse) {
+    // _tokenResponse = tokenResponse;
+
+    //Save token
+    var currentUser = CurrentUser()..tokenResponse = tokenResponse;
+    AuthUser.getInstance().saveToken(currentUser);
+
+    //sent otp request
+    corePresenter.getRmList(context);
+  }
 
   @override
   onOtpSent(int otp, provider) {

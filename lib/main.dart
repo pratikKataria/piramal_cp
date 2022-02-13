@@ -115,7 +115,7 @@ class MyApp extends StatelessWidget {
               break;
           }
         },
-        home: UploadDocumentScreen() /*checkAuthUser(authResult)*/,
+        home: checkAuthUser(authResult),
       ),
     );
   }

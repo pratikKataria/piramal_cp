@@ -53,12 +53,11 @@ class DocumentUploadRequest {
     final map = <String, dynamic>{};
     map['CustomerAccountId'] = _customerAccountId;
     map['ReraCertificatePDF'] = _reraCertificatePDF;
-    map[' PanCard'] = _PanCard;
+    map['PanCard'] = _PanCard;
     map['LISTofDirectors'] = _lISTofDirectors;
     map['partnershipDeeds'] = _partnershipDeeds;
     map['listOfpartners'] = _listOfpartners;
-    map['TnCFlag'] = _tnCFlag;
-    return map;
+     return map;
   }
 
   set tnCFlag(String value) {

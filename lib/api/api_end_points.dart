@@ -30,7 +30,7 @@ class EndPoints {
   static const String PROJECT_UNIT_DETAILS = BASE_URL + "/CP_Mobile_App/CustomerUnitdetails";
   static const String GET_R_MANAGER_LIST = BASE_URL + "/CP_Mobile_App/RManagerList";
   static const String SIGN_UP = BASE_URL + "/CP_Mobile_App/CPEmpanelmentSignup";
-  static const String CP_EMP_DOC_UPLOAD = BASE_URL + "/CPEmpalDocUpload";
+  static const String CP_EMP_DOC_UPLOAD = BASE_URL + "/CP_Mobile_App/CPEmpalDocUpload";
 
   static const String MY_ASSIST = BASE_URL + "/CP_Mobile_App/MyAssist";
   static const String MY_PROFILE = BASE_URL + "/CP_Mobile_App/ProfileDetails";

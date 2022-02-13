@@ -43,7 +43,7 @@ class CorePresenter {
     apiController.post(EndPoints.ACCESS_TOKEN, body: body)
       ..then((response) {
         TokenResponse tokenResponse = TokenResponse.fromJson(response.data);
-        LoginView loginView = _v as LoginView;
+        SignupView loginView = _v as SignupView;
         loginView.onTokenGenerated(tokenResponse);
       })
       ..catchError((e) {
@@ -228,7 +228,7 @@ class CorePresenter {
       });
   }
 
-  void getRmList(BuildContext context, String value) async {
+  void getRmList(BuildContext context) async {
     //check for internal token
     if (await AuthUser.getInstance().hasToken()) {
       _v.onError("Token not found");
@@ -263,6 +263,8 @@ class CorePresenter {
 
     //check network
     if (!await NetworkCheck.check()) return;
+
+    request.customerAccountId = "001p000000zI4QiAAK";
 
     Dialogs.showLoader(context, "Please wait uploading document ...");
     apiController.post(EndPoints.CP_EMP_DOC_UPLOAD, body: request.toJson(), headers: await Utility.header())
