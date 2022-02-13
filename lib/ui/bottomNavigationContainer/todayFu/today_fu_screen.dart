@@ -6,8 +6,8 @@ import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/todayFu/model/today_sv_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/todayFu/today_sv_presenter.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/todayFu/today_sv_view.dart';
-import 'package:piramal_channel_partner/ui/bottomNavigationContainer/todayFu/widgets/booking_card_widget.dart';
-import 'package:piramal_channel_partner/ui/bottomNavigationContainer/todayFu/widgets/walkin_card_widget.dart';
+import 'package:piramal_channel_partner/ui/bottomNavigationContainer/todayFu/widgets/sv_booking_card_widget.dart';
+import 'package:piramal_channel_partner/ui/bottomNavigationContainer/todayFu/widgets/sv_walkin_card_widget.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
 import 'package:piramal_channel_partner/widgets/pml_outline_button.dart';
@@ -63,26 +63,17 @@ class _TodayFollowUpScreenState extends State<TodayFollowUpScreen> with SingleTi
                 controller: _tabController,
                 physics: NeverScrollableScrollPhysics(),
                 children: [
-                  // ListView(
-                  //   children: [
-                  //     //Card one
-                  //     buildFirstCard(),
-                  //
-                  //     //Card Two
-                  //     buildSecondCard(),
-                  //   ],
-                  // ),
                   RefreshListView(
                     onRefresh: () {
                       _homePresenter.getSvList(context);
                     },
-                    children: walkInListWidgets.map<Widget>((e) => SvWalkInCardWidget(e)).toList(),
+                    children: walkInListWidgets.map<Widget>((e) => SvWalkInCardWidget(e, _homePresenter)).toList(),
                   ),
                   RefreshListView(
                     onRefresh: () {
                       _homePresenter.getSvList(context);
                     },
-                    children: bookingListWidgets.map<Widget>((e) => SvBookingCardWidget(e)).toList(),
+                    children: bookingListWidgets.map<Widget>((e) => SvBookingCardWidget(e, _homePresenter)).toList(),
                   ),
                 ],
               ),
@@ -228,5 +219,10 @@ class _TodayFollowUpScreenState extends State<TodayFollowUpScreen> with SingleTi
     });
 
     setState(() {});
+  }
+
+  @override
+  void onTaggingDone() {
+    Utility.showSuccessToastB(context, "Tagging completed");
   }
 }

@@ -5,4 +5,5 @@ import 'package:piramal_channel_partner/ui/bottomNavigationContainer/todayFu/mod
 
 abstract class TodayView extends BaseView{
   void onSvListFetched(List<TodaySvResponse> brList);
+  void onTaggingDone() {}
 }

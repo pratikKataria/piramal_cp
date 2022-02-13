@@ -133,7 +133,11 @@ class HomePresenter {
     }
 
     String formattedDate = DateFormat("yyyy-MM-ddTHH:mm:ss").format(visitDate);
-    var body = {"OpportunityId": "$otyId", "scheduleDateTime": "$formattedDate"};
+    var body = {
+      "OpportunityId": "$otyId",
+      "scheduleDateTime": "$formattedDate",
+      "CustomerAccountID":"001p000000y1SqW"
+    };
     Dialogs.showLoader(context, "Please wait scheduling your visit ...");
     apiController.post(EndPoints.SCHEDULE_VISIT, body: body, headers: await Utility.header())
       ..then((response) {

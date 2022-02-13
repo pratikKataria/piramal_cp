@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import 'AppColors.dart';
 
 /// 🔥 MVP Architecture🔥
@@ -296,6 +297,12 @@ const textStylePrimary12px500w = TextStyle(
 const textStyleRed10px500w = TextStyle(
   color: AppColors.colorPrimary,
   fontFamily: kFontFamily,);
+
+const textStyleWhite10px500w = TextStyle(
+    color: AppColors.white,
+    fontFamily: kFontFamily,
+    fontWeight: FontWeight.w500,
+    fontSize: 10);
 
 const textStyleSubText10px400w = TextStyle(
     color: AppColors.textColorSubText,

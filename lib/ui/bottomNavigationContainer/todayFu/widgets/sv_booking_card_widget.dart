@@ -4,14 +4,16 @@ import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
 import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/booking_response.dart';
+import 'package:piramal_channel_partner/ui/bottomNavigationContainer/todayFu/today_sv_presenter.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/whats_app_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class SvWalkInCardWidget extends StatelessWidget {
+class SvBookingCardWidget extends StatelessWidget {
   final BookingResponse _bookingResponse;
+  final TodaySVPresenter homePresenter;
 
-  const SvWalkInCardWidget(this._bookingResponse, {Key key}) : super(key: key);
+  const SvBookingCardWidget(this._bookingResponse, this.homePresenter, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -42,14 +44,6 @@ class SvWalkInCardWidget extends StatelessWidget {
             },
             child: Row(
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(80.0),
-                  child: Container(
-                    height: 37,
-                    width: 37,
-                    child: Image.asset(Images.kImgPlaceholder, fit: BoxFit.fill),
-                  ),
-                ),
                 horizontalSpace(8.0),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -83,8 +77,8 @@ class SvWalkInCardWidget extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
                   child: Text("Validity: ${_bookingResponse.createdDays} Day", style: textStyle14px500w),
                 ),
-                horizontalSpace(10.0),
-                if (_bookingResponse.revisit)
+                if (_bookingResponse?.revisit ?? false) ...[
+                  horizontalSpace(10.0),
                   Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(6),
@@ -92,7 +86,20 @@ class SvWalkInCardWidget extends StatelessWidget {
                     ),
                     padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
                     child: Text("Revisit", style: textStyle14px500w),
+                  )
+                ],
+                horizontalSpace(10.0),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(6),
+                    color: AppColors.chipColor,
                   ),
+                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+                  child: Text(
+                    "${_bookingResponse?.projectFinalized ?? _bookingResponse?.projectInterested} ",
+                    style: textStyle14px500w,
+                  ),
+                ),
               ],
             ),
           ),
@@ -104,14 +111,26 @@ class SvWalkInCardWidget extends StatelessWidget {
               horizontalSpace(8.0),
               WhatsAppButton(_bookingResponse?.mobilenumber),
               Spacer(),
-              Container(
-                width: 35,
-                height: 35,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.colorSecondary,
+              InkWell(
+                onTap: () {
+                  homePresenter.completeTagging(context);
+                },
+                child: Container(
+                  width: 110,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                    color: AppColors.colorSecondary,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.warning_amber_sharp, color: AppColors.red, size: 12),
+                      horizontalSpace(4.0),
+                      Text("Complete Tagging", style: textStyleWhite12px500w),
+                    ],
+                  ),
                 ),
-                child: Icon(Icons.add, color: AppColors.white),
               ),
             ],
           ),
@@ -121,7 +140,7 @@ class SvWalkInCardWidget extends StatelessWidget {
   }
 
   Color getRatingColor(String rating) {
-    switch (rating.toUpperCase()) {
+    switch (rating?.toUpperCase()) {
       case "HOT":
         return AppColors.colorPrimary;
       case "WARM":
@@ -147,6 +166,21 @@ class SvWalkInCardWidget extends StatelessWidget {
         ),
         padding: EdgeInsets.all(10.0),
         child: Image.asset(Images.kIconCalender),
+      ),
+    );
+  }
+
+  InkWell addButton(BuildContext context) {
+    return InkWell(
+      onTap: () {},
+      child: Container(
+        width: 35,
+        height: 35,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: AppColors.colorSecondary,
+        ),
+        child: Icon(Icons.add, color: AppColors.white),
       ),
     );
   }
