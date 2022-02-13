@@ -61,4 +61,31 @@ class DocumentUploadRequest {
     return map;
   }
 
+  set tnCFlag(String value) {
+    _tnCFlag = value;
+  }
+
+  set listOfpartners(String value) {
+    _listOfpartners = value;
+  }
+
+  set partnershipDeeds(String value) {
+    _partnershipDeeds = value;
+  }
+
+  set lISTofDirectors(String value) {
+    _lISTofDirectors = value;
+  }
+
+  set PanCard(String value) {
+    _PanCard = value;
+  }
+
+  set reraCertificatePDF(String value) {
+    _reraCertificatePDF = value;
+  }
+
+  set customerAccountId(String value) {
+    _customerAccountId = value;
+  }
 }

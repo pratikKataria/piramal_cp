@@ -10,11 +10,13 @@ import 'package:piramal_channel_partner/ui/core/login/login_view.dart';
 import 'package:piramal_channel_partner/ui/core/login/model/login_response.dart';
 import 'package:piramal_channel_partner/ui/core/login/model/otp_response.dart';
 import 'package:piramal_channel_partner/ui/core/login/model/token_response.dart';
+import 'package:piramal_channel_partner/ui/core/signup/model/document_upload_request.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/document_upload_response.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/relation_manager_list_response.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/signup_request.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/signup_response.dart';
 import 'package:piramal_channel_partner/ui/core/signup/signup_view.dart';
+import 'package:piramal_channel_partner/ui/core/uploadDocument/upload_document_view.dart';
 import 'package:piramal_channel_partner/user/AuthUser.dart';
 import 'package:piramal_channel_partner/utils/Dialogs.dart';
 import 'package:piramal_channel_partner/utils/NetworkCheck.dart';
@@ -114,7 +116,8 @@ class CorePresenter {
 
     int mobileOtp = _genRandomNumber();
 
-    String queryParams = "username=7506775158&password=Stetig@123&To=$value&senderid=VM-PRLCRM&feedid=372501&Text=Your%20OTP%20for%20MyPiramal%20App%20is%20$mobileOtp%20kindly%20use%20this%20for%20login";
+    String queryParams =
+        "username=7506775158&password=Stetig@123&To=$value&senderid=VM-PRLCRM&feedid=372501&Text=Your%20OTP%20for%20MyPiramal%20App%20is%20$mobileOtp%20kindly%20use%20this%20for%20login";
     apiController.get("${EndPoints.SEND_MOBILE_OTP}$queryParams", headers: await Utility.header())
       ..then((response) {
         Utility.log(tag, response.data);
@@ -251,7 +254,7 @@ class CorePresenter {
       });
   }
 
-  void uploadDocument(BuildContext context, String value) async {
+  void uploadDocument(BuildContext context, DocumentUploadRequest request) async {
     //check for internal token
     if (await AuthUser.getInstance().hasToken()) {
       _v.onError("Token not found");
@@ -262,13 +265,13 @@ class CorePresenter {
     if (!await NetworkCheck.check()) return;
 
     Dialogs.showLoader(context, "Please wait uploading document ...");
-    apiController.get(EndPoints.CP_EMP_DOC_UPLOAD, headers: await Utility.header())
+    apiController.post(EndPoints.CP_EMP_DOC_UPLOAD, body: request.toJson(), headers: await Utility.header())
       ..then((response) {
         Dialogs.hideLoader(context);
         Utility.log(tag, response.data);
         DocumentUploadResponse documentUploadResponse = DocumentUploadResponse.fromJson(response.data);
-        // SignupView signUpView = _v as SignupView;
-        // signUpView.onRelationManagerListFetched(relationManagerListResponse);
+        UploadDocumentView signUpView = _v as UploadDocumentView;
+        signUpView.onDocumentUploaded(documentUploadResponse);
       })
       ..catchError((e) {
         Dialogs.hideLoader(context);

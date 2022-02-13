@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
-import 'package:piramal_channel_partner/res/Screens.dart';
-import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
+import 'package:piramal_channel_partner/ui/core/core_presenter.dart';
+import 'package:piramal_channel_partner/ui/core/signup/model/document_upload_request.dart';
+import 'package:piramal_channel_partner/ui/core/signup/model/document_upload_response.dart';
+import 'package:piramal_channel_partner/ui/core/uploadDocument/upload_document_view.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
-import 'package:provider/provider.dart';
 
 class UploadDocumentScreen extends StatefulWidget {
   const UploadDocumentScreen({Key key}) : super(key: key);
@@ -15,10 +16,25 @@ class UploadDocumentScreen extends StatefulWidget {
   _UploadDocumentScreenState createState() => _UploadDocumentScreenState();
 }
 
-class _UploadDocumentScreenState extends State<UploadDocumentScreen> {
+class _UploadDocumentScreenState extends State<UploadDocumentScreen> implements UploadDocumentView {
   final subTextStyle = textStyleSubText14px500w;
   final mainTextStyle = textStyle14px500w;
   bool checkedValue = false;
+
+  String reraFileName = "";
+  String panCardFileName = "";
+  String directorsFileName = "";
+  String partnerShipFileName = "";
+  String partnersFileName = "";
+
+  DocumentUploadRequest documentUploadRequest = DocumentUploadRequest();
+  CorePresenter presenter;
+
+  @override
+  void initState() {
+    presenter = CorePresenter(this);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,11 +55,66 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> {
               ),
               verticalSpace(20.0),
               buildProfileDetailCard("Type of Firm", "Partnership Firm"),
-              buildProfileDetailCard2("RERA Certificate", "28377_43434.pdf"),
-              buildProfileDetailCard2("PAN Card", "PAN_589_3948.pdf"),
-              buildProfileDetailCard2("List of Directors", "DirectorsList_2021.pdf"),
-              buildProfileDetailCard2("Partnership Deed", "PD2020_V2.pdf"),
-              buildProfileDetailCard2("List of Partners", "LOP2021_5.pdf"),
+              buildProfileDetailCard2(
+                "RERA Certificate",
+                "$reraFileName",
+                () async {
+                  List<String> file = await Utility.pickFile(context);
+                  String fileBytes = file[0];
+                  String name = file[1];
+                  documentUploadRequest.reraCertificatePDF = fileBytes;
+                  reraFileName = name;
+                  setState(() {});
+                },
+              ),
+              buildProfileDetailCard2(
+                "PAN Card",
+                "$panCardFileName",
+                () async {
+                  List<String> file = await Utility.pickFile(context);
+                  String fileBytes = file[0];
+                  String name = file[1];
+                  documentUploadRequest.PanCard = fileBytes;
+                  panCardFileName = name;
+                  setState(() {});
+                },
+              ),
+              buildProfileDetailCard2(
+                "List of Directors",
+                "$directorsFileName",
+                () async {
+                  List<String> file = await Utility.pickFile(context);
+                  String fileBytes = file[0];
+                  String name = file[1];
+                  documentUploadRequest.lISTofDirectors = fileBytes;
+                  directorsFileName = name;
+                  setState(() {});
+                },
+              ),
+              buildProfileDetailCard2(
+                "Partnership Deed",
+                "$partnerShipFileName",
+                () async {
+                  List<String> file = await Utility.pickFile(context);
+                  String fileBytes = file[0];
+                  String name = file[1];
+                  documentUploadRequest.partnershipDeeds = fileBytes;
+                  partnerShipFileName = name;
+                  setState(() {});
+                },
+              ),
+              buildProfileDetailCard2(
+                "List of Partners",
+                "$partnersFileName",
+                () async {
+                  List<String> file = await Utility.pickFile(context);
+                  String fileBytes = file[0];
+                  String name = file[1];
+                  documentUploadRequest.listOfpartners = fileBytes;
+                  partnersFileName = name;
+                  setState(() {});
+                },
+              ),
               verticalSpace(15.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -90,7 +161,7 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> {
     );
   }
 
-  Container buildProfileDetailCard2(String mText, String sText) {
+  Container buildProfileDetailCard2(String mText, String sText, Function onClick) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 18.0),
       margin: EdgeInsets.only(bottom: 12.0),
@@ -108,16 +179,19 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> {
               Text("$sText", style: textStyleSubText14px500w),
             ],
           ),
-          Container(
-            width: 30,
-            height: 30,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: AppColors.colorPrimary,
-            ),
-            padding: EdgeInsets.all(8.0),
-            child: Image.asset(
-              Images.kIconUpload,
+          InkWell(
+            onTap: onClick,
+            child: Container(
+              width: 30,
+              height: 30,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColors.colorPrimary,
+              ),
+              padding: EdgeInsets.all(8.0),
+              child: Image.asset(
+                Images.kIconUpload,
+              ),
             ),
           ),
         ],
@@ -131,10 +205,27 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> {
       height: 36,
       text: "Next",
       onTap: () {
-        var provider = Provider.of<BaseProvider>(context, listen: false);
-        provider.showToolTip();
-        Navigator.pushNamed(context, Screens.kHomeBase);
+        if (checkedValue) {
+          presenter.uploadDocument(context, documentUploadRequest);
+          return;
+        }
+
+        onError("Please accept Terms & Conditions");
+
+        // var provider = Provider.of<BaseProvider>(context, listen: false);
+        // provider.showToolTip();
+        // Navigator.pushNamed(context, Screens.kHomeBase);
       },
     );
+  }
+
+  @override
+  void onDocumentUploaded(DocumentUploadResponse documentUploadResponse) {
+
+  }
+
+  @override
+  onError(String message) {
+    Utility.showErrorToastB(context, message);
   }
 }

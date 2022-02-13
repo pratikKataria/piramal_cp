@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -366,6 +367,23 @@ class Utility {
       return base64Decode(source);
     } catch (e) {
       return base64Decode(kDefImage);
+    }
+  }
+
+  static Future<List<String>> pickFile(BuildContext context) async {
+    try {
+      FilePickerResult result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['pdf'],
+      );
+
+      File file = File(result.files.single.path);
+      List<int> imageBytes = file.readAsBytesSync();
+      String base64Image = base64Encode(imageBytes);
+      return [base64Image, result.names.single];
+    } catch (e) {
+      Utility.showErrorToastB(context, e.toString());
+      return ["", ""];
     }
   }
 }
