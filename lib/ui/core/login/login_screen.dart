@@ -30,7 +30,6 @@ class _LoginScreenState extends State<LoginScreen> implements LoginView {
   final mainTextStyle = textStyle14px500w;
 
   final TextEditingController emailTextController = TextEditingController();
-
   final TextEditingController otpTextController = TextEditingController();
 
   BuildContext _context;

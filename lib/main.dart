@@ -115,7 +115,7 @@ class MyApp extends StatelessWidget {
               break;
           }
         },
-        home: checkAuthUser(authResult),
+        home: SignupScreen() /*checkAuthUser(authResult)*/,
       ),
     );
   }
