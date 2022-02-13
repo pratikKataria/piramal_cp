@@ -74,11 +74,19 @@ class CorePresenter {
     apiController.post(EndPoints.SEND_OTP, body: body, headers: await Utility.header())
       ..then((response) {
         OTPResponse otpResponse = OTPResponse.fromJson(response.data);
-        LoginView loginView = _v as LoginView;
-        if (otpResponse.returnCode)
+        if (otpResponse.returnCode == false) {
+          _v.onError(otpResponse.message);
+          return;
+        }
+
+        if (_v is LoginView) {
+          LoginView loginView = _v as LoginView;
           loginView.onOtpSent(mobileOtp);
-        else
-          loginView.onError(otpResponse.message);
+          return;
+        }
+
+        SignupView signupView = _v as SignupView;
+        signupView.onOtpSent(mobileOtp, 1);
       })
       ..catchError((e) {
         ApiErrorParser.getResult(e, _v);
@@ -107,18 +115,18 @@ class CorePresenter {
     int mobileOtp = _genRandomNumber();
 
     String queryParams = "username=7506775158&password=Stetig@123&To=$value&senderid=VM-PRLCRM&feedid=372501&Text=Your%20OTP%20for%20MyPiramal%20App%20is%20$mobileOtp%20kindly%20use%20this%20for%20login";
-
     apiController.get("${EndPoints.SEND_MOBILE_OTP}$queryParams", headers: await Utility.header())
       ..then((response) {
         Utility.log(tag, response.data);
-        LoginView loginView = _v as LoginView;
-        loginView.onOtpSent(mobileOtp);
-        // OTPResponse otpResponse = OTPResponse.fromJson(response.data);
-        // LoginView loginView = _v as LoginView;
-        // if (otpResponse.returnCode)
-        //   loginView.onOtpSent(mobileOtp);
-        // else
-        //   loginView.onError(otpResponse.message);
+
+        if (_v is LoginView) {
+          LoginView loginView = _v as LoginView;
+          loginView.onOtpSent(mobileOtp);
+          return;
+        }
+
+        SignupView signupView = _v as SignupView;
+        signupView.onOtpSent(mobileOtp, 1);
       })
       ..catchError((e) {
         ApiErrorParser.getResult(e, _v);
@@ -140,7 +148,6 @@ class CorePresenter {
       verifyMobile(value);
       return;
     }
-
 
     var body = {
       "EmailId": "$value",
@@ -207,8 +214,10 @@ class CorePresenter {
         Utility.log(tag, response.data);
         SignupResponse signupResponse = SignupResponse.fromJson(response.data);
         SignupView signUpView = _v as SignupView;
-        if (signupResponse.returnCode) signUpView.onSignupSuccessfully(signupResponse);
-        else signUpView.onError(signupResponse.message);
+        if (signupResponse.returnCode)
+          signUpView.onSignupSuccessfully(signupResponse);
+        else
+          signUpView.onError(signupResponse.message);
       })
       ..catchError((e) {
         Dialogs.hideLoader(context);
@@ -226,13 +235,16 @@ class CorePresenter {
     //check network
     if (!await NetworkCheck.check()) return;
 
-
-    apiController.get(EndPoints.GET_R_MANAGER_LIST, headers: await Utility.header())
+    apiController.post(EndPoints.GET_R_MANAGER_LIST, headers: await Utility.header())
       ..then((response) {
         Utility.log(tag, response.data);
-        RelationManagerListResponse relationManagerListResponse = RelationManagerListResponse.fromJson(response.data);
+        List<RelationManagerListResponse> brList = [];
+        var listOfDynamic = response.data as List;
+        listOfDynamic.forEach((element) {
+          brList.add(RelationManagerListResponse.fromJson(element));
+        });
         SignupView signUpView = _v as SignupView;
-        signUpView.onRelationManagerListFetched(relationManagerListResponse);
+        signUpView.onRelationManagerListFetched(brList);
       })
       ..catchError((e) {
         ApiErrorParser.getResult(e, _v);
@@ -271,5 +283,3 @@ class CorePresenter {
     return code;
   }
 }
-
-

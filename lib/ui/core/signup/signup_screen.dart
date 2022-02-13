@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
@@ -8,6 +9,7 @@ import 'package:piramal_channel_partner/ui/core/signup/model/relation_manager_li
 import 'package:piramal_channel_partner/ui/core/signup/model/signup_request.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/signup_response.dart';
 import 'package:piramal_channel_partner/ui/core/signup/signup_view.dart';
+import 'package:piramal_channel_partner/utils/Dialogs.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
 
@@ -25,10 +27,20 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
   SignupRequest signupRequest = SignupRequest();
   CorePresenter corePresenter;
 
+  List<RelationManagerListResponse> rmList = [];
+  RelationManagerListResponse relationManagerListResponse;
+
+  bool mobileOTPVerified = false;
+  bool emailOTPVerified = false;
+
+  int emailOTP;
+  int mobileOTP;
+
   @override
   void initState() {
     super.initState();
     corePresenter = CorePresenter(this);
+    corePresenter.getRmList(context, "");
   }
 
   @override
@@ -55,30 +67,108 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
                 return;
               }),
               verticalSpace(10.0),
-              input("Primary Mobile Number", (String v) {
-                signupRequest.primaryMobNo = v;
-                return;
-              }, showChildButton: true, childButtonText: "Get OTP"),
+              input(
+                "Primary Mobile Number",
+                (String v) {
+                  signupRequest.primaryMobNo = v;
+                  return;
+                },
+                showChildButton: true,
+                childButtonText: "Get OTP",
+                number: true,
+                onClick: () {
+                  Dialogs.showLoader(context, "Sending OTP to ${signupRequest.primaryMobNo}");
+                  corePresenter.sendMobileOTP(signupRequest.primaryMobNo);
+                  mobileOTPVerified = false;
+                  setState(() {});
+                },
+              ),
               verticalSpace(10.0),
-              input("OTP", (String v) {
-                signupRequest.name = v;
-                return;
-              }, showChildButton: true, childButtonText: "Verify"),
+              input(
+                "OTP",
+                (String v) {
+                  signupRequest.mobileOTP = v;
+                  return;
+                },
+                showChildButton: true,
+                childButtonText: mobileOTPVerified ? "Verified": "Verify",
+                number: true,
+                verified: mobileOTPVerified,
+                onClick: () {
+                  if (mobileOTPVerified) return;
+
+                  if (signupRequest.mobileOTP == null) {
+                    onError("Please Enter OTP");
+                    return;
+                  }
+
+                  if (signupRequest.mobileOTP != mobileOTP.toString()) {
+                    onError("Please Enter correct OTP");
+                    return;
+                  }
+
+                  mobileOTPVerified = true;
+                  setState(() {});
+                },
+              ),
               verticalSpace(10.0),
-              input("Email", (String v) {
-                signupRequest.email = v;
-                return;
-              }, showChildButton: true, childButtonText: "Get OTP"),
+              input(
+                "Email",
+                (String v) {
+                  signupRequest.email = v;
+                  return;
+                },
+                showChildButton: true,
+                childButtonText: "Get OTP",
+                onClick: () {
+                  Dialogs.showLoader(context, "Sending OTP to ${signupRequest.email}");
+                  corePresenter.sendOTP(signupRequest.email);
+                },
+              ),
               verticalSpace(10.0),
-              input("OTP", (String v) {
-                signupRequest.name = v;
-                return;
-              }, showChildButton: true, childButtonText: "Verify"),
+              input(
+                "OTP",
+                (String v) {
+                  // signupRequest.name = v;
+                  return;
+                },
+                showChildButton: true,
+                childButtonText: "Verify",
+                number: true,
+                onClick: () {},
+              ),
+              // verticalSpace(10.0),
+              // input("Relationship Manager", (String v) {
+              //   signupRequest.relationshipManager = v;
+              //   return;
+              // }),
               verticalSpace(10.0),
-              input("Relationship Manager", (String v) {
-                signupRequest.relationshipManager = v;
-                return;
-              }),
+              Container(
+                height: 38.0,
+                decoration: BoxDecoration(
+                  color: AppColors.inputFieldBackgroundColor,
+                  borderRadius: BorderRadius.circular(6.0),
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 10.0),
+                child: DropdownButton<RelationManagerListResponse>(
+                  isExpanded: true,
+                  hint: Text("Select Relation Manager", style: subTextStyle),
+                  value: relationManagerListResponse,
+                  underline: Container(),
+                  items: <RelationManagerListResponse>[...rmList].map((RelationManagerListResponse value) {
+                    return DropdownMenuItem<RelationManagerListResponse>(
+                      value: value,
+                      child: Text(value.fieldName, style: subTextStyle),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    relationManagerListResponse = value;
+                    signupRequest.relationshipManager = value.fieldName;
+                    // signupRequest.typeoffirm = value.
+                    setState(() {});
+                  },
+                ),
+              ),
               verticalSpace(10.0),
               input("Permanent Account Number (PAN)", (String v) {
                 signupRequest.pan = v;
@@ -100,7 +190,7 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
   }
 
   Container input(String helperText, Function onX(String value),
-      {bool important: false, bool showChildButton: false, String childButtonText: ""}) {
+      {bool number: false, bool important: false, bool showChildButton: false, String childButtonText: "", Function onClick, bool verified: false}) {
     return Container(
       height: 38,
       decoration: BoxDecoration(
@@ -117,9 +207,13 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
               obscureText: false,
               textAlign: TextAlign.left,
               // controller: widget.textEditingController ?? _controller,
+              inputFormatters: [
+                number ? FilteringTextInputFormatter.digitsOnly : FilteringTextInputFormatter.singleLineFormatter
+              ],
               maxLines: 1,
               textCapitalization: TextCapitalization.none,
               style: subTextStyle,
+              keyboardType: number ? TextInputType.number : TextInputType.text,
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: "$helperText",
@@ -152,8 +246,8 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
                   width: 95,
                   height: 36,
                   text: "$childButtonText",
-                  color: AppColors.colorSecondary,
-                  onTap: () {},
+                  color: verified? AppColors.colorSecondary.withOpacity(0.5) : AppColors.colorSecondary,
+                  onTap: onClick,
                 ),
               ],
             ),
@@ -177,21 +271,36 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
 
   @override
   onError(String message) {
+    Dialogs.hideLoader(context);
     Utility.showErrorToastB(context, message);
   }
 
   @override
-  void onRelationManagerListFetched(RelationManagerListResponse relationManagerListResponse) {
-    // TODO: implement onRelationManagerListFetched
+  void onRelationManagerListFetched(List<RelationManagerListResponse> relationManagerListResponse) {
+    rmList.clear();
+    relationManagerListResponse.forEach((element) {
+      if (element.returnCode)
+        rmList.add(element);
+      else
+        onError(element.message);
+    });
+
+    setState(() {});
   }
 
   @override
-  void onSignupSuccessfully(SignupResponse signupResponse) {
-    // TODO: implement onSignupSuccessfully
-  }
+  void onSignupSuccessfully(SignupResponse signupResponse) {}
 
   @override
-  void onTokenGenerated(TokenResponse tokenResponse) {
-    // TODO: implement onTokenGenerated
+  void onTokenGenerated(TokenResponse tokenResponse) {}
+
+  @override
+  onOtpSent(int otp, provider) {
+    Dialogs.hideLoader(context);
+    //0 for email and 1 for mobile
+    if (provider == 1)
+      mobileOTP = otp;
+    else
+      emailOTP = otp;
   }
 }

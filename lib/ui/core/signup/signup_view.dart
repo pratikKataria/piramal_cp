@@ -7,5 +7,6 @@ import '../core_view.dart';
 abstract class SignupView implements CoreView {
   void onTokenGenerated(TokenResponse tokenResponse);
   void onSignupSuccessfully(SignupResponse signupResponse);
-  void onRelationManagerListFetched(RelationManagerListResponse relationManagerListResponse);
+  void onRelationManagerListFetched(List<RelationManagerListResponse> brList);
+  onOtpSent(int otp, int provider);
 }
