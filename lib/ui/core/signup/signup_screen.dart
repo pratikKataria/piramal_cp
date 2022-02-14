@@ -3,7 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
+import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/ui/core/core_presenter.dart';
+import 'package:piramal_channel_partner/ui/core/login/model/login_response.dart';
 import 'package:piramal_channel_partner/ui/core/login/model/token_response.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/relation_manager_list_response.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/signup_request.dart';
@@ -93,7 +95,7 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
                   return;
                 },
                 showChildButton: true,
-                childButtonText: mobileOTPVerified ? "Verified": "Verify",
+                childButtonText: mobileOTPVerified ? "Verified" : "Verify",
                 number: true,
                 verified: mobileOTPVerified,
                 onClick: () {
@@ -192,7 +194,12 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
   }
 
   Container input(String helperText, Function onX(String value),
-      {bool number: false, bool important: false, bool showChildButton: false, String childButtonText: "", Function onClick, bool verified: false}) {
+      {bool number: false,
+      bool important: false,
+      bool showChildButton: false,
+      String childButtonText: "",
+      Function onClick,
+      bool verified: false}) {
     return Container(
       height: 38,
       decoration: BoxDecoration(
@@ -248,7 +255,7 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
                   width: 95,
                   height: 36,
                   text: "$childButtonText",
-                  color: verified? AppColors.colorSecondary.withOpacity(0.5) : AppColors.colorSecondary,
+                  color: verified ? AppColors.colorSecondary.withOpacity(0.5) : AppColors.colorSecondary,
                   onTap: onClick,
                 ),
               ],
@@ -296,7 +303,19 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
   }
 
   @override
-  void onSignupSuccessfully(SignupResponse signupResponse) {}
+  void onSignupSuccessfully(SignupResponse signupResponse) async {
+    LoginResponse loginResponse = LoginResponse();
+    loginResponse.accountId = signupResponse.brokerAccountID;
+
+    Dialogs.hideLoader(context);
+    var currentUser = await AuthUser.getInstance().getCurrentUser();
+    currentUser.userCredentials = loginResponse;
+    AuthUser.getInstance().login(currentUser);
+
+    Navigator.pop(context);
+    Navigator.pop(context);
+    Navigator.pushNamed(context, Screens.kUploadDocumentScreen);
+  }
 
   @override
   void onTokenGenerated(TokenResponse tokenResponse) {

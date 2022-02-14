@@ -62,4 +62,20 @@ class LoginResponse {
       accountId: map != null ? map['accountId'] as String : null,
     );
   }
+
+  set accountId(String value) {
+    _accountId = value;
+  }
+
+  set isCustomer(bool value) {
+    _isCustomer = value;
+  }
+
+  set message(String value) {
+    _message = value;
+  }
+
+  set returnCode(bool value) {
+    _returnCode = value;
+  }
 }

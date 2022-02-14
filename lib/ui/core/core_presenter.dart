@@ -264,7 +264,7 @@ class CorePresenter {
     //check network
     if (!await NetworkCheck.check()) return;
 
-    request.customerAccountId = "001p000000zI4QiAAK";
+    request.customerAccountId = await Utility.uID();
 
     Dialogs.showLoader(context, "Please wait uploading document ...");
     apiController.post(EndPoints.CP_EMP_DOC_UPLOAD, body: request.toJson(), headers: await Utility.header())

@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
+import 'package:piramal_channel_partner/res/Screens.dart';
+import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
 import 'package:piramal_channel_partner/ui/core/core_presenter.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/document_upload_request.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/document_upload_response.dart';
 import 'package:piramal_channel_partner/ui/core/uploadDocument/upload_document_view.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
+import 'package:provider/provider.dart';
 
 class UploadDocumentScreen extends StatefulWidget {
   const UploadDocumentScreen({Key key}) : super(key: key);
@@ -221,7 +224,11 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> implements 
 
   @override
   void onDocumentUploaded(DocumentUploadResponse documentUploadResponse) {
+    Navigator.pop(context);
+    Navigator.pushNamed(context, Screens.kHomeBase);
 
+    var provider = Provider.of<BaseProvider>(context, listen: false);
+    provider.showToolTip();
   }
 
   @override

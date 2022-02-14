@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/res/Screens.dart';
 
 class BaseProvider extends ChangeNotifier {
-  final bool isLogin;
-  BaseProvider(this.isLogin);
+  bool isLogin;
+
+  BaseProvider(bool isLogin) {
+    this.isLogin = isLogin;
+    showAppbarAndBottomNavigation = isLogin;
+  }
 
   bool filterIsOpen = false;
   bool _drawerIsOpen = false;
-  bool showAppbarAndBottomNavigation = true;
+  bool showAppbarAndBottomNavigation = false;
   String currentScreen = Screens.kHomeScreen;
 
   GlobalKey<ScaffoldState> drawerKey;
