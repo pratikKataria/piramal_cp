@@ -113,7 +113,7 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
                       padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
                       child: Text("Validity: ${widget.response?.createdDays} Days", style: textStyle14px500w),
                     ),
-                    if (widget.response.revisit) ...[
+                    if (widget?.response?.revisit ?? false) ...[
                       horizontalSpace(10.0),
                       Container(
                         decoration: BoxDecoration(

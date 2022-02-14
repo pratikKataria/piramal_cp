@@ -113,9 +113,9 @@ class SvWalkInCardWidget extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      if (!_bookingResponse.taggingStatus) Icon(Icons.warning_amber_sharp, color: AppColors.red, size: 12),
+                      if (!(_bookingResponse?.taggingStatus ?? false)) Icon(Icons.warning_amber_sharp, color: AppColors.red, size: 12),
                       horizontalSpace(4.0),
-                      Text("${_bookingResponse.taggingStatus? "Tagging Completed" : "Complete Tagging"}", style: textStyleWhite12px500w),
+                      Text("${(_bookingResponse?.taggingStatus?? false)? "Tagging Completed" : "Complete Tagging"}", style: textStyleWhite12px500w),
                     ],
                   ),
                 ),
