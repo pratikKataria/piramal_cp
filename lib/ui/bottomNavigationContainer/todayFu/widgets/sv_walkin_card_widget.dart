@@ -101,7 +101,7 @@ class SvWalkInCardWidget extends StatelessWidget {
               Spacer(),
               InkWell(
                 onTap: () {
-                  homePresenter.completeTagging(context);
+                  homePresenter.completeTagging(context, _bookingResponse.sfdcid);
                 },
                 child: Container(
                   width: 110,

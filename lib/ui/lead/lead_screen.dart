@@ -98,7 +98,7 @@ class _LeadScreenState extends State<LeadScreen> implements LeadView {
         children: [
           Row(
             children: [
-        /*      ClipRRect(
+              /*      ClipRRect(
                 borderRadius: BorderRadius.circular(80.0),
                 child: Container(
                   height: 46,
@@ -127,6 +127,9 @@ class _LeadScreenState extends State<LeadScreen> implements LeadView {
                 width: 32.0,
                 color: AppColors.screenBackgroundColor,
                 child: Icon(Icons.edit, size: 16),
+                onTap: () {
+                  Navigator.pushNamed(context, Screens.kEditLeadScreen, arguments: leadData);
+                },
               ),
               horizontalSpace(10.0),
               PmlButton(

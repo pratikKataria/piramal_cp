@@ -5,6 +5,7 @@ import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/model/project_download_response.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
+import 'package:piramal_channel_partner/widgets/download_button.dart';
 import 'package:piramal_channel_partner/widgets/whats_app_button.dart';
 
 class ProjectDetailDownloadPage extends StatelessWidget {
@@ -28,22 +29,24 @@ class ProjectDetailDownloadPage extends StatelessWidget {
             Image.asset(Images.kIconHome, color: AppColors.colorSecondary, width: 20.0),
             "Masterplan",
             projectDownloadResponse[0],
+            projectDownloadResponse[0].masterPlanLink,
           ),
 
           cardViewListDownloadsV2(
             Image.asset(Images.kIconBrochure, color: AppColors.colorSecondary, width: 15.0),
             "Brochure",
             projectDownloadResponse[1],
+            projectDownloadResponse[1].brochure,
           ),
 
-          for (int i = 2; i < projectDownloadResponse.length; i++) cardViewListDownloads(projectDownloadResponse[i]),
+          for (int i = 2; i < projectDownloadResponse.length; i++) cardViewListDownloads(context, projectDownloadResponse[i]),
           // ...projectDownloadResponse.map<Widget>((e) => cardViewListDownloads(e)).toList(),
         ],
       ),
     );
   }
 
-  cardViewListDownloadsV2(Image icon, String name, ProjectDownloadResponse response) {
+  cardViewListDownloadsV2(Image icon, String name, ProjectDownloadResponse response, String link) {
     return Column(
       children: [
         verticalSpace(20.0),
@@ -57,18 +60,7 @@ class ProjectDetailDownloadPage extends StatelessWidget {
             //whats app and download
             WhatsAppButton(response.message),
             horizontalSpace(8.0),
-            Container(
-              width: 30,
-              height: 30,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.colorPrimary,
-              ),
-              padding: EdgeInsets.all(8.0),
-              child: Image.asset(
-                Images.kIconDownload,
-              ),
-            ),
+            DownloadButton(link),
           ],
         ),
         verticalSpace(20.0),
@@ -77,7 +69,7 @@ class ProjectDetailDownloadPage extends StatelessWidget {
     );
   }
 
-  cardViewListDownloads(ProjectDownloadResponse response) {
+  cardViewListDownloads(BuildContext context, ProjectDownloadResponse response) {
     return Column(
       children: [
         verticalSpace(20.0),
@@ -91,18 +83,7 @@ class ProjectDetailDownloadPage extends StatelessWidget {
             //whats app and download
             WhatsAppButton(response?.message),
             horizontalSpace(8.0),
-            Container(
-              width: 30,
-              height: 30,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.colorPrimary,
-              ),
-              padding: EdgeInsets.all(8.0),
-              child: Image.asset(
-                Images.kIconDownload,
-              ),
-            ),
+            DownloadButton(response?.floorplanlink),
           ],
         ),
         verticalSpace(20.0),

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -384,6 +385,25 @@ class Utility {
     } catch (e) {
       Utility.showErrorToastB(context, e.toString());
       return ["", ""];
+    }
+  }
+
+  static void launchUrlX(BuildContext context, String file) {
+    if (file == null || file.isEmpty) {
+      Utility.showErrorToastB(context, "No link found !!");
+      return;
+    }
+
+    //add http if link not having http
+    bool hasHttp = file.startsWith("http") || file.startsWith("https");
+    file = hasHttp ? file : "https://${file}";
+    print(file);
+
+    try {
+      launch(file);
+    } catch (e) {
+      Utility.showErrorToastB(context, "$e");
+      print(e);
     }
   }
 }

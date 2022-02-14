@@ -8,6 +8,7 @@ import 'package:piramal_channel_partner/ui/currentPromotions/current_promo_prese
 import 'package:piramal_channel_partner/ui/currentPromotions/current_promo_view.dart';
 import 'package:piramal_channel_partner/ui/currentPromotions/model/current_promo_response.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
+import 'package:piramal_channel_partner/widgets/download_button.dart';
 import 'package:piramal_channel_partner/widgets/refresh_list_view.dart';
 import 'package:piramal_channel_partner/widgets/whats_app_button.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -120,24 +121,7 @@ class _CurrentPromotionScreenState extends State<CurrentPromotionScreen> impleme
                           ),
                         ),
                         horizontalSpace(8.0),
-                        InkWell(
-                          onTap: () {
-                            Utility.getPdfFromBlob(currentPromoData.download);
-                          },
-                          child: Container(
-                            width: 30,
-                            height: 30,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: AppColors.colorPrimary,
-                            ),
-                            child: Icon(
-                              Icons.download_rounded,
-                              color: AppColors.white,
-                              size: 16,
-                            ),
-                          ),
-                        ),
+                        DownloadButton(currentPromoData?.download),
                       ],
                     ),
                   ],

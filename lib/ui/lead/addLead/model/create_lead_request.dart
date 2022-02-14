@@ -17,6 +17,7 @@ class CreateLeadRequest {
     String mobilenumber,
     String dateofvisit,
     String customerAccountId,
+    String accountId,
   }) {
     _name = name;
     _projectInterested = projectInterested;
@@ -26,6 +27,7 @@ class CreateLeadRequest {
     _mobilenumber = mobilenumber;
     _dateofvisit = dateofvisit;
     _customerAccountId = customerAccountId;
+    _accountId = accountId;
   }
 
   CreateLeadRequest.fromJson(dynamic json) {
@@ -37,6 +39,7 @@ class CreateLeadRequest {
     _mobilenumber = json['Mobilenumber'];
     _dateofvisit = json['Dateofvisit'];
     _customerAccountId = json['CustomerAccountId'];
+    _accountId = json['AccountID'];
   }
 
   String _name;
@@ -47,6 +50,7 @@ class CreateLeadRequest {
   String _mobilenumber;
   String _dateofvisit;
   String _customerAccountId;
+  String _accountId;
 
   String get name => _name;
 
@@ -74,6 +78,7 @@ class CreateLeadRequest {
     map['Mobilenumber'] = _mobilenumber;
     map['Dateofvisit'] = _dateofvisit;
     map['CustomerAccountId'] = _customerAccountId;
+    map['RecordID'] = _accountId;
     return map;
   }
 
@@ -107,5 +112,11 @@ class CreateLeadRequest {
 
   set name(String value) {
     _name = value;
+  }
+
+  String get accountId => _accountId;
+
+  set accountId(String value) {
+    _accountId = value;
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/api/api_controller_expo.dart';
 import 'package:piramal_channel_partner/api/api_end_points.dart';
+import 'package:piramal_channel_partner/api/api_error_parser.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/todayFu/model/today_sv_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/todayFu/today_sv_view.dart';
 import 'package:piramal_channel_partner/user/AuthUser.dart';
@@ -46,7 +47,7 @@ class TodaySVPresenter {
       });
   }
 
-  void completeTagging(BuildContext context) async {
+  void completeTagging(BuildContext context, String oId) async {
     //check for internal token
     if (await AuthUser.getInstance().hasToken()) {
       _v.onError("Token not found");
@@ -60,7 +61,10 @@ class TodaySVPresenter {
     }
 
     String userId = await Utility.uID();
-    var body = {"CustomerAccountID": "001p000000y1SqW"};
+    var body = {
+      "CustomerAccountId": "001p000000y1SqW",
+      "OpportunityId": "$oId",
+    };
 
     Dialogs.showLoader(context, "Tagging customer please wait ...");
     apiController.post(EndPoints.COMPLETE_TAGGING, body: body, headers: await Utility.header())
@@ -71,9 +75,7 @@ class TodaySVPresenter {
       })
       ..catchError((e) {
         Dialogs.hideLoader(context);
-        _v.onError(e.message);
-        Utility.log(tag, e.toString());
+        ApiErrorParser.getResult(e, _v);
       });
   }
-
 }

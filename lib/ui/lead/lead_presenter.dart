@@ -119,6 +119,39 @@ class LeadPresenter {
       });
   }
 
+  void updateLead(BuildContext context, CreateLeadRequest request) async {
+    //check for internal token
+    if (await AuthUser.getInstance().hasToken()) {
+      _v.onError("Token not found");
+      return;
+    }
+
+    //check network
+    if (!await NetworkCheck.check()) {
+      _v.onError("Network Error");
+      return;
+    }
+
+    //add customer id
+    CurrentUser currentUser = await AuthUser.getInstance().getCurrentUser();
+    request.customerAccountId = currentUser.userCredentials.accountId;
+    // CustomerAccountId
+    Dialogs.showLoader(context, "Creating your lead ...");
+    apiController.post(EndPoints.CREATE_LEAD, body: request.toJson(), headers: await Utility.header())
+      ..then((response) {
+        Dialogs.hideLoader(context);
+        CreateLeadResponse createLeadResponse = CreateLeadResponse.fromJson(response.data);
+        (_v as AddLeadView).onLeadCreated();
+        // DeleteLeadResponse deleteLeadResponse = DeleteLeadResponse.fromJson(response.data);
+        // deleteLeadResponse.leadId = leadData.sfdcid;
+        // (_v as LeadView).onLeadDeleted(leadData);
+      })
+      ..catchError((e) {
+        Dialogs.hideLoader(context);
+        ApiErrorParser.getResult(e, _v);
+      });
+  }
+
   void fetchDropDownValues(BuildContext context) async {
     //check for internal token
     if (await AuthUser.getInstance().hasToken()) {

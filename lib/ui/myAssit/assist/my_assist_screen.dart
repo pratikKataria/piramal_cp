@@ -73,13 +73,7 @@ class _MyAssistScreenState extends State<MyAssistScreen> implements MyAssistView
                 ),
               ),
             verticalSpace(10.0),
-            Center(
-              child: PmlButton(
-                width: Utility.screenWidth(context) * 0.55,
-                text: "Raise Query",
-              ),
-            ),
-            verticalSpace(10.0),
+
           ],
         ),
       ),

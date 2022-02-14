@@ -7,12 +7,14 @@ import 'package:piramal_channel_partner/ui/lead/addLead/add_lead_view.dart';
 import 'package:piramal_channel_partner/ui/lead/addLead/model/create_lead_request.dart';
 import 'package:piramal_channel_partner/ui/lead/addLead/model/pick_list_response.dart';
 import 'package:piramal_channel_partner/ui/lead/lead_presenter.dart';
+import 'package:piramal_channel_partner/ui/lead/model/all_lead_response.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
 
 class EditLeadScreen extends StatefulWidget {
+  final AllLeadResponse allLeadResponse;
 
-  const EditLeadScreen({Key key}) : super(key: key);
+  const EditLeadScreen(this.allLeadResponse, {Key key}) : super(key: key);
 
   @override
   _EditLeadScreenState createState() => _EditLeadScreenState();
@@ -46,12 +48,20 @@ class _EditLeadScreenState extends State<EditLeadScreen> implements AddLeadView 
     super.initState();
     leadPresenter = LeadPresenter(this);
     leadPresenter.fetchDropDownValues(context);
-    createLeadRequest.projectInterested = projectList[0];
-    createLeadRequest.configuration = configurationList[0];
-    createLeadRequest.budget = budgetList[0];
-    createLeadRequest.location = locationList[0];
-    DateTime date = DateTime.now();
-    createLeadRequest.dateofvisit = "${date.year}-${date.month}-${date.day}";
+
+    AllLeadResponse response = widget.allLeadResponse;
+    createLeadRequest.name = response.name;
+    createLeadRequest.mobilenumber = response.mobileNumber;
+    createLeadRequest.projectInterested = response.projectInterested;
+    createLeadRequest.configuration = response.configuration;
+    createLeadRequest.budget = response.budget;
+    createLeadRequest.location = response.location;
+    createLeadRequest.accountId = response.sfdcid;
+
+    // for mate  time
+    String date = response?.dateofvisit;
+    if (date != null) date = date.split("T").first;
+    createLeadRequest.dateofvisit = date;
   }
 
   @override
@@ -62,31 +72,28 @@ class _EditLeadScreenState extends State<EditLeadScreen> implements AddLeadView 
       backgroundColor: AppColors.screenBackgroundColor,
       body: Container(
         margin: EdgeInsets.symmetric(horizontal: 20.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              verticalSpace(22.0),
-              Text("Add Lead", style: textStyle24px500w),
-              verticalSpace(20.0),
-              buildProfileDetailCard("Name of the Customer", "Enter customer name", 1),
-              buildProfileDetailCard("Mobile Number", "Enter customer mobile number", 2),
-              buildProfileDetailCard2("Interested In", "Piramal Mahalaxmi", projectList, 1),
-              buildProfileDetailCard2("Configuration", "2 Bedroom", configurationList, 2),
-              buildProfileDetailCard2("Budget", "INR 5 Crore ", budgetList, 3),
-              buildProfileDetailCard2("Location", "Navi Mumbai", locationList, 4),
-              buildProfileDetailCard3("Date of Visit", "27 October 2021"),
-              Center(
-                child: PmlButton(
-                  width: Utility.screenWidth(context) * 0.55,
-                  text: "Submit",
-                  onTap: () {
-                    leadPresenter.createLead(context, createLeadRequest);
-                  },
-                ),
-              )
-            ],
-          ),
+        child: ListView(
+          children: [
+            verticalSpace(22.0),
+            Text("Add Lead", style: textStyle24px500w),
+            verticalSpace(20.0),
+            buildProfileDetailCard("Name of the Customer", "Enter customer name", 0),
+            buildProfileDetailCard("Mobile Number", "Enter customer mobile number", 1),
+            buildProfileDetailCard2("Interested In", "Piramal Mahalaxmi", projectList, 2),
+            buildProfileDetailCard2("Configuration", "2 Bedroom", configurationList, 3),
+            buildProfileDetailCard2("Budget", "INR 5 Crore ", budgetList, 4),
+            buildProfileDetailCard2("Location", "Navi Mumbai", locationList, 5),
+            buildProfileDetailCard3("Date of Visit", "27 October 2021"),
+            Center(
+              child: PmlButton(
+                width: Utility.screenWidth(context) * 0.55,
+                text: "Submit",
+                onTap: () {
+                  leadPresenter.updateLead(context, createLeadRequest);
+                },
+              ),
+            )
+          ],
         ),
       ),
     );
@@ -108,6 +115,7 @@ class _EditLeadScreenState extends State<EditLeadScreen> implements AddLeadView 
             style: textStyle14px500w,
           ),
           TextFormField(
+            initialValue: getItemByCaptureNo(captureNo),
             // obscureText: true,
             textAlign: TextAlign.left,
             // controller: otpTextController,
@@ -123,9 +131,9 @@ class _EditLeadScreenState extends State<EditLeadScreen> implements AddLeadView 
               suffixStyle: TextStyle(color: AppColors.textColor),
             ),
             onChanged: (String val) {
-              if (captureNo == 1) {
+              if (captureNo == 0) {
                 createLeadRequest.name = val;
-              } else if (captureNo == 2) {
+              } else if (captureNo == 1) {
                 createLeadRequest.mobilenumber = val;
               }
             },
@@ -138,7 +146,7 @@ class _EditLeadScreenState extends State<EditLeadScreen> implements AddLeadView 
 
   Container buildProfileDetailCard2(String mText, String sText, List dropDownValue, int captureNo) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 18.0),
+      padding: EdgeInsets.only(left: 20.0, top: 18.0, bottom: 18.0),
       margin: EdgeInsets.only(bottom: 18.0),
       decoration: BoxDecoration(
         color: AppColors.white,
@@ -150,18 +158,20 @@ class _EditLeadScreenState extends State<EditLeadScreen> implements AddLeadView 
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                "$mText",
-                style: textStyle14px500w,
-              ),
+              Text("$mText", style: textStyle14px500w),
               Stack(
                 children: [
-                  Text("${getItemByCaptureNo(captureNo)}", style: textStyleSubText14px500w),
+                  Positioned(
+                    top: 10.0,
+                    child: Text("${getItemByCaptureNo(captureNo)}", style: textStyleSubText14px500w),
+                  ),
                   Opacity(
                     opacity: 0.0,
                     child: Container(
-                      height: 25.0,
+                      width: Utility.screenWidth(context) * .70,
+                      height: 35.0,
                       child: DropdownButton<String>(
+                        isExpanded: true,
                         items: <String>[...dropDownValue].map((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
@@ -170,31 +180,30 @@ class _EditLeadScreenState extends State<EditLeadScreen> implements AddLeadView 
                         }).toList(),
                         onChanged: (value) {
                           switch (captureNo) {
-                            case 1:
+                            case 2:
                               createLeadRequest.projectInterested = value;
                               break;
-                            case 2:
+                            case 3:
                               createLeadRequest.configuration = value;
                               break;
-                            case 3:
+                            case 4:
                               createLeadRequest.budget = value;
                               break;
-                            case 4:
+                            case 5:
                               createLeadRequest.location = value;
                               break;
                           }
-
                           setState(() {});
                         },
                       ),
                     ),
                   ),
+                  Positioned(right: 0, child: Icon(Icons.arrow_drop_down)),
                 ],
               )
             ],
           ),
-          Spacer(),
-          Icon(Icons.arrow_drop_down),
+          horizontalSpace(30.0),
         ],
       ),
     );
@@ -202,17 +211,23 @@ class _EditLeadScreenState extends State<EditLeadScreen> implements AddLeadView 
 
   String getItemByCaptureNo(int captureNo) {
     switch (captureNo) {
+      case 0:
+        return createLeadRequest?.name;
+        break;
       case 1:
-        return createLeadRequest.projectInterested;
+        return createLeadRequest?.mobilenumber;
         break;
       case 2:
-        return createLeadRequest.configuration;
+        return createLeadRequest?.projectInterested;
         break;
       case 3:
-        return createLeadRequest.budget;
+        return createLeadRequest?.configuration;
         break;
       case 4:
-        return createLeadRequest.location;
+        return createLeadRequest?.budget;
+        break;
+      case 5:
+        return createLeadRequest?.location;
         break;
       default:
         return "";

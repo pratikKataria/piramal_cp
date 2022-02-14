@@ -21,12 +21,12 @@ class ProjectDetailTowerPage extends StatelessWidget {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 20.0),
       child: ListView(
-        children: projectTowerResponse.map<Widget>((e) => cardViewTower(e)).toList(),
+        children: projectTowerResponse.map<Widget>((e) => cardViewTower(e, context)).toList(),
       ),
     );
   }
 
-  cardViewTower(ProjectTowerResponse response) {
+  cardViewTower(ProjectTowerResponse response, BuildContext context) {
     return Container(
       margin: EdgeInsets.only(bottom: 18.0),
       decoration: BoxDecoration(
@@ -52,19 +52,16 @@ class ProjectDetailTowerPage extends StatelessWidget {
                 height: 130.0,
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: MemoryImage(Utility.convertMemoryImage(response.towerImage)),
-                      fit: BoxFit.fill,
-                    )),
+                  image: MemoryImage(Utility.convertMemoryImage(response.towerImage)),
+                  fit: BoxFit.fill,
+                )),
               ),
               Positioned(
                 right: 10,
                 top: 10,
                 child: InkWell(
                   onTap: () {
-                /*    if (response?.towerWebsite == null)
-                      Utility.showErrorToastB(context, "Project link not found");
-                    else*/
-                      launch("https://${response.towerWebsite}");
+                    launch("https://${response.towerWebsite}");
                   },
                   child: Container(
                     width: 30,
@@ -80,15 +77,14 @@ class ProjectDetailTowerPage extends StatelessWidget {
               ),
             ],
           ),
-
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("${response?.projectName??""}", style: textStyle24px500w),
-                Text("${response?.towerName??""}", style: textStyleSubText14px500w),
+                Text("${response?.projectName ?? ""}", style: textStyle24px500w),
+                Text("${response?.towerName ?? ""}", style: textStyleSubText14px500w),
               ],
             ),
           ),

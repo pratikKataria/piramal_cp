@@ -126,14 +126,19 @@ class _ProjectScreenState extends State<ProjectScreen> implements ProjectView {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(child: Text("${projectData.projectName}", style: textStyle24px500w)),
-                      Container(
-                        width: 30,
-                        height: 30,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppColors.colorPrimary,
+                      InkWell(
+                        onTap: () {
+                          Utility.launchUrlX(context, projectData?.mobileBroucher);
+                        },
+                        child: Container(
+                          width: 30,
+                          height: 30,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppColors.colorPrimary,
+                          ),
+                          child: Icon(Icons.download_rounded, color: AppColors.white, size: 16),
                         ),
-                        child: Icon(Icons.download_rounded, color: AppColors.white, size: 16),
                       ),
                     ],
                   ),

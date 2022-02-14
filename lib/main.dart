@@ -14,6 +14,7 @@ import 'package:piramal_channel_partner/ui/currentPromotions/current_promotions_
 import 'package:piramal_channel_partner/ui/customerProfile/booked/booked_customer_profile_detail_Screen.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/walkin/walkin_customer_profile_detail_Screen.dart';
 import 'package:piramal_channel_partner/ui/lead/addLead/add_lead_screen.dart';
+import 'package:piramal_channel_partner/ui/lead/editLead/edit_lead_screen.dart';
 import 'package:piramal_channel_partner/ui/lead/lead_screen.dart';
 import 'package:piramal_channel_partner/ui/myAssit/projectList/project_screen.dart';
 import 'package:piramal_channel_partner/ui/myProfile/my_profile.dart';
@@ -109,6 +110,9 @@ class MyApp extends StatelessWidget {
               break;
             case Screens.kUploadDocumentScreen:
               return RouteTransition(widget: UploadDocumentScreen());
+              break;
+            case Screens.kEditLeadScreen:
+              return RouteTransition(widget: EditLeadScreen(settings.arguments));
               break;
             default:
               return RouteTransition(widget: HomeBottomNavigationBaseScreen());

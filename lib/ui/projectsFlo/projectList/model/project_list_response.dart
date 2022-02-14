@@ -1,77 +1,71 @@
-/// returnCode : 2
-/// RelationshipManager : ""
-/// ProjectName : "Piramal Mahalaxmi"
-/// ProjectId : "a03N000000PixbIIAR"
+/// returnCode : true
+/// ProjectWebsite : "www.piramalvaikunth.com"
+/// ProjectName : "Piramal Vaikunth"
+/// ProjectLocation : "South Mumbai - India"
+/// ProjectImage : ""
+/// ProjectId : "a03N0000005NHiTIAW"
+/// MobileBroucher : "file:///C:/Users/Aniket/Downloads/CP%20APP%20Solution%20Document%20updated%20v2.pdf"
 /// message : "Success"
-/// Head_of_Department : ""
 
 class ProjectListResponse {
   ProjectListResponse({
-    bool returnCode,
-    String relationshipManager,
-    String projectName,
-    String projectImage,
-    String projectWebsite,
-    String projectId,
-    String message,
-    String headOfDepartment,
-  }) {
+      bool returnCode, 
+      String projectWebsite, 
+      String projectName, 
+      String projectLocation, 
+      String projectImage, 
+      String projectId, 
+      String mobileBroucher, 
+      String message,}){
     _returnCode = returnCode;
-    _relationshipManager = relationshipManager;
+    _projectWebsite = projectWebsite;
     _projectName = projectName;
+    _projectLocation = projectLocation;
     _projectImage = projectImage;
     _projectId = projectId;
-    _projectWebsite = projectWebsite;
+    _mobileBroucher = mobileBroucher;
     _message = message;
-    _headOfDepartment = headOfDepartment;
-  }
+}
 
   ProjectListResponse.fromJson(dynamic json) {
     _returnCode = json['returnCode'];
-    _relationshipManager = json['RelationshipManager'];
-    _projectName = json['ProjectName'];
-    _projectImage = json['ProjectImage'];
     _projectWebsite = json['ProjectWebsite'];
+    _projectName = json['ProjectName'];
+    _projectLocation = json['ProjectLocation'];
+    _projectImage = json['ProjectImage'];
     _projectId = json['ProjectId'];
+    _mobileBroucher = json['MobileBroucher'];
     _message = json['message'];
-    _headOfDepartment = json['Head_of_Department'];
   }
-
   bool _returnCode;
-  String _relationshipManager;
-  String _projectName;
-  String _projectImage;
   String _projectWebsite;
+  String _projectName;
+  String _projectLocation;
+  String _projectImage;
   String _projectId;
+  String _mobileBroucher;
   String _message;
-  String _headOfDepartment;
 
   bool get returnCode => _returnCode;
-
-  String get relationshipManager => _relationshipManager;
-
-  String get projectName => _projectName;
-
-  String get projectId => _projectId;
-
-  String get message => _message;
-
-  String get headOfDepartment => _headOfDepartment;
-
-  String get projectImage => _projectImage;
-
   String get projectWebsite => _projectWebsite;
+  String get projectName => _projectName;
+  String get projectLocation => _projectLocation;
+  String get projectImage => _projectImage;
+  String get projectId => _projectId;
+  String get mobileBroucher => _mobileBroucher;
+  String get message => _message;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['returnCode'] = _returnCode;
-    map['RelationshipManager'] = _relationshipManager;
-    map['ProjectName'] = _projectName;
-    map['ProjectId'] = _projectId;
-    map['ProjectImage'] = _projectImage;
     map['ProjectWebsite'] = _projectWebsite;
+    map['ProjectName'] = _projectName;
+    map['ProjectLocation'] = _projectLocation;
+    map['ProjectImage'] = _projectImage;
+    map['ProjectId'] = _projectId;
+    map['MobileBroucher'] = _mobileBroucher;
     map['message'] = _message;
-    map['Head_of_Department'] = _headOfDepartment;
     return map;
   }
+
 }
