@@ -12,6 +12,7 @@
 /// ApartmentFinalized : null
 
 class BookingResponse {
+  bool taggingStatus = false;
   BookingResponse({
     dynamic towerFinalized,
     String stageName,

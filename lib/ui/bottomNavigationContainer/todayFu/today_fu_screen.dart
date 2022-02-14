@@ -57,27 +57,26 @@ class _TodayFollowUpScreenState extends State<TodayFollowUpScreen> with SingleTi
               ],
             ),
           ),
-          if (walkInListWidgets.isNotEmpty || bookingListWidgets.isNotEmpty)
-            Expanded(
-              child: TabBarView(
-                controller: _tabController,
-                physics: NeverScrollableScrollPhysics(),
-                children: [
-                  RefreshListView(
-                    onRefresh: () {
-                      _homePresenter.getSvList(context);
-                    },
-                    children: walkInListWidgets.map<Widget>((e) => SvWalkInCardWidget(e, _homePresenter)).toList(),
-                  ),
-                  RefreshListView(
-                    onRefresh: () {
-                      _homePresenter.getSvList(context);
-                    },
-                    children: bookingListWidgets.map<Widget>((e) => SvBookingCardWidget(e, _homePresenter)).toList(),
-                  ),
-                ],
-              ),
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              physics: NeverScrollableScrollPhysics(),
+              children: [
+                RefreshListView(
+                  onRefresh: () {
+                    _homePresenter.getSvList(context);
+                  },
+                  children: walkInListWidgets.map<Widget>((e) => SvWalkInCardWidget(e, _homePresenter)).toList(),
+                ),
+                RefreshListView(
+                  onRefresh: () {
+                    _homePresenter.getSvList(context);
+                  },
+                  children: bookingListWidgets.map<Widget>((e) => SvBookingCardWidget(e, _homePresenter)).toList(),
+                ),
+              ],
             ),
+          ),
         ],
       ),
     );
@@ -210,7 +209,8 @@ class _TodayFollowUpScreenState extends State<TodayFollowUpScreen> with SingleTi
         ..mobilenumber = element.mobilenumber
         ..sfdcid = element.opportunityID
         ..apartmentFinalized = element.apartmentFinalized
-        ..projectFinalized = element.projectFinalized;
+        ..projectFinalized = element.projectFinalized
+        ..taggingStatus = element.completeTaggingStatus;
       if (element.stageName == "WalkIn") {
         walkInListWidgets.add(bookingResponse);
       } else {
@@ -224,5 +224,6 @@ class _TodayFollowUpScreenState extends State<TodayFollowUpScreen> with SingleTi
   @override
   void onTaggingDone() {
     Utility.showSuccessToastB(context, "Tagging completed");
+    _homePresenter.getSvList(context);
   }
 }
