@@ -152,12 +152,16 @@ class _CPEventScreenState extends State<CPEventScreen> implements CPEventView {
   }
 
   getFormattedDate(String date) {
+    if (date == null || date.isEmpty) return "";
+
     DateTime dateTime = DateTime.parse(date);
     String formattedDate = DateFormat("MMM dd, yyyy").format(dateTime);
     return formattedDate;
   }
 
   getFormattedTime(String dTime) {
+    if (dTime == null || dTime.isEmpty) return "";
+
     DateTime dateTime = DateTime.parse(dTime);
     String formattedDate = DateFormat("hh:mm a").format(dateTime);
     return formattedDate;

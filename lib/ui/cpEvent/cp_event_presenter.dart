@@ -29,7 +29,8 @@ class CPEventPresenter {
       return;
     }
 
-    var body = {"AccountID": "001p000000wiszQ"};
+    String uID = await Utility.uID();
+    var body = {"AccountID": uID}; /*001p000000wiszQ*/
 
     Dialogs.showLoader(context, "Fetching cp event data ...");
     apiController.post(EndPoints.CP_EVENT_LIST, body: body, headers: await Utility.header())
