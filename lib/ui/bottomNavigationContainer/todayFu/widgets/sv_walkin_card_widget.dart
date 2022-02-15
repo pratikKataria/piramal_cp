@@ -64,7 +64,7 @@ class SvWalkInCardWidget extends StatelessWidget {
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(6),
-                    color: getRatingColor(_bookingResponse.newRating),
+                    color: getRatingColor(_bookingResponse?.newRating),
                   ),
                   padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
                   child: Text("${_bookingResponse.newRating}", style: textStyleWhite14px500w),
@@ -101,7 +101,7 @@ class SvWalkInCardWidget extends StatelessWidget {
               Spacer(),
               InkWell(
                 onTap: () {
-                  homePresenter.completeTagging(context, _bookingResponse.sfdcid);
+                  homePresenter.completeTagging(context, _bookingResponse.sfdcid, _bookingResponse.taskId);
                 },
                 child: Container(
                   width: 110,
@@ -128,7 +128,7 @@ class SvWalkInCardWidget extends StatelessWidget {
   }
 
   Color getRatingColor(String rating) {
-    switch (rating.toUpperCase()) {
+    switch (rating?.toUpperCase()) {
       case "HOT":
         return AppColors.colorPrimary;
       case "WARM":

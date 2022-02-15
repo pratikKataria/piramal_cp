@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:piramal_channel_partner/api/api_controller_expo.dart';
 import 'package:piramal_channel_partner/api/api_end_points.dart';
 import 'package:piramal_channel_partner/api/api_error_parser.dart';
+import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/booking_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/project_unit_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/schedule_visit_response.dart';
@@ -39,15 +40,19 @@ class HomePresenter {
     String uID = await Utility.uID();
     var body = {"CustomerAccountId": "$uID"};
 
+
     apiController.post(EndPoints.GET_BOOKING, body: body, headers: await Utility.header())
       ..then((Response response) {
         List<BookingResponse> brList = [];
         List listOfDynamic = response.data as List;
         listOfDynamic.forEach((element) => brList.add(BookingResponse.fromJson(element)));
 
-        BookingResponse bookingResponse = brList.isNotEmpty ? brList.first : BookingResponse()
-          ..returnCode = false
-          ..message = "Something went wrong";
+        BookingResponse bookingResponse = brList.isNotEmpty ? brList.first : null;
+        if(bookingResponse == null) {
+          _v.onError(Screens.kErrorTxt);
+          return;
+        }
+
         if (bookingResponse.returnCode) {
           _v.onBookingListFetched(brList);
         } else {
@@ -85,9 +90,12 @@ class HomePresenter {
         var listOfDynamic = response.data as List;
         listOfDynamic.forEach((element) => brList.add(BookingResponse.fromJson(element)));
 
-        BookingResponse bookingResponse = brList.isNotEmpty ? brList.first : BookingResponse()
-          ..returnCode = false
-          ..message = "Something went wrong";
+        BookingResponse bookingResponse = brList.isNotEmpty ? brList.first : null;
+        if(bookingResponse == null) {
+          _v.onError(Screens.kErrorTxt);
+          return;
+        }
+
         if (bookingResponse.returnCode) {
           _v.onWalkInListFetched(brList);
         } else {
@@ -123,9 +131,12 @@ class HomePresenter {
         var listOfDynamic = response.data as List;
         listOfDynamic.forEach((element) => brList.add(BookingResponse.fromJson(element)));
 
-        BookingResponse bookingResponse = brList.isNotEmpty ? brList.first : BookingResponse()
-          ..returnCode = false
-          ..message = "Something went wrong";
+        BookingResponse bookingResponse = brList.isNotEmpty ? brList.first : null;
+        if(bookingResponse == null) {
+          _v.onError(Screens.kErrorTxt);
+          return;
+        }
+
         if (bookingResponse.returnCode) {
           _v.onWalkInListFetched(brList);
         } else {
@@ -199,9 +210,12 @@ class HomePresenter {
         var listOfDynamic = response.data as List;
         listOfDynamic.forEach((element) => brList.add(CpEventResponse.fromJson(element)));
 
-        CpEventResponse bookingResponse = brList.isNotEmpty ? brList.first : CpEventResponse()
-          ..returnCode = false
-          ..message = "Something went wrong";
+        CpEventResponse bookingResponse = brList.isNotEmpty ? brList.first : null;
+        if(bookingResponse == null) {
+          _v.onError("No Event Available");
+          return;
+        }
+
         if (bookingResponse.returnCode) {
           _v.onEventFetched(brList);
         } else {

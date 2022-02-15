@@ -13,6 +13,7 @@
 
 class BookingResponse {
   bool taggingStatus = false;
+  String taskId = "";
   BookingResponse({
     dynamic towerFinalized,
     String stageName,

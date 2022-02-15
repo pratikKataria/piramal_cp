@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:piramal_channel_partner/api/api_controller_expo.dart';
 import 'package:piramal_channel_partner/api/api_end_points.dart';
 import 'package:piramal_channel_partner/api/api_error_parser.dart';
+import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/ui/cpEvent/cp_event_view.dart';
 import 'package:piramal_channel_partner/ui/cpEvent/model/cp_event_response.dart';
 import 'package:piramal_channel_partner/ui/cpEvent/model/cp_event_status_update_response.dart';
@@ -38,11 +39,19 @@ class CPEventPresenter {
         Dialogs.hideLoader(context);
         List<CpEventResponse> brList = [];
         var listOfDynamic = response.data as List;
-        listOfDynamic.forEach((element) {
-          brList.add(CpEventResponse.fromJson(element));
-        });
+        listOfDynamic.forEach((element) => brList.add(CpEventResponse.fromJson(element)));
 
-        _v.onEventFetched(brList);
+        CpEventResponse bookingResponse = brList.isNotEmpty ? brList.first : null;
+        if (bookingResponse == null) {
+          _v.onError(Screens.kErrorTxt);
+          return;
+        }
+
+        if (bookingResponse.returnCode) {
+          _v.onEventFetched(brList);
+        } else {
+          _v.onError(bookingResponse.message);
+        }
       })
       ..catchError((e) {
         Dialogs.hideLoader(context);
@@ -63,8 +72,9 @@ class CPEventPresenter {
       return;
     }
 
+    String uID = await Utility.uID();
     var body = {
-      "AccountID": "001p000000wiszQAAQ",
+      "AccountID": "$uID",
       "CPEventID": "$eventId",
       "status": "$status",
     };

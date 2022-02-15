@@ -1,24 +1,26 @@
-/// ValidDays : 62
-/// TowerFinalized : "Tower 1 (South Tower)"
+/// ValidDays : -90
+/// TowerFinalized : ""
+/// taskid : "00Tp000000HpO5AEAV"
 /// subject : "Schedule Site Visit"
 /// StageName : "WalkIn"
-/// Revisit : true
+/// Revisit : false
 /// returnCode : true
-/// Rating : "Warm"
-/// proposedDateOFVisit : "2022-02-14T17:30:00.000Z"
+/// Rating : ""
+/// proposedDateOFVisit : "2022-02-15T18:30:00.000Z"
 /// ProjectFinalized : "Piramal Mahalaxmi"
 /// opportunityName : ""
-/// opportunityID : "006p00000092HFKAA2"
-/// Name : "Testing ABC - Piramal Mahalaxmi"
-/// Mobilenumber : "9588696494"
+/// opportunityID : "006p000000AyCqLAAV"
+/// Name : "Opportunity3"
+/// Mobilenumber : "9881560816"
 /// message : "SUCCESS"
-/// CompleteTaggingStatus : false
+/// CompleteTaggingStatus : true
 /// ApartmentFinalized : ""
 
 class TodaySvResponse {
   TodaySvResponse({
       int validDays, 
       String towerFinalized, 
+      String taskid, 
       String subject, 
       String stageName, 
       bool revisit, 
@@ -35,6 +37,7 @@ class TodaySvResponse {
       String apartmentFinalized,}){
     _validDays = validDays;
     _towerFinalized = towerFinalized;
+    _taskid = taskid;
     _subject = subject;
     _stageName = stageName;
     _revisit = revisit;
@@ -54,6 +57,7 @@ class TodaySvResponse {
   TodaySvResponse.fromJson(dynamic json) {
     _validDays = json['ValidDays'];
     _towerFinalized = json['TowerFinalized'];
+    _taskid = json['taskid'];
     _subject = json['subject'];
     _stageName = json['StageName'];
     _revisit = json['Revisit'];
@@ -66,11 +70,12 @@ class TodaySvResponse {
     _name = json['Name'];
     _mobilenumber = json['Mobilenumber'];
     _message = json['message'];
-    _completeTaggingStatus = json['CompleteTaggingStatus'];
+    _completeTaggingStatus = json['CompleteTagging'];
     _apartmentFinalized = json['ApartmentFinalized'];
   }
   int _validDays;
   String _towerFinalized;
+  String _taskid;
   String _subject;
   String _stageName;
   bool _revisit;
@@ -88,6 +93,7 @@ class TodaySvResponse {
 
   int get validDays => _validDays;
   String get towerFinalized => _towerFinalized;
+  String get taskid => _taskid;
   String get subject => _subject;
   String get stageName => _stageName;
   bool get revisit => _revisit;
@@ -107,6 +113,7 @@ class TodaySvResponse {
     final map = <String, dynamic>{};
     map['ValidDays'] = _validDays;
     map['TowerFinalized'] = _towerFinalized;
+    map['taskid'] = _taskid;
     map['subject'] = _subject;
     map['StageName'] = _stageName;
     map['Revisit'] = _revisit;
@@ -119,7 +126,7 @@ class TodaySvResponse {
     map['Name'] = _name;
     map['Mobilenumber'] = _mobilenumber;
     map['message'] = _message;
-    map['CompleteTaggingStatus'] = _completeTaggingStatus;
+    map['CompleteTagging'] = _completeTaggingStatus;
     map['ApartmentFinalized'] = _apartmentFinalized;
     return map;
   }

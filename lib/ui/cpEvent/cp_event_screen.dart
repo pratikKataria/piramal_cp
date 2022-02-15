@@ -182,6 +182,7 @@ class _CPEventScreenState extends State<CPEventScreen> implements CPEventView {
   @override
   void onCpEventStatusUpdated(CpEventStatusUpdateResponse response) {
     Utility.showSuccessToastB(context, response.availabilityStatus);
+    presenter.getEventList(context);
   }
 
   String eventText(String eventStatus) =>

@@ -114,7 +114,7 @@ class SvBookingCardWidget extends StatelessWidget {
               Spacer(),
               InkWell(
                 onTap: () {
-                  homePresenter.completeTagging(context, _bookingResponse.sfdcid);
+                  homePresenter.completeTagging(context, _bookingResponse.sfdcid, _bookingResponse.taskId);
                 },
                 child: Container(
                   width: 110,

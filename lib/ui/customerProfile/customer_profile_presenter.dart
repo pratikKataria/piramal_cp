@@ -34,8 +34,14 @@ class CustomerProfilePresenter extends BasePresenter {
       return;
     }
 
+    String uID = await Utility.uID();
     String formattedDate = DateFormat("yyyy-MM-ddTHH:mm:ss").format(visitDate);
-    var body = {"OpportunityId": "$otyId", "scheduleDateTime": "$formattedDate"};
+    var body = {
+      "OpportunityId": "$otyId",
+      "scheduleDateTime": "$formattedDate",
+      "CustomerAccountID": uID /*"001p000000y1SqW"*/
+    };
+
     Dialogs.showLoader(context, "Please wait scheduling your visit ...");
     apiController.post(EndPoints.SCHEDULE_VISIT, body: body, headers: await Utility.header())
       ..then((response) {
@@ -121,8 +127,9 @@ class CustomerProfilePresenter extends BasePresenter {
       return;
     }
 
+    // String uID = await Utility.uID();
     var body = {
-      "CustomerOpportunityId": "006p000000Ac0Gn",
+      "CustomerOpportunityId": "$sfdcID"/*006p000000Ac0Gn*/,
       "comment": "$comment",
       "SiteVisitID": "$siteVisitID",
     };
@@ -141,7 +148,7 @@ class CustomerProfilePresenter extends BasePresenter {
       });
   }
 
-  void getProjectList(BuildContext context) async {
+  void getCommentList(BuildContext context, String oID) async {
     //check for internal token
     if (await AuthUser.getInstance().hasToken()) {
       _v.onError("Token not found");
@@ -154,7 +161,7 @@ class CustomerProfilePresenter extends BasePresenter {
       return;
     }
 
-    var body = {"OpportunityID": "006p000000Ac0Gn"};
+    var body = {"OpportunityID": "$oID"}/*006p000000Ac0Gn*/;
 
     Dialogs.showLoader(context, "Please wait fetching your project list ...");
     apiController.post(EndPoints.GET_COMMENTS, body: body, headers: await Utility.header())

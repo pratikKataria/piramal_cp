@@ -57,15 +57,15 @@ class MyAssistResponse {
   String _headOfDepartmentLabel;
 
   bool get returnCode => _returnCode;
-  String get relationshipManagerName => _relationshipManagerName;
-  String get relationshipManagerMobile => _relationshipManagerMobile;
-  String get relationshipManagerLabel => _relationshipManagerLabel;
-  String get projectName => _projectName;
-  String get projectID => _projectID;
-  String get message => _message;
-  String get headOfDepartmentName => _headOfDepartmentName;
-  String get headOfDepartmentMobile => _headOfDepartmentMobile;
-  String get headOfDepartmentLabel => _headOfDepartmentLabel;
+  String get relationshipManagerName => _relationshipManagerName ?? "Not Available";
+  String get relationshipManagerMobile => _relationshipManagerMobile ?? "Not Available";
+  String get relationshipManagerLabel => _relationshipManagerLabel ?? "Not Available";
+  String get projectName => _projectName ?? "Not Available";
+  String get projectID => _projectID ?? "Not Available";
+  String get message => _message ?? "Not Available";
+  String get headOfDepartmentName => _headOfDepartmentName ?? "Not Available";
+  String get headOfDepartmentMobile => _headOfDepartmentMobile ?? "Not Available";
+  String get headOfDepartmentLabel => _headOfDepartmentLabel ?? "Not Available";
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -81,5 +81,4 @@ class MyAssistResponse {
     map['HeadOfDepartmentLabel'] = _headOfDepartmentLabel;
     return map;
   }
-
 }

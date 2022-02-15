@@ -37,7 +37,7 @@ class _WalkinCustomerProfileDetailScreenState extends State<WalkinCustomerProfil
   @override
   void initState() {
     presenter = CustomerProfilePresenter(this);
-    presenter.getProjectList(context);
+    presenter.getCommentList(context, widget.response.sfdcid);
     super.initState();
   }
 
@@ -74,15 +74,20 @@ class _WalkinCustomerProfileDetailScreenState extends State<WalkinCustomerProfil
           verticalSpace(12.0),
           Row(
             children: [
-              Container(
-                width: 35,
-                height: 35,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.colorPrimaryLight,
+              InkWell(
+                onTap: () {
+                  _selectDate(context);
+                },
+                child: Container(
+                  width: 35,
+                  height: 35,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppColors.colorPrimaryLight,
+                  ),
+                  padding: EdgeInsets.all(10.0),
+                  child: Image.asset(Images.kIconCalender),
                 ),
-                padding: EdgeInsets.all(10.0),
-                child: Image.asset(Images.kIconCalender),
               ),
               horizontalSpace(8.0),
               InkWell(
@@ -144,7 +149,8 @@ class _WalkinCustomerProfileDetailScreenState extends State<WalkinCustomerProfil
           ),
 
           //Chat
-          for (int i = 0; i < chatlist.length; i++) chatCardView(chatlist[i], i + 1),
+          if (chatlist.isNotEmpty)
+            for (int i = 0; i < chatlist.length; i++) chatCardView(chatlist[i], i + 1),
           // ...(chatlist.map<Widget>((e) => chatCardView(e)).toList())
         ],
       ),
@@ -152,6 +158,7 @@ class _WalkinCustomerProfileDetailScreenState extends State<WalkinCustomerProfil
   }
 
   getFormattedDate(String date) {
+    if (date == null) return "";
     DateTime dateTime = DateTime.parse(date);
     String formattedDate = DateFormat("MMM dd, yyyy").format(dateTime);
     return formattedDate;
@@ -193,20 +200,24 @@ class _WalkinCustomerProfileDetailScreenState extends State<WalkinCustomerProfil
 
         verticalSpace(20.0),
 
-        ...commentBuilder(chatresponse.allFeedbacks),
+        ...commentBuilder(chatresponse?.allFeedbacks),
       ],
     );
   }
 
   commentBuilder(String allComments) {
+    List<Widget> commentWidgets = [];
+    if (allComments == null || allComments.isEmpty) {
+      commentWidgets.add(Text("No Data"));
+      return commentWidgets;
+    }
+
     List<String> s = allComments.split("\r");
     List<String> temp = [];
     temp.clear();
     temp.addAll(s.reversed);
     s.clear();
     s.addAll(temp);
-
-    List<Widget> commentWidgets = [];
 
     for (String c in s) {
       commentWidgets.add(verticalSpace(10.0));
@@ -329,5 +340,40 @@ class _WalkinCustomerProfileDetailScreenState extends State<WalkinCustomerProfil
   @override
   void onCommentAdded() {
     Navigator.pop(context);
+    presenter.getCommentList(context, widget?.response?.sfdcid);
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2100),
+    );
+    if (picked != null) {
+      _selectTime(context, picked);
+    }
+  }
+
+  Future<Null> _selectTime(BuildContext context, DateTime datePicked) async {
+    final TimeOfDay picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+
+    DateTime x = DateTime(
+      datePicked.year,
+      datePicked.month,
+      datePicked.day,
+      picked.hour,
+      picked.minute,
+      datePicked.second,
+      datePicked.millisecond,
+      datePicked.microsecond,
+    );
+
+    if (picked != null) {
+      presenter.scheduleTime(context, widget.response.sfdcid, x);
+    }
   }
 }

@@ -45,11 +45,18 @@ class LeadPresenter {
         Dialogs.hideLoader(context);
         List<AllLeadResponse> brList = [];
         var listOfDynamic = response.data as List;
-        listOfDynamic.forEach((element) {
-          brList.add(AllLeadResponse.fromJson(element));
-        });
+        listOfDynamic.forEach((element) => brList.add(AllLeadResponse.fromJson(element)));
+        AllLeadResponse bookingResponse = brList.isNotEmpty ? brList.first : null;
+        if(bookingResponse == null) {
+          _v.onError("No Leads Available");
+          return;
+        }
 
-        (_v as LeadView).onAllLeadFetched(brList);
+        if (bookingResponse.returnCode) {
+          (_v as LeadView).onAllLeadFetched(brList);
+        } else {
+          _v.onError(bookingResponse.message);
+        }
       })
       ..catchError((e) {
         Dialogs.hideLoader(context);
@@ -78,11 +85,19 @@ class LeadPresenter {
       ..then((response) {
         List<AllLeadResponse> brList = [];
         var listOfDynamic = response.data as List;
-        listOfDynamic.forEach((element) {
-          brList.add(AllLeadResponse.fromJson(element));
-        });
+        listOfDynamic.forEach((element) => brList.add(AllLeadResponse.fromJson(element)));
 
-        (_v as LeadView).onAllLeadFetched(brList);
+        AllLeadResponse bookingResponse = brList.isNotEmpty ? brList.first : null;
+        if(bookingResponse == null) {
+          _v.onError("No Leads Available");
+          return;
+        }
+
+        if (bookingResponse.returnCode) {
+          (_v as LeadView).onAllLeadFetched(brList);
+        } else {
+          _v.onError(bookingResponse.message);
+        }
       })
       ..catchError((e) {
         ApiErrorParser.getResult(e, _v);
