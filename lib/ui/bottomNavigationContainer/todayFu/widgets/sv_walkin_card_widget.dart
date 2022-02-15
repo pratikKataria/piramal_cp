@@ -41,7 +41,7 @@ class SvWalkInCardWidget extends StatelessWidget {
         children: [
           InkWell(
             onTap: () {
-              Navigator.pushNamed(context, Screens.kCustomerProfileDetailBooking);
+              Navigator.pushNamed(context, Screens.kCustomerProfileDetailWalkin, arguments: _bookingResponse);
             },
             child: Row(
               children: [

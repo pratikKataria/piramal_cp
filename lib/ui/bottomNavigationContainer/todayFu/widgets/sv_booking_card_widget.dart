@@ -40,7 +40,8 @@ class SvBookingCardWidget extends StatelessWidget {
         children: [
           InkWell(
             onTap: () {
-              Navigator.pushNamed(context, Screens.kCustomerProfileDetailBooking);
+              // Navigator.pushNamed(context, Screens.kCustomerProfileDetailBooking);
+              Navigator.pushNamed(context, Screens.kCustomerProfileDetailBooking, arguments: _bookingResponse);
             },
             child: Row(
               children: [
