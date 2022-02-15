@@ -68,13 +68,13 @@ class BookingCardWidget extends StatelessWidget {
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: [
-                Container(
-                  decoration:
-                      BoxDecoration(borderRadius: BorderRadius.circular(6), color: getRatingColor(_bookingResponse.newRating)),
-                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-                  child: Text("${_bookingResponse.newRating}", style: textStyleWhite14px500w),
-                ),
-                horizontalSpace(10.0),
+                // Container(
+                //   decoration:
+                //       BoxDecoration(borderRadius: BorderRadius.circular(6), color: getRatingColor(_bookingResponse.newRating)),
+                //   padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+                //   child: Text("${_bookingResponse.newRating}", style: textStyleWhite14px500w),
+                // ),
+                // horizontalSpace(10.0),
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(6),

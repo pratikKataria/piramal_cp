@@ -5,6 +5,7 @@ import 'package:piramal_channel_partner/res/Images.dart';
 import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
 import 'package:piramal_channel_partner/ui/core/core_presenter.dart';
+import 'package:piramal_channel_partner/ui/core/login/model/token_response.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/document_upload_request.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/document_upload_response.dart';
 import 'package:piramal_channel_partner/ui/core/uploadDocument/upload_document_view.dart';
@@ -234,5 +235,10 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> implements 
   @override
   onError(String message) {
     Utility.showErrorToastB(context, message);
+  }
+
+  @override
+  void onTokenGenerated(TokenResponse tokenResponse) {
+
   }
 }

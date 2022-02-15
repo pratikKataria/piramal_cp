@@ -61,6 +61,11 @@ class ProjectDetailTowerPage extends StatelessWidget {
                 top: 10,
                 child: InkWell(
                   onTap: () {
+                    if (response?.towerWebsite == null) {
+                      Utility.showErrorToastB(context, "No link found");
+                      return;
+                    }
+
                     launch("https://${response.towerWebsite}");
                   },
                   child: Container(

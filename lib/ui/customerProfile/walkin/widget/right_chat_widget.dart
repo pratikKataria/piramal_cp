@@ -4,7 +4,9 @@ import 'package:piramal_channel_partner/res/Images.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 
 class RightChatWidget extends StatelessWidget {
-  const RightChatWidget({Key key}) : super(key: key);
+  final String c;
+
+  const RightChatWidget(this.c, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,7 @@ class RightChatWidget extends StatelessWidget {
             ),
           ),
           child: Text(
-            "Elegibility aaj ho jayegi. Kal subah call kar lena",
+            "$c",
             style: textStyleWhite12px500w,
           ),
         ),

@@ -96,15 +96,15 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6),
-                        color: Utility.getRatingColor(widget.response?.newRating),
-                      ),
-                      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-                      child: Text("${widget.response?.newRating}", style: textStyleWhite14px500w),
-                    ),
-                    horizontalSpace(10.0),
+                    // Container(
+                    //   decoration: BoxDecoration(
+                    //     borderRadius: BorderRadius.circular(6),
+                    //     color: Utility.getRatingColor(widget.response?.newRating),
+                    //   ),
+                    //   padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+                    //   child: Text("${widget.response?.newRating}", style: textStyleWhite14px500w),
+                    // ),
+                    // horizontalSpace(10.0),
                     Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(6),
@@ -225,17 +225,20 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
     );
   }
 
+  // 9.9% received
+  // Eligible to raise Invoice
+  // Invoice Approved
+  // Payment Released
   String getInvoiceProgress() {
     switch (response?.status) {
+      case "9.9% received":
+        return Images.kImagePD1;
       case "Invoice Approved":
+        return Images.kImagePD2;
+      case "Eligible to raise Invoice":
         return Images.kImagePD3;
-        return "";
-      case "":
-        return "";
-      case "":
-        return "";
-      case "":
-        return "";
+      case "Payment Released":
+        return Images.kImagePD4;
       default:
         return Images.kImagePD1;
         break;

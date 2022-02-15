@@ -37,7 +37,7 @@ Future<void> main() async {
 
   bool authResult = await (AuthUser.getInstance()).isLoggedIn();
 
-  await Future.delayed(Duration(seconds: 2));
+  await Future.delayed(Duration(seconds: 3));
   runApp(MyApp(authResult));
 }
 

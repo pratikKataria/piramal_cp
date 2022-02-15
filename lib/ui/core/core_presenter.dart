@@ -43,8 +43,7 @@ class CorePresenter {
     apiController.post(EndPoints.ACCESS_TOKEN, body: body)
       ..then((response) {
         TokenResponse tokenResponse = TokenResponse.fromJson(response.data);
-        SignupView loginView = _v as SignupView;
-        loginView.onTokenGenerated(tokenResponse);
+         _v.onTokenGenerated(tokenResponse);
       })
       ..catchError((e) {
         Utility.log(tag, e.toString());

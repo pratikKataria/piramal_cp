@@ -38,4 +38,7 @@ class EndPoints {
   static const String GET_PICK_LIST = BASE_URL + "/CP_Mobile_App/CPPicklistVal";
   static const String GET_INVOICE = BASE_URL + "/CP_Mobile_App/Invoice";
   static const String COMPLETE_TAGGING = BASE_URL + "/CP_Mobile_App/CompleteTagging";
+  static const String GET_COMMENTS = BASE_URL + "/CP_Mobile_App/Allfeedback";
+  static const String ADD_COMMENTS = BASE_URL + "/CP_Mobile_App/createcpcomments";
+
 }

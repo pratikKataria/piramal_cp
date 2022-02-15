@@ -39,7 +39,6 @@ dependencies:
   share: 0.6.5+4
   permission_handler: 4.4.0
   provider: 4.3.3
-  image_picker: 0.6.7+22
   path_provider: 1.6.28
   progress_dialog: ^1.2.4
   animations: ^2.0.0

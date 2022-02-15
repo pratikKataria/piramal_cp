@@ -8,6 +8,8 @@ import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/schedule_visit_response.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/booked/model/invoice_response.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/customer_profile_view.dart';
+import 'package:piramal_channel_partner/ui/customerProfile/walkin/chatresponse.dart';
+import 'package:piramal_channel_partner/ui/customerProfile/walkin/walkin_view.dart';
 import 'package:piramal_channel_partner/user/AuthUser.dart';
 import 'package:piramal_channel_partner/utils/Dialogs.dart';
 import 'package:piramal_channel_partner/utils/NetworkCheck.dart';
@@ -67,7 +69,7 @@ class CustomerProfilePresenter extends BasePresenter {
     var body = {"CustomerAccountId": "001N000001S7nkd", "CustomerOpportunityId": "006N000000DuA69"};
 
     Dialogs.showLoader(context, "Fetching unit details ...");
-    apiController.post(EndPoints.PROJECT_UNIT_DETAILS, body: body, headers: await Utility.header())
+    apiController.post(EndPoints.GET_COMMENTS, body: body, headers: await Utility.header())
       ..then((response) {
         Dialogs.hideLoader(context);
         ProjectUnitResponse projectUnitResponse = ProjectUnitResponse.fromJson(response.data);
@@ -99,6 +101,72 @@ class CustomerProfilePresenter extends BasePresenter {
         Dialogs.hideLoader(context);
         InvoiceResponse projectUnitResponse = InvoiceResponse.fromJson(response.data);
         _v.onInvoiceDetailFetched(projectUnitResponse);
+      })
+      ..catchError((e) {
+        Dialogs.hideLoader(context);
+        ApiErrorParser.getResult(e, _v);
+      });
+  }
+
+  void addComments(BuildContext context, String comment, String sfdcID) async {
+    //check for internal token
+    if (await AuthUser.getInstance().hasToken()) {
+      _v.onError("Token not found");
+      return;
+    }
+
+    //check network
+    if (!await NetworkCheck.check()) {
+      _v.onError("Network Error");
+      return;
+    }
+
+    var body = {
+      "CustomerOpportunityId": "$sfdcID",
+      "comment": "$comment",
+      "SiteVisitID": "",
+    };
+    Dialogs.showLoader(context, "Adding comment ...");
+    apiController.post(EndPoints.ADD_COMMENTS, body: body, headers: await Utility.header())
+      ..then((response) {
+        Dialogs.hideLoader(context);
+        (_v as WalkinView).onCommentAdded();
+        // InvoiceResponse projectUnitResponse = InvoiceResponse.fromJson(response.data);
+        // _v.onInvoiceDetailFetched(projectUnitResponse);
+      })
+      ..catchError((e) {
+        Dialogs.hideLoader(context);
+        (_v as WalkinView).onCommentAddError("$e");
+        // ApiErrorParser.getResult(e, _v);
+      });
+  }
+
+  void getProjectList(BuildContext context) async {
+    //check for internal token
+    if (await AuthUser.getInstance().hasToken()) {
+      _v.onError("Token not found");
+      return;
+    }
+
+    //check network
+    if (!await NetworkCheck.check()) {
+      _v.onError("Network Error");
+      return;
+    }
+
+    var body = {"OpportunityID": "006p000000Ac0Gn"};
+
+    Dialogs.showLoader(context, "Please wait fetching your project list ...");
+    apiController.post(EndPoints.GET_COMMENTS, body: body, headers: await Utility.header())
+      ..then((response) {
+        Dialogs.hideLoader(context);
+        List<Chatresponse> projectListResponse = [];
+        var listOfDynamic = response.data as List;
+        listOfDynamic.forEach((element) {
+          projectListResponse.add(Chatresponse.fromJson(element));
+        });
+
+        (_v as WalkinView).onWalkinCommentFetched(projectListResponse);
       })
       ..catchError((e) {
         Dialogs.hideLoader(context);

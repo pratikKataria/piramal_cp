@@ -223,7 +223,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
             scrollAxis: Axis.horizontal,
             crossAxisAlignment: CrossAxisAlignment.start,
             blankSpace: 20.0,
-            velocity: 100.0,
+            velocity: 50.0,
             pauseAfterRound: Duration(seconds: 1),
             startPadding: 10.0,
             accelerationDuration: Duration(seconds: 1),
