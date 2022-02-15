@@ -12,17 +12,18 @@
 
 class MyProfileResponse {
   MyProfileResponse({
-      String typeOfFirm, 
-      String secondaryMobileNo, 
-      int returnCode, 
-      String reraID, 
-      dynamic profilepic, 
-      String primaryMobileNo, 
-      String primaryEmail, 
-      String primaryContactPerson, 
-      String pan, 
-      String name, 
-      String message,}){
+    String typeOfFirm,
+    String secondaryMobileNo,
+    int returnCode,
+    String reraID,
+    String profilepic,
+    String primaryMobileNo,
+    String primaryEmail,
+    String primaryContactPerson,
+    String pan,
+    String name,
+    String message,
+  }) {
     _typeOfFirm = typeOfFirm;
     _secondaryMobileNo = secondaryMobileNo;
     _returnCode = returnCode;
@@ -34,7 +35,7 @@ class MyProfileResponse {
     _pan = pan;
     _name = name;
     _message = message;
-}
+  }
 
   MyProfileResponse.fromJson(dynamic json) {
     _typeOfFirm = json['TypeOfFirm'];
@@ -49,11 +50,12 @@ class MyProfileResponse {
     _name = json['name'];
     _message = json['message'];
   }
+
   String _typeOfFirm;
   String _secondaryMobileNo;
   int _returnCode;
   String _reraID;
-  dynamic _profilepic;
+  String _profilepic;
   String _primaryMobileNo;
   String _primaryEmail;
   String _primaryContactPerson;
@@ -62,15 +64,25 @@ class MyProfileResponse {
   String _message;
 
   String get typeOfFirm => _typeOfFirm;
+
   String get secondaryMobileNo => _secondaryMobileNo;
+
   int get returnCode => _returnCode;
+
   String get reraID => _reraID;
-  dynamic get profilepic => _profilepic;
+
+  String get profilepic => _profilepic;
+
   String get primaryMobileNo => _primaryMobileNo;
+
   String get primaryEmail => _primaryEmail;
+
   String get primaryContactPerson => _primaryContactPerson;
+
   String get pan => _pan;
+
   String get name => _name;
+
   String get message => _message;
 
   Map<String, dynamic> toJson() {
@@ -88,5 +100,4 @@ class MyProfileResponse {
     map['message'] = _message;
     return map;
   }
-
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
-import 'package:piramal_channel_partner/res/Images.dart';
 import 'package:piramal_channel_partner/ui/myProfile/model/my_profile_response.dart';
 import 'package:piramal_channel_partner/ui/myProfile/my_profile_presenter.dart';
 import 'package:piramal_channel_partner/ui/myProfile/my_profile_view.dart';
@@ -48,12 +47,18 @@ class _MyProfileScreenState extends State<MyProfileScreen> implements MyProfileV
             verticalSpace(33.0),
             Row(
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(80.0),
-                  child: Container(
-                    height: 46,
-                    width: 46,
-                    child: Image.asset(Images.kImgPlaceholder, fit: BoxFit.fill),
+                InkWell(
+                  onTap: () async {
+                    String img = await Utility.pickImg(context);
+                    leadPresenter.uploadProfile(context, img);
+                  },
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(80.0),
+                    child: Container(
+                      height: 46,
+                      width: 46,
+                      child: Image.memory(Utility.convertMemoryImage(assistResponse?.profilepic)),
+                    ),
                   ),
                 ),
                 horizontalSpace(14.0),
@@ -128,5 +133,10 @@ class _MyProfileScreenState extends State<MyProfileScreen> implements MyProfileV
   void onProfileDataFetch(MyProfileResponse myAssistResponse) {
     assistResponse = myAssistResponse;
     setState(() {});
+  }
+
+  @override
+  void onProfileUploaded() {
+    leadPresenter.getProfileDataS(context);
   }
 }

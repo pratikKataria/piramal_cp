@@ -40,5 +40,6 @@ class EndPoints {
   static const String COMPLETE_TAGGING = BASE_URL + "/CP_Mobile_App/CompleteTagging";
   static const String GET_COMMENTS = BASE_URL + "/CP_Mobile_App/Allfeedback";
   static const String ADD_COMMENTS = BASE_URL + "/CP_Mobile_App/createcpcomments";
+  static const String PROFILE_PIC_UPLOAD = BASE_URL + "/CP_Mobile_App/ProfilePicUpdate";
 
 }

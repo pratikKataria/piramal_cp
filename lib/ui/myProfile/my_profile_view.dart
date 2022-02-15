@@ -3,4 +3,5 @@ import 'package:piramal_channel_partner/ui/myProfile/model/my_profile_response.d
 
 abstract class MyProfileView extends BaseView {
   void onProfileDataFetch(MyProfileResponse myAssistResponse);
+  void onProfileUploaded();
 }

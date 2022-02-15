@@ -29,9 +29,7 @@ class MyProfilePresenter {
       return;
     }
 
-    var body = {
-      "CustomerAccountID":"001p000000y1SqWAAU"
-    };
+    var body = {"CustomerAccountID": "001p000000y1SqWAAU"};
 
     Dialogs.showLoader(context, "Please wait fetching your project list ...");
     apiController.post(EndPoints.MY_PROFILE, body: body, headers: await Utility.header())
@@ -39,6 +37,62 @@ class MyProfilePresenter {
         Dialogs.hideLoader(context);
         MyProfileResponse myAssistResponse = MyProfileResponse.fromJson(response.data);
         _v.onProfileDataFetch(myAssistResponse);
+      })
+      ..catchError((e) {
+        Dialogs.hideLoader(context);
+        ApiErrorParser.getResult(e, _v);
+      });
+  }
+
+  void getProfileDataS(BuildContext context) async {
+    //check for internal token
+    if (await AuthUser.getInstance().hasToken()) {
+      _v.onError("Token not found");
+      return;
+    }
+
+    //check network
+    if (!await NetworkCheck.check()) {
+      _v.onError("Network Error");
+      return;
+    }
+
+    var body = {"CustomerAccountID": "001p000000y1SqWAAU"};
+
+    apiController.post(EndPoints.MY_PROFILE, body: body, headers: await Utility.header())
+      ..then((response) {
+        MyProfileResponse myAssistResponse = MyProfileResponse.fromJson(response.data);
+        _v.onProfileDataFetch(myAssistResponse);
+      })
+      ..catchError((e) {
+        ApiErrorParser.getResult(e, _v);
+      });
+  }
+
+
+  void uploadProfile(BuildContext context, String img) async {
+    //check for internal token
+    if (await AuthUser.getInstance().hasToken()) {
+      _v.onError("Token not found");
+      return;
+    }
+
+    //check network
+    if (!await NetworkCheck.check()) {
+      _v.onError("Network Error");
+      return;
+    }
+
+    var body = {
+      "CustomerAccountId": "001p000000y1SqWAAU",
+      "BlobImage": img,
+    };
+
+    Dialogs.showLoader(context, "Uploading profile please wait ...");
+    apiController.post(EndPoints.PROFILE_PIC_UPLOAD, body: body, headers: await Utility.header())
+      ..then((response) {
+        Dialogs.hideLoader(context);
+         _v.onProfileUploaded();
       })
       ..catchError((e) {
         Dialogs.hideLoader(context);

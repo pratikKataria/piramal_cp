@@ -388,6 +388,24 @@ class Utility {
     }
   }
 
+  static Future<String> pickImg(BuildContext context) async {
+    try {
+      FilePickerResult result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['jpeg',"jpg"],
+      );
+
+      File file = File(result.files.single.path);
+      List<int> imageBytes = file.readAsBytesSync();
+      String base64Image = base64Encode(imageBytes);
+      return base64Image;
+    } catch (e) {
+      Utility.showErrorToastB(context, e.toString());
+      return "";
+    }
+  }
+
+
   static void launchUrlX(BuildContext context, String file) {
     if (file == null || file.isEmpty) {
       Utility.showErrorToastB(context, "No link found !!");

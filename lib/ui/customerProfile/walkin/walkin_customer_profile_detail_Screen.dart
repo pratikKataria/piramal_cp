@@ -51,15 +51,15 @@ class _WalkinCustomerProfileDetailScreenState extends State<WalkinCustomerProfil
           //customer pic with name and time
           Row(
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(80.0),
-                child: Container(
-                  height: 37,
-                  width: 37,
-                  child: Image.asset(Images.kImgPlaceholder, fit: BoxFit.fill),
-                ),
-              ),
-              horizontalSpace(8.0),
+              // ClipRRect(
+              //   borderRadius: BorderRadius.circular(80.0),
+              //   child: Container(
+              //     height: 37,
+              //     width: 37,
+              //     child: Image.asset(Images.kImgPlaceholder, fit: BoxFit.fill),
+              //   ),
+              // ),
+              // horizontalSpace(8.0),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
