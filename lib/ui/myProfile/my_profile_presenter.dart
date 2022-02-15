@@ -29,7 +29,8 @@ class MyProfilePresenter {
       return;
     }
 
-    var body = {"CustomerAccountID": "001p000000y1SqWAAU"};
+    String uID = await Utility.uID();
+    var body = {"CustomerAccountID": uID}/*001p000000y1SqWAAU*/;
 
     Dialogs.showLoader(context, "Please wait fetching your project list ...");
     apiController.post(EndPoints.MY_PROFILE, body: body, headers: await Utility.header())
@@ -57,7 +58,9 @@ class MyProfilePresenter {
       return;
     }
 
-    var body = {"CustomerAccountID": "001p000000y1SqWAAU"};
+    String uID = await Utility.uID();
+    var body = {"CustomerAccountID": uID}/*001p000000y1SqWAAU*/;
+    // var body = {"CustomerAccountID": "001p000000y1SqWAAU"};
 
     apiController.post(EndPoints.MY_PROFILE, body: body, headers: await Utility.header())
       ..then((response) {
@@ -83,8 +86,9 @@ class MyProfilePresenter {
       return;
     }
 
+    String uID = await Utility.uID();
     var body = {
-      "CustomerAccountId": "001p000000y1SqWAAU",
+      "CustomerAccountId": uID/*001p000000y1SqWAAU*/,
       "BlobImage": img,
     };
 
