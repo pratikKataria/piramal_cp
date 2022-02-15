@@ -108,7 +108,7 @@ class CustomerProfilePresenter extends BasePresenter {
       });
   }
 
-  void addComments(BuildContext context, String comment, String sfdcID) async {
+  void addComments(BuildContext context, String comment, String sfdcID, String siteVisitID) async {
     //check for internal token
     if (await AuthUser.getInstance().hasToken()) {
       _v.onError("Token not found");
@@ -122,9 +122,9 @@ class CustomerProfilePresenter extends BasePresenter {
     }
 
     var body = {
-      "CustomerOpportunityId": "$sfdcID",
+      "CustomerOpportunityId": "006p000000Ac0Gn",
       "comment": "$comment",
-      "SiteVisitID": "",
+      "SiteVisitID": "$siteVisitID",
     };
     Dialogs.showLoader(context, "Adding comment ...");
     apiController.post(EndPoints.ADD_COMMENTS, body: body, headers: await Utility.header())
@@ -136,8 +136,8 @@ class CustomerProfilePresenter extends BasePresenter {
       })
       ..catchError((e) {
         Dialogs.hideLoader(context);
-        (_v as WalkinView).onCommentAddError("$e");
-        // ApiErrorParser.getResult(e, _v);
+        // (_v as WalkinView).onCommentAddError("$e");
+        ApiErrorParser.getResult(e, _v);
       });
   }
 

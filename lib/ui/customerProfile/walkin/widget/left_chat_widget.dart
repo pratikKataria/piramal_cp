@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
-import 'package:piramal_channel_partner/utils/Utility.dart';
 
 class LeftChatWidget extends StatelessWidget {
   final String name;
@@ -27,11 +26,11 @@ class LeftChatWidget extends StatelessWidget {
             style: textStyleWhite12px500w,
           ),
         ),
-        verticalSpace(4.0),
-        Text(
-          "$name",
-          style: textStyle12px500w,
-        )
+        // verticalSpace(4.0),
+        // Text(
+        //   "$name",
+        //   style: textStyle12px500w,
+        // )
       ],
     );
   }

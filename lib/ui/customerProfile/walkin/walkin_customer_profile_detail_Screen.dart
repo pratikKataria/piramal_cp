@@ -43,53 +43,53 @@ class _WalkinCustomerProfileDetailScreenState extends State<WalkinCustomerProfil
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: InkWell(
-        onTap: () {
-          showDetailDialog(context);
-        },
-        child: Container(
-          width: 35,
-          height: 35,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: AppColors.colorSecondary,
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 2.0),
+      child: ListView(
+        children: [
+          verticalSpace(20.0),
+          //customer pic with name and time
+          Row(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(80.0),
+                child: Container(
+                  height: 37,
+                  width: 37,
+                  child: Image.asset(Images.kImgPlaceholder, fit: BoxFit.fill),
+                ),
+              ),
+              horizontalSpace(8.0),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("${widget.response?.name}", style: textStyleRegular18pxW500),
+                  Text("Next Follow up: -", style: textStyleSubText14px500w),
+                ],
+              ),
+            ],
           ),
-          child: Icon(Icons.add, color: AppColors.white),
-        ),
-      ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 2.0),
-        child: ListView(
-          children: [
-            verticalSpace(20.0),
-            //customer pic with name and time
-            Row(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(80.0),
-                  child: Container(
-                    height: 37,
-                    width: 37,
-                    child: Image.asset(Images.kImgPlaceholder, fit: BoxFit.fill),
-                  ),
-                ),
-                horizontalSpace(8.0),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("${widget.response?.name}", style: textStyleRegular18pxW500),
-                    Text("Next Follow up: -", style: textStyleSubText14px500w),
-                  ],
-                ),
-              ],
-            ),
 
-            //calender call whatsapp
-            verticalSpace(12.0),
-            Row(
-              children: [
-                Container(
+          //calender call whatsapp
+          verticalSpace(12.0),
+          Row(
+            children: [
+              Container(
+                width: 35,
+                height: 35,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.colorPrimaryLight,
+                ),
+                padding: EdgeInsets.all(10.0),
+                child: Image.asset(Images.kIconCalender),
+              ),
+              horizontalSpace(8.0),
+              InkWell(
+                onTap: () {
+                  launch("tel://${widget.response?.name ?? ""}");
+                },
+                child: Container(
                   width: 35,
                   height: 35,
                   decoration: BoxDecoration(
@@ -97,73 +97,56 @@ class _WalkinCustomerProfileDetailScreenState extends State<WalkinCustomerProfil
                     color: AppColors.colorPrimaryLight,
                   ),
                   padding: EdgeInsets.all(10.0),
-                  child: Image.asset(Images.kIconCalender),
+                  child: Image.asset(Images.kIconPhone),
                 ),
-                horizontalSpace(8.0),
-                InkWell(
-                  onTap: () {
-                    launch("tel://${widget.response?.name ?? ""}");
-                  },
-                  child: Container(
-                    width: 35,
-                    height: 35,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppColors.colorPrimaryLight,
-                    ),
-                    padding: EdgeInsets.all(10.0),
-                    child: Image.asset(Images.kIconPhone),
-                  ),
-                ),
-                horizontalSpace(8.0),
-                WhatsAppButton("${widget.response?.mobilenumber}"),
-              ],
-            ),
+              ),
+              horizontalSpace(8.0),
+              WhatsAppButton("${widget.response?.mobilenumber}"),
+            ],
+          ),
 
-            //chip layout
-            verticalSpace(12.0),
-            Container(
-              height: 30,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(6),
-                      color: Utility.getRatingColor(widget.response?.newRating),
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-                    child: Text("${widget.response?.newRating}", style: textStyleWhite14px500w),
+          //chip layout
+          verticalSpace(12.0),
+          Container(
+            height: 30,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(6),
+                    color: Utility.getRatingColor(widget.response?.newRating),
                   ),
-                  horizontalSpace(10.0),
+                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+                  child: Text("${widget.response?.newRating}", style: textStyleWhite14px500w),
+                ),
+                horizontalSpace(10.0),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(6),
+                    color: AppColors.chipColor,
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+                  child: Text("Validity: ${widget.response?.createdDays} Days", style: textStyle14px500w),
+                ),
+                horizontalSpace(10.0),
+                if (widget.response.revisit)
                   Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(6),
                       color: AppColors.chipColor,
                     ),
                     padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-                    child: Text("Validity: ${widget.response?.createdDays} Days", style: textStyle14px500w),
+                    child: Text("Revisit", style: textStyle14px500w),
                   ),
-                  horizontalSpace(10.0),
-                  if (widget.response.revisit)
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6),
-                        color: AppColors.chipColor,
-                      ),
-                      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-                      child: Text("Revisit", style: textStyle14px500w),
-                    ),
-                ],
-              ),
+              ],
             ),
+          ),
 
-            //Chat
-            for(int i = 0; i < chatlist.length; i++)
-              chatCardView(chatlist[i], i+1),
-            // ...(chatlist.map<Widget>((e) => chatCardView(e)).toList())
-          ],
-        ),
+          //Chat
+          for (int i = 0; i < chatlist.length; i++) chatCardView(chatlist[i], i + 1),
+          // ...(chatlist.map<Widget>((e) => chatCardView(e)).toList())
+        ],
       ),
     );
   }
@@ -175,7 +158,7 @@ class _WalkinCustomerProfileDetailScreenState extends State<WalkinCustomerProfil
   }
 
   chatCardView(Chatresponse chatresponse, int no) {
-    String dateFormatter  = getFormattedDate(chatresponse.dateOfVisit);
+    String dateFormatter = getFormattedDate(chatresponse.dateOfVisit);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -185,11 +168,26 @@ class _WalkinCustomerProfileDetailScreenState extends State<WalkinCustomerProfil
         line(),
         verticalSpace(10.0),
         Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text("Visit No. $no", style: textStyle20px500w),
             horizontalSpace(12.0),
             Text("$dateFormatter", style: textStyleSubText14px500w),
+            Spacer(),
+            InkWell(
+              onTap: () {
+                showDetailDialog(context, chatresponse);
+              },
+              child: Container(
+                width: 35,
+                height: 35,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.colorSecondary,
+                ),
+                child: Icon(Icons.add, color: AppColors.white),
+              ),
+            ),
           ],
         ),
 
@@ -202,6 +200,11 @@ class _WalkinCustomerProfileDetailScreenState extends State<WalkinCustomerProfil
 
   commentBuilder(String allComments) {
     List<String> s = allComments.split("\r");
+    List<String> temp = [];
+    temp.clear();
+    temp.addAll(s.reversed);
+    s.clear();
+    s.addAll(temp);
 
     List<Widget> commentWidgets = [];
 
@@ -244,7 +247,7 @@ class _WalkinCustomerProfileDetailScreenState extends State<WalkinCustomerProfil
 
   final subTextStyle = textStyleSubText14px500w;
 
-  void showDetailDialog(BuildContext context) {
+  void showDetailDialog(BuildContext context, Chatresponse chatResponse) {
     AlertDialog alert = AlertDialog(
       contentPadding: EdgeInsets.all(0.0),
       content: Wrap(
@@ -292,7 +295,12 @@ class _WalkinCustomerProfileDetailScreenState extends State<WalkinCustomerProfil
                 color: AppColors.colorPrimary,
                 onTap: () {
                   if (comment != null && comment.isNotEmpty) {
-                    presenter.addComments(context, widget.response.sfdcid, comment);
+                    presenter.addComments(
+                      context,
+                      comment,
+                      widget.response.sfdcid,
+                      chatResponse.siteVisitID,
+                    );
                   } else {
                     onError("Please enter comment");
                   }

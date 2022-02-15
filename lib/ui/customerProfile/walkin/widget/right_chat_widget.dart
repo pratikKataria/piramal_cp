@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
-import 'package:piramal_channel_partner/utils/Utility.dart';
 
 class RightChatWidget extends StatelessWidget {
   final String c;
@@ -27,11 +26,11 @@ class RightChatWidget extends StatelessWidget {
             style: textStyleWhite12px500w,
           ),
         ),
-        verticalSpace(4.0),
-        Text(
-          "Suhail Patel (Cp)",
-          style: textStylePrimary12px500w,
-        )
+        // verticalSpace(4.0),
+        // Text(
+        //   "Suhail Patel (Cp)",
+        //   style: textStylePrimary12px500w,
+        // )
       ],
     );
   }
