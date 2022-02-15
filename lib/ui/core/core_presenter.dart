@@ -94,6 +94,50 @@ class CorePresenter {
       });
   }
 
+  void sendOTPX(String value) async {
+    //check for internal token
+    if (await AuthUser.getInstance().hasToken()) {
+      _v.onError("Token not found");
+      return;
+    }
+
+    //check network
+    if (!await NetworkCheck.check()) return;
+
+    //if incoming value is mobile number
+    if (value.length == 10 && checkForMobileNumber(value)) {
+      sendMobileOTP(value);
+      return;
+    }
+
+    int mobileOtp = _genRandomNumber();
+    var body = {
+      "EmailId": "$value",
+      "GenOTP": "$mobileOtp",
+    };
+
+    apiController.post(EndPoints.SEND_OTP_V1, body: body, headers: await Utility.header())
+      ..then((response) {
+        OTPResponse otpResponse = OTPResponse.fromJson(response.data);
+        if (otpResponse.returnCode == false) {
+          _v.onError(otpResponse.message);
+          return;
+        }
+
+        if (_v is LoginView) {
+          LoginView loginView = _v as LoginView;
+          loginView.onOtpSent(mobileOtp);
+          return;
+        }
+
+        SignupView signupView = _v as SignupView;
+        signupView.onOtpSent(mobileOtp, 0);
+      })
+      ..catchError((e) {
+        ApiErrorParser.getResult(e, _v);
+      });
+  }
+
   bool checkForMobileNumber(String val) {
     try {
       int.parse(val);
@@ -169,6 +213,7 @@ class CorePresenter {
         Utility.log(tag, e.toString());
       });
   }
+
 
   void verifyMobile(String email) async {
     //check for internal token

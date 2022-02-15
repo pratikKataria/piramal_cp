@@ -116,7 +116,7 @@ class BookingCardWidget extends StatelessWidget {
               Spacer(),
               InkWell(
                 onTap: () {
-                  _presenter.getCustomerUnitDetail(context);
+                  _presenter.getCustomerUnitDetail(context, _bookingResponse.sfdcid);
                 },
                 child: Container(
                   width: 35,

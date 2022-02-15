@@ -35,7 +35,7 @@ class HomePresenter {
     }
     String uID = await Utility.uID();
     // var body = {"CustomerAccountId": "$uID"};
-    var body = {"CustomerAccountId": "001p000000y1SqW"};
+    var body = {"CustomerAccountId": "$uID"};
     apiController.post(EndPoints.GET_BOOKING, body: body, headers: await Utility.header())
       ..then((response) {
         List<BookingResponse> brList = [];
@@ -66,8 +66,8 @@ class HomePresenter {
     }
 
     String uID = await Utility.uID();
-    // var body = {"CustomerAccountId": "$uID"};
-    var body = {"CustomerAccountId": "001p000000y1SqW"};
+    var body = {"CustomerAccountId": "$uID"};
+    // var body = {"CustomerAccountId": "001p000000y1SqW"};
 
     Dialogs.showLoader(context, "Please wait fetching your data ...");
     apiController.post(EndPoints.GET_WALK_IN, body: body, headers: await Utility.header())
@@ -101,8 +101,8 @@ class HomePresenter {
     }
 
     String uID = await Utility.uID();
-    // var body = {"CustomerAccountId": "$uID"};
-    var body = {"CustomerAccountId": "001p000000y1SqW"};
+    var body = {"CustomerAccountId": "$uID"};
+    // var body = {"CustomerAccountId": "001p000000y1SqW"};
 
     apiController.post(EndPoints.GET_WALK_IN, body: body, headers: await Utility.header())
       ..then((response) {
@@ -132,11 +132,12 @@ class HomePresenter {
       return;
     }
 
+    String uID = await Utility.uID();
     String formattedDate = DateFormat("yyyy-MM-ddTHH:mm:ss").format(visitDate);
     var body = {
       "OpportunityId": "$otyId",
       "scheduleDateTime": "$formattedDate",
-      "CustomerAccountID":"001p000000y1SqW"
+      "CustomerAccountID": uID /*"001p000000y1SqW"*/
     };
     Dialogs.showLoader(context, "Please wait scheduling your visit ...");
     apiController.post(EndPoints.SCHEDULE_VISIT, body: body, headers: await Utility.header())
@@ -168,7 +169,9 @@ class HomePresenter {
       return;
     }
 
-    var body = {"AccountID": "001p000000wiszQ"};
+    String uID = await Utility.uID();
+    var body = {"CustomerAccountId": "$uID"};
+    // var body = {"AccountID": "001p000000wiszQ"};
 
     // Dialogs.showLoader(context, "Fetching cp event data ...");
     apiController.post(EndPoints.CP_EVENT_LIST, body: body, headers: await Utility.header())
@@ -188,7 +191,7 @@ class HomePresenter {
       });
   }
 
-  void getCustomerUnitDetail(BuildContext context) async {
+  void getCustomerUnitDetail(BuildContext context, String otyId) async {
     //check for internal token
     if (await AuthUser.getInstance().hasToken()) {
       _v.onError("Token not found");
@@ -201,7 +204,11 @@ class HomePresenter {
       return;
     }
 
-    var body = {"CustomerAccountId": "001N000001S7nkd", "CustomerOpportunityId": "006N000000DuA69"};
+    String uID = await Utility.uID();
+    var body = {
+      "CustomerAccountId": uID/*001N000001S7nkd*/,
+      "CustomerOpportunityId":otyId /* "006N000000DuA69"*/,
+    };
 
     Dialogs.showLoader(context, "Fetching unit details ...");
     apiController.post(EndPoints.PROJECT_UNIT_DETAILS, body: body, headers: await Utility.header())

@@ -8,6 +8,7 @@ class EndPoints {
   static const String EMAIL_LOGIN = BASE_URL + "/CP_Mobile_App/EmailLoginCP";
   static const String MOBILE_LOGIN = BASE_URL + "/CP_Mobile_App/MobileLogincp";
   static const String SEND_OTP = BASE_URL + "/CP_Mobile_App/EmailOTPCP";
+  static const String SEND_OTP_V1 = BASE_URL + "/CP_Mobile_App/CreateEmailOTPCP";
   static const String VERIFY_EMAIL = BASE_URL + "/CP_Mobile_App/EmailLoginCP";
   static const String VERIFY_MOBILE = BASE_URL + "/CP_Mobile_App/MobileLogincp";
   static const String SEND_MOBILE_OTP = "https://bulkpush.mytoday.com/BulkSms/SingleMsgApi?";

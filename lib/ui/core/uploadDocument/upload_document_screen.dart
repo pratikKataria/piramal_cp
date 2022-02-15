@@ -23,7 +23,6 @@ class UploadDocumentScreen extends StatefulWidget {
 class _UploadDocumentScreenState extends State<UploadDocumentScreen> implements UploadDocumentView {
   final subTextStyle = textStyleSubText14px500w;
   final mainTextStyle = textStyle14px500w;
-  bool checkedValue = false;
 
   String reraFileName = "";
   String panCardFileName = "";
@@ -120,21 +119,6 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> implements 
                 },
               ),
               verticalSpace(15.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Checkbox(
-                    value: checkedValue,
-                    onChanged: (newValue) {
-                      setState(() {
-                        checkedValue = newValue;
-                      });
-                    },
-                  ),
-                  Text("I Agree to the Terms & Conditions", style: textStyle14px500w),
-                ],
-              ),
-              verticalSpace(15.0),
               loginButton(context),
               verticalSpace(15.0),
             ],
@@ -209,12 +193,7 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> implements 
       height: 36,
       text: "Next",
       onTap: () {
-        if (checkedValue) {
-          presenter.uploadDocument(context, documentUploadRequest);
-          return;
-        }
-
-        onError("Please accept Terms & Conditions");
+        presenter.uploadDocument(context, documentUploadRequest);
 
         // var provider = Provider.of<BaseProvider>(context, listen: false);
         // provider.showToolTip();
@@ -238,7 +217,5 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> implements 
   }
 
   @override
-  void onTokenGenerated(TokenResponse tokenResponse) {
-
-  }
+  void onTokenGenerated(TokenResponse tokenResponse) {}
 }

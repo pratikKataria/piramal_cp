@@ -36,6 +36,7 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
 
   bool mobileOTPVerified = false;
   bool emailOTPVerified = false;
+  bool checkedValue = false;
 
   int emailOTP;
   int mobileOTP;
@@ -64,12 +65,12 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
               input("Name as per Rera ID", (String v) {
                 signupRequest.name = v;
                 return;
-              }, important: true),
+              }, important: true, limit: 250),
               verticalSpace(10.0),
               input("Primary Contact Person Name", (String v) {
                 signupRequest.primaryContactPerson = v;
                 return;
-              }),
+              }, limit: 250),
               verticalSpace(10.0),
               input(
                 "Primary Mobile Number",
@@ -77,6 +78,7 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
                   signupRequest.primaryMobNo = v;
                   return;
                 },
+                limit: 10,
                 showChildButton: true,
                 childButtonText: "Get OTP",
                 number: true,
@@ -97,6 +99,7 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
                 showChildButton: true,
                 childButtonText: mobileOTPVerified ? "Verified" : "Verify",
                 number: true,
+                limit: 4,
                 verified: mobileOTPVerified,
                 onClick: () {
                   if (mobileOTPVerified) return;
@@ -120,26 +123,46 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
                 "Email",
                 (String v) {
                   signupRequest.email = v;
+                  emailOTPVerified = false;
                   return;
                 },
                 showChildButton: true,
                 childButtonText: "Get OTP",
+                limit: 250,
                 onClick: () {
                   Dialogs.showLoader(context, "Sending OTP to ${signupRequest.email}");
-                  corePresenter.sendOTP(signupRequest.email);
+                  corePresenter.sendOTPX(signupRequest.email);
                 },
               ),
               verticalSpace(10.0),
               input(
                 "OTP",
                 (String v) {
-                  // signupRequest.name = v;
+                  signupRequest.emailOTP = v;
                   return;
                 },
                 showChildButton: true,
-                childButtonText: "Verify",
+                limit: 4,
+                childButtonText: emailOTPVerified ? "Verified" : "Verify",
                 number: true,
-                onClick: () {},
+                verified: emailOTPVerified,
+                onClick: () {
+                  if (emailOTPVerified) return;
+
+                  if (signupRequest.emailOTP == null) {
+                    onError("Please Enter OTP");
+                    return;
+                  }
+
+                  if (signupRequest.emailOTP != emailOTP.toString()) {
+                    onError("Please Enter correct OTP");
+                    return;
+                  }
+
+                  emailOTPVerified = true;
+                  setState(() {});
+
+                },
               ),
               // verticalSpace(10.0),
               // input("Relationship Manager", (String v) {
@@ -177,13 +200,27 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
               input("Permanent Account Number (PAN)", (String v) {
                 signupRequest.pan = v;
                 return;
-              }, important: true),
+              }, important: true, limit: 10),
               verticalSpace(10.0),
               input("RERA Registration ID", (String v) {
                 signupRequest.reraID = v;
                 return;
-              }),
+              },limit: 20),
               verticalSpace(40.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Checkbox(
+                    value: checkedValue,
+                    onChanged: (newValue) {
+                      setState(() {
+                        checkedValue = newValue;
+                      });
+                    },
+                  ),
+                  Text("I Agree to the Terms & Conditions", style: textStyle14px500w),
+                ],
+              ),
               loginButton(context),
               verticalSpace(20.0),
             ],
@@ -199,7 +236,8 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
       bool showChildButton: false,
       String childButtonText: "",
       Function onClick,
-      bool verified: false}) {
+      bool verified: false,
+      int limit: 1}) {
     return Container(
       height: 38,
       decoration: BoxDecoration(
@@ -217,7 +255,8 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
               textAlign: TextAlign.left,
               // controller: widget.textEditingController ?? _controller,
               inputFormatters: [
-                number ? FilteringTextInputFormatter.digitsOnly : FilteringTextInputFormatter.singleLineFormatter
+                number ? FilteringTextInputFormatter.digitsOnly : FilteringTextInputFormatter.singleLineFormatter,
+                LengthLimitingTextInputFormatter(limit)
               ],
               maxLines: 1,
               textCapitalization: TextCapitalization.none,
@@ -272,6 +311,22 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
       height: 36,
       text: "Next",
       onTap: () {
+
+        if (!checkedValue) {
+          onError("Please select terms and condition");
+          return;
+        }
+
+        if (!mobileOTPVerified) {
+          onError("Please verify mobile");
+          return;
+        }
+
+        if (!emailOTPVerified) {
+          onError("Please verify email");
+          return;
+        }
+
         corePresenter.singUp(context, signupRequest);
         // Navigator.pushNamed(context, Screens.kUploadDocumentScreen);
       },
@@ -331,6 +386,7 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
 
   @override
   onOtpSent(int otp, provider) {
+    Utility.showSuccessToastB(context, "OTP sent successfully");
     Dialogs.hideLoader(context);
     //0 for email and 1 for mobile
     if (provider == 1)
