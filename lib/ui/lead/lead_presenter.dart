@@ -56,6 +56,37 @@ class LeadPresenter {
       });
   }
 
+  void getLeadListS(BuildContext context) async {
+    //check for internal token
+    if (await AuthUser.getInstance().hasToken()) {
+      _v.onError("Token not found");
+      return;
+    }
+
+    //check network
+    if (!await NetworkCheck.check()) {
+      _v.onError("Network Error");
+      return;
+    }
+
+    var body = {"CustomerAccountId": "001N000001S7nkdIAB"};
+
+    apiController.post(EndPoints.ALL_LEAD_LIST, body: body, headers: await Utility.header())
+      ..then((response) {
+        List<AllLeadResponse> brList = [];
+        var listOfDynamic = response.data as List;
+        listOfDynamic.forEach((element) {
+          brList.add(AllLeadResponse.fromJson(element));
+        });
+
+        (_v as LeadView).onAllLeadFetched(brList);
+      })
+      ..catchError((e) {
+        ApiErrorParser.getResult(e, _v);
+      });
+  }
+
+
   void deleteLead(BuildContext context, AllLeadResponse leadData) async {
     //check for internal token
     if (await AuthUser.getInstance().hasToken()) {
@@ -136,7 +167,7 @@ class LeadPresenter {
     CurrentUser currentUser = await AuthUser.getInstance().getCurrentUser();
     request.customerAccountId = currentUser.userCredentials.accountId;
     // CustomerAccountId
-    Dialogs.showLoader(context, "Creating your lead ...");
+    Dialogs.showLoader(context, "Updating your lead ...");
     apiController.post(EndPoints.CREATE_LEAD, body: request.toJson(), headers: await Utility.header())
       ..then((response) {
         Dialogs.hideLoader(context);

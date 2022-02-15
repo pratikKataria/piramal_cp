@@ -54,7 +54,7 @@ class _LeadScreenState extends State<LeadScreen> implements LeadView {
                   padding: EdgeInsets.symmetric(horizontal: 20.0),
                   onTap: () async {
                     var created = await Navigator.pushNamed(context, Screens.kAddLeadScreen);
-                    if (created is bool && created) leadPresenter.getLeadList(context);
+                    if (created is bool && created) leadPresenter.getLeadListS(context);
                   },
                 )
               ],
@@ -127,8 +127,9 @@ class _LeadScreenState extends State<LeadScreen> implements LeadView {
                 width: 32.0,
                 color: AppColors.screenBackgroundColor,
                 child: Icon(Icons.edit, size: 16),
-                onTap: () {
-                  Navigator.pushNamed(context, Screens.kEditLeadScreen, arguments: leadData);
+                onTap: () async {
+                  var created = await Navigator.pushNamed(context, Screens.kEditLeadScreen, arguments: leadData);
+                  if (created is bool && created) leadPresenter.getLeadListS(context);
                 },
               ),
               horizontalSpace(10.0),

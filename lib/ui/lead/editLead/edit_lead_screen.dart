@@ -68,32 +68,36 @@ class _EditLeadScreenState extends State<EditLeadScreen> implements AddLeadView 
   Widget build(BuildContext context) {
     // 18% from top
     final perTop18 = Utility.screenHeight(context) * 0.18;
-    return Scaffold(
-      backgroundColor: AppColors.screenBackgroundColor,
-      body: Container(
-        margin: EdgeInsets.symmetric(horizontal: 20.0),
-        child: ListView(
-          children: [
-            verticalSpace(22.0),
-            Text("Add Lead", style: textStyle24px500w),
-            verticalSpace(20.0),
-            buildProfileDetailCard("Name of the Customer", "Enter customer name", 0),
-            buildProfileDetailCard("Mobile Number", "Enter customer mobile number", 1),
-            buildProfileDetailCard2("Interested In", "Piramal Mahalaxmi", projectList, 2),
-            buildProfileDetailCard2("Configuration", "2 Bedroom", configurationList, 3),
-            buildProfileDetailCard2("Budget", "INR 5 Crore ", budgetList, 4),
-            buildProfileDetailCard2("Location", "Navi Mumbai", locationList, 5),
-            buildProfileDetailCard3("Date of Visit", "27 October 2021"),
-            Center(
-              child: PmlButton(
-                width: Utility.screenWidth(context) * 0.55,
-                text: "Submit",
-                onTap: () {
-                  leadPresenter.updateLead(context, createLeadRequest);
-                },
-              ),
-            )
-          ],
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      onVerticalDragStart: (x) => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Scaffold(
+        backgroundColor: AppColors.screenBackgroundColor,
+        body: Container(
+          margin: EdgeInsets.symmetric(horizontal: 20.0),
+          child: ListView(
+            children: [
+              verticalSpace(22.0),
+              Text("Add Lead", style: textStyle24px500w),
+              verticalSpace(20.0),
+              buildProfileDetailCard("Name of the Customer", "Enter customer name", 0),
+              buildProfileDetailCard("Mobile Number", "Enter customer mobile number", 1),
+              buildProfileDetailCard2("Interested In", "Piramal Mahalaxmi", projectList, 2),
+              buildProfileDetailCard2("Configuration", "2 Bedroom", configurationList, 3),
+              buildProfileDetailCard2("Budget", "INR 5 Crore ", budgetList, 4),
+              buildProfileDetailCard2("Location", "Navi Mumbai", locationList, 5),
+              buildProfileDetailCard3("Date of Visit", "27 October 2021"),
+              Center(
+                child: PmlButton(
+                  width: Utility.screenWidth(context) * 0.55,
+                  text: "Submit",
+                  onTap: () {
+                    leadPresenter.updateLead(context, createLeadRequest);
+                  },
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -165,41 +169,37 @@ class _EditLeadScreenState extends State<EditLeadScreen> implements AddLeadView 
                     top: 10.0,
                     child: Text("${getItemByCaptureNo(captureNo)}", style: textStyleSubText14px500w),
                   ),
-                  Opacity(
-                    opacity: 0.0,
-                    child: Container(
-                      width: Utility.screenWidth(context) * .70,
-                      height: 35.0,
-                      child: DropdownButton<String>(
-                        isExpanded: true,
-                        items: <String>[...dropDownValue].map((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          switch (captureNo) {
-                            case 2:
-                              createLeadRequest.projectInterested = value;
-                              break;
-                            case 3:
-                              createLeadRequest.configuration = value;
-                              break;
-                            case 4:
-                              createLeadRequest.budget = value;
-                              break;
-                            case 5:
-                              createLeadRequest.location = value;
-                              break;
-                          }
-                          setState(() {});
-                        },
-                      ),
+                  Container(
+                    width: Utility.screenWidth(context) * .70,
+                    height: 35.0,
+                    child: DropdownButton<String>(
+                      isExpanded: true,
+                      items: <String>[...dropDownValue].map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        switch (captureNo) {
+                          case 2:
+                            createLeadRequest.projectInterested = value;
+                            break;
+                          case 3:
+                            createLeadRequest.configuration = value;
+                            break;
+                          case 4:
+                            createLeadRequest.budget = value;
+                            break;
+                          case 5:
+                            createLeadRequest.location = value;
+                            break;
+                        }
+                        setState(() {});
+                      },
                     ),
                   ),
-                  Positioned(right: 0, child: Icon(Icons.arrow_drop_down)),
-                ],
+                 ],
               )
             ],
           ),
@@ -290,7 +290,7 @@ class _EditLeadScreenState extends State<EditLeadScreen> implements AddLeadView 
 
   @override
   void onLeadCreated() {
-    Utility.showSuccessToastB(context, "Lead created");
+    Utility.showSuccessToastB(context, "Lead updated");
     Navigator.pop(context, true);
   }
 

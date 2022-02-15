@@ -22,6 +22,7 @@ class _AddLeadScreenState extends State<AddLeadScreen> implements AddLeadView {
   final mainTextStyle = textStyle14px500w;
   final List<String> projectList = ["Piramal Aranya", "Piramal Vaikunth", "Piramal Revanta", "Piramal Mahalaxm"];
   final List<String> configurationList = ["1 BHK", "2 BHK", "3 BHK"];
+  final List<String> locationList = ["Mumbai"];
   final List<String> budgetList = [
     "0.75 Cr - 1.0 Cr",
     "1.0 Cr - 1.5 Cr",
@@ -35,10 +36,9 @@ class _AddLeadScreenState extends State<AddLeadScreen> implements AddLeadView {
     "Other",
   ];
 
-  final List<String> locationList = ["Mumbai"];
-
   CreateLeadRequest createLeadRequest = CreateLeadRequest();
   LeadPresenter leadPresenter;
+  bool hideKeyboard = false;
 
   @override
   void initState() {
@@ -57,34 +57,38 @@ class _AddLeadScreenState extends State<AddLeadScreen> implements AddLeadView {
   Widget build(BuildContext context) {
     // 18% from top
     final perTop18 = Utility.screenHeight(context) * 0.18;
-    return Scaffold(
-      backgroundColor: AppColors.screenBackgroundColor,
-      body: Container(
-        margin: EdgeInsets.symmetric(horizontal: 20.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              verticalSpace(22.0),
-              Text("Add Lead", style: textStyle24px500w),
-              verticalSpace(20.0),
-              buildProfileDetailCard("Name of the Customer", "Enter customer name", 1),
-              buildProfileDetailCard("Mobile Number", "Enter customer mobile number", 2),
-              buildProfileDetailCard2("Interested In", "Piramal Mahalaxmi", projectList, 1),
-              buildProfileDetailCard2("Configuration", "2 Bedroom", configurationList, 2),
-              buildProfileDetailCard2("Budget", "INR 5 Crore ", budgetList, 3),
-              buildProfileDetailCard2("Location", "Navi Mumbai", locationList, 4),
-              buildProfileDetailCard3("Date of Visit", "27 October 2021"),
-              Center(
-                child: PmlButton(
-                  width: Utility.screenWidth(context) * 0.55,
-                  text: "Submit",
-                  onTap: () {
-                    leadPresenter.createLead(context, createLeadRequest);
-                  },
-                ),
-              )
-            ],
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      onVerticalDragStart: (x) => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Scaffold(
+        backgroundColor: AppColors.screenBackgroundColor,
+        body: Container(
+          margin: EdgeInsets.symmetric(horizontal: 20.0),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                verticalSpace(22.0),
+                Text("Add Lead", style: textStyle24px500w),
+                verticalSpace(20.0),
+                buildProfileDetailCard("Name of the Customer", "Enter customer name", 1),
+                buildProfileDetailCard("Mobile Number", "Enter customer mobile number", 2),
+                buildProfileDetailCard2("Interested In", "Piramal Mahalaxmi", projectList, 1),
+                buildProfileDetailCard2("Configuration", "2 Bedroom", configurationList, 2),
+                buildProfileDetailCard2("Budget", "INR 5 Crore ", budgetList, 3),
+                buildProfileDetailCard2("Location", "Navi Mumbai", locationList, 4),
+                buildProfileDetailCard3("Date of Visit", "27 October 2021"),
+                Center(
+                  child: PmlButton(
+                    width: Utility.screenWidth(context) * 0.55,
+                    text: "Submit",
+                    onTap: () {
+                      leadPresenter.createLead(context, createLeadRequest);
+                    },
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -122,6 +126,7 @@ class _AddLeadScreenState extends State<AddLeadScreen> implements AddLeadView {
               suffixStyle: TextStyle(color: AppColors.textColor),
             ),
             onChanged: (String val) {
+              hideKeyboard = false;
               if (captureNo == 1) {
                 createLeadRequest.name = val;
               } else if (captureNo == 2) {
@@ -155,45 +160,46 @@ class _AddLeadScreenState extends State<AddLeadScreen> implements AddLeadView {
               ),
               Stack(
                 children: [
-                  Text("${getItemByCaptureNo(captureNo)}", style: textStyleSubText14px500w),
-                  Opacity(
-                    opacity: 0.0,
-                    child: Container(
-                      height: 25.0,
-                      child: DropdownButton<String>(
-                        items: <String>[...dropDownValue].map((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          switch (captureNo) {
-                            case 1:
-                              createLeadRequest.projectInterested = value;
-                              break;
-                            case 2:
-                              createLeadRequest.configuration = value;
-                              break;
-                            case 3:
-                              createLeadRequest.budget = value;
-                              break;
-                            case 4:
-                              createLeadRequest.location = value;
-                              break;
-                          }
-
-                          setState(() {});
-                        },
-                      ),
-                    ),
+                  Positioned(
+                    top: 10.0,
+                    child: Text("${getItemByCaptureNo(captureNo)}", style: textStyleSubText14px500w),
                   ),
+                  Container(
+                    width: Utility.screenWidth(context) * .70,
+                    height: 35.0,
+                    child: DropdownButton<String>(
+                      isExpanded: true,
+                      items: <String>[...dropDownValue].map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        hideKeyboard = true;
+                        switch (captureNo) {
+                          case 1:
+                            createLeadRequest.projectInterested = value;
+                            break;
+                          case 2:
+                            createLeadRequest.configuration = value;
+                            break;
+                          case 3:
+                            createLeadRequest.budget = value;
+                            break;
+                          case 4:
+                            createLeadRequest.location = value;
+                            break;
+                        }
+
+                        setState(() {});
+                      },
+                    ),
+                  )
                 ],
               )
             ],
           ),
-          Spacer(),
-          Icon(Icons.arrow_drop_down),
         ],
       ),
     );
@@ -308,5 +314,9 @@ class _AddLeadScreenState extends State<AddLeadScreen> implements AddLeadView {
       stringList.removeLast();
       list.addAll(stringList);
     }
+  }
+
+  void removeFocus(BuildContext context) {
+    FocusScope.of(context).unfocus();
   }
 }
