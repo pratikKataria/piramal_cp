@@ -61,4 +61,31 @@ class CpEventResponse {
     return map;
   }
 
+  set availabilitystatus(String value) {
+    _availabilitystatus = value;
+  }
+
+  set cpeventId(String value) {
+    _cpeventId = value;
+  }
+
+  set eventDatetime(String value) {
+    _eventDatetime = value;
+  }
+
+  set eventImage(String value) {
+    _eventImage = value;
+  }
+
+  set eventName(String value) {
+    _eventName = value;
+  }
+
+  set message(String value) {
+    _message = value;
+  }
+
+  set returnCode(bool value) {
+    _returnCode = value;
+  }
 }

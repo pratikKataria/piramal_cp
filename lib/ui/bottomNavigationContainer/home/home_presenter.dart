@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:piramal_channel_partner/api/api_controller_expo.dart';
@@ -33,18 +34,25 @@ class HomePresenter {
       _v.onError("Network Error");
       return;
     }
-    String uID = await Utility.uID();
-    // var body = {"CustomerAccountId": "$uID"};
-    var body = {"CustomerAccountId": "$uID"};
-    apiController.post(EndPoints.GET_BOOKING, body: body, headers: await Utility.header())
-      ..then((response) {
-        List<BookingResponse> brList = [];
-        var listOfDynamic = response.data as List;
-        listOfDynamic.forEach((element) {
-          brList.add(BookingResponse.fromJson(element));
-        });
 
-        _v.onBookingListFetched(brList);
+    // var body = {"CustomerAccountId": "$uID"};
+    String uID = await Utility.uID();
+    var body = {"CustomerAccountId": "$uID"};
+
+    apiController.post(EndPoints.GET_BOOKING, body: body, headers: await Utility.header())
+      ..then((Response response) {
+        List<BookingResponse> brList = [];
+        List listOfDynamic = response.data as List;
+        listOfDynamic.forEach((element) => brList.add(BookingResponse.fromJson(element)));
+
+        BookingResponse bookingResponse = brList.isNotEmpty ? brList.first : BookingResponse()
+          ..returnCode = false
+          ..message = "Something went wrong";
+        if (bookingResponse.returnCode) {
+          _v.onBookingListFetched(brList);
+        } else {
+          _v.onError(bookingResponse.message);
+        }
       })
       ..catchError((e) {
         _v.onError(e.message);
@@ -75,11 +83,16 @@ class HomePresenter {
         Dialogs.hideLoader(context);
         List<BookingResponse> brList = [];
         var listOfDynamic = response.data as List;
-        listOfDynamic.forEach((element) {
-          brList.add(BookingResponse.fromJson(element));
-        });
+        listOfDynamic.forEach((element) => brList.add(BookingResponse.fromJson(element)));
 
-        _v.onWalkInListFetched(brList);
+        BookingResponse bookingResponse = brList.isNotEmpty ? brList.first : BookingResponse()
+          ..returnCode = false
+          ..message = "Something went wrong";
+        if (bookingResponse.returnCode) {
+          _v.onWalkInListFetched(brList);
+        } else {
+          _v.onError(bookingResponse.message);
+        }
       })
       ..catchError((e) {
         Dialogs.hideLoader(context);
@@ -108,11 +121,16 @@ class HomePresenter {
       ..then((response) {
         List<BookingResponse> brList = [];
         var listOfDynamic = response.data as List;
-        listOfDynamic.forEach((element) {
-          brList.add(BookingResponse.fromJson(element));
-        });
+        listOfDynamic.forEach((element) => brList.add(BookingResponse.fromJson(element)));
 
-        _v.onWalkInListFetched(brList);
+        BookingResponse bookingResponse = brList.isNotEmpty ? brList.first : BookingResponse()
+          ..returnCode = false
+          ..message = "Something went wrong";
+        if (bookingResponse.returnCode) {
+          _v.onWalkInListFetched(brList);
+        } else {
+          _v.onError(bookingResponse.message);
+        }
       })
       ..catchError((e) {
         ApiErrorParser.getResult(e, _v);
@@ -170,7 +188,7 @@ class HomePresenter {
     }
 
     String uID = await Utility.uID();
-    var body = {"CustomerAccountId": "$uID"};
+    var body = {"AccountID": "$uID"};
     // var body = {"AccountID": "001p000000wiszQ"};
 
     // Dialogs.showLoader(context, "Fetching cp event data ...");
@@ -179,11 +197,16 @@ class HomePresenter {
         // Dialogs.hideLoader(context);
         List<CpEventResponse> brList = [];
         var listOfDynamic = response.data as List;
-        listOfDynamic.forEach((element) {
-          brList.add(CpEventResponse.fromJson(element));
-        });
+        listOfDynamic.forEach((element) => brList.add(CpEventResponse.fromJson(element)));
 
-        _v.onEventFetched(brList);
+        CpEventResponse bookingResponse = brList.isNotEmpty ? brList.first : CpEventResponse()
+          ..returnCode = false
+          ..message = "Something went wrong";
+        if (bookingResponse.returnCode) {
+          _v.onEventFetched(brList);
+        } else {
+          _v.onError(bookingResponse.message);
+        }
       })
       ..catchError((e) {
         // Dialogs.hideLoader(context);
@@ -206,8 +229,8 @@ class HomePresenter {
 
     String uID = await Utility.uID();
     var body = {
-      "CustomerAccountId": uID/*001N000001S7nkd*/,
-      "CustomerOpportunityId":otyId /* "006N000000DuA69"*/,
+      "CustomerAccountId": uID /*001N000001S7nkd*/,
+      "CustomerOpportunityId": otyId /* "006N000000DuA69"*/,
     };
 
     Dialogs.showLoader(context, "Fetching unit details ...");
@@ -215,7 +238,11 @@ class HomePresenter {
       ..then((response) {
         Dialogs.hideLoader(context);
         ProjectUnitResponse projectUnitResponse = ProjectUnitResponse.fromJson(response.data);
-        _v.onProjectUnitResponseFetched(projectUnitResponse);
+        if (projectUnitResponse.returnCode) {
+          _v.onProjectUnitResponseFetched(projectUnitResponse);
+        } else {
+          _v.onError(projectUnitResponse.message);
+        }
       })
       ..catchError((e) {
         Dialogs.hideLoader(context);

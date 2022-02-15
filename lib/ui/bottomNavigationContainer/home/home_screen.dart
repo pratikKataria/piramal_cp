@@ -85,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
               ],
             ),
           ),
-          if (walkInList.isNotEmpty)
+          // if (walkInList.isNotEmpty)
             Expanded(
               child: TabBarView(
                 controller: _tabController,

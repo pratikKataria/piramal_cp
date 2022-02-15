@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:piramal_channel_partner/res/Fonts.dart';
+import 'package:piramal_channel_partner/utils/Utility.dart';
 
 class RefreshListView extends StatelessWidget {
   List<Widget> children;
@@ -16,16 +18,22 @@ class RefreshListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      // key: refreshKey,
       onRefresh: refreshList,
       child: Container(
         margin: margin,
-        child: ListView.builder(
-          itemCount: children.length,
-          itemBuilder: (context, i) {
-            return children[i];
-          },
-        ),
+        child: children.isEmpty
+            ? ListView(
+              children: [
+                verticalSpace(150.0),
+                Center(child: Text("No Data Found", style: textStyleRegular16px500w)),
+              ],
+            )
+            : ListView.builder(
+                itemCount: children.length,
+                itemBuilder: (context, i) {
+                  return children[i];
+                },
+              ),
       ),
     );
   }
