@@ -61,7 +61,7 @@ class _ProjectScreenState extends State<ProjectScreen> implements ProjectView {
   cardViewProjects(ProjectListResponse projectData) {
     return InkWell(
       onTap: () {
-        Navigator.pushNamed(context, Screens.kProjectDetailScreen);
+        Navigator.pushNamed(context, Screens.kProjectDetailScreen, arguments: projectData);
       },
       child: Container(
         margin: EdgeInsets.only(bottom: 18.0),

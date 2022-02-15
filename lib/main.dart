@@ -100,7 +100,7 @@ class MyApp extends StatelessWidget {
               return RouteTransition(widget: AddLeadScreen());
               break;
             case Screens.kProjectDetailScreen:
-              return RouteTransition(widget: ProjectDetailScreen());
+              return RouteTransition(widget: ProjectDetailScreen(settings.arguments));
               break;
             case Screens.kLoginScreen:
               return RouteTransition(widget: LoginScreen());

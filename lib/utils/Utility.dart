@@ -363,7 +363,7 @@ class Utility {
   }
 
   static convertMemoryImage(String source) {
-    if (source == null) return base64Decode(kDefImage);
+    if (source == null || source.isEmpty) return base64Decode(kDefImage);
     try {
       return base64Decode(source);
     } catch (e) {

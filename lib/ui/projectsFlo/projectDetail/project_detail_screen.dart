@@ -12,11 +12,14 @@ import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/pages/proje
 import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/pages/project_detail_overview_page.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/pages/project_detail_towers_page.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/project_detail_view.dart';
+import 'package:piramal_channel_partner/ui/projectsFlo/projectList/model/project_list_response.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/project_presenter.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 
 class ProjectDetailScreen extends StatefulWidget {
-  const ProjectDetailScreen({Key key}) : super(key: key);
+  final ProjectListResponse arguments;
+
+  const ProjectDetailScreen(this.arguments, {Key key}) : super(key: key);
 
   @override
   _ProjectDetailScreenState createState() => _ProjectDetailScreenState();
@@ -43,10 +46,10 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen>
 
     // project present
     projectPresenter = ProjectPresenter(this);
-    projectPresenter.getProjectOverview(context);
-    projectPresenter.getTowerList(context);
-    projectPresenter.getDownloadList(context);
-    projectPresenter.getProjectAmenities(context);
+    projectPresenter.getProjectOverview(context, widget?.arguments?.projectId);
+    projectPresenter.getTowerList(context, widget?.arguments?.projectId);
+    projectPresenter.getDownloadList(context, widget?.arguments?.projectId);
+    projectPresenter.getProjectAmenities(context, widget?.arguments?.projectId);
 
     super.initState();
   }

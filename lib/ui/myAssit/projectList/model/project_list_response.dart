@@ -5,8 +5,8 @@
 /// message : "Success"
 /// Head_of_Department : ""
 
-class ProjectListResponse {
-  ProjectListResponse({
+class ProjectListResponse2 {
+  ProjectListResponse2({
       bool returnCode,
       String relationshipManager, 
       String projectName, 
@@ -21,7 +21,7 @@ class ProjectListResponse {
     _headOfDepartment = headOfDepartment;
 }
 
-  ProjectListResponse.fromJson(dynamic json) {
+  ProjectListResponse2.fromJson(dynamic json) {
     _returnCode = json['returnCode'];
     _relationshipManager = json['RelationshipManager'];
     _projectName = json['ProjectName'];

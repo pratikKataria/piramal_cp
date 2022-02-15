@@ -62,7 +62,7 @@ class ProjectPresenter {
   * Project detail
   * */
 
-  void getProjectOverview(BuildContext context) async {
+  void getProjectOverview(BuildContext context, String projectID) async {
     //check for internal token
     if (await AuthUser.getInstance().hasToken()) {
       _v.onError("Token not found");
@@ -75,7 +75,8 @@ class ProjectPresenter {
       return;
     }
 
-    var body = {"ProjectID": "a03N0000005NHiTIAW"};
+    var body = {"ProjectID": "$projectID"};
+    // var body = {"ProjectID": "a03N0000005NHiTIAW"};
     Dialogs.showLoader(context, "Please wait fetching your project details ...");
     apiController.post(EndPoints.PROJECT_OVERVIEW, body: body, headers: await Utility.header())
       ..then((response) {
@@ -89,7 +90,7 @@ class ProjectPresenter {
       });
   }
 
-  void getProjectAmenities(BuildContext context) async {
+  void getProjectAmenities(BuildContext context, String projectId) async {
     //check for internal token
     if (await AuthUser.getInstance().hasToken()) {
       _v.onError("Token not found");
@@ -102,7 +103,8 @@ class ProjectPresenter {
       return;
     }
 
-    var body = {"ProjectID": "a03N0000005NHiTIAW"};
+    var body = {"ProjectID": projectId};
+    // var body = {"ProjectID": "a03N0000005NHiTIAW"};
     // Dialogs.showLoader(context, "Please wait fetching your project list ...");
     apiController.post(EndPoints.PROJECT_AMENITIES, body: body, headers: await Utility.header())
       ..then((response) {
@@ -116,7 +118,7 @@ class ProjectPresenter {
       });
   }
 
-  void getTowerList(BuildContext context) async {
+  void getTowerList(BuildContext context, String projectId) async {
     //check for internal token
     if (await AuthUser.getInstance().hasToken()) {
       _v.onError("Token not found");
@@ -129,7 +131,7 @@ class ProjectPresenter {
       return;
     }
 
-    var body = {"ProjectID": "a03N0000005NHiTIAW"};
+    var body = {"ProjectID": "$projectId"};
     // Dialogs.showLoader(context, "Please wait fetching your project list ...");
     apiController.post(EndPoints.PROJECT_TOWER, body: body, headers: await Utility.header())
       ..then((response) {
@@ -149,7 +151,7 @@ class ProjectPresenter {
       });
   }
 
-  void getDownloadList(BuildContext context) async {
+  void getDownloadList(BuildContext context, String projectId) async {
     //check for internal token
     if (await AuthUser.getInstance().hasToken()) {
       _v.onError("Token not found");
@@ -162,7 +164,8 @@ class ProjectPresenter {
       return;
     }
 
-    var body = {"ProjectID": "a03N0000005NHiTIAW"};
+    var body = {"ProjectID": projectId};
+    // var body = {"ProjectID": "a03N0000005NHiTIAW"};
     // Dialogs.showLoader(context, "Please wait fetching your project list ...");
     apiController.post(EndPoints.PROJECT_GALLERY, body: body, headers: await Utility.header())
       ..then((response) {
