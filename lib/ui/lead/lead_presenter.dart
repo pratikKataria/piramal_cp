@@ -10,7 +10,6 @@ import 'package:piramal_channel_partner/ui/lead/lead_marker_interface.dart';
 import 'package:piramal_channel_partner/ui/lead/model/all_lead_response.dart';
 import 'package:piramal_channel_partner/ui/lead/model/delete_lead_response.dart';
 import 'package:piramal_channel_partner/user/AuthUser.dart';
-import 'package:piramal_channel_partner/user/CurrentUser.dart';
 import 'package:piramal_channel_partner/utils/Dialogs.dart';
 import 'package:piramal_channel_partner/utils/NetworkCheck.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
@@ -36,7 +35,9 @@ class LeadPresenter {
       return;
     }
 
-    var body = {"CustomerAccountId": "001N000001S7nkdIAB"};
+    String uID = await Utility.uID();
+    var body = {"CustomerAccountId": uID};
+    // var body = {"CustomerAccountId": "001N000001S7nkdIAB"};
 
     Dialogs.showLoader(context, "Please wait fetching your lead data ...");
     apiController.post(EndPoints.ALL_LEAD_LIST, body: body, headers: await Utility.header())
@@ -69,7 +70,9 @@ class LeadPresenter {
       return;
     }
 
-    var body = {"CustomerAccountId": "001N000001S7nkdIAB"};
+    String uID = await Utility.uID();
+    var body = {"CustomerAccountId": uID};
+    // var body = {"CustomerAccountId": "001N000001S7nkdIAB"};
 
     apiController.post(EndPoints.ALL_LEAD_LIST, body: body, headers: await Utility.header())
       ..then((response) {
@@ -85,7 +88,6 @@ class LeadPresenter {
         ApiErrorParser.getResult(e, _v);
       });
   }
-
 
   void deleteLead(BuildContext context, AllLeadResponse leadData) async {
     //check for internal token
@@ -131,8 +133,8 @@ class LeadPresenter {
     }
 
     //add customer id
-    CurrentUser currentUser = await AuthUser.getInstance().getCurrentUser();
-    request.customerAccountId = currentUser.userCredentials.accountId;
+    String uID = await Utility.uID();
+    request.customerAccountId = uID;
 
     Dialogs.showLoader(context, "Creating your lead ...");
     apiController.post(EndPoints.CREATE_LEAD, body: request.toJson(), headers: await Utility.header())
@@ -164,8 +166,9 @@ class LeadPresenter {
     }
 
     //add customer id
-    CurrentUser currentUser = await AuthUser.getInstance().getCurrentUser();
-    request.customerAccountId = currentUser.userCredentials.accountId;
+    String uID = await Utility.uID();
+    request.customerAccountId = uID;
+
     // CustomerAccountId
     Dialogs.showLoader(context, "Updating your lead ...");
     apiController.post(EndPoints.CREATE_LEAD, body: request.toJson(), headers: await Utility.header())
@@ -196,9 +199,8 @@ class LeadPresenter {
       return;
     }
 
-
     Dialogs.showLoader(context, "Please wait getting picklist ...");
-    apiController.post(EndPoints.GET_PICK_LIST,  headers: await Utility.header())
+    apiController.post(EndPoints.GET_PICK_LIST, headers: await Utility.header())
       ..then((response) {
         Dialogs.hideLoader(context);
         List<PickListResponse> brList = [];
