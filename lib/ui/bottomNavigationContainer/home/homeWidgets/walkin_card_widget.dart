@@ -58,7 +58,7 @@ class WalkInCardWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text("${_bookingResponse?.name ?? ""}", style: textStyleRegular18pxW500),
-                    Text("Next Follow up: March 27th", style: textStyleSubText14px500w),
+                    Text("Next Follow up: Not Available", style: textStyleSubText14px500w),
                   ],
                 ),
               ],
@@ -104,7 +104,7 @@ class WalkInCardWidget extends StatelessWidget {
                     color: AppColors.chipColor,
                   ),
                   padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-                  child: Text("${_bookingResponse?.projectInterested??_bookingResponse?.projectFinalized} ", style: textStyle14px500w),
+                  child: Text("${_bookingResponse?.projectInterested?? _bookingResponse?.projectFinalized ?? ""} ", style: textStyle14px500w),
                 ),
               ],
             ),

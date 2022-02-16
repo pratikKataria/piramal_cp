@@ -43,7 +43,7 @@ class CorePresenter {
     apiController.post(EndPoints.ACCESS_TOKEN, body: body)
       ..then((response) {
         TokenResponse tokenResponse = TokenResponse.fromJson(response.data);
-         _v.onTokenGenerated(tokenResponse);
+        _v.onTokenGenerated(tokenResponse);
       })
       ..catchError((e) {
         Utility.log(tag, e.toString());
@@ -214,7 +214,6 @@ class CorePresenter {
       });
   }
 
-
   void verifyMobile(String email) async {
     //check for internal token
     if (await AuthUser.getInstance().hasToken()) {
@@ -292,6 +291,39 @@ class CorePresenter {
         });
         SignupView signUpView = _v as SignupView;
         signUpView.onRelationManagerListFetched(brList);
+      })
+      ..catchError((e) {
+        ApiErrorParser.getResult(e, _v);
+      });
+  }
+
+  void getTypeOfFirm(BuildContext context) async {
+    //check for internal token
+    if (await AuthUser.getInstance().hasToken()) {
+      _v.onError("Token not found");
+      return;
+    }
+
+    //check network
+    if (!await NetworkCheck.check()) return;
+
+    apiController.post(EndPoints.GET_R_MANAGER_LIST, headers: await Utility.header())
+      ..then((response) {
+        Utility.log(tag, response.data);
+        List<String> brList = [];
+
+        var listOfDynamic = response.data as List;
+        listOfDynamic.forEach((element) {
+          RelationManagerListResponse rm = RelationManagerListResponse.fromJson(element);
+          if (rm != null && rm.fieldName == "Type_of_firm__c") {
+            brList.addAll(rm.values?.split(",")?.toList() ?? []);
+          }
+        });
+
+        if (brList.isNotEmpty) brList.removeLast();
+
+        UploadDocumentView signUpView = _v as UploadDocumentView;
+        signUpView.onTypeOfFirmFetched(brList);
       })
       ..catchError((e) {
         ApiErrorParser.getResult(e, _v);

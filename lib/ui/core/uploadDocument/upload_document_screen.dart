@@ -29,6 +29,9 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> implements 
   String directorsFileName = "";
   String partnerShipFileName = "";
   String partnersFileName = "";
+  String typeOfFirm = "";
+
+  List<String> typeOfFirms = [];
 
   DocumentUploadRequest documentUploadRequest = DocumentUploadRequest();
   CorePresenter presenter;
@@ -36,6 +39,7 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> implements 
   @override
   void initState() {
     presenter = CorePresenter(this);
+    presenter.getTypeOfFirm(context);
     super.initState();
   }
 
@@ -139,11 +143,35 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> implements 
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            "$mText",
-            style: textStyle14px500w,
+          Text("$mText", style: textStyle14px500w),
+          Container(
+            height: 35.0,
+            decoration: BoxDecoration(
+              color: AppColors.inputFieldBackgroundColor,
+              borderRadius: BorderRadius.circular(6.0),
+            ),
+            padding: EdgeInsets.only(right: 10.0),
+            child: DropdownButton<String>(
+              isExpanded: true,
+              hint: Text("Select type of firm", style: subTextStyle),
+              value: typeOfFirm,
+              underline: Container(),
+              items: <String>[...typeOfFirms].map((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value, style: subTextStyle),
+                );
+              }).toList(),
+              onChanged: (value) {
+                typeOfFirm = value;
+                // relationManagerListResponse = value;
+                // signupRequest.relationshipManager = value;
+                // signupRequest.typeoffirm = value.
+                setState(() {});
+              },
+            ),
           ),
-          Text("$sText", style: textStyleSubText14px500w),
+          // Text("$sText", style: textStyleSubText14px500w),
         ],
       ),
     );
@@ -218,4 +246,12 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> implements 
 
   @override
   void onTokenGenerated(TokenResponse tokenResponse) {}
+
+  @override
+  void onTypeOfFirmFetched(List<String> brList) {
+    typeOfFirms.clear();
+    typeOfFirms.addAll(brList);
+    typeOfFirm = typeOfFirms?.first ?? "";
+    setState(() {});
+  }
 }

@@ -40,7 +40,6 @@ class HomePresenter {
     String uID = await Utility.uID();
     var body = {"CustomerAccountId": "$uID"};
 
-
     apiController.post(EndPoints.GET_BOOKING, body: body, headers: await Utility.header())
       ..then((Response response) {
         List<BookingResponse> brList = [];
@@ -48,7 +47,7 @@ class HomePresenter {
         listOfDynamic.forEach((element) => brList.add(BookingResponse.fromJson(element)));
 
         BookingResponse bookingResponse = brList.isNotEmpty ? brList.first : null;
-        if(bookingResponse == null) {
+        if (bookingResponse == null) {
           _v.onError(Screens.kErrorTxt);
           return;
         }
@@ -61,7 +60,7 @@ class HomePresenter {
       })
       ..catchError((e) {
         _v.onError(e.message);
-        Utility.log(tag, e.toString());
+        ApiErrorParser.getResult(e, _v);
       });
   }
 
@@ -91,7 +90,7 @@ class HomePresenter {
         listOfDynamic.forEach((element) => brList.add(BookingResponse.fromJson(element)));
 
         BookingResponse bookingResponse = brList.isNotEmpty ? brList.first : null;
-        if(bookingResponse == null) {
+        if (bookingResponse == null) {
           _v.onError(Screens.kErrorTxt);
           return;
         }
@@ -104,7 +103,7 @@ class HomePresenter {
       })
       ..catchError((e) {
         Dialogs.hideLoader(context);
-        ApiErrorParser.getResult(e, _v);
+        // ApiErrorParser.getResult(e, _v);
       });
   }
 
@@ -132,7 +131,7 @@ class HomePresenter {
         listOfDynamic.forEach((element) => brList.add(BookingResponse.fromJson(element)));
 
         BookingResponse bookingResponse = brList.isNotEmpty ? brList.first : null;
-        if(bookingResponse == null) {
+        if (bookingResponse == null) {
           _v.onError(Screens.kErrorTxt);
           return;
         }
@@ -144,7 +143,7 @@ class HomePresenter {
         }
       })
       ..catchError((e) {
-        ApiErrorParser.getResult(e, _v);
+        // ApiErrorParser.getResult(e, _v);
       });
   }
 
@@ -181,7 +180,7 @@ class HomePresenter {
       })
       ..catchError((e) {
         Dialogs.hideLoader(context);
-        ApiErrorParser.getResult(e, _v);
+        // ApiErrorParser.getResult(e, _v);
       });
   }
 
@@ -211,7 +210,7 @@ class HomePresenter {
         listOfDynamic.forEach((element) => brList.add(CpEventResponse.fromJson(element)));
 
         CpEventResponse bookingResponse = brList.isNotEmpty ? brList.first : null;
-        if(bookingResponse == null) {
+        if (bookingResponse == null) {
           _v.onError("No Event Available");
           return;
         }
@@ -224,7 +223,7 @@ class HomePresenter {
       })
       ..catchError((e) {
         // Dialogs.hideLoader(context);
-        ApiErrorParser.getResult(e, _v);
+        // ApiErrorParser.getResult(e, _v);
       });
   }
 
@@ -260,7 +259,7 @@ class HomePresenter {
       })
       ..catchError((e) {
         Dialogs.hideLoader(context);
-        ApiErrorParser.getResult(e, _v);
+        // ApiErrorParser.getResult(e, _v);
       });
   }
 }

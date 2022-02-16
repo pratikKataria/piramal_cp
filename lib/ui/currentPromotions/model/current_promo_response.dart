@@ -46,7 +46,7 @@ class CurrentPromoResponse {
     _mobilenumber = json['Mobilenumber'];
     _message = json['message'];
     _location = json['Location'];
-    _image = json['Image'];
+    _image = json['ProjectImage'];
     _download = json['Download'];
   }
   String _title;
@@ -84,7 +84,7 @@ class CurrentPromoResponse {
     map['Mobilenumber'] = _mobilenumber;
     map['message'] = _message;
     map['Location'] = _location;
-    map['Image'] = _image;
+    map['ProjectImage'] = _image;
     map['Download'] = _download;
     return map;
   }

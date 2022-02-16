@@ -50,7 +50,7 @@ class SvBookingCardWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text("${_bookingResponse?.name ?? ""}", style: textStyleRegular18pxW500),
-                    Text("Next Follow up: March 27th", style: textStyleSubText14px500w),
+                    Text("Next Follow up: Not Available", style: textStyleSubText14px500w),
                   ],
                 ),
               ],

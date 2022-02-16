@@ -64,7 +64,7 @@ class _WalkinCustomerProfileDetailScreenState extends State<WalkinCustomerProfil
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text("${widget.response?.name}", style: textStyleRegular18pxW500),
-                  Text("Next Follow up: -", style: textStyleSubText14px500w),
+                  Text("Next Follow up: Not Available", style: textStyleSubText14px500w),
                 ],
               ),
             ],

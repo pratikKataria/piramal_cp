@@ -3,4 +3,5 @@ import 'package:piramal_channel_partner/ui/core/signup/model/document_upload_res
 
 abstract class UploadDocumentView implements CoreView {
   void onDocumentUploaded(DocumentUploadResponse documentUploadResponse);
+  void onTypeOfFirmFetched(List<String> brList);
 }
