@@ -59,7 +59,7 @@ class CustomerProfilePresenter extends BasePresenter {
       });
   }
 
-  void getCustomerUnitDetail(BuildContext context) async {
+  void getCustomerUnitDetail(BuildContext context, String otyID) async {
     //check for internal token
     if (await AuthUser.getInstance().hasToken()) {
       _v.onError("Token not found");
@@ -72,7 +72,8 @@ class CustomerProfilePresenter extends BasePresenter {
       return;
     }
 
-    var body = {"CustomerAccountId": "001N000001S7nkd", "CustomerOpportunityId": "006N000000DuA69"};
+    String uID = await Utility.uID();
+    var body = {"CustomerAccountId": "$uID", "CustomerOpportunityId": "$otyID"};
 
     Dialogs.showLoader(context, "Fetching unit details ...");
     apiController.post(EndPoints.GET_COMMENTS, body: body, headers: await Utility.header())
@@ -87,7 +88,7 @@ class CustomerProfilePresenter extends BasePresenter {
       });
   }
 
-  void getInvoice(BuildContext context) async {
+  void getInvoice(BuildContext context, String otyID) async {
     //check for internal token
     if (await AuthUser.getInstance().hasToken()) {
       _v.onError("Token not found");
@@ -100,7 +101,10 @@ class CustomerProfilePresenter extends BasePresenter {
       return;
     }
 
-    var body = {"CustomerAccountID": "001p000000y1SqWAAU", "opportunityid": "006p000000AeMAtAAN"};
+    String uID = await Utility.uID();
+    var body = {"CustomerAccountId": "$uID", "CustomerOpportunityId": "$otyID"};
+
+    // var body = {"CustomerAccountID": "001p000000y1SqWAAU", "opportunityid": "006p000000AeMAtAAN"};
     Dialogs.showLoader(context, "Fetching details ...");
     apiController.post(EndPoints.GET_INVOICE, body: body, headers: await Utility.header())
       ..then((response) {
@@ -129,7 +133,7 @@ class CustomerProfilePresenter extends BasePresenter {
 
     // String uID = await Utility.uID();
     var body = {
-      "CustomerOpportunityId": "$sfdcID"/*006p000000Ac0Gn*/,
+      "CustomerOpportunityId": "$sfdcID" /*006p000000Ac0Gn*/,
       "comment": "$comment",
       "SiteVisitID": "$siteVisitID",
     };
@@ -161,7 +165,7 @@ class CustomerProfilePresenter extends BasePresenter {
       return;
     }
 
-    var body = {"OpportunityID": "$oID"}/*006p000000Ac0Gn*/;
+    var body = {"OpportunityID": "$oID"} /*006p000000Ac0Gn*/;
 
     Dialogs.showLoader(context, "Please wait fetching your project list ...");
     apiController.post(EndPoints.GET_COMMENTS, body: body, headers: await Utility.header())
@@ -169,11 +173,10 @@ class CustomerProfilePresenter extends BasePresenter {
         Dialogs.hideLoader(context);
         List<Chatresponse> projectListResponse = [];
         var listOfDynamic = response.data as List;
-        listOfDynamic.forEach((element) {
-          projectListResponse.add(Chatresponse.fromJson(element));
-        });
-
-        (_v as WalkinView).onWalkinCommentFetched(projectListResponse);
+        listOfDynamic.forEach((element) => projectListResponse.add(Chatresponse.fromJson(element)));
+        WalkinView v = _v as WalkinView;
+        if (projectListResponse.isNotEmpty) v.onWalkinCommentFetched(projectListResponse);
+        else v.onNoVisitFound();
       })
       ..catchError((e) {
         Dialogs.hideLoader(context);

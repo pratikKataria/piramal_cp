@@ -148,6 +148,13 @@ class _WalkinCustomerProfileDetailScreenState extends State<WalkinCustomerProfil
             ),
           ),
 
+          if (chatlist.isEmpty) ...[
+            verticalSpace(20.0),
+            line(),
+            verticalSpace(150.0),
+            Center(child: Text("No Visit Found", style: textStyleRegular16px500w)),
+          ],
+
           //Chat
           if (chatlist.isNotEmpty)
             for (int i = 0; i < chatlist.length; i++) chatCardView(chatlist[i], i + 1),
@@ -375,5 +382,11 @@ class _WalkinCustomerProfileDetailScreenState extends State<WalkinCustomerProfil
     if (picked != null) {
       presenter.scheduleTime(context, widget.response.sfdcid, x);
     }
+  }
+
+  @override
+  void onNoVisitFound() {
+    print("no visit found");
+    print("no visit found");
   }
 }

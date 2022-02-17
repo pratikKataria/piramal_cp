@@ -37,7 +37,7 @@ Future<void> main() async {
 
   bool authResult = await (AuthUser.getInstance()).isLoggedIn();
 
-  await Future.delayed(Duration(seconds: 3));
+  await Future.delayed(Duration(seconds: 2));
   runApp(MyApp(authResult));
 }
 
@@ -119,7 +119,7 @@ class MyApp extends StatelessWidget {
               break;
           }
         },
-        home: /*checkAuthUser(authResult)*/ UploadDocumentScreen(),
+        home: checkAuthUser(authResult),
       ),
     );
   }

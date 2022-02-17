@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -23,8 +22,10 @@ class CPEventScreen extends StatefulWidget {
 class _CPEventScreenState extends State<CPEventScreen> implements CPEventView {
   final subTextStyle = textStyleSubText14px500w;
   final mainTextStyle = textStyle14px500w;
-  final ATTEND = "Attend";
-  final TENTATIVE = "Tentative";
+  static const ATTEND = "Attend";
+  static const TENTATIVE = "Tentative";
+  static const String NOT_GOING = "Not Going";
+
   final List<CpEventResponse> cpEventList = [];
   CPEventPresenter presenter;
 
@@ -88,19 +89,19 @@ class _CPEventScreenState extends State<CPEventScreen> implements CPEventView {
             height: 130.0,
             decoration: BoxDecoration(
                 image: DecorationImage(
-              image: MemoryImage(Utility.convertMemoryImage(cpEventData.eventImage)),
-              fit: BoxFit.fill,
-            )),
+                  image: NetworkImage("${cpEventData?.eventImage??""}") /*MemoryImage(Utility.convertMemoryImage(cpEventData.eventImage))*/,
+                  fit: BoxFit.fill,
+                )),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+            padding: const EdgeInsets.only(left: 20.0, top: 10.0, bottom: 10.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text("${cpEventData.eventName}", style: textStyle24px500w),
                 verticalSpace(10.0),
-                Row(
+                Wrap(
                   children: [
                     Image.asset(Images.kIconCpEventCalender, height: 16),
                     horizontalSpace(10.0),
@@ -115,33 +116,44 @@ class _CPEventScreenState extends State<CPEventScreen> implements CPEventView {
                 if (cpEventData.availabilitystatus != null)
                   Container(
                     height: 25.0,
-                    color: cpEventData.availabilitystatus == ATTEND ? AppColors.attendButtonColor : AppColors.tentativeButtonColor,
+                    color:
+                    cpEventData.availabilitystatus == ATTEND ? AppColors.attendButtonColor : AppColors.tentativeButtonColor,
                     child: Center(child: Text("${eventText(cpEventData.availabilitystatus)}", style: textStyleWhite14px500w)),
                   ),
                 if (cpEventData.availabilitystatus == null)
                   Row(
-                  children: [
-                    PmlButton(
-                      height: 32.0,
-                      text: "Attend",
-                      color: AppColors.attendButtonColor,
-                      padding: EdgeInsets.symmetric(horizontal: 20.0),
-                      onTap: () {
-                        presenter.revertToEvent(context, "Attend", cpEventData.cpeventId);
-                      },
-                    ),
-                    horizontalSpace(10.0),
-                    PmlButton(
-                      height: 32.0,
-                      text: "Tentative",
-                      color: AppColors.tentativeButtonColor,
-                      padding: EdgeInsets.symmetric(horizontal: 20.0),
-                      onTap: () {
-                        presenter.revertToEvent(context, "Tentative", cpEventData.cpeventId);
-                      },
-                    )
-                  ],
-                )
+                    children: [
+                      PmlButton(
+                        height: 32.0,
+                        text: "Attend",
+                        color: AppColors.attendButtonColor,
+                        padding: EdgeInsets.symmetric(horizontal: 20.0),
+                        onTap: () {
+                          presenter.revertToEvent(context, "Attend", cpEventData.cpeventId);
+                        },
+                      ),
+                      horizontalSpace(10.0),
+                      PmlButton(
+                        height: 32.0,
+                        text: "Tentative",
+                        color: AppColors.tentativeButtonColor,
+                        padding: EdgeInsets.symmetric(horizontal: 20.0),
+                        onTap: () {
+                          presenter.revertToEvent(context, "Tentative", cpEventData.cpeventId);
+                        },
+                      ),
+                      horizontalSpace(10.0),
+                      PmlButton(
+                        height: 32.0,
+                        text: "Not Going",
+                        color: AppColors.red,
+                        padding: EdgeInsets.symmetric(horizontal: 20.0),
+                        onTap: () {
+                          presenter.revertToEvent(context, "Not Going", cpEventData.cpeventId);
+                        },
+                      ),
+                    ],
+                  )
               ],
             ),
           ),
@@ -185,8 +197,17 @@ class _CPEventScreenState extends State<CPEventScreen> implements CPEventView {
     presenter.getEventList(context);
   }
 
-  String eventText(String eventStatus) =>
-      eventStatus == ATTEND ? "You are Attending event" : "You have tentatively accepted for event";
+  String eventText(String eventStatus) {
+    switch (eventStatus) {
+      case ATTEND:
+        return "You are Attending this event";
+      case TENTATIVE:
+        return "You have tentatively accepted for event";
+      case NOT_GOING:
+        return "You are not going to this event";
+    }
+    return "";
+  }
 }
 
 /*

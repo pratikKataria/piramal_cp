@@ -104,7 +104,7 @@ class _LoginScreenState extends State<LoginScreen> implements LoginView {
               style: subTextStyle,
               decoration: InputDecoration(
                 border: InputBorder.none,
-                hintText: "Enter email/phone address",
+                hintText: "Enter email or phone",
                 hintStyle: subTextStyle,
                 isDense: true,
                 suffixStyle: TextStyle(color: AppColors.textColor),

@@ -31,7 +31,7 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
   void initState() {
     _homePresenter = CustomerProfilePresenter(this);
     // _homePresenter.getWalkInList(context);
-    _homePresenter.getInvoice(context);
+    _homePresenter.getInvoice(context, widget?.response?.sfdcid);
     super.initState();
   }
 
@@ -162,7 +162,7 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
                     color: AppColors.colorSecondary,
                     child: Icon(Icons.add, color: AppColors.white, size: 16.0),
                     onTap: () {
-                      _homePresenter.getCustomerUnitDetail(context);
+                      _homePresenter.getCustomerUnitDetail(context, widget?.response?.sfdcid);
                     },
                   ),
                 ],

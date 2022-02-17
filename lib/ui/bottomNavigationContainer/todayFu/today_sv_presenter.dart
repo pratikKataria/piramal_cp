@@ -37,9 +37,7 @@ class TodaySVPresenter {
       ..then((response) {
         List<TodaySvResponse> brList = [];
         var listOfDynamic = response.data as List;
-        listOfDynamic.forEach((element) {
-          brList.add(TodaySvResponse.fromJson(element));
-        });
+        listOfDynamic.forEach((element) => brList.add(TodaySvResponse.fromJson(element)));
 
         _v.onSvListFetched(brList);
       })

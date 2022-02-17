@@ -55,7 +55,7 @@ class HomePresenter {
         if (bookingResponse.returnCode) {
           _v.onBookingListFetched(brList);
         } else {
-          _v.onError(bookingResponse.message);
+          // _v.onError(bookingResponse.message);
         }
       })
       ..catchError((e) {
@@ -98,12 +98,12 @@ class HomePresenter {
         if (bookingResponse.returnCode) {
           _v.onWalkInListFetched(brList);
         } else {
-          _v.onError(bookingResponse.message);
+          // _v.onError(bookingResponse.message);
         }
       })
       ..catchError((e) {
         Dialogs.hideLoader(context);
-        // ApiErrorParser.getResult(e, _v);
+        ApiErrorParser.getResult(e, _v);
       });
   }
 
@@ -139,11 +139,11 @@ class HomePresenter {
         if (bookingResponse.returnCode) {
           _v.onWalkInListFetched(brList);
         } else {
-          _v.onError(bookingResponse.message);
+          // _v.onError(bookingResponse.message);
         }
       })
       ..catchError((e) {
-        // ApiErrorParser.getResult(e, _v);
+        ApiErrorParser.getResult(e, _v);
       });
   }
 
@@ -180,7 +180,7 @@ class HomePresenter {
       })
       ..catchError((e) {
         Dialogs.hideLoader(context);
-        // ApiErrorParser.getResult(e, _v);
+        ApiErrorParser.getResult(e, _v);
       });
   }
 
@@ -218,12 +218,12 @@ class HomePresenter {
         if (bookingResponse.returnCode) {
           _v.onEventFetched(brList);
         } else {
-          _v.onError(bookingResponse.message);
+          // _v.onError(bookingResponse.message);
         }
       })
       ..catchError((e) {
         // Dialogs.hideLoader(context);
-        // ApiErrorParser.getResult(e, _v);
+        ApiErrorParser.getResult(e, _v);
       });
   }
 
@@ -259,7 +259,7 @@ class HomePresenter {
       })
       ..catchError((e) {
         Dialogs.hideLoader(context);
-        // ApiErrorParser.getResult(e, _v);
+        ApiErrorParser.getResult(e, _v);
       });
   }
 }

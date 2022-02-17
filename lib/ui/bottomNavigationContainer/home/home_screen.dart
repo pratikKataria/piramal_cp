@@ -222,7 +222,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
             style: textStyleWhite12px600w,
             scrollAxis: Axis.horizontal,
             crossAxisAlignment: CrossAxisAlignment.start,
-            blankSpace: 20.0,
+            blankSpace: 8.0,
             velocity: 50.0,
             pauseAfterRound: Duration(seconds: 1),
             startPadding: 10.0,
@@ -313,7 +313,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   @override
   void onEventFetched(List<CpEventResponse> brList) {
     events = "";
-    brList.forEach((element) => events = "$events ${element.eventName}      \u2022");
+    brList.forEach((element) => events = "$events${element.eventName}     \u2022    ");
     setState(() {});
   }
 
