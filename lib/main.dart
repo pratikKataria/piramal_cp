@@ -109,7 +109,7 @@ class MyApp extends StatelessWidget {
               return RouteTransition(widget: SignupScreen());
               break;
             case Screens.kUploadDocumentScreen:
-              return RouteTransition(widget: UploadDocumentScreen());
+              return RouteTransition(widget: UploadDocumentScreen(settings.arguments));
               break;
             case Screens.kEditLeadScreen:
               return RouteTransition(widget: EditLeadScreen(settings.arguments));

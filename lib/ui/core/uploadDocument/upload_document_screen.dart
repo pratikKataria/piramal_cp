@@ -5,16 +5,21 @@ import 'package:piramal_channel_partner/res/Images.dart';
 import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
 import 'package:piramal_channel_partner/ui/core/core_presenter.dart';
+import 'package:piramal_channel_partner/ui/core/login/model/login_response.dart';
 import 'package:piramal_channel_partner/ui/core/login/model/token_response.dart';
-import 'package:piramal_channel_partner/ui/core/signup/model/document_upload_request.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/document_upload_response.dart';
+import 'package:piramal_channel_partner/ui/core/signup/model/signup_request.dart';
+import 'package:piramal_channel_partner/ui/core/signup/model/signup_response.dart';
 import 'package:piramal_channel_partner/ui/core/uploadDocument/upload_document_view.dart';
+import 'package:piramal_channel_partner/user/AuthUser.dart';
+import 'package:piramal_channel_partner/utils/Dialogs.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
 import 'package:provider/provider.dart';
 
 class UploadDocumentScreen extends StatefulWidget {
-  const UploadDocumentScreen({Key key}) : super(key: key);
+  final SignupRequest request;
+  const UploadDocumentScreen(this.request, {Key key}) : super(key: key);
 
   @override
   _UploadDocumentScreenState createState() => _UploadDocumentScreenState();
@@ -33,7 +38,7 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> implements 
 
   List<String> typeOfFirms = [];
 
-  DocumentUploadRequest documentUploadRequest = DocumentUploadRequest();
+  // DocumentUploadRequest documentUploadRequest = DocumentUploadRequest();
   CorePresenter presenter;
 
   @override
@@ -69,7 +74,7 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> implements 
                   List<String> file = await Utility.pickFile(context);
                   String fileBytes = file[0];
                   String name = file[1];
-                  documentUploadRequest.reraCertificatePDF = fileBytes;
+                  widget.request.reraCertificatePDF = fileBytes;
                   reraFileName = name;
                   setState(() {});
                 },
@@ -81,7 +86,7 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> implements 
                   List<String> file = await Utility.pickFile(context);
                   String fileBytes = file[0];
                   String name = file[1];
-                  documentUploadRequest.PanCard = fileBytes;
+                  widget.request.panCard = fileBytes;
                   panCardFileName = name;
                   setState(() {});
                 },
@@ -93,7 +98,7 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> implements 
                   List<String> file = await Utility.pickFile(context);
                   String fileBytes = file[0];
                   String name = file[1];
-                  documentUploadRequest.lISTofDirectors = fileBytes;
+                  widget.request.lISTofDirectors = fileBytes;
                   directorsFileName = name;
                   setState(() {});
                 },
@@ -105,7 +110,7 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> implements 
                   List<String> file = await Utility.pickFile(context);
                   String fileBytes = file[0];
                   String name = file[1];
-                  documentUploadRequest.partnershipDeeds = fileBytes;
+                  widget.request.partnershipDeeds = fileBytes;
                   partnerShipFileName = name;
                   setState(() {});
                 },
@@ -117,7 +122,7 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> implements 
                   List<String> file = await Utility.pickFile(context);
                   String fileBytes = file[0];
                   String name = file[1];
-                  documentUploadRequest.listOfpartners = fileBytes;
+                  widget.request.listOfpartners = fileBytes;
                   partnersFileName = name;
                   setState(() {});
                 },
@@ -164,6 +169,7 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> implements 
               }).toList(),
               onChanged: (value) {
                 typeOfFirm = value;
+                widget?.request?.typeoffirm = typeOfFirm;
                 // relationManagerListResponse = value;
                 // signupRequest.relationshipManager = value;
                 // signupRequest.typeoffirm = value.
@@ -221,8 +227,10 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> implements 
       height: 36,
       text: "Next",
       onTap: () {
-        presenter.uploadDocument(context, documentUploadRequest);
 
+        presenter.singUp(context, widget.request);
+
+        // presenter.uploadDocument(context, documentUploadRequest);
         // var provider = Provider.of<BaseProvider>(context, listen: false);
         // provider.showToolTip();
         // Navigator.pushNamed(context, Screens.kHomeBase);
@@ -252,6 +260,26 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> implements 
     typeOfFirms.clear();
     typeOfFirms.addAll(brList);
     typeOfFirm = typeOfFirms?.first ?? "";
+    widget?.request?.typeoffirm = typeOfFirm;
     setState(() {});
+  }
+
+  @override
+  void onSignupSuccessfully(SignupResponse signupResponse) async {
+    LoginResponse loginResponse = LoginResponse();
+    loginResponse.accountId = signupResponse.brokerAccountID;
+
+    Dialogs.hideLoader(context);
+    var currentUser = await AuthUser.getInstance().getCurrentUser();
+    currentUser.userCredentials = loginResponse;
+    AuthUser.getInstance().login(currentUser);
+
+    Navigator.pop(context); // login
+    Navigator.pop(context); // signup
+    Navigator.pop(context); // upload
+    Navigator.pushNamed(context, Screens.kHomeBase);
+
+    var provider = Provider.of<BaseProvider>(context, listen: false);
+    provider.showToolTip();
   }
 }

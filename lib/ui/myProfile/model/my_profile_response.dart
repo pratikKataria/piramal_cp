@@ -14,7 +14,7 @@ class MyProfileResponse {
   MyProfileResponse({
     String typeOfFirm,
     String secondaryMobileNo,
-    int returnCode,
+    bool returnCode,
     String reraID,
     String profilepic,
     String primaryMobileNo,
@@ -53,7 +53,7 @@ class MyProfileResponse {
 
   String _typeOfFirm;
   String _secondaryMobileNo;
-  int _returnCode;
+  bool _returnCode;
   String _reraID;
   String _profilepic;
   String _primaryMobileNo;
@@ -67,7 +67,7 @@ class MyProfileResponse {
 
   String get secondaryMobileNo => _secondaryMobileNo;
 
-  int get returnCode => _returnCode;
+  bool get returnCode => _returnCode;
 
   String get reraID => _reraID;
 

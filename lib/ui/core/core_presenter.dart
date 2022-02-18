@@ -259,7 +259,7 @@ class CorePresenter {
         Dialogs.hideLoader(context);
         Utility.log(tag, response.data);
         SignupResponse signupResponse = SignupResponse.fromJson(response.data);
-        SignupView signUpView = _v as SignupView;
+        UploadDocumentView signUpView = _v as UploadDocumentView;
         if (signupResponse.returnCode)
           signUpView.onSignupSuccessfully(signupResponse);
         else

@@ -16,7 +16,7 @@ class SignupResponse {
   SignupResponse.fromJson(dynamic json) {
     _returnCode = json['returnCode'];
     _message = json['message'];
-    _brokerAccountID = json['BrokerAccountID'];
+    _brokerAccountID = json['MobileAppBrokerID'];
   }
 
   bool _returnCode;
@@ -33,7 +33,7 @@ class SignupResponse {
     final map = <String, dynamic>{};
     map['returnCode'] = _returnCode;
     map['message'] = _message;
-    map['BrokerAccountID'] = _brokerAccountID;
+    map['MobileAppBrokerID'] = _brokerAccountID;
     return map;
   }
 }

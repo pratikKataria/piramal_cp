@@ -327,8 +327,8 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
           return;
         }
 
-        corePresenter.singUp(context, signupRequest);
-        // Navigator.pushNamed(context, Screens.kUploadDocumentScreen);
+        // corePresenter.singUp(context, signupRequest);
+        Navigator.pushNamed(context, Screens.kUploadDocumentScreen, arguments: signupRequest);
       },
     );
   }

@@ -37,7 +37,11 @@ class MyProfilePresenter {
       ..then((response) {
         Dialogs.hideLoader(context);
         MyProfileResponse myAssistResponse = MyProfileResponse.fromJson(response.data);
-        _v.onProfileDataFetch(myAssistResponse);
+        if (myAssistResponse.returnCode) {
+          _v.onProfileDataFetch(myAssistResponse);
+        } else {
+          _v.onError(myAssistResponse.message);
+        }
       })
       ..catchError((e) {
         Dialogs.hideLoader(context);
