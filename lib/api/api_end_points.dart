@@ -12,7 +12,6 @@ class EndPoints {
   static const String VERIFY_EMAIL = BASE_URL + "/CP_Mobile_App/EmailLoginCP";
   static const String VERIFY_MOBILE = BASE_URL + "/CP_Mobile_App/MobileLogincp";
   static const String SEND_MOBILE_OTP = "https://bulkpush.mytoday.com/BulkSms/SingleMsgApi?";
-
   static const String GET_BOOKING = BASE_URL + "/CP_Mobile_App/OpportunityDetails";
   static const String GET_WALK_IN = BASE_URL + "/CP_Mobile_App/WalkinOpportunityDetails";
   static const String SCHEDULE_VISIT = BASE_URL + "/CP_Mobile_App/ScheduleSiteVisits";
@@ -32,7 +31,6 @@ class EndPoints {
   static const String GET_R_MANAGER_LIST = BASE_URL + "/CP_Mobile_App/RManagerList";
   static const String SIGN_UP = BASE_URL + "/CP_Mobile_App/CPEmpanelmentSignup";
   static const String CP_EMP_DOC_UPLOAD = BASE_URL + "/CP_Mobile_App/CPEmpalDocUpload";
-
   static const String MY_ASSIST = BASE_URL + "/CP_Mobile_App/MyAssist";
   static const String MY_PROFILE = BASE_URL + "/CP_Mobile_App/ProfileDetails";
   static const String TODAY_SV = BASE_URL + "/CP_Mobile_App/TodaysScheduleSite";
@@ -42,5 +40,5 @@ class EndPoints {
   static const String GET_COMMENTS = BASE_URL + "/CP_Mobile_App/Allfeedback";
   static const String ADD_COMMENTS = BASE_URL + "/CP_Mobile_App/createcpcomments";
   static const String PROFILE_PIC_UPLOAD = BASE_URL + "/CP_Mobile_App/ProfilePicUpdate";
-
+  static const String TERMS_AND_CONDITION = BASE_URL + "/CP_Mobile_App/TermsAndConditions";
 }

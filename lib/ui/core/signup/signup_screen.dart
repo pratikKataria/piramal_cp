@@ -10,6 +10,7 @@ import 'package:piramal_channel_partner/ui/core/login/model/token_response.dart'
 import 'package:piramal_channel_partner/ui/core/signup/model/relation_manager_list_response.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/signup_request.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/signup_response.dart';
+import 'package:piramal_channel_partner/ui/core/signup/model/terms_and_condition_response.dart';
 import 'package:piramal_channel_partner/ui/core/signup/signup_view.dart';
 import 'package:piramal_channel_partner/user/AuthUser.dart';
 import 'package:piramal_channel_partner/user/CurrentUser.dart';
@@ -218,7 +219,25 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
                       });
                     },
                   ),
-                  Text("I Agree to the Terms & Conditions", style: textStyle14px500w),
+                  InkWell(
+                    onTap: (){
+                      corePresenter.getTermsAndCondition(context);
+                    },
+                    child: Stack(
+                      children: [
+                        Text("I Agree to the Terms & Conditions", style: textStyle14px500w),
+                        Positioned(
+                          right: 0,
+                          left: 0,
+                          bottom: 0,
+                          child: Container(
+                            height: 1,
+                            color: AppColors.black,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                 ],
               ),
               loginButton(context),
@@ -393,5 +412,230 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
       mobileOTP = otp;
     else
       emailOTP = otp;
+  }
+
+  @override
+  void onTermsAndConditionFetched(TermsAndConditionResponse termsAndConditionResponse) {
+    showDetailDialog(context);
+  }
+
+  void showDetailDialog(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      contentPadding: EdgeInsets.all(0.0),
+      backgroundColor: Colors.transparent,
+      content: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(6),
+            ),
+            margin: EdgeInsets.all(10.0),
+            padding: EdgeInsets.all(10.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(''' I/flutter (24677): 
+I/flutter (24677): 
+I/flutter (24677): *****************
+I/flutter (24677): ApiController
+I/flutter (24677): Api Call :
+I/flutter (24677):  https://test.salesforce.com/services/oauth2/token 
+I/flutter (24677):  --> Inputs :
+I/flutter (24677):  Instance of 'FormData' 
+I/flutter (24677):  --> payload :
+I/flutter (24677):  null 
+I/flutter (24677):  --> header :
+I/flutter (24677):  null
+I/flutter (24677): *****************
+I/flutter (24677): 
+I/flutter (24677): 
+I/flutter (24677): 
+I/flutter (24677): *****************
+I/flutter (24677): ApiController
+I/flutter (24677): {"access_token":"00Dp00000001TjB!ARYAQO45x7P0fvhZXVwd5ltnqKMKgwx6Qbl6UDFLPvEv2OJI40uPNAAEnaHTfTx8ZAR8z05vsWVQXzoyX.q9vYtdzdgX3uir","instance_url":"https://prl--PRLAPP.my.salesforce.com","id":"https://test.salesforce.com/id/00Dp00000001TjBEAU/005p0000004R4ifAAC","token_type":"Bearer","issued_at":"1645188842233","signature":"N7IKUcGLJKEoGaYe/IHHRnb8VpHH0eoDap1wOFHOtik="}
+I/flutter (24677): *****************
+I/flutter (24677): 
+I/flutter (24677): 
+I/flutter (24677): 
+I/flutter (24677): *****************
+I/flutter (24677): user
+I/flutter (24677): {_userCredentials: null, _tokenResponse: {access_token: 00Dp00000001TjB!ARYAQO45x7P0fvhZXVwd5ltnqKMKgwx6Qbl6UDFLPvEv2OJI40uPNAAEnaHTfTx8ZAR8z05vsWVQXzoyX.q9vYtdzdgX3uir, instance_url: https://prl--PRLAPP.my.salesforce.com, id: https://test.salesforce.com/id/00Dp00000001TjBEAU/005p0000004R4ifAAC, token_type: Bearer, issued_at: 1645188842233, signature: N7IKUcGLJKEoGaYe/IHHRnb8VpHH0eoDap1wOFHOtik=}, isLogin: false}
+I/flutter (24677): *****************
+I/flutter (24677): 
+I/flutter (24677): 
+I/flutter (24677): 
+I/flutter (24677): *****************
+I/flutter (24677): AuthUser current user
+I/flutter (24677): {"_userCredentials":null,"_tokenResponse":{"access_token":"00Dp00000001TjB!ARYAQO45x7P0fvhZXVwd5ltnqKMKgwx6Qbl6UDFLPvEv2OJI40uPNAAEnaHTfTx8ZAR8z05vsWVQXzoyX.q9vYtdzdgX3uir","instance_url":"https://prl--PRLAPP.my.salesforce.com","id":"https://test.salesforce.com/id/00Dp00000001TjBEAU/005p0000004R4ifAAC","token_type":"Bearer","issued_at":"1645188842233","signature":"N7IKUcGLJKEoGaYe/IHHRnb8VpHH0eoDap1wOFHOtik="},"isLogin":false}
+I/flutter (24677): *****************
+I/flutter (24677): 
+I/flutter (24677): 
+I/flutter (24677): 
+I/flutter (24677): *****************
+I/flutter (24677): CorePresenter
+I/flutter (24677): 1463
+I/flutter (24677): *****************
+I/flutter (24677): 
+I/flutter (24677): 
+I/flutter (24677): 
+I/flutter (24677): *****************
+I/flutter (24677): AuthUser current user
+I/flutter (24677): {"_userCredentials":null,"_tokenResponse":{"access_token":"00Dp00000001TjB!ARYAQO45x7P0fvhZXVwd5ltnqKMKgwx6Qbl6UDFLPvEv2OJI40uPNAAEnaHTfTx8ZAR8z05vsWVQXzoyX.q9vYtdzdgX3uir","instance_url":"https://prl--PRLAPP.my.salesforce.com","id":"https://test.salesforce.com/id/00Dp00000001TjBEAU/005p0000004R4ifAAC","token_type":"Bearer","issued_at":"1645188842233","signature":"N7IKUcGLJKEoGaYe/IHHRnb8VpHH0eoDap1wOFHOtik="},"isLogin":false}
+I/flutter (24677): *****************
+I/flutter (24677): 
+I/flutter (24677): 
+I/flutter (24677): 
+I/flutter (24677): *****************
+I/flutter (24677): AuthUser
+I/flutter (24677): User Token: 00Dp00000001TjB!ARYAQO45x7P0fvhZXVwd5ltnqKMKgwx6Qbl6UDFLPvEv2OJI40uPNAAEnaHTfTx8ZAR8z05vsWVQXzoyX.q9vYtdzdgX3uir
+I/flutter (24677): *****************
+I/flutter (24677): 
+I/flutter (24677): 
+I/flutter (24677): 
+I/flutter (24677): *****************
+I/flutter (24677): ApiController
+I/flutter (24677): Api Call :
+I/flutter (24677):  https://prl--PRLAPP.my.salesforce.com/services/apexrest/CP_Mobile_App/EmailOTPCP 
+I/flutter (24677):  --> Inputs :
+I/flutter (24677):  {EmailId: niji@gmail.com, GenOTP: 1463} 
+I/flutter (24677):  --> payload :
+I/flutter (24677):  null 
+I/flutter (24677):  --> header :
+I/flutter (24677):  {Authorization: Bearer 00Dp00000001TjB!ARYAQO45x7P0fvhZXVwd5ltnqKMKgwx6Qbl6UDFLPvEv2OJI40uPNAAEnaHTfTx8ZAR8z05vsWVQXzoyX.q9vYtdzdgX3uir}
+I/flutter (24677): *****************
+I/flutter (24677): 
+I/flutter (24677): 
+I/flutter (24677): 
+I/flutter (24677): *****************
+I/flutter (24677): ApiController
+I/flutter (24677): {"returnCode":false,"message":"Please Enter Registered Email Id"}
+I/flutter (24677): *****************
+I/flutter (24677): 
+I/flutter (24677): Hide Loader true
+I/flutter (24677): Hide Loader false
+W/IInputConnectionWrapper(24677): getTextBeforeCursor on inactive InputConnection
+W/IInputConnectionWrapper(24677): getSelectedText on inactive InputConnection
+W/IInputConnectionWrapper(24677): getTextAfterCursor on inactive InputConnection
+W/IInputConnectionWrapper(24677): beginBatchEdit on inactive InputConnection
+W/IInputConnectionWrapper(24677): getTextBeforeCursor on inactive InputConnection
+W/IInputConnectionWrapper(24677): endBatchEdit on inactive InputConnection
+I/flutter (24677): Base consumer rebuilding ... Navigator-[LabeledGlobalKey<NavigatorState>#d10aa]
+
+======== Exception caught by foundation library ====================================================
+The following assertion was thrown while dispatching notifications for BaseProvider:
+setState() or markNeedsBuild() called during build.
+
+This _InheritedProviderScope<BaseProvider> widget cannot be marked as needing to build because the framework is already in the process of building widgets.  A widget can be marked as needing to be built during the build phase only if one of its ancestors is currently building. This exception is allowed because the framework builds parent widgets before children, which means a dirty descendant will always be built. Otherwise, the framework might not visit this widget during this build phase.
+The widget on which setState() or markNeedsBuild() was called was: _InheritedProviderScope<BaseProvider>
+  value: Instance of 'BaseProvider'
+  listening to value
+The widget which was currently being built when the offending call was made was: HomeScreen
+  dirty
+  dependencies: [_EffectiveTickerMode]
+  state: _HomeScreenState#379f7(ticker inactive and muted)
+When the exception was thrown, this was the stack: 
+#0      Element.markNeedsBuild.<anonymous closure> (package:flutter/src/widgets/framework.dart:4217:11)
+#1      Element.markNeedsBuild (package:flutter/src/widgets/framework.dart:4232:6)
+#2      _InheritedProviderScopeElement.markNeedsNotifyDependents (package:provider/src/inherited_provider.dart:496:5)
+#3      ChangeNotifier.notifyListeners (package:flutter/src/foundation/change_notifier.dart:243:25)
+#4      BaseProvider.showToolTip (package:piramal_channel_partner/ui/base/provider/base_provider.dart:52:5)
+...
+The BaseProvider sending notification was: Instance of 'BaseProvider'
+====================================================================================================
+
+======== Exception caught by foundation library ====================================================
+The following assertion was thrown while dispatching notifications for BaseProvider:
+setState() or markNeedsBuild() called during build.
+
+This _InheritedProviderScope<BaseProvider> widget cannot be marked as needing to build because the framework is already in the process of building widgets.  A widget can be marked as needing to be built during the build phase only if one of its ancestors is currently building. This exception is allowed because the framework builds parent widgets before children, which means a dirty descendant will always be built. Otherwise, the framework might not visit this widget during this build phase.
+The widget on which setState() or markNeedsBuild() was called was: _InheritedProviderScope<BaseProvider>
+  value: Instance of 'BaseProvider'
+  listening to value
+The widget which was currently being built when the offending call was made was: LoginScreen
+  dirty
+  dependencies: [MediaQuery]
+  state: _LoginScreenState#11d01
+When the exception was thrown, this was the stack: 
+#0      Element.markNeedsBuild.<anonymous closure> (package:flutter/src/widgets/framework.dart:4217:11)
+#1      Element.markNeedsBuild (package:flutter/src/widgets/framework.dart:4232:6)
+#2      _InheritedProviderScopeElement.markNeedsNotifyDependents (package:provider/src/inherited_provider.dart:496:5)
+#3      ChangeNotifier.notifyListeners (package:flutter/src/foundation/change_notifier.dart:243:25)
+#4      BaseProvider.hideToolTip (package:piramal_channel_partner/ui/base/provider/base_provider.dart:47:5)
+...
+The BaseProvider sending notification was: Instance of 'BaseProvider'
+====================================================================================================
+I/flutter (24677): Base consumer rebuilding ... Navigator-[LabeledGlobalKey<NavigatorState>#d10aa]
+
+======== Exception caught by foundation library ====================================================
+The following assertion was thrown while dispatching notifications for BaseProvider:
+setState() or markNeedsBuild() called during build.
+
+This _InheritedProviderScope<BaseProvider> widget cannot be marked as needing to build because the framework is already in the process of building widgets.  A widget can be marked as needing to be built during the build phase only if one of its ancestors is currently building. This exception is allowed because the framework builds parent widgets before children, which means a dirty descendant will always be built. Otherwise, the framework might not visit this widget during this build phase.
+The widget on which setState() or markNeedsBuild() was called was: _InheritedProviderScope<BaseProvider>
+  value: Instance of 'BaseProvider'
+  listening to value
+The widget which was currently being built when the offending call was made was: HomeScreen
+  dirty
+  dependencies: [_EffectiveTickerMode]
+  state: _HomeScreenState#379f7(ticker inactive and muted)
+When the exception was thrown, this was the stack: 
+#0      Element.markNeedsBuild.<anonymous closure> (package:flutter/src/widgets/framework.dart:4217:11)
+#1      Element.markNeedsBuild (package:flutter/src/widgets/framework.dart:4232:6)
+#2      _InheritedProviderScopeElement.markNeedsNotifyDependents (package:provider/src/inherited_provider.dart:496:5)
+#3      ChangeNotifier.notifyListeners (package:flutter/src/foundation/change_notifier.dart:243:25)
+#4      BaseProvider.showToolTip (package:piramal_channel_partner/ui/base/provider/base_provider.dart:52:5)
+...
+The BaseProvider sending notification was: Instance of 'BaseProvider'
+====================================================================================================
+
+======== Exception caught by foundation library ====================================================
+The following assertion was thrown while dispatching notifications for BaseProvider:
+setState() or markNeedsBuild() called during build.
+
+This _InheritedProviderScope<BaseProvider> widget cannot be marked as needing to build because the framework is already in the process of building widgets.  A widget can be marked as needing to be built during the build phase only if one of its ancestors is currently building. This exception is allowed because the framework builds parent widgets before children, which means a dirty descendant will always be built. Otherwise, the framework might not visit this widget during this build phase.
+The widget on which setState() or markNeedsBuild() was called was: _InheritedProviderScope<BaseProvider>
+  value: Instance of 'BaseProvider'
+  listening to value
+The widget which was currently being built when the offending call was made was: LoginScreen
+  dirty
+  dependencies: [MediaQuery]
+  state: _LoginScreenState#11d01
+When the exception was thrown, this was the stack: 
+#0      Element.markNeedsBuild.<anonymous closure> (package:flutter/src/widgets/framework.dart:4217:11)
+#1      Element.markNeedsBuild (package:flutter/src/widgets/framework.dart:4232:6)
+#2      _InheritedProviderScopeElement.markNeedsNotifyDependents (package:provider/src/inherited_provider.dart:496:5)
+#3      ChangeNotifier.notifyListeners (package:flutter/src/foundation/change_notifier.dart:243:25)
+#4      BaseProvider.hideToolTip (package:piramal_channel_partner/ui/base/provider/base_provider.dart:47:5)
+...
+The BaseProvider sending notification was: Instance of 'BaseProvider'
+====================================================================================================
+ '''),
+              ],
+            ),
+          ),
+          Positioned(
+            right: 0,
+            top: 0,
+            child: PmlButton(
+              width: 30,
+              height: 30,
+              color: AppColors.colorPrimary,
+              child: Icon(Icons.close, color: AppColors.white, size: 16.0),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }

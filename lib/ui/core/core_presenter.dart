@@ -15,6 +15,7 @@ import 'package:piramal_channel_partner/ui/core/signup/model/document_upload_res
 import 'package:piramal_channel_partner/ui/core/signup/model/relation_manager_list_response.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/signup_request.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/signup_response.dart';
+import 'package:piramal_channel_partner/ui/core/signup/model/terms_and_condition_response.dart';
 import 'package:piramal_channel_partner/ui/core/signup/signup_view.dart';
 import 'package:piramal_channel_partner/ui/core/uploadDocument/upload_document_view.dart';
 import 'package:piramal_channel_partner/user/AuthUser.dart';
@@ -353,6 +354,32 @@ class CorePresenter {
       })
       ..catchError((e) {
         Dialogs.hideLoader(context);
+        ApiErrorParser.getResult(e, _v);
+      });
+  }
+
+  void getTermsAndCondition(BuildContext context) async {
+    //check for internal token
+    if (await AuthUser.getInstance().hasToken()) {
+      _v.onError("Token not found");
+      return;
+    }
+
+    //check network
+    if (!await NetworkCheck.check()) return;
+
+    apiController.post(EndPoints.TERMS_AND_CONDITION, headers: await Utility.header())
+      ..then((response) {
+        Utility.log(tag, response.data);
+        TermsAndConditionResponse termsAndConditionResponse = TermsAndConditionResponse();
+        SignupView view = _v as SignupView ;
+        if (termsAndConditionResponse.returnCode) {
+          view.onTermsAndConditionFetched(termsAndConditionResponse);
+        } else {
+          _v.onError(termsAndConditionResponse.message);
+        }
+      })
+      ..catchError((e) {
         ApiErrorParser.getResult(e, _v);
       });
   }
