@@ -71,7 +71,7 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
                   horizontalSpace(8.0),
                   InkWell(
                     onTap: () {
-                      launch("tel://${widget.response?.name ?? ""}");
+                      launch("tel://${widget.response?.mobilenumber ?? ""}");
                     },
                     child: Container(
                       width: 35,
@@ -233,9 +233,9 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
     switch (response?.status) {
       case "9.9% received":
         return Images.kImagePD1;
-      case "Invoice Approved":
-        return Images.kImagePD2;
       case "Eligible to raise Invoice":
+        return Images.kImagePD2;
+      case "Invoice Approved":
         return Images.kImagePD3;
       case "Payment Released":
         return Images.kImagePD4;
@@ -365,3 +365,6 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
     setState(() {});
   }
 }
+// '"Eligible to Raise Invoice"
+// and "Invoice Approved"
+// values are swapped in app when  selected in SFDC
