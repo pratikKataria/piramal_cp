@@ -301,7 +301,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     AuthUser.getInstance().updateUser(currentUser);
 
     //sent request again
-    _homePresenter.getWalkInList(context);
+    _homePresenter.getWalkInListV2(context);
   }
 
   @override

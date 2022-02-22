@@ -29,7 +29,8 @@ class ApiController {
   Future<Response> post(String url, {Map headers, body, encoding, payload}) async {
     Map<String, String> headersMap = headers ?? {};
     // headersMap["NoEncryption"] = 'true';
-    Utility.log(tag, "Api Call :\n $url \n --> Inputs :\n $body \n --> payload :\n ${payload.toString()} \n --> header :\n $headers");
+    Utility.log(
+        tag, "Api Call :\n $url \n --> Inputs :\n $body \n --> payload :\n ${payload.toString()} \n --> header :\n $headers");
     Response response = await dio.post(
       url,
       data: body,
@@ -43,14 +44,18 @@ class ApiController {
       ),
     );
 
-    Utility.log(tag, response.toString());
+    Utility.log(
+      tag,
+      "Api Call :\n $url \n --> Inputs :\n $body \n --> payload :\n ${payload.toString()} \n --> header :\n $headers \n --> Response :\n ${response.toString()}",
+    );
     return response;
   }
 
   Future<Response> postV2(String url, {Map text, encoding, payload, String body}) async {
     Map<String, String> headersMap = text ?? {};
     // headersMap["NoEncryption"] = 'true';
-    Utility.log(tag, "Api Call :\n $url \n --> Inputs :\n ${body.toString()} \n --> payload :\n ${payload.toString()} \n --> header :\n ${text.toString()}");
+    Utility.log(tag,
+        "Api Call :\n $url \n --> Inputs :\n ${body.toString()} \n --> payload :\n ${payload.toString()} \n --> header :\n ${text.toString()}");
     Response response = await dio.post(
       url,
       data: body,
@@ -64,7 +69,10 @@ class ApiController {
       ),
     );
 
-    Utility.log(tag, response.toString());
+    Utility.log(
+      tag,
+      "Api Call :\n $url \n --> Inputs :\n $body \n --> payload :\n ${payload.toString()} \n --> Response :\n ${response.toString()}",
+    );
     return response;
   }
 
@@ -86,7 +94,10 @@ class ApiController {
       ),
     );
 
-    Utility.log(tag, response.toString());
+    Utility.log(
+      tag,
+      "Api Call :\n $url \n --> Inputs :\n $body \n --> payload :\n ${payload.toString()} \n --> header :\n $headers \n --> Response :\n ${response.toString()}",
+    );
     return response;
   }
 
@@ -108,7 +119,10 @@ class ApiController {
       ),
     );
 
-    Utility.log(tag, response.toString());
+    Utility.log(
+      tag,
+      "Api Call :\n $url \n --> Inputs :\n $body \n --> payload :\n ${payload.toString()} \n --> header :\n $headers \n --> Response :\n ${response.toString()}",
+    );
     return response;
   }
 
@@ -127,7 +141,10 @@ class ApiController {
           headers: headerMap,
         ));
 
-    Utility.log(tag, response.toString());
+    Utility.log(
+      tag,
+      "Api Call :\n $url \n --> Inputs :\n $body \n --> payload :\n ${payload.toString()} \n --> header :\n $headers \n --> Response :\n ${response.toString()}",
+    );
     return response;
   }
 
@@ -145,7 +162,10 @@ class ApiController {
           headers: headerMap,
         ));
 
-    Utility.log(tag, response.toString());
+    Utility.log(
+      tag,
+      "Api Call :\n $url \n --> Inputs :\n $body \n --> payload :\n ${payload.toString()} \n --> header :\n $headers \n --> Response :\n ${response.toString()}",
+    );
     return response;
   }
 
@@ -166,8 +186,10 @@ class ApiController {
           headers: headerMap,
         ));
 
-    Utility.log(tag, response.toString());
+    Utility.log(
+      tag,
+      "Api Call :\n $url \n --> Inputs :\n $body \n --> payload :\n ${payload.toString()} \n --> header :\n $headers \n --> Response :\n ${response.toString()}",
+    );
     return response;
   }
-
 }

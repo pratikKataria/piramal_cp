@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/api/api_controller_expo.dart';
 import 'package:piramal_channel_partner/api/api_end_points.dart';
 import 'package:piramal_channel_partner/api/api_error_parser.dart';
@@ -368,10 +369,12 @@ class CorePresenter {
     //check network
     if (!await NetworkCheck.check()) return;
 
+    Dialogs.showLoader(context, "Getting terms and condition please wait ...");
     apiController.post(EndPoints.TERMS_AND_CONDITION, headers: await Utility.header())
       ..then((response) {
         Utility.log(tag, response.data);
-        TermsAndConditionResponse termsAndConditionResponse = TermsAndConditionResponse();
+        Dialogs.hideLoader(context);
+        TermsAndConditionResponse termsAndConditionResponse = TermsAndConditionResponse.fromJson(response.data);
         SignupView view = _v as SignupView ;
         if (termsAndConditionResponse.returnCode) {
           view.onTermsAndConditionFetched(termsAndConditionResponse);
@@ -380,6 +383,7 @@ class CorePresenter {
         }
       })
       ..catchError((e) {
+        Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }

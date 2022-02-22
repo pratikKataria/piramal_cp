@@ -47,7 +47,7 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
               verticalSpace(20.0),
               //customer pic with name and time
               Text("${widget.response?.name}", style: textStyleRegular18pxW500),
-              Text("Next Follow up: Not Available", style: textStyleSubText14px500w),
+              Text("Next Follow up: ${Utility.formatDate(widget?.response?.nextFollowUp)}", style: textStyleSubText14px500w),
 
               //calender call whatsapp
               verticalSpace(12.0),

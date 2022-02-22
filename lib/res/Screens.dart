@@ -24,6 +24,7 @@ abstract class Screens {
    static const kSignupScreen = "kSignupScreen";
    static const kUploadDocumentScreen = "kUploadDocumentScreen";
    static const kEditLeadScreen = "kEditLeadScreen";
+   static const kUploadPendingDocumentScreen = "kUploadPendingDocumentScreen";
 
    static const kErrorTxt = "No Data Found";
 }

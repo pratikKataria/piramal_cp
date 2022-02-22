@@ -8,10 +8,11 @@ import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/schedule_visit_response.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/booked/model/invoice_response.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/customer_profile_presenter.dart';
-import 'package:piramal_channel_partner/ui/customerProfile/walkin/chatresponse.dart';
+import 'package:piramal_channel_partner/ui/customerProfile/walkin/model/chatresponse.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/walkin/walkin_view.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
+import 'package:piramal_channel_partner/widgets/refresh_list_view.dart';
 import 'package:piramal_channel_partner/widgets/whats_app_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -45,7 +46,10 @@ class _WalkinCustomerProfileDetailScreenState extends State<WalkinCustomerProfil
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 2.0),
-      child: ListView(
+      child: RefreshListView(
+        onRefresh: () {
+          presenter.getCommentList(context, widget.response.sfdcid);
+        },
         children: [
           verticalSpace(20.0),
           //customer pic with name and time
@@ -64,7 +68,7 @@ class _WalkinCustomerProfileDetailScreenState extends State<WalkinCustomerProfil
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text("${widget.response?.name}", style: textStyleRegular18pxW500),
-                  Text("Next Follow up: Not Available", style: textStyleSubText14px500w),
+                  Text("Next Follow up: ${Utility.formatDate(widget.response?.nextFollowUp)}", style: textStyleSubText14px500w),
                 ],
               ),
             ],
@@ -166,7 +170,7 @@ class _WalkinCustomerProfileDetailScreenState extends State<WalkinCustomerProfil
 
   getFormattedDate(String date) {
     if (date == null) return "";
-    DateTime dateTime = DateTime.parse(date);
+    DateTime dateTime = DateTime.parse(date).toLocal();
     String formattedDate = DateFormat("MMM dd, yyyy").format(dateTime);
     return formattedDate;
   }
@@ -207,35 +211,24 @@ class _WalkinCustomerProfileDetailScreenState extends State<WalkinCustomerProfil
 
         verticalSpace(20.0),
 
-        ...commentBuilder(chatresponse?.allFeedbacks),
+        ...commentBuilder(chatresponse?.cm),
       ],
     );
   }
 
-  commentBuilder(String allComments) {
+  commentBuilder(List<CM> allComments) {
     List<Widget> commentWidgets = [];
     if (allComments == null || allComments.isEmpty) {
       commentWidgets.add(Text("No Data"));
       return commentWidgets;
     }
-
-    List<String> s = allComments.split("\r");
-    List<String> temp = [];
-    temp.clear();
-    temp.addAll(s.reversed);
-    s.clear();
-    s.addAll(temp);
-
-    for (String c in s) {
+    for (CM c in allComments) {
       commentWidgets.add(verticalSpace(10.0));
-      if (c.endsWith("(CP)")) {
-        commentWidgets.add(Align(alignment: Alignment.centerRight, child: RightChatWidget(c)));
+      if (c.commentByCP) {
+        commentWidgets.add(Align(alignment: Alignment.centerRight, child: RightChatWidget(c?.feedback)));
         print("cp comment --- $c");
       } else {
-        commentWidgets.add(LeftChatWidget(
-          name: "Maryam Kapur (SM)",
-          chatText: "$c",
-        ));
+        commentWidgets.add(LeftChatWidget(name: "Maryam Kapur (SM)", chatText: "${c?.feedback}"));
         print("SM comment --- $c");
       }
     }
@@ -390,3 +383,29 @@ class _WalkinCustomerProfileDetailScreenState extends State<WalkinCustomerProfil
     print("no visit found");
   }
 }
+
+/*
+
+    List<String> s = allComments.split("\r");
+    List<String> temp = [];
+    temp.clear();
+    temp.addAll(s.reversed);
+    s.clear();
+    s.addAll(temp);
+
+    for (String c in s) {
+      commentWidgets.add(verticalSpace(10.0));
+      if (c.endsWith("(CP)")) {
+        commentWidgets.add(Align(alignment: Alignment.centerRight, child: RightChatWidget(c)));
+        print("cp comment --- $c");
+      } else {
+        commentWidgets.add(LeftChatWidget(
+          name: "Maryam Kapur (SM)",
+          chatText: "$c",
+        ));
+        print("SM comment --- $c");
+      }
+    }
+
+
+*/

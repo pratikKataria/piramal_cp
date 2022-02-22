@@ -18,6 +18,7 @@ import 'package:piramal_channel_partner/ui/lead/editLead/edit_lead_screen.dart';
 import 'package:piramal_channel_partner/ui/lead/lead_screen.dart';
 import 'package:piramal_channel_partner/ui/myAssit/projectList/project_screen.dart';
 import 'package:piramal_channel_partner/ui/myProfile/my_profile.dart';
+import 'package:piramal_channel_partner/ui/myProfile/uploadPendingDocument/upload_pending_document_screen.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/projectList/project_screen.dart';
 import 'package:piramal_channel_partner/utils/scroll_behavior.dart';
 import 'package:provider/provider.dart';
@@ -110,6 +111,9 @@ class MyApp extends StatelessWidget {
               break;
             case Screens.kUploadDocumentScreen:
               return RouteTransition(widget: UploadDocumentScreen(settings.arguments));
+              break;
+            case Screens.kUploadPendingDocumentScreen:
+              return RouteTransition(widget: UploadPendingDocumentScreen(settings.arguments));
               break;
             case Screens.kEditLeadScreen:
               return RouteTransition(widget: EditLeadScreen(settings.arguments));

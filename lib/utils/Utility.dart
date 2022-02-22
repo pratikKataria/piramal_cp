@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
@@ -269,19 +270,19 @@ class Utility {
   }
 
   static String calculateReturnDateString(String deliveryDate, int timePeriodDays) {
-    DateTime deliveryDateTime = DateTime.parse(deliveryDate);
+    DateTime deliveryDateTime = DateTime.parse(deliveryDate).toLocal();;
     DateTime returnTime = DateTime(deliveryDateTime.year, deliveryDateTime.month, deliveryDateTime.day + 7);
     return '${returnTime.day}/${returnTime.month}/${returnTime.year}';
   }
 
   static DateTime calculateReturnDate(String deliveryDate, int timePeriodDays) {
-    DateTime deliveryDateTime = DateTime.parse(deliveryDate);
+    DateTime deliveryDateTime = DateTime.parse(deliveryDate).toLocal();;
     DateTime returnTime = DateTime(deliveryDateTime.year, deliveryDateTime.month, deliveryDateTime.day + 7);
     return returnTime;
   }
 
   static int calculateExtendDays(String deliveryDate, int timePeriodDays) {
-    DateTime deliveryDateTime = DateTime.parse(deliveryDate);
+    DateTime deliveryDateTime = DateTime.parse(deliveryDate).toLocal();;
     DateTime returnDate = calculateReturnDate(deliveryDate, timePeriodDays);
     int days = deliveryDateTime.difference(returnDate).inDays;
     return days;
@@ -312,6 +313,15 @@ class Utility {
         ],
       ),
     );
+  }
+
+  static String formatDate(String date) {
+    if (date != null && date.isNotEmpty) {
+      DateTime dateTime = DateTime.parse(date).toLocal();;
+      String formattedDate = DateFormat("MMM dd").format(dateTime);
+      return formattedDate;
+    }
+    return "Not Available";
   }
 
   static Future<Map<String, String>> header() async {
@@ -391,7 +401,7 @@ class Utility {
     try {
       FilePickerResult result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
-        allowedExtensions: ['jpeg',"jpg"],
+        allowedExtensions: ['jpeg', "jpg"],
       );
 
       File file = File(result.files.single.path);
@@ -403,7 +413,6 @@ class Utility {
       return "";
     }
   }
-
 
   static void launchUrlX(BuildContext context, String file) {
     if (file == null || file.isEmpty) {

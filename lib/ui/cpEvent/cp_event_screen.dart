@@ -89,7 +89,7 @@ class _CPEventScreenState extends State<CPEventScreen> implements CPEventView {
             height: 130.0,
             decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: NetworkImage("${cpEventData?.eventImage??""}") /*MemoryImage(Utility.convertMemoryImage(cpEventData.eventImage))*/,
+                  image: /*NetworkImage("${cpEventData?.eventImage??""}") */MemoryImage(Utility.convertMemoryImage(cpEventData.eventImage)),
                   fit: BoxFit.fill,
                 )),
           ),
@@ -166,16 +166,17 @@ class _CPEventScreenState extends State<CPEventScreen> implements CPEventView {
   getFormattedDate(String date) {
     if (date == null || date.isEmpty) return "";
 
-    DateTime dateTime = DateTime.parse(date);
+    DateTime dateTime = DateTime.parse(date).toLocal();
     String formattedDate = DateFormat("MMM dd, yyyy").format(dateTime);
     return formattedDate;
   }
 
   getFormattedTime(String dTime) {
+    print(dTime);
     if (dTime == null || dTime.isEmpty) return "";
 
-    DateTime dateTime = DateTime.parse(dTime);
-    String formattedDate = DateFormat("hh:mm a").format(dateTime);
+    DateTime dateTime = DateTime.parse(dTime).toLocal();
+    String formattedDate = DateFormat("hh:mm aa").format(dateTime);
     return formattedDate;
   }
 

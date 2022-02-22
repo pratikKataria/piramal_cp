@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
+import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/ui/myProfile/model/my_profile_response.dart';
 import 'package:piramal_channel_partner/ui/myProfile/my_profile_presenter.dart';
 import 'package:piramal_channel_partner/ui/myProfile/my_profile_view.dart';
@@ -74,6 +75,24 @@ class _MyProfileScreenState extends State<MyProfileScreen> implements MyProfileV
                   height: 32.0,
                   width: 32.0,
                   child: Icon(Icons.edit, color: AppColors.white, size: 16),
+                  onTap: () async {
+                    bool allDocumentUploaded = assistResponse.listOfpartnersPDFUPLOADED &&
+                        assistResponse.lISTofDirectorsPDFUPLOADED &&
+                        assistResponse.panCardPDFUPLOADED &&
+                        assistResponse.reraCertificatePDFUPLOADED &&
+                        assistResponse.partnershipDeedsPDFUPLOADED;
+
+                    if (allDocumentUploaded) {
+                      Utility.showSuccessToastB(context, "All documents already uploaded");
+                      return;
+                    }
+
+                    var hasUpdate =
+                        await Navigator.pushNamed(context, Screens.kUploadPendingDocumentScreen, arguments: assistResponse);
+                    if (hasUpdate is bool && hasUpdate) {
+                      leadPresenter.getProfileDataS(context);
+                    }
+                  },
                 )
               ],
             ),

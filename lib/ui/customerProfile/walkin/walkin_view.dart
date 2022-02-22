@@ -1,5 +1,5 @@
 import 'package:piramal_channel_partner/ui/customerProfile/customer_profile_view.dart';
-import 'package:piramal_channel_partner/ui/customerProfile/walkin/chatresponse.dart';
+import 'package:piramal_channel_partner/ui/customerProfile/walkin/model/chatresponse.dart';
 
 abstract class WalkinView implements CustomerProfileView {
   void onWalkinCommentFetched(List<Chatresponse> projectListResponse);

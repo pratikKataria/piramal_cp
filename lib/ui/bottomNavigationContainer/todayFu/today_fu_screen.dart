@@ -196,7 +196,7 @@ class _TodayFollowUpScreenState extends State<TodayFollowUpScreen> with SingleTi
     walkInListWidgets.clear();
     brList.forEach((element) {
       if (!element.returnCode) {
-        onError(element.message);
+        // onError(element.message);
         return;
       }
 

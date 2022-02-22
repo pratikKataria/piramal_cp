@@ -161,7 +161,7 @@ class HomePresenter {
     }
 
     String uID = await Utility.uID();
-    String formattedDate = DateFormat("yyyy-MM-ddTHH:mm:ss").format(visitDate);
+    String formattedDate = DateFormat("yyyy-MM-ddThh:mm:ss").format(visitDate);
     var body = {
       "OpportunityId": "$otyId",
       "scheduleDateTime": "$formattedDate",

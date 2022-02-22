@@ -57,7 +57,7 @@ class BookingCardWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text("${_bookingResponse?.name ?? ""}", style: textStyleRegular18pxW500),
-                    Text("Next Follow up: Not Available", style: textStyleSubText14px500w),
+                    Text("Next Follow up: ${Utility.formatDate(_bookingResponse.nextFollowUp)}", style: textStyleSubText14px500w),
                   ],
                 ),
               ],
@@ -226,7 +226,7 @@ class BookingCardWidget extends StatelessWidget {
       datePicked.second,
       datePicked.millisecond,
       datePicked.microsecond,
-    );
+    ).toLocal();
 
     if (picked != null) {
       _presenter.scheduleTime(context, _bookingResponse.sfdcid, x);

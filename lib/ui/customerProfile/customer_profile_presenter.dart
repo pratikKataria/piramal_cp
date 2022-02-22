@@ -3,12 +3,13 @@ import 'package:intl/intl.dart';
 import 'package:piramal_channel_partner/api/api_controller_expo.dart';
 import 'package:piramal_channel_partner/api/api_end_points.dart';
 import 'package:piramal_channel_partner/api/api_error_parser.dart';
+import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/ui/base/base_presenter.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/project_unit_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/schedule_visit_response.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/booked/model/invoice_response.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/customer_profile_view.dart';
-import 'package:piramal_channel_partner/ui/customerProfile/walkin/chatresponse.dart';
+import 'package:piramal_channel_partner/ui/customerProfile/walkin/model/chatresponse.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/walkin/walkin_view.dart';
 import 'package:piramal_channel_partner/user/AuthUser.dart';
 import 'package:piramal_channel_partner/utils/Dialogs.dart';
@@ -35,7 +36,7 @@ class CustomerProfilePresenter extends BasePresenter {
     }
 
     String uID = await Utility.uID();
-    String formattedDate = DateFormat("yyyy-MM-ddTHH:mm:ss").format(visitDate);
+    String formattedDate = DateFormat("yyyy-MM-ddThh:mm:ss").format(visitDate);
     var body = {
       "OpportunityId": "$otyId",
       "scheduleDateTime": "$formattedDate",
@@ -76,7 +77,7 @@ class CustomerProfilePresenter extends BasePresenter {
     var body = {"CustomerAccountId": "$uID", "CustomerOpportunityId": "$otyID"};
 
     Dialogs.showLoader(context, "Fetching unit details ...");
-    apiController.post(EndPoints.GET_COMMENTS, body: body, headers: await Utility.header())
+    apiController.post(EndPoints.UNIT_DETAIL, body: body, headers: await Utility.header())
       ..then((response) {
         Dialogs.hideLoader(context);
         ProjectUnitResponse projectUnitResponse = ProjectUnitResponse.fromJson(response.data);
@@ -102,7 +103,7 @@ class CustomerProfilePresenter extends BasePresenter {
     }
 
     String uID = await Utility.uID();
-    var body = {"CustomerAccountId": "$uID", "CustomerOpportunityId": "$otyID"};
+    var body = {"CustomerAccountID": "$uID", "opportunityid": "$otyID"};
 
     // var body = {"CustomerAccountID": "001p000000y1SqWAAU", "opportunityid": "006p000000AeMAtAAN"};
     Dialogs.showLoader(context, "Fetching details ...");
@@ -166,6 +167,7 @@ class CustomerProfilePresenter extends BasePresenter {
     }
 
     var body = {"OpportunityID": "$oID"} /*006p000000Ac0Gn*/;
+    // var body = {"OpportunityID": "006p000000Ac0Gn"} /*006p000000Ac0Gn*/;
 
     Dialogs.showLoader(context, "Please wait fetching your project list ...");
     apiController.post(EndPoints.GET_COMMENTS, body: body, headers: await Utility.header())
@@ -174,9 +176,20 @@ class CustomerProfilePresenter extends BasePresenter {
         List<Chatresponse> projectListResponse = [];
         var listOfDynamic = response.data as List;
         listOfDynamic.forEach((element) => projectListResponse.add(Chatresponse.fromJson(element)));
+
+        Chatresponse bookingResponse = projectListResponse.isNotEmpty ? projectListResponse.first : null;
+        if (bookingResponse == null) {
+          _v.onError(Screens.kErrorTxt);
+          return;
+        }
+
         WalkinView v = _v as WalkinView;
-        if (projectListResponse.isNotEmpty) v.onWalkinCommentFetched(projectListResponse);
-        else v.onNoVisitFound();
+        if (bookingResponse.returnCode) {
+          v.onWalkinCommentFetched(projectListResponse);
+        } else {
+          // _v.onError(bookingResponse.message);
+          v.onNoVisitFound();
+        }
       })
       ..catchError((e) {
         Dialogs.hideLoader(context);

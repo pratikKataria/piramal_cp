@@ -88,8 +88,8 @@ class ProjectDetailTowerPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("${response?.projectName ?? ""}", style: textStyle24px500w),
-                Text("${response?.towerName ?? ""}", style: textStyleSubText14px500w),
+                Text("${response?.towerName ?? ""}", style: textStyle24px500w),
+                Text("${response?.projectName ?? ""}", style: textStyleSubText14px500w),
               ],
             ),
           ),

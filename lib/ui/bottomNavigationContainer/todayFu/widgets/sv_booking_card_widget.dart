@@ -50,7 +50,8 @@ class SvBookingCardWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text("${_bookingResponse?.name ?? ""}", style: textStyleRegular18pxW500),
-                    Text("Next Follow up: Not Available", style: textStyleSubText14px500w),
+                    Text("Next Follow up: ${Utility.formatDate(_bookingResponse?.nextFollowUp)}",
+                        style: textStyleSubText14px500w),
                   ],
                 ),
               ],
@@ -126,9 +127,11 @@ class SvBookingCardWidget extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      if (!(_bookingResponse?.taggingStatus ?? false)) Icon(Icons.warning_amber_sharp, color: AppColors.red, size: 12),
+                      if (!(_bookingResponse?.taggingStatus ?? false))
+                        Icon(Icons.warning_amber_sharp, color: AppColors.red, size: 12),
                       horizontalSpace(4.0),
-                      Text("${(_bookingResponse?.taggingStatus?? false)? "Tagging Completed" : "Complete Tagging"}", style: textStyleWhite12px500w),
+                      Text("${(_bookingResponse?.taggingStatus ?? false) ? "Tagging Completed" : "Complete Tagging"}",
+                          style: textStyleWhite12px500w),
                     ],
                   ),
                 ),
