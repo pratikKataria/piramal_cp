@@ -1,3 +1,5 @@
+/// SiteHeadLabel : "Site Head"
+/// SiteHead : null
 /// returnCode : true
 /// RelationshipManagerName : "Devashish Nagapure"
 /// RelationshipManagerMobile : "9881560816"
@@ -11,6 +13,8 @@
 
 class MyAssistResponse {
   MyAssistResponse({
+      String siteHeadLabel, 
+      String siteHead,
       bool returnCode, 
       String relationshipManagerName, 
       String relationshipManagerMobile, 
@@ -21,6 +25,8 @@ class MyAssistResponse {
       String headOfDepartmentName, 
       String headOfDepartmentMobile, 
       String headOfDepartmentLabel,}){
+    _siteHeadLabel = siteHeadLabel;
+    _siteHead = siteHead;
     _returnCode = returnCode;
     _relationshipManagerName = relationshipManagerName;
     _relationshipManagerMobile = relationshipManagerMobile;
@@ -34,6 +40,8 @@ class MyAssistResponse {
 }
 
   MyAssistResponse.fromJson(dynamic json) {
+    _siteHeadLabel = json['SiteHeadLabel'];
+    _siteHead = json['SiteHead'];
     _returnCode = json['returnCode'];
     _relationshipManagerName = json['RelationshipManagerName'];
     _relationshipManagerMobile = json['RelationshipManagerMobile'];
@@ -45,6 +53,8 @@ class MyAssistResponse {
     _headOfDepartmentMobile = json['HeadOfDepartmentMobile'];
     _headOfDepartmentLabel = json['HeadOfDepartmentLabel'];
   }
+  String _siteHeadLabel;
+  String _siteHead;
   bool _returnCode;
   String _relationshipManagerName;
   String _relationshipManagerMobile;
@@ -56,19 +66,23 @@ class MyAssistResponse {
   String _headOfDepartmentMobile;
   String _headOfDepartmentLabel;
 
+  String get siteHeadLabel => _siteHeadLabel;
+  String get siteHead => _siteHead;
   bool get returnCode => _returnCode;
-  String get relationshipManagerName => _relationshipManagerName ?? "Not Available";
-  String get relationshipManagerMobile => _relationshipManagerMobile ?? "Not Available";
-  String get relationshipManagerLabel => _relationshipManagerLabel ?? "Not Available";
-  String get projectName => _projectName ?? "Not Available";
-  String get projectID => _projectID ?? "Not Available";
-  String get message => _message ?? "Not Available";
-  String get headOfDepartmentName => _headOfDepartmentName ?? "Not Available";
-  String get headOfDepartmentMobile => _headOfDepartmentMobile ?? "Not Available";
-  String get headOfDepartmentLabel => _headOfDepartmentLabel ?? "Not Available";
+  String get relationshipManagerName => _relationshipManagerName;
+  String get relationshipManagerMobile => _relationshipManagerMobile;
+  String get relationshipManagerLabel => _relationshipManagerLabel;
+  String get projectName => _projectName;
+  String get projectID => _projectID;
+  String get message => _message;
+  String get headOfDepartmentName => _headOfDepartmentName;
+  String get headOfDepartmentMobile => _headOfDepartmentMobile;
+  String get headOfDepartmentLabel => _headOfDepartmentLabel;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
+    map['SiteHeadLabel'] = _siteHeadLabel;
+    map['SiteHead'] = _siteHead;
     map['returnCode'] = _returnCode;
     map['RelationshipManagerName'] = _relationshipManagerName;
     map['RelationshipManagerMobile'] = _relationshipManagerMobile;
@@ -81,4 +95,5 @@ class MyAssistResponse {
     map['HeadOfDepartmentLabel'] = _headOfDepartmentLabel;
     return map;
   }
+
 }

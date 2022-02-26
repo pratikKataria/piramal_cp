@@ -61,26 +61,26 @@ class _MyAssistScreenState extends State<MyAssistScreen> implements MyAssistView
                       assistResponse?.relationshipManagerLabel,
                       assistResponse?.relationshipManagerMobile,
                       assistResponse?.projectName,
+                      assistResponse?.siteHead ?? "Not Available",
                     ),
-
                     cardViewAssist(
                       assistResponse?.headOfDepartmentName,
                       assistResponse?.headOfDepartmentLabel,
                       assistResponse?.headOfDepartmentMobile,
                       assistResponse?.projectName,
+                      assistResponse?.siteHead ?? "Not Available",
                     )
                   ],
                 ),
               ),
             verticalSpace(10.0),
-
           ],
         ),
       ),
     );
   }
 
-  cardViewAssist(String name, String profile, String number, String project) {
+  cardViewAssist(String name, String profile, String number, String project, String siteHead) {
     return Column(
       children: [
         verticalSpace(24.0),
@@ -103,6 +103,7 @@ class _MyAssistScreenState extends State<MyAssistScreen> implements MyAssistView
                 Text("$name", style: textStyle20px500w),
                 Text("$profile", style: textStyleSubText14px500w),
                 Text("$project", style: textStyleSubText14px500w),
+                Text("Site head: $siteHead", style: textStyleSubText14px500w),
               ],
             ),
             Spacer(),
