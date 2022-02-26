@@ -104,29 +104,6 @@ class SvWalkInCardWidget extends StatelessWidget {
               horizontalSpace(8.0),
               WhatsAppButton(_bookingResponse?.mobilenumber),
               Spacer(),
-              InkWell(
-                onTap: () {
-                  homePresenter.completeTagging(context, _bookingResponse.sfdcid, _bookingResponse.taskId);
-                },
-                child: Container(
-                  width: 110,
-                  height: 32,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(40.0)),
-                    color: AppColors.colorSecondary,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      if (!(_bookingResponse?.taggingStatus ?? false))
-                        Icon(Icons.warning_amber_sharp, color: AppColors.red, size: 12),
-                      horizontalSpace(4.0),
-                      Text("${(_bookingResponse?.taggingStatus ?? false) ? "Tagging Completed" : "Complete Tagging"}",
-                          style: textStyleWhite12px500w),
-                    ],
-                  ),
-                ),
-              ),
             ],
           ),
         ],

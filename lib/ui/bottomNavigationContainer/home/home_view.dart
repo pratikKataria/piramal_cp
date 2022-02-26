@@ -14,4 +14,5 @@ abstract class HomeView extends BaseView{
   void onSiteVisitScheduled(ScheduleVisitResponse visitResponse);
   void onEventFetched(List<CpEventResponse> brList) {}
   void onProjectUnitResponseFetched(ProjectUnitResponse projectUnitResponse);
+  void onTaggingDone();
 }

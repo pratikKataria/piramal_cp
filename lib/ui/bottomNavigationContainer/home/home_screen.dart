@@ -407,6 +407,12 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 
     return bookingWidgetList;
   }
+
+  @override
+  void onTaggingDone() {
+    Utility.showSuccessToastB(context, "Tagging completed");
+    _homePresenter.getWalkInListV2(context);
+  }
 }
 
 /*   Text("Lead Status", style: textStyleRegular16px400w),

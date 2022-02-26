@@ -8,6 +8,7 @@ import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/booking_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/project_unit_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/schedule_visit_response.dart';
+import 'package:piramal_channel_partner/ui/core/login/model/otp_response.dart';
 import 'package:piramal_channel_partner/ui/cpEvent/model/cp_event_response.dart';
 import 'package:piramal_channel_partner/user/AuthUser.dart';
 import 'package:piramal_channel_partner/utils/Dialogs.dart';
@@ -255,6 +256,60 @@ class HomePresenter {
           _v.onProjectUnitResponseFetched(projectUnitResponse);
         } else {
           _v.onError(projectUnitResponse.message);
+        }
+      })
+      ..catchError((e) {
+        Dialogs.hideLoader(context);
+        ApiErrorParser.getResult(e, _v);
+      });
+  }
+
+  void completeTagging(BuildContext context, String oId, String taskId) async {
+    //check for internal token
+    if (await AuthUser.getInstance().hasToken()) {
+      _v.onError("Token not found");
+      return;
+    }
+
+    //check network
+    if (!await NetworkCheck.check()) {
+      _v.onError("Network Error");
+      return;
+    }
+
+    /*{
+      "CustomerAccountId": "001p000000y1SqW",
+    "OpportunityId": "006p00000092HFKAA2",
+    "CompleteTag": "false",
+    "TaskId": "00Tp000000HpLsy"
+    }*/
+
+    String userId = await Utility.uID();
+    var body = {
+      "CustomerAccountId": "$userId",
+      "OpportunityId": "$oId",
+      "CompleteTag": true,
+      "TaskId": "$taskId",
+    };
+
+    Dialogs.showLoader(context, "Tagging customer please wait ...");
+    apiController.post(EndPoints.COMPLETE_TAGGING, body: body, headers: await Utility.header())
+      ..then((response) {
+        Dialogs.hideLoader(context);
+        List<OTPResponse> brList = [];
+        var listOfDynamic = response.data as List;
+        listOfDynamic.forEach((element) => brList.add(OTPResponse.fromJson(element)));
+
+        OTPResponse bookingResponse = brList.isNotEmpty ? brList.first : null;
+        if (bookingResponse == null) {
+          _v.onError(Screens.kErrorTxt);
+          return;
+        }
+
+        if (bookingResponse.returnCode) {
+          _v.onTaggingDone();
+        } else {
+          _v.onError(bookingResponse.message);
         }
       })
       ..catchError((e) {
