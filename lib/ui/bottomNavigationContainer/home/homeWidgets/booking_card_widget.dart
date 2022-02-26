@@ -3,10 +3,12 @@ import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
 import 'package:piramal_channel_partner/res/Screens.dart';
+import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/home_presenter.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/booking_response.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/whats_app_button.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class BookingCardWidget extends StatelessWidget {
@@ -18,7 +20,7 @@ class BookingCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 165,
+      height: 135,
       padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 2.0),
       margin: EdgeInsets.only(bottom: 18.0, left: 20.0, right: 20.0),
       decoration: BoxDecoration(
@@ -41,6 +43,8 @@ class BookingCardWidget extends StatelessWidget {
           InkWell(
             onTap: () {
               Navigator.pushNamed(context, Screens.kCustomerProfileDetailBooking, arguments: _bookingResponse);
+              BaseProvider baseProvider = Provider.of<BaseProvider>(context, listen: false);
+              baseProvider.setBottomNavScreen(Screens.kCustomerProfileDetailBooking);
             },
             child: Row(
               children: [
@@ -57,7 +61,7 @@ class BookingCardWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text("${_bookingResponse?.name ?? ""}", style: textStyleRegular18pxW500),
-                    Text("Next Follow up: ${Utility.formatDate(_bookingResponse.nextFollowUp)}", style: textStyleSubText14px500w),
+                    // Text("Next Follow up: ${Utility.formatDate(_bookingResponse.nextFollowUp)}", style: textStyleSubText14px500w),
                   ],
                 ),
               ],
@@ -75,16 +79,15 @@ class BookingCardWidget extends StatelessWidget {
                 //   child: Text("${_bookingResponse.newRating}", style: textStyleWhite14px500w),
                 // ),
                 // horizontalSpace(10.0),
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    color: AppColors.chipColor,
-                  ),
-                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-                  child: Text("Validity: ${_bookingResponse.createdDays} Day", style: textStyle14px500w),
-                ),
+                // Container(
+                //   decoration: BoxDecoration(
+                //     borderRadius: BorderRadius.circular(6),
+                //     color: AppColors.chipColor,
+                //   ),
+                //   padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+                //   child: Text("Validity: ${_bookingResponse.createdDays} Day", style: textStyle14px500w),
+                // ),
                 if (_bookingResponse.revisit) ...[
-                  horizontalSpace(10.0),
                   Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(6),
@@ -92,9 +95,9 @@ class BookingCardWidget extends StatelessWidget {
                     ),
                     padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
                     child: Text("Revisit", style: textStyle14px500w),
-                  )
+                  ),
+                  horizontalSpace(10.0),
                 ],
-                horizontalSpace(10.0),
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(6),
@@ -106,10 +109,11 @@ class BookingCardWidget extends StatelessWidget {
               ],
             ),
           ),
+
           Row(
             children: [
-              calenderButton(context),
-              horizontalSpace(8.0),
+              // calenderButton(context),
+              // horizontalSpace(8.0),
               callButton(),
               horizontalSpace(8.0),
               WhatsAppButton(_bookingResponse?.mobilenumber),
@@ -187,8 +191,8 @@ class BookingCardWidget extends StatelessWidget {
         launch("tel://${_bookingResponse?.mobilenumber ?? ""}");
       },
       child: Container(
-        width: 35,
-        height: 35,
+        width: 32,
+        height: 32,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: AppColors.colorPrimaryLight,

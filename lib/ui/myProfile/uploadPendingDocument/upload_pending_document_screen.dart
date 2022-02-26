@@ -10,6 +10,7 @@ import 'package:piramal_channel_partner/ui/core/login/model/token_response.dart'
 import 'package:piramal_channel_partner/ui/core/signup/model/document_upload_request.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/document_upload_response.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/signup_response.dart';
+import 'package:piramal_channel_partner/ui/core/signup/model/terms_and_condition_response.dart';
 import 'package:piramal_channel_partner/ui/core/uploadDocument/upload_document_view.dart';
 import 'package:piramal_channel_partner/ui/myProfile/model/my_profile_response.dart';
 import 'package:piramal_channel_partner/user/AuthUser.dart';
@@ -279,5 +280,10 @@ class _UploadPendingDocumentScreenState extends State<UploadPendingDocumentScree
 
     var provider = Provider.of<BaseProvider>(context, listen: false);
     provider.showToolTip();
+  }
+
+  @override
+  void onTermsAndConditionFetched(TermsAndConditionResponse termsAndConditionResponse) {
+    //ignore
   }
 }

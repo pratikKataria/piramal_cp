@@ -44,38 +44,38 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              verticalSpace(20.0),
+              verticalSpace(10.0),
               //customer pic with name and time
               Text("${widget.response?.name}", style: textStyleRegular18pxW500),
-              Text("Next Follow up: ${Utility.formatDate(widget?.response?.nextFollowUp)}", style: textStyleSubText14px500w),
-
+              /*Text("Next Follow up: ${Utility.formatDate(widget?.response?.nextFollowUp)}", style: textStyleSubText14px500w),
+*/
               //calender call whatsapp
               verticalSpace(12.0),
               Row(
                 children: [
-                  InkWell(
-                    onTap: () {
-                      _selectDate(context);
-                    },
-                    child: Container(
-                      width: 35,
-                      height: 35,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: AppColors.colorPrimaryLight,
-                      ),
-                      padding: EdgeInsets.all(10.0),
-                      child: Image.asset(Images.kIconCalender),
-                    ),
-                  ),
-                  horizontalSpace(8.0),
+                  // InkWell(
+                  //   onTap: () {
+                  //     _selectDate(context);
+                  //   },
+                  //   child: Container(
+                  //     width: 35,
+                  //     height: 35,
+                  //     decoration: BoxDecoration(
+                  //       shape: BoxShape.circle,
+                  //       color: AppColors.colorPrimaryLight,
+                  //     ),
+                  //     padding: EdgeInsets.all(10.0),
+                  //     child: Image.asset(Images.kIconCalender),
+                  //   ),
+                  // ),
+                  // horizontalSpace(8.0),
                   InkWell(
                     onTap: () {
                       launch("tel://${widget.response?.mobilenumber ?? ""}");
                     },
                     child: Container(
-                      width: 35,
-                      height: 35,
+                      width: 32,
+                      height: 32,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: AppColors.colorPrimaryLight,
@@ -105,16 +105,15 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
                     //   child: Text("${widget.response?.newRating}", style: textStyleWhite14px500w),
                     // ),
                     // horizontalSpace(10.0),
-                    Container(
+                    /* Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(6),
                         color: AppColors.chipColor,
                       ),
                       padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
                       child: Text("Validity: ${widget.response?.createdDays} Days", style: textStyle14px500w),
-                    ),
+                    ),*/
                     if (widget?.response?.revisit ?? false) ...[
-                      horizontalSpace(10.0),
                       Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(6),
@@ -122,9 +121,9 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
                         ),
                         padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
                         child: Text("Revisit", style: textStyle14px500w),
-                      )
+                      ),
+                      horizontalSpace(10.0),
                     ],
-                    horizontalSpace(10.0),
                     Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(6),

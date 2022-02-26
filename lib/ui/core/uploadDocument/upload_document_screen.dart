@@ -10,6 +10,7 @@ import 'package:piramal_channel_partner/ui/core/login/model/token_response.dart'
 import 'package:piramal_channel_partner/ui/core/signup/model/document_upload_response.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/signup_request.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/signup_response.dart';
+import 'package:piramal_channel_partner/ui/core/signup/model/terms_and_condition_response.dart';
 import 'package:piramal_channel_partner/ui/core/uploadDocument/upload_document_view.dart';
 import 'package:piramal_channel_partner/user/AuthUser.dart';
 import 'package:piramal_channel_partner/utils/Dialogs.dart';
@@ -35,6 +36,8 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> implements 
   String partnerShipFileName = "";
   String partnersFileName = "";
   String typeOfFirm = "";
+
+  bool checkedValue = false;
 
   List<String> typeOfFirms = [];
 
@@ -128,6 +131,40 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> implements 
                 },
               ),
               verticalSpace(15.0),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Checkbox(
+                    value: checkedValue,
+                    onChanged: (newValue) {
+                      setState(() {
+                        checkedValue = newValue;
+                      });
+                    },
+                  ),
+                  InkWell(
+                    onTap: () {
+                      presenter.getTermsAndCondition(context);
+                    },
+                    child: Stack(
+                      children: [
+                        Text("I Agree to the Terms & Conditions", style: textStyle14px500w),
+                        Positioned(
+                          right: 0,
+                          left: 0,
+                          bottom: 0,
+                          child: Container(
+                            height: 1,
+                            color: AppColors.black,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+
               loginButton(context),
               verticalSpace(15.0),
             ],
@@ -227,6 +264,10 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> implements 
       height: 36,
       text: "Next",
       onTap: () {
+        if (!checkedValue) {
+          onError("Please select terms and condition");
+          return;
+        }
 
         presenter.singUp(context, widget.request);
 
@@ -282,4 +323,52 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> implements 
     var provider = Provider.of<BaseProvider>(context, listen: false);
     provider.showToolTip();
   }
+
+  @override
+  void onTermsAndConditionFetched(TermsAndConditionResponse termsAndConditionResponse) {
+    showDetailDialog(context, termsAndConditionResponse?.termsAndCondition);
+  }
+
+  void showDetailDialog(BuildContext context, String message) {
+    AlertDialog alert = AlertDialog(
+      contentPadding: EdgeInsets.all(0.0),
+      backgroundColor: Colors.transparent,
+      content: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(6),
+            ),
+            margin: EdgeInsets.all(10.0),
+            padding: EdgeInsets.all(10.0),
+            child: ListView(
+              children: [Text("$message")],
+            ),
+          ),
+          Positioned(
+            right: 0,
+            top: 0,
+            child: PmlButton(
+              width: 30,
+              height: 30,
+              color: AppColors.colorPrimary,
+              child: Icon(Icons.close, color: AppColors.white, size: 16.0),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
 }

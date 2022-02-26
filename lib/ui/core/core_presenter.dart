@@ -375,7 +375,7 @@ class CorePresenter {
         Utility.log(tag, response.data);
         Dialogs.hideLoader(context);
         TermsAndConditionResponse termsAndConditionResponse = TermsAndConditionResponse.fromJson(response.data);
-        SignupView view = _v as SignupView ;
+        UploadDocumentView view = _v as UploadDocumentView;
         if (termsAndConditionResponse.returnCode) {
           view.onTermsAndConditionFetched(termsAndConditionResponse);
         } else {

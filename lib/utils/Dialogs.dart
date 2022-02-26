@@ -75,6 +75,8 @@ class Dialogs {
       });
   }
 
+  static bool isDialogVisible() => _dialog.isShowing();
+
   static void showProgressDialod(BuildContext context) {
     if (pd == null) {
       pd = new ProgressDialog(context, type: ProgressDialogType.Normal);

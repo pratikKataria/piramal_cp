@@ -4,6 +4,7 @@ import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
 import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
+import 'package:piramal_channel_partner/utils/Dialogs.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/utils/navigator_gk.dart';
 import 'package:provider/provider.dart';
@@ -25,27 +26,21 @@ class BaseScreen extends StatelessWidget {
     return Consumer<BaseProvider>(
       builder: (_, provider, __) {
         print("Base consumer rebuilding ... $child");
-        return WillPopScope(
-          onWillPop: () {
-            print("Back button pressed");
-            return;
-          },
-          child: Scaffold(
-            appBar: provider.showAppbarAndBottomNavigation ? buildAppBar(context) : null,
-            drawerScrimColor: Colors.transparent,
-            body: SafeArea(
-              child: Scaffold(
-                key: drawerKey,
-                drawerEnableOpenDragGesture: false,
-                backgroundColor: AppColors.screenBackgroundColor,
-                bottomNavigationBar: provider.showAppbarAndBottomNavigation ? PersistentBottomNavigation() : null,
-                onDrawerChanged: drawerOpenCloseListener,
-                drawer: PersistentSideNavigation(),
-                body: Column(
-                  children: [
-                    Expanded(child: child),
-                  ],
-                ),
+        return Scaffold(
+          appBar: provider.showAppbarAndBottomNavigation ? buildAppBar(context) : null,
+          drawerScrimColor: Colors.transparent,
+          body: SafeArea(
+            child: Scaffold(
+              key: drawerKey,
+              drawerEnableOpenDragGesture: false,
+              backgroundColor: AppColors.screenBackgroundColor,
+              bottomNavigationBar: provider.showAppbarAndBottomNavigation ? PersistentBottomNavigation() : null,
+              onDrawerChanged: drawerOpenCloseListener,
+              drawer: PersistentSideNavigation(),
+              body: Column(
+                children: [
+                  Expanded(child: child),
+                ],
               ),
             ),
           ),
@@ -92,11 +87,27 @@ class BaseScreen extends StatelessWidget {
             provider.currentScreen == Screens.kExploreScreen ||
             provider.currentScreen == Screens.kTodayFollowUpScreen ||
             provider.currentScreen == Screens.kNotificationsScreen;
+
         return InkWell(
           onTap: () {
             if (isBase) {
               provider.toggleFilter();
             } else {
+              if (Dialogs.isDialogVisible()) {
+                navigatorGk.currentState.pop();
+                return;
+              }
+              BaseProvider baseProvider = Provider.of<BaseProvider>(context, listen: false);
+
+              if (baseProvider.screenStack.isNotEmpty){
+                baseProvider.screenStack.pop();
+              }
+
+              if (baseProvider.screenStack.isEmpty) {
+                baseProvider.currentScreen = Screens.kHomeScreen;
+                baseProvider.setBottomNavScreen(baseProvider.currentScreen);
+              }
+
               navigatorGk.currentState.pop();
             }
             // setState(() {});

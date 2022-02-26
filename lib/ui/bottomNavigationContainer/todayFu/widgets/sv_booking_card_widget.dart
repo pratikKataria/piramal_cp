@@ -3,10 +3,12 @@ import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
 import 'package:piramal_channel_partner/res/Screens.dart';
+import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/booking_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/todayFu/today_sv_presenter.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/whats_app_button.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SvBookingCardWidget extends StatelessWidget {
@@ -42,6 +44,8 @@ class SvBookingCardWidget extends StatelessWidget {
             onTap: () {
               // Navigator.pushNamed(context, Screens.kCustomerProfileDetailBooking);
               Navigator.pushNamed(context, Screens.kCustomerProfileDetailBooking, arguments: _bookingResponse);
+              BaseProvider baseProvider = Provider.of<BaseProvider>(context, listen: false);
+              baseProvider.setBottomNavScreen(Screens.kCustomerProfileDetailBooking);
             },
             child: Row(
               children: [

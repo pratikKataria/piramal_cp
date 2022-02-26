@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:piramal_channel_partner/dataStruct/stack.dart';
 import 'package:piramal_channel_partner/res/Screens.dart';
 
 class BaseProvider extends ChangeNotifier {
@@ -15,6 +16,7 @@ class BaseProvider extends ChangeNotifier {
   String currentScreen = Screens.kHomeScreen;
 
   GlobalKey<ScaffoldState> drawerKey;
+  StackSetDSA<String> screenStack = StackSetDSA<String>();
 
   //getter
   get drawerStatus => _drawerIsOpen;

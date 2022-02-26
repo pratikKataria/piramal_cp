@@ -3,9 +3,11 @@ import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
 import 'package:piramal_channel_partner/res/Screens.dart';
+import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/booking_response.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/whats_app_button.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../home_presenter.dart';
@@ -42,6 +44,9 @@ class WalkInCardWidget extends StatelessWidget {
           InkWell(
             onTap: () {
               Navigator.pushNamed(context, Screens.kCustomerProfileDetailWalkin, arguments: _bookingResponse);
+              BaseProvider baseProvider = Provider.of<BaseProvider>(context, listen: false);
+
+              baseProvider.setBottomNavScreen(Screens.kCustomerProfileDetailWalkin);
             },
             child: Row(
               children: [
@@ -58,7 +63,8 @@ class WalkInCardWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text("${_bookingResponse?.name ?? ""}", style: textStyleRegular18pxW500),
-                    Text("Next Follow up: ${Utility.formatDate(_bookingResponse?.nextFollowUp)}", style: textStyleSubText14px500w),
+                    Text("Next Follow up: ${Utility.formatDate(_bookingResponse?.nextFollowUp)}",
+                        style: textStyleSubText14px500w),
                   ],
                 ),
               ],
@@ -104,7 +110,8 @@ class WalkInCardWidget extends StatelessWidget {
                     color: AppColors.chipColor,
                   ),
                   padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-                  child: Text("${_bookingResponse?.projectInterested?? _bookingResponse?.projectFinalized ?? ""} ", style: textStyle14px500w),
+                  child: Text("${_bookingResponse?.projectInterested ?? _bookingResponse?.projectFinalized ?? ""} ",
+                      style: textStyle14px500w),
                 ),
               ],
             ),

@@ -34,7 +34,7 @@ class PersistentBottomNavigation extends StatelessWidget {
         return InkWell(
           onTap: () {
             provider.setBottomNavScreen(text);
-            navigateToFirstRoute();
+            navigateToFirstRoute(context);
             onTap();
           },
           child: Column(
@@ -59,7 +59,11 @@ class PersistentBottomNavigation extends StatelessWidget {
     );
   }
 
-  void navigateToFirstRoute() {
+  void navigateToFirstRoute(BuildContext context) {
     navigatorGk.currentState.popUntil((route) => route.isFirst);
+
+    //clear screen backstack
+    BaseProvider baseProvider = Provider.of<BaseProvider>(context, listen: false);
+    baseProvider.screenStack.popAll();
   }
 }

@@ -37,7 +37,6 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
 
   bool mobileOTPVerified = false;
   bool emailOTPVerified = false;
-  bool checkedValue = false;
 
   int emailOTP;
   int mobileOTP;
@@ -207,38 +206,6 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
                 return;
               }, limit: 20),
               verticalSpace(40.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Checkbox(
-                    value: checkedValue,
-                    onChanged: (newValue) {
-                      setState(() {
-                        checkedValue = newValue;
-                      });
-                    },
-                  ),
-                  InkWell(
-                    onTap: () {
-                      corePresenter.getTermsAndCondition(context);
-                    },
-                    child: Stack(
-                      children: [
-                        Text("I Agree to the Terms & Conditions", style: textStyle14px500w),
-                        Positioned(
-                          right: 0,
-                          left: 0,
-                          bottom: 0,
-                          child: Container(
-                            height: 1,
-                            color: AppColors.black,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
               loginButton(context),
               verticalSpace(20.0),
             ],
@@ -329,10 +296,6 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
       height: 36,
       text: "Next",
       onTap: () {
-        if (!checkedValue) {
-          onError("Please select terms and condition");
-          return;
-        }
 
         if (!mobileOTPVerified) {
           onError("Please verify mobile");
