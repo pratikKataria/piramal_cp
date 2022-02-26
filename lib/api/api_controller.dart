@@ -46,7 +46,7 @@ class ApiController {
 
     Utility.log(
       tag,
-      "Api Call :\n $url \n --> Inputs :\n $body \n --> payload :\n ${payload.toString()} \n --> header :\n $headers \n --> Response :\n ${response.toString()}",
+      "\n----------------------------RESPONSE START-----------------------------\nApi Call :\n $url \n --> Inputs :\n $body \n --> payload :\n ${payload.toString()} \n --> header :\n $headers \n --> Response :\n ${response.toString()} \n----------------------------RESPONSE END-----------------------------\n",
     );
     return response;
   }

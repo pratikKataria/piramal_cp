@@ -5,6 +5,7 @@ import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/model/project_amenities_response.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/model/project_download_response.dart';
+import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/model/project_overview_images_response.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/model/project_overview_response.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/model/project_tower_response.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/pages/project_detail_amenities_page.dart';
@@ -33,8 +34,10 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen>
 
   ProjectOverviewResponse projectOverviewResponse;
   ProjectAmenitiesResponse projectAmenitiesResponse;
+
   List<ProjectTowerResponse> projectTowerResponse;
   List<ProjectDownloadResponse> projectDownloadResponse;
+  List<String> projectCarouselImages = [];
 
   ProjectPresenter projectPresenter;
 
@@ -50,6 +53,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen>
     projectPresenter.getTowerList(context, widget?.arguments?.projectId);
     projectPresenter.getDownloadList(context, widget?.arguments?.projectId);
     projectPresenter.getProjectAmenities(context, widget?.arguments?.projectId);
+    projectPresenter.getProjectPics(context, widget?.arguments?.projectId);
 
     super.initState();
   }
@@ -66,11 +70,12 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
+          // new Image.asset(listOfImages[index], fit: BoxFit.fill) Container(
+          if (projectCarouselImages.isNotEmpty) Container(
             height: 180.0,
             child: Swiper(
               itemBuilder: (BuildContext context, int index) {
-                return new Image.asset(listOfImages[index], fit: BoxFit.fill);
+                return Image.memory(Utility.convertMemoryImage((projectCarouselImages[index]??"")));
               },
               itemCount: 3,
               pagination: new SwiperPagination(),
@@ -182,6 +187,13 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen>
   @override
   void onProjectDownloadListFetched(List<ProjectDownloadResponse> projectDownloadResponse) {
     this.projectDownloadResponse = projectDownloadResponse;
+    setState(() {});
+  }
+
+  @override
+  void onProjectImagesFetched(List<ProjectOverviewImagesResponse> brList) {
+    projectCarouselImages.clear();
+    brList.forEach((element) => projectCarouselImages.add(element.projectPic));
     setState(() {});
   }
 }

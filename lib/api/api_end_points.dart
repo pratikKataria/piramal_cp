@@ -41,4 +41,5 @@ class EndPoints {
   static const String ADD_COMMENTS = BASE_URL + "/CP_Mobile_App/createcpcomments";
   static const String PROFILE_PIC_UPLOAD = BASE_URL + "/CP_Mobile_App/ProfilePicUpdate";
   static const String TERMS_AND_CONDITION = BASE_URL + "/CP_Mobile_App/TermsAndConditions";
+  static const String PROJECT_IMAGES = BASE_URL + "/CP_Mobile_App/ProjectPic";
 }
