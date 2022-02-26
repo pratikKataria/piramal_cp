@@ -11,6 +11,7 @@ import 'package:piramal_channel_partner/ui/customerProfile/customer_profile_pres
 import 'package:piramal_channel_partner/ui/customerProfile/customer_profile_view.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
+import 'package:piramal_channel_partner/widgets/refresh_list_view.dart';
 import 'package:piramal_channel_partner/widgets/whats_app_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -37,7 +38,10 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
+    return RefreshListView(
+      onRefresh: () {
+        _homePresenter.getInvoice(context, widget?.response?.sfdcid);
+      },
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),

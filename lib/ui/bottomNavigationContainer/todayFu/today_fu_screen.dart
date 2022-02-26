@@ -6,7 +6,6 @@ import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/todayFu/model/today_sv_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/todayFu/today_sv_presenter.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/todayFu/today_sv_view.dart';
-import 'package:piramal_channel_partner/ui/bottomNavigationContainer/todayFu/widgets/sv_booking_card_widget.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/todayFu/widgets/sv_walkin_card_widget.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
@@ -39,46 +38,39 @@ class _TodayFollowUpScreenState extends State<TodayFollowUpScreen> with SingleTi
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.screenBackgroundColor,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                verticalSpace(10.0),
-                Text("Customers (${totalCustomerCount()})", style: textStyle20px500w),
-                verticalSpace(6.0),
-                buildTabs(),
-                verticalSpace(18.0),
-              ],
-            ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        verticalSpace(10.0),
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: 20.0),
+          child: Text("Walk In Customers (${totalCustomerCount()})", style: textStyle20px500w),
+        ),
+        verticalSpace(18.0),
+        Expanded(
+          child: RefreshListView(
+            onRefresh: () {
+              _homePresenter.getSvList(context);
+            },
+            children: walkInListWidgets.map<Widget>((e) => SvWalkInCardWidget(e, _homePresenter)).toList(),
           ),
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              physics: NeverScrollableScrollPhysics(),
-              children: [
-                RefreshListView(
-                  onRefresh: () {
-                    _homePresenter.getSvList(context);
-                  },
-                  children: walkInListWidgets.map<Widget>((e) => SvWalkInCardWidget(e, _homePresenter)).toList(),
-                ),
-                RefreshListView(
-                  onRefresh: () {
-                    _homePresenter.getSvList(context);
-                  },
-                  children: bookingListWidgets.map<Widget>((e) => SvBookingCardWidget(e, _homePresenter)).toList(),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+        ),
+
+        // Expanded(
+        //   child: TabBarView(
+        //     controller: _tabController,
+        //     physics: NeverScrollableScrollPhysics(),
+        //     children: [
+        //       RefreshListView(
+        //         onRefresh: () {
+        //           _homePresenter.getSvList(context);
+        //         },
+        //         children: bookingListWidgets.map<Widget>((e) => SvBookingCardWidget(e, _homePresenter)).toList(),
+        //       ),
+        //     ],
+        //   ),
+        // ),
+      ],
     );
   }
 
