@@ -17,6 +17,7 @@
 /// ApartmentFinalized : ""
 
 class TodaySvResponse {
+
   TodaySvResponse({
       int validDays, 
       String towerFinalized, 
@@ -32,8 +33,9 @@ class TodaySvResponse {
       String opportunityID, 
       String name, 
       String mobilenumber, 
-      String message, 
-      bool completeTaggingStatus, 
+      String message,
+    String nextFollowUp,
+    bool completeTaggingStatus,
       String apartmentFinalized,}){
     _validDays = validDays;
     _towerFinalized = towerFinalized;
@@ -51,6 +53,7 @@ class TodaySvResponse {
     _mobilenumber = mobilenumber;
     _message = message;
     _completeTaggingStatus = completeTaggingStatus;
+    _nextFollowUp = nextFollowUp;
     _apartmentFinalized = apartmentFinalized;
 }
 
@@ -72,6 +75,7 @@ class TodaySvResponse {
     _message = json['message'];
     _completeTaggingStatus = json['CompleteTagging'];
     _apartmentFinalized = json['ApartmentFinalized'];
+    _nextFollowUp = json['NextFollowUp'];
   }
   int _validDays;
   String _towerFinalized;
@@ -90,6 +94,7 @@ class TodaySvResponse {
   String _message;
   bool _completeTaggingStatus;
   String _apartmentFinalized;
+  String _nextFollowUp;
 
   int get validDays => _validDays;
   String get towerFinalized => _towerFinalized;
@@ -108,6 +113,11 @@ class TodaySvResponse {
   String get message => _message;
   bool get completeTaggingStatus => _completeTaggingStatus;
   String get apartmentFinalized => _apartmentFinalized;
+  String get nextFollowUp => _nextFollowUp;
+
+  set nextFollowUp(String value) {
+    _nextFollowUp = value;
+  }
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -128,6 +138,7 @@ class TodaySvResponse {
     map['message'] = _message;
     map['CompleteTagging'] = _completeTaggingStatus;
     map['ApartmentFinalized'] = _apartmentFinalized;
+    map['NextFollowUp'] = _nextFollowUp;
     return map;
   }
 

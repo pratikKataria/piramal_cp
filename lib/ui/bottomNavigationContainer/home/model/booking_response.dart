@@ -12,15 +12,14 @@
 /// ApartmentFinalized : null
 
 class BookingResponse {
-  bool taggingStatus = false;
-  String taskId = "";
-
+   String taskId = "";
 
   BookingResponse({
     dynamic towerFinalized,
     String stageName,
     String sfdcid,
     bool revisit,
+    bool completeTagging,
     bool returnCode,
     dynamic projectFinalized,
     dynamic newRating,
@@ -45,7 +44,9 @@ class BookingResponse {
     _createdDays = createdDays;
     _apartmentFinalized = apartmentFinalized;
     _projectInterested = projectInterested;
-    _nextFollowUp = nextFollowUp;}
+    _nextFollowUp = nextFollowUp;
+    _completeTagging = completeTagging;
+  }
 
   BookingResponse.fromJson(dynamic json) {
     _towerFinalized = json['TowerFinalized'];
@@ -61,7 +62,8 @@ class BookingResponse {
     _createdDays = json['CreatedDays'];
     _apartmentFinalized = json['ApartmentFinalized'];
     _projectInterested = json['ProjectInterested'];
-    _nextFollowUp  = json['NextFollowUp'];
+    _nextFollowUp = json['NextFollowUp'];
+    _completeTagging = json['CompleteTagging'];
   }
 
   String _nextFollowUp;
@@ -78,7 +80,7 @@ class BookingResponse {
   String _message;
   int _createdDays;
   dynamic _apartmentFinalized;
-
+  bool _completeTagging;
 
   String get nextFollowUp => _nextFollowUp;
 
@@ -126,6 +128,7 @@ class BookingResponse {
     map['ApartmentFinalized'] = _apartmentFinalized;
     map['ProjectInterested'] = _projectInterested;
     map['NextFollowUp'] = _nextFollowUp;
+    map['CompleteTagging'] = _completeTagging;
     return map;
   }
 
@@ -175,6 +178,12 @@ class BookingResponse {
 
   set towerFinalized(dynamic value) {
     _towerFinalized = value;
+  }
+
+  bool get completeTagging => _completeTagging;
+
+  set completeTagging(bool value) {
+    _completeTagging = value;
   }
 
   String get projectInterested => _projectInterested;

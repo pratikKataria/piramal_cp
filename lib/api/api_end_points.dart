@@ -5,6 +5,8 @@ class EndPoints {
   static const String BASE_URL = 'https://prl--PRLAPP.my.salesforce.com/services/apexrest';
 
   static const String ACCESS_TOKEN = 'https://test.salesforce.com/services/oauth2/token';
+  static const String GET_ACCOUNT_STATUS = BASE_URL + "/CP_Mobile_App/NewCpApplicationStatus";
+  static const String POST_DEVICE_TOKEN = BASE_URL + "/CP_Mobile_App/deviceTokenCPAPP";
   static const String EMAIL_LOGIN = BASE_URL + "/CP_Mobile_App/EmailLoginCP";
   static const String MOBILE_LOGIN = BASE_URL + "/CP_Mobile_App/MobileLogincp";
   static const String SEND_OTP = BASE_URL + "/CP_Mobile_App/EmailOTPCP";
@@ -42,4 +44,5 @@ class EndPoints {
   static const String PROFILE_PIC_UPLOAD = BASE_URL + "/CP_Mobile_App/ProfilePicUpdate";
   static const String TERMS_AND_CONDITION = BASE_URL + "/CP_Mobile_App/TermsAndConditions";
   static const String PROJECT_IMAGES = BASE_URL + "/CP_Mobile_App/ProjectPic";
+  static const String GET_PROJECT_DOWNLOAD_LINK = BASE_URL + "/CP_Mobile_App/Download";
 }

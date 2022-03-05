@@ -4,10 +4,12 @@ import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
 import 'package:piramal_channel_partner/res/Screens.dart';
+import 'package:piramal_channel_partner/res/constants.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/projectList/model/project_list_response.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/projectList/project_view.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/project_presenter.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
+import 'package:piramal_channel_partner/widgets/download_button.dart';
 import 'package:piramal_channel_partner/widgets/refresh_list_view.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -126,20 +128,21 @@ class _ProjectScreenState extends State<ProjectScreen> implements ProjectView {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(child: Text("${projectData.projectName}", style: textStyle24px500w)),
-                      InkWell(
-                        onTap: () {
-                          Utility.launchUrlX(context, projectData?.mobileBroucher);
-                        },
-                        child: Container(
-                          width: 30,
-                          height: 30,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: AppColors.colorPrimary,
-                          ),
-                          child: Icon(Icons.download_rounded, color: AppColors.white, size: 16),
-                        ),
-                      ),
+                      // InkWell(
+                      //   onTap: () {
+                      //     Utility.launchUrlX(context, projectData?.mobileBroucher);
+                      //   },
+                      //   child: Container(
+                      //     width: 30,
+                      //     height: 30,
+                      //     decoration: BoxDecoration(
+                      //       shape: BoxShape.circle,
+                      //       color: AppColors.colorPrimary,
+                      //     ),
+                      //     child: Icon(Icons.download_rounded, color: AppColors.white, size: 16),
+                      //   ),
+                      // ),
+                      DownloadButton(projectData?.projectId, Constants.BROCHURE),
                     ],
                   ),
                   verticalSpace(10.0),

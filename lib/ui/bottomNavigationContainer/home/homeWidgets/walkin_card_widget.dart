@@ -43,10 +43,12 @@ class WalkInCardWidget extends StatelessWidget {
         children: [
           InkWell(
             onTap: () {
-              Navigator.pushNamed(context, Screens.kCustomerProfileDetailWalkin, arguments: _bookingResponse);
-              BaseProvider baseProvider = Provider.of<BaseProvider>(context, listen: false);
+              if ((_bookingResponse?.completeTagging ?? false)) {
+                Navigator.pushNamed(context, Screens.kCustomerProfileDetailWalkin, arguments: _bookingResponse);
+                BaseProvider baseProvider = Provider.of<BaseProvider>(context, listen: false);
 
-              baseProvider.setBottomNavScreen(Screens.kCustomerProfileDetailWalkin);
+                baseProvider.setBottomNavScreen(Screens.kCustomerProfileDetailWalkin);
+              }
             },
             child: Row(
               children: [
@@ -127,7 +129,9 @@ class WalkInCardWidget extends StatelessWidget {
 
               InkWell(
                 onTap: () {
-                  _presenter.completeTagging(context, _bookingResponse.sfdcid, _bookingResponse.taskId);
+                  if (!(_bookingResponse?.completeTagging ?? false)) {
+                    _presenter.completeTagging(context, _bookingResponse.sfdcid, _bookingResponse.taskId);
+                  }
                 },
                 child: Container(
                   width: 110,
@@ -139,10 +143,10 @@ class WalkInCardWidget extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      if (!(_bookingResponse?.taggingStatus ?? false))
+                      if (!(_bookingResponse?.completeTagging ?? false))
                         Icon(Icons.warning_amber_sharp, color: AppColors.red, size: 12),
                       horizontalSpace(4.0),
-                      Text("${(_bookingResponse?.taggingStatus ?? false) ? "Tagging Completed" : "Complete Tagging"}",
+                      Text("${(_bookingResponse?.completeTagging ?? false) ? "Tagging Completed" : "Complete Tagging"}",
                           style: textStyleWhite12px500w),
                     ],
                   ),
@@ -186,7 +190,7 @@ class WalkInCardWidget extends StatelessWidget {
   InkWell calenderButton(BuildContext context) {
     return InkWell(
       onTap: () {
-        _selectDate(context);
+        if ((_bookingResponse?.completeTagging ?? false)) _selectDate(context);
       },
       child: Container(
         width: 35,

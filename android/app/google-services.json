@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "970701622319",
+    "project_id": "cp-mobile-app-a7646",
+    "storage_bucket": "cp-mobile-app-a7646.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:970701622319:android:fc4b63431393f64a030ada",
+        "android_client_info": {
+          "package_name": "com.stetig.piramal_channel_partner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "970701622319-u590ogcgqj99nb7n9ishd8e5b7oa1p8f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.stetig.piramal_channel_partner",
+            "certificate_hash": "10e0aa3f72bcb568f052a0602e249a236724794d"
+          }
+        },
+        {
+          "client_id": "970701622319-54hu9r451diujl0kft4onq95fhl292fi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAB5-LCGExJAVh1kp9pRCWmVN-tSLrfMDE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "970701622319-54hu9r451diujl0kft4onq95fhl292fi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

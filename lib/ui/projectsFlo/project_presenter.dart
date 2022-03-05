@@ -166,7 +166,7 @@ class ProjectPresenter {
       return;
     }
     // "ProjectID":""
-    var body = {"ProjectID": "a03N000000J4W34"};
+    var body = {"ProjectID": "$projectId"};
     // var body = {"ProjectID": "a03N0000005NHiTIAW"};
     // Dialogs.showLoader(context, "Please wait fetching your project list ...");
     apiController.post(EndPoints.PROJECT_IMAGES, body: body, headers: await Utility.header())
@@ -187,7 +187,7 @@ class ProjectPresenter {
         if (bookingResponse.returnCode) {
           projectDetailView.onProjectImagesFetched(brList);
         } else {
-          _v.onError(bookingResponse.message);
+          // _v.onError(bookingResponse.message);
         }
       })
       ..catchError((e) {
@@ -219,7 +219,9 @@ class ProjectPresenter {
         List<ProjectDownloadResponse> projectListResponse = [];
         var listOfDynamic = response.data as List;
         listOfDynamic.forEach((element) {
-          projectListResponse.add(ProjectDownloadResponse.fromJson(element));
+          ProjectDownloadResponse projectDownloadResponse = ProjectDownloadResponse.fromJson(element);
+          projectDownloadResponse?.projectId = projectId;
+          projectListResponse.add(projectDownloadResponse);
         });
 
         (_v as ProjectDetailView).onProjectDownloadListFetched(projectListResponse);

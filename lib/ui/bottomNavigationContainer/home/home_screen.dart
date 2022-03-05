@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
+import 'package:piramal_channel_partner/res/constants.dart';
 import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/homeWidgets/booking_card_widget.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/homeWidgets/walkin_card_widget.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/home_presenter.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/home_view.dart';
+import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/account_status_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/booking_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/project_unit_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/schedule_visit_response.dart';
@@ -43,8 +45,9 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
     _homePresenter = HomePresenter(this);
-    _homePresenter.getWalkInList(context);
+    _homePresenter.getAccountStatus(context);
     _homePresenter.getEventList(context);
+    _homePresenter.postDeviceToken(context);
     super.initState();
   }
 
@@ -86,28 +89,30 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
             ),
           ),
           // if (walkInList.isNotEmpty)
-            Expanded(
-              child: TabBarView(
-                controller: _tabController,
-                physics: NeverScrollableScrollPhysics(),
-                children: [
-                  RefreshListView(
-                    children: getWalkInListByFilterValue(),
-                    onRefresh: () {
-                      _homePresenter.getWalkInListV2(context);
-                      _homePresenter.getEventList(context);
-                    },
-                  ),
-                  RefreshListView(
-                    children: getBookingListByFilterValue(),
-                    onRefresh: () {
-                      _homePresenter.getWalkInListV2(context);
-                      _homePresenter.getEventList(context);
-                    },
-                  ),
-                ],
-              ),
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              physics: NeverScrollableScrollPhysics(),
+              children: [
+                RefreshListView(
+                  children: getWalkInListByFilterValue(),
+                  onRefresh: () {
+                    _homePresenter.getAccountStatusS(context);
+                    // _homePresenter.getWalkInListV2(context);
+                    _homePresenter.getEventList(context);
+                  },
+                ),
+                RefreshListView(
+                  children: getBookingListByFilterValue(),
+                  onRefresh: () {
+                    // _homePresenter.getWalkInListV2(context);
+                    _homePresenter.getAccountStatusS(context);
+                    _homePresenter.getEventList(context);
+                  },
+                ),
+              ],
             ),
+          ),
         ],
       ),
     );
@@ -412,6 +417,87 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   void onTaggingDone() {
     Utility.showSuccessToastB(context, "Tagging completed");
     _homePresenter.getWalkInListV2(context);
+  }
+
+  @override
+  void onAccountStatusChecked(AccountStatusResponse accountStatusResponse) async {
+    switch (accountStatusResponse.applicationStatus) {
+      case Constants.ADMIN:
+        await updateUserCreds(accountStatusResponse?.customerAccountID);
+        _homePresenter.getWalkInList(context);
+        break;
+      case Constants.GUEST_USER:
+        break;
+      case Constants.IN_PROGRESS:
+        showApplicationInProcessDialog();
+        break;
+      case Constants.APPROVED:
+        await updateUserCreds(accountStatusResponse?.customerAccountID);
+        _homePresenter.getWalkInList(context);
+        break;
+    }
+  }
+
+  void updateUserCreds(String uId) async {
+    if (uId == null || uId.isEmpty) {
+      return;
+    }
+
+    var currentUser = await AuthUser.getInstance().getCurrentUser();
+    currentUser.userCredentials..accountId = uId;
+    await AuthUser.getInstance().updateUser(currentUser);
+  }
+
+  void showApplicationInProcessDialog() {
+    AlertDialog alert = AlertDialog(
+      contentPadding: EdgeInsets.all(0.0),
+      backgroundColor: Colors.transparent,
+      content: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(6),
+            ),
+            margin: EdgeInsets.all(10.0),
+            padding: EdgeInsets.all(10.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Application in Process", style: textStyle20px500w),
+                verticalSpace(10.0),
+                Text(
+                  "We have received your details. Our team will get in touch with you shortly!\nThank you.",
+                  style: textStyle12px500w,
+                ),
+                verticalSpace(10.0),
+              ],
+            ),
+          ),
+          Positioned(
+            right: 0,
+            top: 0,
+            child: PmlButton(
+              width: 30,
+              height: 30,
+              color: AppColors.colorPrimary,
+              child: Icon(Icons.close, color: AppColors.white, size: 16.0),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }
 

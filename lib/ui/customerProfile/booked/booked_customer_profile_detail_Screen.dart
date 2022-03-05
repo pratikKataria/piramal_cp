@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
+import 'package:piramal_channel_partner/res/constants.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/booking_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/project_unit_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/schedule_visit_response.dart';
@@ -10,6 +11,7 @@ import 'package:piramal_channel_partner/ui/customerProfile/booked/model/invoice_
 import 'package:piramal_channel_partner/ui/customerProfile/customer_profile_presenter.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/customer_profile_view.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
+import 'package:piramal_channel_partner/widgets/download_button.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
 import 'package:piramal_channel_partner/widgets/refresh_list_view.dart';
 import 'package:piramal_channel_partner/widgets/whats_app_button.dart';
@@ -171,21 +173,17 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
                 ],
               ),
               verticalSpace(25.0),
-              InkWell(
-                onTap: () async {
-                  Utility.launchUrlX(context, response.file);
-                },
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 6.0),
-                  color: AppColors.screenBackgroundColor,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("Download Invoice", style: textStyleRegular16px500px),
-                      Icon(Icons.arrow_circle_down_outlined, size: 14.0, color: AppColors.colorSecondary),
-                    ],
-                  ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 6.0),
+                color: AppColors.screenBackgroundColor,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Download Invoice", style: textStyleRegular16px500px),
+                    DownloadButton("${response.brokerageID}",  Constants.INVOICE),
+                    // Icon(Icons.arrow_circle_down_outlined, size: 14.0, color: AppColors.colorSecondary),
+                  ],
                 ),
               ),
               verticalSpace(25.0),

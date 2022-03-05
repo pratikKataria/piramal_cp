@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer' as dev;
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
@@ -56,8 +57,8 @@ class Utility {
   );
 
   static log(var tag, var message) {
-    // dev.log('\n\n*****************\n$tag\n$message\n*****************\n\n');
-    print('\n\n*****************\n$tag\n$message\n*****************\n\n');
+    dev.log('\n\n*****************\n$tag\n$message\n*****************\n\n');
+    // print('\n\n*****************\n$tag\n$message\n*****************\n\n');
   }
 
   static void showErrorToast(BuildContext context, String text) async {

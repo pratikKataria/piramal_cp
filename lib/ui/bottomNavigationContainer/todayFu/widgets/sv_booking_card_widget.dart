@@ -131,10 +131,10 @@ class SvBookingCardWidget extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      if (!(_bookingResponse?.taggingStatus ?? false))
+                      if (!(_bookingResponse?.completeTagging ?? false))
                         Icon(Icons.warning_amber_sharp, color: AppColors.red, size: 12),
                       horizontalSpace(4.0),
-                      Text("${(_bookingResponse?.taggingStatus ?? false) ? "Tagging Completed" : "Complete Tagging"}",
+                      Text("${(_bookingResponse?.completeTagging ?? false) ? "Tagging Completed" : "Complete Tagging"}",
                           style: textStyleWhite12px500w),
                     ],
                   ),

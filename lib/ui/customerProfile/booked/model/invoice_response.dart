@@ -7,19 +7,22 @@
 
 class InvoiceResponse {
   InvoiceResponse({
-      String status, 
-      bool returnCode, 
-      String name, 
-      String message, 
-      String fileID, 
-      String file,}){
+    String status,
+    bool returnCode,
+    String name,
+    String message,
+    String fileID,
+    String BrokerageID,
+    String file,
+  }) {
     _status = status;
     _returnCode = returnCode;
     _name = name;
     _message = message;
     _fileID = fileID;
     _file = file;
-}
+    _brokerageID = BrokerageID;
+  }
 
   InvoiceResponse.fromJson(dynamic json) {
     _status = json['Status'];
@@ -28,20 +31,34 @@ class InvoiceResponse {
     _message = json['message'];
     _fileID = json['FileID'];
     _file = json['InvoiceDownloadlink'];
+    _brokerageID = json['BrokerageID'];
   }
+
   String _status;
   bool _returnCode;
   String _name;
   String _message;
   String _fileID;
   String _file;
+  String _brokerageID;
 
   String get status => _status;
+
   bool get returnCode => _returnCode;
+
   String get name => _name;
+
   String get message => _message;
+
   String get fileID => _fileID;
+
   String get file => _file;
+
+  String get brokerageID => _brokerageID;
+
+  set brokerageID(String value) {
+    _brokerageID = value;
+  }
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -51,7 +68,7 @@ class InvoiceResponse {
     map['message'] = _message;
     map['FileID'] = _fileID;
     map['InvoiceDownloadlink'] = _file;
+    map['BrokerageID'] = _brokerageID;
     return map;
   }
-
 }

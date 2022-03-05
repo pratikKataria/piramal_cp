@@ -48,9 +48,13 @@ dependencies:
   url_launcher: any
   intl: any
   pull_to_refresh: any
-  file_picker: 4.0.0
-  marquee: ^2.2.0
-  cupertino_icons: ^1.0.2
+  file_picker: any
+  marquee: any
+  cupertino_icons: any
+  firebase_core: any
+  firebase_messaging: 10.0.8
+  firebase_messaging_platform_interface: 3.1.6
+  flutter_local_notifications: 9.0.2
 
 dev_dependencies:
   flutter_test:

@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:piramal_channel_partner/api/api_controller_expo.dart';
+import 'package:piramal_channel_partner/api/api_end_points.dart';
+import 'package:piramal_channel_partner/api/model/project_download_link_reponse.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
+import 'package:piramal_channel_partner/utils/Dialogs.dart';
+import 'package:piramal_channel_partner/utils/NetworkCheck.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 
 class DownloadButton extends StatelessWidget {
-  final String link;
+  final String projectId;
+  final String fileIdentifier;
 
-  const DownloadButton(this.link, {Key key}) : super(key: key);
+  const DownloadButton(this.projectId, this.fileIdentifier, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Utility.launchUrlX(context, link);
+        // Utility.launchUrlX(context, projectId);
+        downloadFile(context);
       },
       child: Container(
         width: 30,
@@ -28,4 +35,39 @@ class DownloadButton extends StatelessWidget {
       ),
     );
   }
+
+  void downloadFile(BuildContext context) async {
+    if (!await NetworkCheck.check()) {
+      // _v.onError("");
+      Utility.showErrorToastB(context, "No Network Found");
+      return;
+    }
+
+    var body = {"LinkedEntityId": "$projectId", "FileName": "$fileIdentifier"};
+
+    Dialogs.showLoader(context, "Getting your file ready please wait ...");
+    apiController.post(EndPoints.GET_PROJECT_DOWNLOAD_LINK, body: body, headers: await Utility.header())
+      ..then((response) {
+        Dialogs.hideLoader(context);
+        Utility.log("Download Button", response);
+        ProjectDownloadLinkReponse projectDownloadLinkReponse = ProjectDownloadLinkReponse.fromJson(response.data);
+
+        if (projectDownloadLinkReponse.returnCode) {
+          Utility.launchUrlX(context, projectDownloadLinkReponse?.downloadlink);
+        } else {
+          Utility.showErrorToastB(context, projectDownloadLinkReponse.message);
+        }
+      })
+      ..catchError((e) {
+        Dialogs.hideLoader(context);
+        Utility.log("Download Button", e);
+        Utility.showErrorToastB(context, "$e");
+      });
+  }
 }
+
+/* if (projectDownloadLinkReponse?.downloadlink == null || (projectDownloadLinkReponse?.downloadlink?.isEmpty ?? true)) {
+            Utility.showErrorToastB(context, "No Link!");
+            return;
+          }
+*/

@@ -1,5 +1,6 @@
+/// SiteHeadMobile : "+91 9960390011"
 /// SiteHeadLabel : "Site Head"
-/// SiteHead : null
+/// SiteHead : "Aniket Khillari"
 /// returnCode : true
 /// RelationshipManagerName : "Devashish Nagapure"
 /// RelationshipManagerMobile : "9881560816"
@@ -13,8 +14,9 @@
 
 class MyAssistResponse {
   MyAssistResponse({
+      String siteHeadMobile, 
       String siteHeadLabel, 
-      String siteHead,
+      String siteHead, 
       bool returnCode, 
       String relationshipManagerName, 
       String relationshipManagerMobile, 
@@ -25,6 +27,7 @@ class MyAssistResponse {
       String headOfDepartmentName, 
       String headOfDepartmentMobile, 
       String headOfDepartmentLabel,}){
+    _siteHeadMobile = siteHeadMobile;
     _siteHeadLabel = siteHeadLabel;
     _siteHead = siteHead;
     _returnCode = returnCode;
@@ -40,6 +43,7 @@ class MyAssistResponse {
 }
 
   MyAssistResponse.fromJson(dynamic json) {
+    _siteHeadMobile = json['SiteHeadMobile'];
     _siteHeadLabel = json['SiteHeadLabel'];
     _siteHead = json['SiteHead'];
     _returnCode = json['returnCode'];
@@ -53,6 +57,7 @@ class MyAssistResponse {
     _headOfDepartmentMobile = json['HeadOfDepartmentMobile'];
     _headOfDepartmentLabel = json['HeadOfDepartmentLabel'];
   }
+  String _siteHeadMobile;
   String _siteHeadLabel;
   String _siteHead;
   bool _returnCode;
@@ -66,6 +71,7 @@ class MyAssistResponse {
   String _headOfDepartmentMobile;
   String _headOfDepartmentLabel;
 
+  String get siteHeadMobile => _siteHeadMobile;
   String get siteHeadLabel => _siteHeadLabel;
   String get siteHead => _siteHead;
   bool get returnCode => _returnCode;
@@ -81,6 +87,7 @@ class MyAssistResponse {
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
+    map['SiteHeadMobile'] = _siteHeadMobile;
     map['SiteHeadLabel'] = _siteHeadLabel;
     map['SiteHead'] = _siteHead;
     map['returnCode'] = _returnCode;

@@ -1,11 +1,14 @@
 import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:piramal_channel_partner/api/api_controller_expo.dart';
 import 'package:piramal_channel_partner/api/api_end_points.dart';
 import 'package:piramal_channel_partner/api/api_error_parser.dart';
 import 'package:piramal_channel_partner/res/Screens.dart';
+import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/account_status_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/booking_response.dart';
+import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/device_token_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/project_unit_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/schedule_visit_response.dart';
 import 'package:piramal_channel_partner/ui/core/login/model/otp_response.dart';
@@ -289,7 +292,6 @@ class HomePresenter {
       "CustomerAccountId": "$userId",
       "OpportunityId": "$oId",
       "CompleteTag": true,
-      "TaskId": "$taskId",
     };
 
     Dialogs.showLoader(context, "Tagging customer please wait ...");
@@ -311,6 +313,130 @@ class HomePresenter {
         } else {
           _v.onError(bookingResponse.message);
         }
+      })
+      ..catchError((e) {
+        Dialogs.hideLoader(context);
+        ApiErrorParser.getResult(e, _v);
+      });
+  }
+
+  void getAccountStatusS(BuildContext context) async {
+    //check for internal token
+    if (await AuthUser.getInstance().hasToken()) {
+      _v.onError("Token not found");
+      return;
+    }
+
+    //check network
+    if (!await NetworkCheck.check()) {
+      _v.onError("Network Error");
+      return;
+    }
+
+    /*{
+      "CustomerAccountId": "001p000000y1SqW",
+    "OpportunityId": "006p00000092HFKAA2",
+    "CompleteTag": "false",
+    "TaskId": "00Tp000000HpLsy"
+    }*/
+
+    String userId = await Utility.uID();
+    var body = {"MobileAppBrokerID": "$userId"};
+
+    // Dialogs.showLoader(context, "Tagging customer please wait ...");
+    apiController.post(EndPoints.GET_ACCOUNT_STATUS, body: body, headers: await Utility.header())
+      ..then((response) {
+        // Dialogs.hideLoader(context);
+
+        AccountStatusResponse bookingResponse = AccountStatusResponse.fromJson(response.data);
+        if (bookingResponse == null) {
+          _v.onError(Screens.kErrorTxt);
+          return;
+        }
+
+        if (bookingResponse.returnCode) {
+          _v.onAccountStatusChecked(bookingResponse);
+        } else {
+          _v.onError(bookingResponse.message);
+        }
+      })
+      ..catchError((e) {
+        // Dialogs.hideLoader(context);
+        ApiErrorParser.getResult(e, _v);
+      });
+  }
+
+  void getAccountStatus(BuildContext context) async {
+    //check for internal token
+    if (await AuthUser.getInstance().hasToken()) {
+      _v.onError("Token not found");
+      return;
+    }
+
+    //check network
+    if (!await NetworkCheck.check()) {
+      _v.onError("Network Error");
+      return;
+    }
+
+    /*{
+      "CustomerAccountId": "001p000000y1SqW",
+    "OpportunityId": "006p00000092HFKAA2",
+    "CompleteTag": "false",
+    "TaskId": "00Tp000000HpLsy"
+    }*/
+
+    String userId = await Utility.uID();
+    var body = {"MobileAppBrokerID": "$userId"};
+
+    Dialogs.showLoader(context, "Please wait fetching your data ...");
+    apiController.post(EndPoints.GET_ACCOUNT_STATUS, body: body, headers: await Utility.header())
+      ..then((response) {
+        Dialogs.hideLoader(context);
+
+        AccountStatusResponse bookingResponse = AccountStatusResponse.fromJson(response.data);
+        if (bookingResponse == null) {
+          _v.onError(Screens.kErrorTxt);
+          return;
+        }
+
+        if (bookingResponse.returnCode) {
+          _v.onAccountStatusChecked(bookingResponse);
+        } else {
+          _v.onError(bookingResponse.message);
+        }
+      })
+      ..catchError((e) {
+        Dialogs.hideLoader(context);
+        ApiErrorParser.getResult(e, _v);
+      });
+  }
+
+  void postDeviceToken(BuildContext context) async {
+    if (await AuthUser.getInstance().hasToken()) {
+      _v.onError("Token not found");
+      return;
+    }
+
+    //check network
+    if (!await NetworkCheck.check()) {
+      _v.onError("Network Error");
+      return;
+    }
+
+    String deviceToken = await FirebaseMessaging.instance.getToken();
+    String userId = await Utility.uID();
+
+    var body = {
+      "CustomerAccountID": "$userId",
+      "deviceToken": "$deviceToken",
+    };
+
+    apiController.post(EndPoints.POST_DEVICE_TOKEN, body: body, headers: await Utility.header())
+      ..then((response) {
+        Dialogs.hideLoader(context);
+        DeviceTokenResponse deviceTokenResponse = DeviceTokenResponse.fromJson(response.data);
+        Utility.log(tag, "Device Token: ${deviceTokenResponse?.token}");
       })
       ..catchError((e) {
         Dialogs.hideLoader(context);

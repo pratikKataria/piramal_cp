@@ -5,6 +5,8 @@
 /// DownloadLinkAPP : ""
 
 class ProjectDownloadResponse {
+  String projectId = "";
+
   ProjectDownloadResponse({
     String towerName,
     String siteManagerMobile,
@@ -13,7 +15,9 @@ class ProjectDownloadResponse {
     String message,
     String masterPlanLink,
     String floorplanlink,
-    String brochure,}) {
+    String towerID,
+    String brochure,
+  }) {
     _towerName = towerName;
     _siteManagerMobile = siteManagerMobile;
     _returnCode = returnCode;
@@ -22,6 +26,7 @@ class ProjectDownloadResponse {
     _masterPlanLink = masterPlanLink;
     _floorplanlink = floorplanlink;
     _brochure = brochure;
+    _towerID = towerID;
   }
 
   ProjectDownloadResponse.fromJson(dynamic json) {
@@ -33,6 +38,7 @@ class ProjectDownloadResponse {
     _masterPlanLink = json['MasterPlanLink'];
     _floorplanlink = json['floorplanlink'];
     _brochure = json['brochure'];
+    _towerID = json['TowerID'];
   }
 
   String _towerName;
@@ -43,6 +49,7 @@ class ProjectDownloadResponse {
   String _masterPlanLink;
   String _floorplanlink;
   String _brochure;
+  String _towerID;
 
   String get towerName => _towerName;
 
@@ -60,6 +67,12 @@ class ProjectDownloadResponse {
 
   String get brochure => _brochure;
 
+  String get towerID => _towerID;
+
+  set towerID(String value) {
+    _towerID = value;
+  }
+
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['TowerName'] = _towerName;
@@ -70,6 +83,7 @@ class ProjectDownloadResponse {
     map['MasterPlanLink'] = _masterPlanLink;
     map['floorplanlink'] = _floorplanlink;
     map['brochure'] = _brochure;
+    map['TowerID'] = _towerID;
     return map;
   }
 }

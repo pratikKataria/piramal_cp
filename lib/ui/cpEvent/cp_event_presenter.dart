@@ -59,7 +59,7 @@ class CPEventPresenter {
       });
   }
 
-  void revertToEvent(BuildContext context, String status, String eventId) async {
+  void revertToEvent(BuildContext context, String status, String size, String eventId) async {
     //check for internal token
     if (await AuthUser.getInstance().hasToken()) {
       _v.onError("Token not found");
@@ -72,11 +72,21 @@ class CPEventPresenter {
       return;
     }
 
+    //check network
+    if (status == "Attend" || status == "Tentative") {
+      if (size == "0") {
+        _v.onError("Please enter pax size");
+        return;
+      }
+    }
+
+
     String uID = await Utility.uID();
     var body = {
       "AccountID": "$uID",
       "CPEventID": "$eventId",
       "status": "$status",
+      "paxsize": "$size",
     };
 
     Dialogs.showLoader(context, "Updating event status ...");

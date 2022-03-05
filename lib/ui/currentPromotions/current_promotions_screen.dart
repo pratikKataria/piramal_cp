@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
+import 'package:piramal_channel_partner/res/constants.dart';
 import 'package:piramal_channel_partner/ui/currentPromotions/current_promo_presenter.dart';
 import 'package:piramal_channel_partner/ui/currentPromotions/current_promo_view.dart';
 import 'package:piramal_channel_partner/ui/currentPromotions/model/current_promo_response.dart';
@@ -121,7 +122,7 @@ class _CurrentPromotionScreenState extends State<CurrentPromotionScreen> impleme
                           ),
                         ),
                         horizontalSpace(8.0),
-                        DownloadButton(currentPromoData?.download),
+                        DownloadButton(currentPromoData?.sfdcid,  Constants.CURRENT_PROMOTION),
                       ],
                     ),
                   ],

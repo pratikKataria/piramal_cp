@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
@@ -11,6 +12,7 @@ import 'package:piramal_channel_partner/ui/cpEvent/model/cp_event_status_update_
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
 import 'package:piramal_channel_partner/widgets/refresh_list_view.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CPEventScreen extends StatefulWidget {
   const CPEventScreen({Key key}) : super(key: key);
@@ -28,6 +30,8 @@ class _CPEventScreenState extends State<CPEventScreen> implements CPEventView {
 
   final List<CpEventResponse> cpEventList = [];
   CPEventPresenter presenter;
+  String comment;
+  String size = "0";
 
   @override
   void initState() {
@@ -89,9 +93,10 @@ class _CPEventScreenState extends State<CPEventScreen> implements CPEventView {
             height: 130.0,
             decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: /*NetworkImage("${cpEventData?.eventImage??""}") */MemoryImage(Utility.convertMemoryImage(cpEventData.eventImage)),
-                  fit: BoxFit.fill,
-                )),
+              image: /*NetworkImage("${cpEventData?.eventImage??""}") */ MemoryImage(
+                  Utility.convertMemoryImage(cpEventData.eventImage)),
+              fit: BoxFit.fill,
+            )),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 20.0, top: 10.0, bottom: 10.0),
@@ -117,10 +122,10 @@ class _CPEventScreenState extends State<CPEventScreen> implements CPEventView {
                   Container(
                     height: 25.0,
                     color:
-                    cpEventData.availabilitystatus == ATTEND ? AppColors.attendButtonColor : AppColors.tentativeButtonColor,
+                        cpEventData.availabilitystatus == ATTEND ? AppColors.attendButtonColor : AppColors.tentativeButtonColor,
                     child: Center(child: Text("${eventText(cpEventData.availabilitystatus)}", style: textStyleWhite14px500w)),
                   ),
-                if (cpEventData.availabilitystatus == null)
+                if (cpEventData.availabilitystatus == null /*true*/)
                   Row(
                     children: [
                       PmlButton(
@@ -129,7 +134,7 @@ class _CPEventScreenState extends State<CPEventScreen> implements CPEventView {
                         color: AppColors.attendButtonColor,
                         padding: EdgeInsets.symmetric(horizontal: 20.0),
                         onTap: () {
-                          presenter.revertToEvent(context, "Attend", cpEventData.cpeventId);
+                          showDetailDialog(cpEventData, "Attend", size);
                         },
                       ),
                       horizontalSpace(10.0),
@@ -139,7 +144,8 @@ class _CPEventScreenState extends State<CPEventScreen> implements CPEventView {
                         color: AppColors.tentativeButtonColor,
                         padding: EdgeInsets.symmetric(horizontal: 20.0),
                         onTap: () {
-                          presenter.revertToEvent(context, "Tentative", cpEventData.cpeventId);
+                          showDetailDialog(cpEventData, "Tentative", size);
+                          // presenter.revertToEvent(context, "Tentative", cpEventData.cpeventId);
                         },
                       ),
                       horizontalSpace(10.0),
@@ -149,7 +155,7 @@ class _CPEventScreenState extends State<CPEventScreen> implements CPEventView {
                         color: AppColors.red,
                         padding: EdgeInsets.symmetric(horizontal: 20.0),
                         onTap: () {
-                          presenter.revertToEvent(context, "Not Going", cpEventData.cpeventId);
+                          presenter.revertToEvent(context, "Not Going", size, cpEventData.cpeventId);
                         },
                       ),
                     ],
@@ -195,7 +201,12 @@ class _CPEventScreenState extends State<CPEventScreen> implements CPEventView {
   @override
   void onCpEventStatusUpdated(CpEventStatusUpdateResponse response) {
     Utility.showSuccessToastB(context, response.availabilityStatus);
+    size = "0";
+    if (response.availabilityStatus != "Not Going")
+      Navigator.pop(context); // hide dialog
+
     presenter.getEventList(context);
+    if (response.availabilityStatus != "Not Going") showZoomDialog(response?.zoomlink);
   }
 
   String eventText(String eventStatus) {
@@ -208,6 +219,133 @@ class _CPEventScreenState extends State<CPEventScreen> implements CPEventView {
         return "You are not going to this event";
     }
     return "";
+  }
+
+  void showDetailDialog(CpEventResponse cpEventData, String status, String size) {
+    AlertDialog alert = AlertDialog(
+      contentPadding: EdgeInsets.all(0.0),
+      content: Wrap(
+        children: [
+          Column(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: AppColors.white,
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                margin: EdgeInsets.all(10.0),
+                padding: EdgeInsets.all(10.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      color: AppColors.screenBackgroundColor,
+                      padding: EdgeInsets.symmetric(horizontal: 10.0),
+                      child: TextFormField(
+                        obscureText: false,
+                        textAlign: TextAlign.left,
+                        maxLines: 1,
+                        textCapitalization: TextCapitalization.none,
+                        style: subTextStyle,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: "Enter Pax Size",
+                          hintStyle: subTextStyle,
+                          isDense: true,
+                          suffixStyle: TextStyle(color: AppColors.textColor),
+                        ),
+                        onChanged: (String val) {
+                          size = val;
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              PmlButton(
+                width: 150,
+                height: 30,
+                text: "Next",
+                color: AppColors.colorPrimary,
+                onTap: () {
+                  presenter.revertToEvent(context, status, size, cpEventData.cpeventId);
+                },
+              ),
+              verticalSpace(20.0),
+            ],
+          ),
+        ],
+      ),
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  void showZoomDialog(String zoomLink) {
+    AlertDialog alert = AlertDialog(
+      contentPadding: EdgeInsets.all(0.0),
+      content: Wrap(
+        children: [
+          Column(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: AppColors.white,
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                margin: EdgeInsets.all(10.0),
+                padding: EdgeInsets.all(10.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      color: AppColors.screenBackgroundColor,
+                      padding: EdgeInsets.symmetric(horizontal: 10.0),
+                      child: Text(
+                        "Please click on Next Button to register on the following meeting link to join the event",
+                        style: textStyle12px500w,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              PmlButton(
+                width: 150,
+                height: 30,
+                text: "Next",
+                color: AppColors.colorPrimary,
+                onTap: () {
+                  Navigator.pop(context);
+                  if (zoomLink != null && zoomLink.isNotEmpty) {
+                    bool hasHttp = zoomLink.startsWith("http") || zoomLink.startsWith("https");
+                    zoomLink = hasHttp ? zoomLink : "https://${zoomLink}";
+                    print(zoomLink);
+
+                    launch(zoomLink);
+                  } else {
+                    onError("No link found!");
+                  }
+                },
+              ),
+              verticalSpace(20.0),
+            ],
+          ),
+        ],
+      ),
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }
 

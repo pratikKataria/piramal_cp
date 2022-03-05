@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
+import 'package:piramal_channel_partner/res/constants.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/model/project_download_response.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/download_button.dart';
@@ -30,6 +31,7 @@ class ProjectDetailDownloadPage extends StatelessWidget {
             "Masterplan",
             projectDownloadResponse[0],
             projectDownloadResponse[0].masterPlanLink,
+            Constants.MASTER_PLAN,
           ),
 
           cardViewListDownloadsV2(
@@ -37,6 +39,7 @@ class ProjectDetailDownloadPage extends StatelessWidget {
             "Brochure",
             projectDownloadResponse[1],
             projectDownloadResponse[1].brochure,
+            Constants.BROCHURE,
           ),
 
           for (int i = 2; i < projectDownloadResponse.length; i++) cardViewListDownloads(context, projectDownloadResponse[i]),
@@ -46,7 +49,7 @@ class ProjectDetailDownloadPage extends StatelessWidget {
     );
   }
 
-  cardViewListDownloadsV2(Image icon, String name, ProjectDownloadResponse response, String link) {
+  cardViewListDownloadsV2(Image icon, String name, ProjectDownloadResponse response, String link, String identifier) {
     return Column(
       children: [
         verticalSpace(20.0),
@@ -60,7 +63,7 @@ class ProjectDetailDownloadPage extends StatelessWidget {
             //whats app and download
             WhatsAppButton(response.message),
             horizontalSpace(8.0),
-            DownloadButton(link),
+            DownloadButton("${response?.projectId}", "$identifier"),
           ],
         ),
         verticalSpace(20.0),
@@ -83,7 +86,7 @@ class ProjectDetailDownloadPage extends StatelessWidget {
             //whats app and download
             WhatsAppButton(response?.message),
             horizontalSpace(8.0),
-            DownloadButton(response?.floorplanlink),
+            DownloadButton("${response.towerID}", Constants.FLOOR_PLAN),
           ],
         ),
         verticalSpace(20.0),
