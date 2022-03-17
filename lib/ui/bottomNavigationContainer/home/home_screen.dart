@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
@@ -310,9 +311,32 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   }
 
   @override
-  void onSiteVisitScheduled(ScheduleVisitResponse visitResponse) {
+  Future<void> onSiteVisitScheduled(ScheduleVisitResponse visitResponse) async {
     // Navigator.pop(context);
     Utility.showSuccessToastB(context, "Visit Scheduled");
+
+    if (visitResponse.schDate != null) {
+      String localTimeZone = await AwesomeNotifications().getLocalTimeZoneIdentifier();
+      DateTime dt = visitResponse.schDate;
+      AwesomeNotifications().createNotification(
+        content: NotificationContent(
+          id: 10,
+          channelKey: 'basic_channel',
+          title: 'Simple Notification',
+          body: 'Simple body',
+        ),
+        schedule: NotificationCalendar(
+          year: dt.year,
+          month: dt.month,
+          hour: dt.hour,
+          minute: dt.minute,
+          second: dt.second,
+          timeZone: localTimeZone,
+          allowWhileIdle: true,
+          repeats: false,
+        ),
+      );
+    }
   }
 
   @override

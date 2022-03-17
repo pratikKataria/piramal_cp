@@ -4,7 +4,7 @@
 
 class NotificationResponse {
   NotificationResponse({
-      int returnCode, 
+      bool returnCode,
       String message, 
       List<NotificationList> notificationList,}){
     _returnCode = returnCode;
@@ -22,11 +22,11 @@ class NotificationResponse {
       });
     }
   }
-  int _returnCode;
+  bool _returnCode;
   String _message;
   List<NotificationList> _notificationList;
 
-  int get returnCode => _returnCode;
+  bool get returnCode => _returnCode;
   String get message => _message;
   List<NotificationList> get notificationList => _notificationList;
 

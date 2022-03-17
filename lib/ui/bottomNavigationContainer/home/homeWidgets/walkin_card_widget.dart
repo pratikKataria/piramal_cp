@@ -1,4 +1,3 @@
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
@@ -47,7 +46,6 @@ class WalkInCardWidget extends StatelessWidget {
               if ((_bookingResponse?.completeTagging ?? false)) {
                 Navigator.pushNamed(context, Screens.kCustomerProfileDetailWalkin, arguments: _bookingResponse);
                 BaseProvider baseProvider = Provider.of<BaseProvider>(context, listen: false);
-
                 baseProvider.setBottomNavScreen(Screens.kCustomerProfileDetailWalkin);
               }
             },
@@ -191,29 +189,7 @@ class WalkInCardWidget extends StatelessWidget {
   InkWell calenderButton(BuildContext context) {
     return InkWell(
       onTap: () async {
-        String localTimeZone = await AwesomeNotifications().getLocalTimeZoneIdentifier();
-        String utcTimeZone = await AwesomeNotifications().getLocalTimeZoneIdentifier();
-
-        /* await AwesomeNotifications().createNotification(
-          content: NotificationContent(
-            id: 45,
-            channelKey: 'scheduled',
-            title: 'Notification at every single minute',
-            body: 'This notification was schedule to repeat at every single minute.',
-          ),
-        );
-*/
-        AwesomeNotifications().createNotification(
-          content: NotificationContent(
-            id: 10,
-            channelKey: 'basic_channel',
-            title: 'Simple Notification',
-            body: 'Simple body',
-
-          ),
-          schedule: NotificationInterval(interval: 8, timeZone: localTimeZone, repeats: false),
-        );
-        // if ((_bookingResponse?.completeTagging ?? false)) _selectDate(context);
+        if ((_bookingResponse?.completeTagging ?? false)) _selectDate(context);
       },
       child: Container(
         width: 35,

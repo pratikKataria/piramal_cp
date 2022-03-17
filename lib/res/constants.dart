@@ -16,4 +16,8 @@ abstract class Constants {
   static const String MASTER_PLAN = "Masterplan";
   static const String FLOOR_PLAN = "Floorplan";
   static const String INVOICE = "Invoice";
+
+  static const String NEW_OPPORTUNITY_NOTIFICATION = "New Opportunity";
+  static const String CP_EVENT_NOTIFICATION = "CP Event";
+  static const String CURRENT_PROMOTION_NOTIFICATION = "Current Promotion";
 }

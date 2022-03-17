@@ -48,6 +48,7 @@ class CustomerProfilePresenter extends BasePresenter {
       ..then((response) {
         Dialogs.hideLoader(context);
         ScheduleVisitResponse visitResponse = ScheduleVisitResponse.fromJson(response.data);
+        visitResponse.schDate = visitDate;
         if (visitResponse.returnCode) {
           _v.onSiteVisitScheduled(visitResponse);
         } else {

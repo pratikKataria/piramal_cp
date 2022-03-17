@@ -4,6 +4,7 @@
 /// Dateofvisit : null
 
 class ScheduleVisitResponse {
+  DateTime schDate = null;
   ScheduleVisitResponse({
       bool returnCode,
       String recordid,

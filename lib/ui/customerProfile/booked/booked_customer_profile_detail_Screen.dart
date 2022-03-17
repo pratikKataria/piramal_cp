@@ -181,7 +181,7 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text("Download Invoice", style: textStyleRegular16px500px),
-                    DownloadButton("${response.brokerageID}",  Constants.INVOICE),
+                    DownloadButton("${response?.brokerageID}",  Constants.INVOICE),
                     // Icon(Icons.arrow_circle_down_outlined, size: 14.0, color: AppColors.colorSecondary),
                   ],
                 ),
