@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -59,6 +60,30 @@ Future<void> main() async {
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(channel);
+
+  AwesomeNotifications().initialize(
+      // set the icon to null if you want to use the default app icon
+      'resource://drawable/ic_app_logo',
+      [
+        NotificationChannel(
+            channelGroupKey: 'basic_channel_group',
+            channelKey: 'basic_channel',
+            channelName: 'Basic notifications',
+            channelDescription: 'Notification channel for basic tests',
+            ledColor: Colors.white)
+      ],
+      // Channel groups are only visual and are not required
+      channelGroups: [NotificationChannelGroup(channelGroupkey: 'basic_channel_group', channelGroupName: 'Basic group')],
+      debug: true);
+
+  AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+    if (!isAllowed) {
+      // This is just a basic example. For real apps, you must show some
+      // friendly dialog box before call the request method.
+      // This is very important to not harm the user experience
+      AwesomeNotifications().requestPermissionToSendNotifications();
+    }
+  });
 
   bool authResult = await (AuthUser.getInstance()).isLoggedIn();
 
@@ -183,12 +208,8 @@ class MyApp extends StatelessWidget {
         "How you doin ?",
         NotificationDetails(
             android: AndroidNotificationDetails(channel.id, channel.name,
-                importance: Importance.high,
-                color: Colors.blue,
-                playSound: true,
-                icon: '@mipmap/ic_launcher')));
+                importance: Importance.high, color: Colors.blue, playSound: true, icon: '@mipmap/ic_launcher')));
   }
-
 
   checkAuthUser(authResult) {
     if (authResult) {

@@ -1,12 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
+import 'package:piramal_channel_partner/ui/bottomNavigationContainer/notificationSc/model/notification_response.dart';
+import 'package:piramal_channel_partner/ui/bottomNavigationContainer/notificationSc/notification_presenter.dart';
+import 'package:piramal_channel_partner/ui/bottomNavigationContainer/notificationSc/notification_view.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 
-class NotificationScreen extends StatelessWidget {
+class NotificationScreen extends StatefulWidget {
   const NotificationScreen({Key key}) : super(key: key);
+
+  @override
+  _NotificationScreenState createState() => _NotificationScreenState();
+}
+
+class _NotificationScreenState extends State<NotificationScreen> implements NotificationView {
   final subTextStyle = textStyleSubText14px500w;
   final mainTextStyle = textStyle14px500w;
+  NotificationPresenter _homePresenter;
+
+  @override
+  void initState() {
+    _homePresenter = NotificationPresenter(this);
+    _homePresenter.getNotificationList(context);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -106,5 +123,15 @@ class NotificationScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  @override
+  onError(String message) {
+    Utility.showErrorToastB(context, message);
+  }
+
+  @override
+  void onNotificationListFetched(List<NotificationResponse> brList) {
+    print("NotificationList $brList");
   }
 }

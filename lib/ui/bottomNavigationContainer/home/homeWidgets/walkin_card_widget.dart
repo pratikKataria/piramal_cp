@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
@@ -189,8 +190,30 @@ class WalkInCardWidget extends StatelessWidget {
 
   InkWell calenderButton(BuildContext context) {
     return InkWell(
-      onTap: () {
-        if ((_bookingResponse?.completeTagging ?? false)) _selectDate(context);
+      onTap: () async {
+        String localTimeZone = await AwesomeNotifications().getLocalTimeZoneIdentifier();
+        String utcTimeZone = await AwesomeNotifications().getLocalTimeZoneIdentifier();
+
+        /* await AwesomeNotifications().createNotification(
+          content: NotificationContent(
+            id: 45,
+            channelKey: 'scheduled',
+            title: 'Notification at every single minute',
+            body: 'This notification was schedule to repeat at every single minute.',
+          ),
+        );
+*/
+        AwesomeNotifications().createNotification(
+          content: NotificationContent(
+            id: 10,
+            channelKey: 'basic_channel',
+            title: 'Simple Notification',
+            body: 'Simple body',
+
+          ),
+          schedule: NotificationInterval(interval: 8, timeZone: localTimeZone, repeats: false),
+        );
+        // if ((_bookingResponse?.completeTagging ?? false)) _selectDate(context);
       },
       child: Container(
         width: 35,
@@ -257,3 +280,37 @@ class WalkInCardWidget extends StatelessWidget {
     }
   }
 }
+
+/*
+
+   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+        var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+          'alarm_notif',
+          'alarm_notif',
+        );
+
+        var iOSPlatformChannelSpecifics =
+            IOSNotificationDetails(sound: 'a_long_cold_sting.wav', presentAlert: true, presentBadge: true, presentSound: true);
+
+        var platformChannelSpecifics = NotificationDetails(
+          android: androidPlatformChannelSpecifics,
+          iOS: iOSPlatformChannelSpecifics,
+        );
+
+        tz.initializeTimeZones();
+        // tz.setLocalLocation(tz.getLocation('Europe/Warsaw'));
+        var currentDateTime = tz.TZDateTime.now(tz.local).add(Duration(seconds: 2));
+        await flutterLocalNotificationsPlugin.zonedSchedule(
+          412,
+          "title",
+          "body",
+          await tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
+          platformChannelSpecifics,
+          androidAllowWhileIdle: true,
+          uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+        );
+
+
+
+*/
