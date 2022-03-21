@@ -5,6 +5,7 @@
 
 class ScheduleVisitResponse {
   DateTime schDate = null;
+  String opportunityName  = "";
   ScheduleVisitResponse({
       bool returnCode,
       String recordid,

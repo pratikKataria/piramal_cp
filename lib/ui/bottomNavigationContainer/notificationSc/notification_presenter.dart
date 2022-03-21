@@ -55,42 +55,4 @@ class NotificationPresenter {
       });
   }
 
-  // void getNotificationList(BuildContext context) async {
-  //   //check for internal token
-  //   if (await AuthUser.getInstance().hasToken()) {
-  //     _v.onError("Token not found");
-  //     return;
-  //   }
-  //
-  //   //check network
-  //   if (!await NetworkCheck.check()) {
-  //     _v.onError("Network Error");
-  //     return;
-  //   }
-  //
-  //   String uID = await Utility.uID();
-  //   // var body = {"CustomerAccountId": "$uID"};
-  //   var body = {
-  //     "AccountId":"001p000000zIm0jAAC"
-  //   };
-  //
-  //   apiController.post(EndPoints.NOTIFICATION_LIST, body: body, headers: await Utility.header())
-  //     ..then((Response response) {
-  //       NotificationResponse nResponse = NotificationResponse.fromJson(response.data);
-  //
-  //       if (nResponse.returnCode == null) {
-  //         _v.onError(Screens.kErrorTxt);
-  //         return;
-  //       }
-  //
-  //       if (nResponse.returnCode != null) {
-  //         _v.onNotificationListFetched(nResponse);
-  //       } else {
-  //         // _v.onError(bookingResponse.message);
-  //       }
-  //     })
-  //     ..catchError((e) {
-  //       ApiErrorParser.getResult(e, _v);
-  //     });
-  // }
 }

@@ -109,7 +109,6 @@ class BookingCardWidget extends StatelessWidget {
               ],
             ),
           ),
-
           Row(
             children: [
               // calenderButton(context),
@@ -233,7 +232,7 @@ class BookingCardWidget extends StatelessWidget {
     ).toLocal();
 
     if (picked != null) {
-      _presenter.scheduleTime(context, _bookingResponse.sfdcid, x);
+      _presenter.scheduleTime(context, "", _bookingResponse.sfdcid, x);
     }
   }
 }

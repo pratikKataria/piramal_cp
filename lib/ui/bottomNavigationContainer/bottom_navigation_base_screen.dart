@@ -8,8 +8,10 @@ import 'explore/explore_screen.dart';
 import 'home/home_screen.dart';
 import 'notificationSc/notification_screen.dart';
 
-class HomeBottomNavigationBaseScreen extends StatelessWidget {
-  HomeBottomNavigationBaseScreen() {
+
+class BottomNavigationBaseScreen extends StatelessWidget {
+
+  BottomNavigationBaseScreen() {
     initState();
   }
 

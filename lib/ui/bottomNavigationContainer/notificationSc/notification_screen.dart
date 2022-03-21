@@ -28,7 +28,6 @@ class _NotificationScreenState extends State<NotificationScreen> implements Noti
   @override
   void initState() {
     _homePresenter = NotificationPresenter(this);
-    _homePresenter.getNotificationList(context);
     super.initState();
   }
 
@@ -41,6 +40,13 @@ class _NotificationScreenState extends State<NotificationScreen> implements Noti
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Consumer<BaseProvider>(
+              builder: (_, provider, __) {
+                print("Notification consumer rebuilding ${provider.currentScreen}");
+                if (provider.currentScreen == Screens.kNotificationsScreen) _homePresenter.getNotificationList(context);
+                return Container();
+              },
+            ),
             verticalSpace(22.0),
             Text("Notification (${notificationList.length})", style: textStyle24px500w),
             verticalSpace(33.0),
@@ -63,9 +69,9 @@ class _NotificationScreenState extends State<NotificationScreen> implements Noti
       onTap: () {
         switch (notificationList?.type) {
           case Constants.NEW_OPPORTUNITY_NOTIFICATION:
-            Navigator.pushNamed(context, Screens.kCPEventScreen);
+            // Navigator.pushNamed(context, Screens.kCPEventScreen);
             BaseProvider baseProvider = Provider.of<BaseProvider>(context, listen: false);
-            baseProvider.setBottomNavScreen(Screens.kCPEventScreen);
+            baseProvider.setBottomNavScreen(Screens.kHomeScreen);
             break;
           case Constants.CP_EVENT_NOTIFICATION:
             Navigator.pushNamed(context, Screens.kCPEventScreen);
@@ -107,8 +113,6 @@ class _NotificationScreenState extends State<NotificationScreen> implements Noti
       ),
     );
   }
-
-
 
   Container buildProfileDetailCard(String mText, String sText) {
     return Container(

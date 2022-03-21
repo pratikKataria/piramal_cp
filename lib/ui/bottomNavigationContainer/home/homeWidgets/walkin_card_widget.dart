@@ -252,7 +252,7 @@ class WalkInCardWidget extends StatelessWidget {
     );
 
     if (picked != null) {
-      _presenter.scheduleTime(context, _bookingResponse.sfdcid, x);
+      _presenter.scheduleTime(context, _bookingResponse.name, _bookingResponse.sfdcid, x);
     }
   }
 }

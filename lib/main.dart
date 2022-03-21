@@ -10,7 +10,7 @@ import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/res/Strings.dart';
 import 'package:piramal_channel_partner/ui/base/base_screen.dart';
 import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
-import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home_bottom_navigation_base_screen.dart';
+import 'package:piramal_channel_partner/ui/bottomNavigationContainer/bottom_navigation_base_screen.dart';
 import 'package:piramal_channel_partner/ui/core/signup/signup_screen.dart';
 import 'package:piramal_channel_partner/ui/core/uploadDocument/upload_document_screen.dart';
 import 'package:piramal_channel_partner/ui/cpEvent/cp_event_screen.dart';
@@ -115,10 +115,10 @@ class MyApp extends StatelessWidget {
         onGenerateRoute: (RouteSettings settings) {
           switch (settings.name) {
             case "/":
-              return RouteTransition(widget: HomeBottomNavigationBaseScreen());
+              return RouteTransition(widget: BottomNavigationBaseScreen());
               break;
             case Screens.kHomeBase:
-              return RouteTransition(widget: HomeBottomNavigationBaseScreen());
+              return RouteTransition(widget: BottomNavigationBaseScreen());
               break;
             case Screens.kCustomerProfileDetailWalkin:
               return RouteTransition(widget: WalkinCustomerProfileDetailScreen(settings.arguments));
@@ -169,7 +169,7 @@ class MyApp extends StatelessWidget {
               return RouteTransition(widget: EditLeadScreen(settings.arguments));
               break;
             default:
-              return RouteTransition(widget: HomeBottomNavigationBaseScreen());
+              return RouteTransition(widget: BottomNavigationBaseScreen());
               break;
           }
         },
@@ -213,7 +213,7 @@ class MyApp extends StatelessWidget {
 
   checkAuthUser(authResult) {
     if (authResult) {
-      return HomeBottomNavigationBaseScreen();
+      return BottomNavigationBaseScreen();
     } else {
       return LoginScreen();
     }

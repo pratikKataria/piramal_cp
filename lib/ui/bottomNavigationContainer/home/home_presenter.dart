@@ -151,7 +151,7 @@ class HomePresenter {
       });
   }
 
-  void scheduleTime(BuildContext context, String otyId, DateTime visitDate) async {
+  void scheduleTime(BuildContext context, String name, String otyId, DateTime visitDate) async {
     //check for internal token
     if (await AuthUser.getInstance().hasToken()) {
       _v.onError("Token not found");
@@ -176,6 +176,8 @@ class HomePresenter {
       ..then((response) {
         Dialogs.hideLoader(context);
         ScheduleVisitResponse visitResponse = ScheduleVisitResponse.fromJson(response.data);
+        visitResponse.schDate = visitDate;
+        visitResponse.opportunityName = name??"";
         if (visitResponse.returnCode) {
           _v.onSiteVisitScheduled(visitResponse);
         } else {

@@ -318,12 +318,16 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     if (visitResponse.schDate != null) {
       String localTimeZone = await AwesomeNotifications().getLocalTimeZoneIdentifier();
       DateTime dt = visitResponse.schDate;
+      print("old time ${dt.hour} ${dt.minute} ${dt.second}");
+      dt = dt.subtract(Duration(minutes: 5));
+      print("new time ${dt.hour} ${dt.minute} ${dt.second}");
+
       AwesomeNotifications().createNotification(
         content: NotificationContent(
           id: 10,
           channelKey: 'basic_channel',
-          title: 'Simple Notification',
-          body: 'Simple body',
+          title: 'New Upcoming site-visit',
+          body: 'You have site visit for ${visitResponse.opportunityName}',
         ),
         schedule: NotificationCalendar(
           year: dt.year,
