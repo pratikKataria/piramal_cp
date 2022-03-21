@@ -4,6 +4,7 @@ import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/res/constants.dart';
 import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
+import 'package:piramal_channel_partner/ui/bottomNavigationContainer/notificationSc/model/notification_read_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/notificationSc/model/notification_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/notificationSc/notification_presenter.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/notificationSc/notification_view.dart';
@@ -36,7 +37,7 @@ class _NotificationScreenState extends State<NotificationScreen> implements Noti
     return Scaffold(
       backgroundColor: AppColors.screenBackgroundColor,
       body: Container(
-        margin: EdgeInsets.symmetric(horizontal: 20.0),
+        margin: const EdgeInsets.symmetric(horizontal: 20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -67,6 +68,8 @@ class _NotificationScreenState extends State<NotificationScreen> implements Noti
   InkWell buildNotificationCard(NotificationList notificationList) {
     return InkWell(
       onTap: () {
+        _homePresenter.readNotification(context, notificationList.notificationID);
+
         switch (notificationList?.type) {
           case Constants.NEW_OPPORTUNITY_NOTIFICATION:
             // Navigator.pushNamed(context, Screens.kCPEventScreen);
@@ -96,7 +99,7 @@ class _NotificationScreenState extends State<NotificationScreen> implements Noti
                 child: Container(
                   width: 8.0,
                   height: 8.0,
-                  decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.colorPrimary),
+                  decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.colorPrimary),
                 ),
               ),
               horizontalSpace(20.0),
@@ -116,8 +119,8 @@ class _NotificationScreenState extends State<NotificationScreen> implements Noti
 
   Container buildProfileDetailCard(String mText, String sText) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 18.0),
-      margin: EdgeInsets.only(bottom: 18.0),
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 18.0),
+      margin: const EdgeInsets.only(bottom: 18.0),
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(6.0),
@@ -142,10 +145,13 @@ class _NotificationScreenState extends State<NotificationScreen> implements Noti
 
   @override
   void onNotificationListFetched(NotificationResponse brList) {
-    print("NotificationList $brList");
-
     notificationList.clear();
     notificationList.addAll(brList.notificationList);
     setState(() {});
+  }
+
+  @override
+  void onNotificationRead(NotificationReadResponse nResponse) {
+
   }
 }

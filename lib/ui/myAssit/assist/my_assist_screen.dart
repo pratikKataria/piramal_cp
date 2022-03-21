@@ -21,7 +21,8 @@ class MyAssistScreen extends StatefulWidget {
   _MyAssistScreenState createState() => _MyAssistScreenState();
 }
 
-class _MyAssistScreenState extends State<MyAssistScreen> implements MyAssistView {
+class _MyAssistScreenState extends State<MyAssistScreen>
+    implements MyAssistView {
   final subTextStyle = textStyleSubText14px500w;
   final mainTextStyle = textStyle14px500w;
 
@@ -42,12 +43,12 @@ class _MyAssistScreenState extends State<MyAssistScreen> implements MyAssistView
     return Scaffold(
       backgroundColor: AppColors.screenBackgroundColor,
       body: Container(
-        margin: EdgeInsets.symmetric(horizontal: 20.0),
+        margin: const EdgeInsets.symmetric(horizontal: 20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             verticalSpace(22.0),
-            Text("My Assist", style: textStyle24px500w),
+            const Text("My Assist", style: textStyle24px500w),
             verticalSpace(20.0),
             if (assistResponse != null)
               Expanded(
@@ -95,7 +96,7 @@ class _MyAssistScreenState extends State<MyAssistScreen> implements MyAssistView
               child: Container(
                 height: 46,
                 width: 46,
-                padding: EdgeInsets.all(10.0),
+                padding: const EdgeInsets.all(10.0),
                 color: AppColors.assistIconBackgroundColor,
                 child: Image.asset(Images.kIconicAssistPerson),
               ),
@@ -104,20 +105,21 @@ class _MyAssistScreenState extends State<MyAssistScreen> implements MyAssistView
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("$name", style: textStyle20px500w),
-                Text("$profile", style: textStyleSubText14px500w),
-                Text("$project", style: textStyleSubText14px500w),
+                Text(name, style: textStyle20px500w),
+                Text(profile, style: textStyleSubText14px500w),
+                Text(project, style: textStyleSubText14px500w),
               ],
             ),
-            Spacer(),
+            const Spacer(),
             PmlButton(
               onTap: () {
-                launch("tel://$number ?? " "}");
+                String numberString = "tel://$number";
+                launch(numberString);
               },
               height: 32.0,
               width: 32.0,
               color: AppColors.colorPrimaryLight,
-              padding: EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(10.0),
               child: Image.asset(Images.kIconPhone),
             ),
             horizontalSpace(10.0),

@@ -45,14 +45,14 @@ class Utility {
     return MediaQuery.of(context).size.height;
   }
 
-  static var paddingSize15Box = SizedBox(
+  static var paddingSize15Box = const SizedBox(
     height: 15,
   );
-  static var paddingSize10Box = SizedBox(
+  static var paddingSize10Box = const SizedBox(
     height: 10,
   );
 
-  static var paddingSize30Box = SizedBox(
+  static var paddingSize30Box = const SizedBox(
     height: 30,
   );
 
@@ -69,8 +69,8 @@ class Utility {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.warning_rounded, color: AppColors.red),
-          SizedBox(width: 6.0),
+          const Icon(Icons.warning_rounded, color: AppColors.red),
+          const SizedBox(width: 6.0),
           Expanded(child: Text("$text", style: textStyleRed12px600w, maxLines: 2, overflow: TextOverflow.ellipsis)),
         ],
       ),
@@ -79,7 +79,7 @@ class Utility {
     fToast.showToast(
       child: toast,
       gravity: ToastGravity.TOP,
-      toastDuration: Duration(seconds: 2),
+      toastDuration: const Duration(seconds: 2),
     );
   }
 
@@ -91,8 +91,8 @@ class Utility {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.warning_rounded, color: AppColors.white),
-          SizedBox(width: 6.0),
+          const Icon(Icons.warning_rounded, color: AppColors.white),
+          const SizedBox(width: 6.0),
           Expanded(child: Text("$text", style: textStyleWhite14px500w, maxLines: 2, overflow: TextOverflow.ellipsis)),
         ],
       ),
@@ -101,7 +101,7 @@ class Utility {
     fToast.showToast(
       child: toast,
       gravity: ToastGravity.CENTER,
-      toastDuration: Duration(seconds: 3),
+      toastDuration: const Duration(seconds: 3),
     );
   }
 
@@ -113,8 +113,8 @@ class Utility {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.warning_rounded, color: AppColors.white),
-          SizedBox(width: 6.0),
+          const Icon(Icons.warning_rounded, color: AppColors.white),
+          const SizedBox(width: 6.0),
           Expanded(child: Text("$text", style: textStyleWhite14px500w, maxLines: 2, overflow: TextOverflow.ellipsis)),
         ],
       ),
@@ -123,7 +123,7 @@ class Utility {
     fToast.showToast(
       child: toast,
       gravity: ToastGravity.TOP,
-      toastDuration: Duration(seconds: 3),
+      toastDuration: const Duration(seconds: 3),
     );
   }
 
@@ -135,8 +135,8 @@ class Utility {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.warning_rounded, color: AppColors.white),
-          SizedBox(width: 6.0),
+          const Icon(Icons.warning_rounded, color: AppColors.white),
+          const SizedBox(width: 6.0),
           Expanded(child: Text("$text", style: textStyleWhite14px500w, maxLines: 2, overflow: TextOverflow.ellipsis)),
         ],
       ),
@@ -145,7 +145,7 @@ class Utility {
     fToast.showToast(
       child: toast,
       gravity: ToastGravity.BOTTOM,
-      toastDuration: Duration(seconds: 3),
+      toastDuration: const Duration(seconds: 3),
     );
   }
 
@@ -157,8 +157,8 @@ class Utility {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.check_circle, color: AppColors.white),
-          SizedBox(width: 6.0),
+          const Icon(Icons.check_circle, color: AppColors.white),
+          const SizedBox(width: 6.0),
           Expanded(child: Text("$text", style: textStyleWhite12px600w, maxLines: 2, overflow: TextOverflow.ellipsis)),
         ],
       ),
@@ -167,7 +167,7 @@ class Utility {
     fToast.showToast(
       child: toast,
       gravity: ToastGravity.BOTTOM,
-      toastDuration: Duration(seconds: 4),
+      toastDuration: const Duration(seconds: 4),
     );
   }
 
@@ -234,13 +234,13 @@ class Utility {
 
   static void portrait() => SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
-  static void statusBarAndNavigationBarColor() => SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+  static void statusBarAndNavigationBarColor() => SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
         statusBarColor: AppColors.white, // status bar color
         statusBarIconBrightness: Brightness.dark,
         systemNavigationBarColor: AppColors.background, // status bar icon color
       ));
 
-  static void statusBarAndNavigationBarColorDark() => SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+  static void statusBarAndNavigationBarColorDark() => SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
         statusBarColor: AppColors.textColorBlack, // status bar color
         statusBarIconBrightness: Brightness.light,
         systemNavigationBarColor: AppColors.textColorBlack, // status bar icon color
@@ -305,7 +305,7 @@ class Utility {
 
   static Container separatedText(String lText, String rText, {TextStyle lStyle, TextStyle rStyle}) {
     return Container(
-      margin: EdgeInsets.only(bottom: 15.0),
+      margin: const EdgeInsets.only(bottom: 15.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

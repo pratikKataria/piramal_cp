@@ -52,7 +52,7 @@ dependencies:
   marquee: any
   cupertino_icons: any
   firebase_core: any
-  firebase_messaging: 10.0.8
+  firebase_messaging: 11.0.0
   firebase_messaging_platform_interface: 3.1.6
   flutter_local_notifications: ^9.4.0
   awesome_notifications: ^0.6.21

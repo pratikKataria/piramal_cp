@@ -51,11 +51,11 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  await Utility.statusBarAndNavigationBarColor();
-  await Utility.portrait();
+  Utility.statusBarAndNavigationBarColor();
+  Utility.portrait();
 
-  await Firebase.initializeApp();
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  // await Firebase.initializeApp();
+  // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
@@ -98,7 +98,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    RegisterFirebaseNotification();
+    // RegisterFirebaseNotification();
 
     return ChangeNotifierProvider<BaseProvider>(
       create: (_) => BaseProvider(authResult),
