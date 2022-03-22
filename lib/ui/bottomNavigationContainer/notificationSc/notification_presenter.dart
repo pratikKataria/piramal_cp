@@ -31,8 +31,8 @@ class NotificationPresenter {
     }
 
     String uID = await Utility.uID();
-    // var body = {"CustomerAccountId": "$uID"};
-    var body = {"AccountId": "001p000000zIm0jAAC"};
+    var body = {"AccountId": "$uID"};
+    // var body = {"AccountId": "001p000000zIm0jAAC"};
 
     apiController.post(EndPoints.NOTIFICATION_LIST, body: body, headers: await Utility.header())
       ..then((Response response) {

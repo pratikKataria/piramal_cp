@@ -2,6 +2,8 @@
 import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:piramal_channel_partner/main.dart';
 
 class PushNotificationService {
   final FirebaseMessaging _fcm;
@@ -26,7 +28,7 @@ class PushNotificationService {
       print("Message Received: ${message.data}");
 
       if (notification != null && android != null) {
-      /*  flutterLocalNotificationsPlugin.show(
+        flutterLocalNotificationsPlugin.show(
             notification.hashCode,
             notification.title,
             notification.body,
@@ -34,12 +36,10 @@ class PushNotificationService {
               android: AndroidNotificationDetails(
                 channel.id,
                 channel.name,
-                channel.description,
-                color: Colors.blue,
                 playSound: true,
-                icon: '@mipmap/ic_launcher',
+                icon: '@mipmap/ic_launcher_foreground',
               ),
-            ));*/
+            ));
       }
     });
   }

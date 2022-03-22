@@ -35,7 +35,7 @@ import 'utils/Utility.dart';
 import 'utils/navigator_gk.dart';
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
-    'high_importance_channel', // id
+    'a', // id
     'High Importance Notifications', // title
     showBadge: true,
     importance: Importance.high,
@@ -49,13 +49,13 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  await WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  Utility.statusBarAndNavigationBarColor();
-  Utility.portrait();
+  await Utility.statusBarAndNavigationBarColor();
+  await Utility.portrait();
 
-  // await Firebase.initializeApp();
-  // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  await Firebase.initializeApp();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
@@ -98,7 +98,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // RegisterFirebaseNotification();
+    RegisterFirebaseNotification();
 
     return ChangeNotifierProvider<BaseProvider>(
       create: (_) => BaseProvider(authResult),
@@ -194,7 +194,7 @@ class MyApp extends StatelessWidget {
                 channel.id,
                 channel.name,
                 playSound: true,
-                icon: '@drawable/ic_app_logo',
+                icon: '@mipmap/ic_launcher_foreground',
               ),
             ));
       }
@@ -207,8 +207,14 @@ class MyApp extends StatelessWidget {
         "Testing",
         "How you doin ?",
         NotificationDetails(
-            android: AndroidNotificationDetails(channel.id, channel.name,
-                importance: Importance.high, color: Colors.blue, playSound: true, icon: '@mipmap/ic_launcher')));
+            android: AndroidNotificationDetails(
+          channel.id,
+          channel.name,
+          importance: Importance.high,
+          color: Colors.blue,
+          playSound: true,
+          icon: '@mipmap/ic_launcher',
+        )));
   }
 
   checkAuthUser(authResult) {

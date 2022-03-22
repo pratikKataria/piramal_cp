@@ -27,10 +27,10 @@ class HomeScreen extends StatefulWidget {
   const HomeScreen({Key key}) : super(key: key);
 
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  HomeScreenState createState() => HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin implements HomeView {
+class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin implements HomeView {
   TabController _tabController;
   HomePresenter _homePresenter;
 
@@ -526,6 +526,13 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
         return alert;
       },
     );
+  }
+
+  void updateHome() {
+    _tabController.index = 0;
+    currentSelectedTab = "Walk in";
+    setState(() {});
+    _homePresenter.getWalkInListV2(context);
   }
 }
 

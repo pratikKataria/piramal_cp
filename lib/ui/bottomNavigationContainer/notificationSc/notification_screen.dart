@@ -6,20 +6,21 @@ import 'package:piramal_channel_partner/res/constants.dart';
 import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/notificationSc/model/notification_read_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/notificationSc/model/notification_response.dart';
-import 'package:piramal_channel_partner/ui/bottomNavigationContainer/notificationSc/notification_presenter.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/notificationSc/notification_view.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/refresh_list_view.dart';
 import 'package:provider/provider.dart';
 
+import 'notification_presenter.dart';
+
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({Key key}) : super(key: key);
 
   @override
-  _NotificationScreenState createState() => _NotificationScreenState();
+  NotificationScreenState createState() => NotificationScreenState();
 }
 
-class _NotificationScreenState extends State<NotificationScreen> implements NotificationView {
+class NotificationScreenState extends State<NotificationScreen> implements NotificationView {
   final subTextStyle = textStyleSubText14px500w;
   final mainTextStyle = textStyle14px500w;
   NotificationPresenter _homePresenter;
@@ -29,6 +30,7 @@ class _NotificationScreenState extends State<NotificationScreen> implements Noti
   @override
   void initState() {
     _homePresenter = NotificationPresenter(this);
+    _homePresenter.getNotificationList(context);
     super.initState();
   }
 
@@ -41,13 +43,13 @@ class _NotificationScreenState extends State<NotificationScreen> implements Noti
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Consumer<BaseProvider>(
+         /*   Consumer<BaseProvider>(
               builder: (_, provider, __) {
                 print("Notification consumer rebuilding ${provider.currentScreen}");
                 if (provider.currentScreen == Screens.kNotificationsScreen) _homePresenter.getNotificationList(context);
                 return Container();
               },
-            ),
+            ),*/
             verticalSpace(22.0),
             Text("Notification (${notificationList.length})", style: textStyle24px500w),
             verticalSpace(33.0),
@@ -152,6 +154,10 @@ class _NotificationScreenState extends State<NotificationScreen> implements Noti
 
   @override
   void onNotificationRead(NotificationReadResponse nResponse) {
+    _homePresenter.getNotificationList(context);
+  }
 
+  void updateNotification() {
+    _homePresenter.getNotificationList(context);
   }
 }

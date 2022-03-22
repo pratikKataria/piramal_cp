@@ -433,6 +433,7 @@ class HomePresenter {
       "CustomerAccountID": "$userId",
       "deviceToken": "$deviceToken",
     };
+    Utility.log(tag, "Device Token: $deviceToken");
 
     apiController.post(EndPoints.POST_DEVICE_TOKEN, body: body, headers: await Utility.header())
       ..then((response) {

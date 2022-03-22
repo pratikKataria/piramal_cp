@@ -8,8 +8,9 @@ import 'explore/explore_screen.dart';
 import 'home/home_screen.dart';
 import 'notificationSc/notification_screen.dart';
 
-
 class BottomNavigationBaseScreen extends StatelessWidget {
+  final GlobalKey<NotificationScreenState> nGK = GlobalKey<NotificationScreenState>();
+  final GlobalKey<HomeScreenState> hGK = GlobalKey<HomeScreenState>();
 
   BottomNavigationBaseScreen() {
     initState();
@@ -19,9 +20,9 @@ class BottomNavigationBaseScreen extends StatelessWidget {
 
   void initState() async {
     allDestinations = {
-      Screens.kHomeScreen: HomeScreen(),
+      Screens.kHomeScreen: HomeScreen(key: hGK),
       Screens.kExploreScreen: ExploreScreen(),
-      Screens.kNotificationsScreen: NotificationScreen(),
+      Screens.kNotificationsScreen: NotificationScreen(key: nGK),
       Screens.kTodayFollowUpScreen: TodayFollowUpScreen(),
     };
   }
@@ -37,6 +38,15 @@ class BottomNavigationBaseScreen extends StatelessWidget {
   }
 
   int getIndexOfScreen(String screen) {
+    switch (screen) {
+      case Screens.kNotificationsScreen:
+        nGK.currentState.updateNotification();
+        break;
+      case Screens.kHomeScreen:
+        hGK?.currentState?.updateHome();
+        break;
+    }
+
     if (allDestinations.containsKey(screen)) {
       return allDestinations.values.toList().indexOf(allDestinations[screen]);
     } else {
