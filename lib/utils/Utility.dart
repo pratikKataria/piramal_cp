@@ -433,6 +433,14 @@ class Utility {
       print(e);
     }
   }
+
+  static bool isNumeric(String s) {
+    if (s == null) {
+      return false;
+    }
+    return double.tryParse(s) != null;
+  }
+
 }
 
 Widget verticalSpace(double height) => SizedBox(

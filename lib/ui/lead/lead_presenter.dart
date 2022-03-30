@@ -6,6 +6,7 @@ import 'package:piramal_channel_partner/ui/lead/addLead/add_lead_view.dart';
 import 'package:piramal_channel_partner/ui/lead/addLead/model/create_lead_request.dart';
 import 'package:piramal_channel_partner/ui/lead/addLead/model/create_lead_response.dart';
 import 'package:piramal_channel_partner/ui/lead/addLead/model/pick_list_response.dart';
+import 'package:piramal_channel_partner/ui/lead/addLead/model/project_configuration_response.dart';
 import 'package:piramal_channel_partner/ui/lead/lead_marker_interface.dart';
 import 'package:piramal_channel_partner/ui/lead/model/all_lead_response.dart';
 import 'package:piramal_channel_partner/ui/lead/model/delete_lead_response.dart';
@@ -47,7 +48,7 @@ class LeadPresenter {
         var listOfDynamic = response.data as List;
         listOfDynamic.forEach((element) => brList.add(AllLeadResponse.fromJson(element)));
         AllLeadResponse bookingResponse = brList.isNotEmpty ? brList.first : null;
-        if(bookingResponse == null) {
+        if (bookingResponse == null) {
           _v.onError("No Leads Available");
           return;
         }
@@ -88,7 +89,7 @@ class LeadPresenter {
         listOfDynamic.forEach((element) => brList.add(AllLeadResponse.fromJson(element)));
 
         AllLeadResponse bookingResponse = brList.isNotEmpty ? brList.first : null;
-        if(bookingResponse == null) {
+        if (bookingResponse == null) {
           _v.onError("No Leads Available");
           return;
         }
@@ -228,6 +229,51 @@ class LeadPresenter {
       })
       ..catchError((e) {
         Dialogs.hideLoader(context);
+        ApiErrorParser.getResult(e, _v);
+      });
+  }
+
+  Future<void> getProjectConfigurationByProject(BuildContext context, String projectName) async {
+    //check for internal token
+    if (await AuthUser.getInstance().hasToken()) {
+      _v.onError("Token not found");
+      return;
+    }
+
+    //check network
+    if (!await NetworkCheck.check()) {
+      _v.onError("Network Error");
+      return;
+    }
+
+    // CustomerAccountId
+    // Dialogs.showLoader(context, "Updating your lead ...");
+    apiController.post(EndPoints.GET_CONFIGURATION_BY_PROJECT, body: {"Project": projectName}, headers: await Utility.header())
+      ..then((response) {
+        // Dialogs.hideLoader(context);
+
+        List<ProjectConfigurationResponse> brList = [];
+        var listOfDynamic = response.data as List;
+        listOfDynamic.forEach((element) => brList.add(ProjectConfigurationResponse.fromJson(element)));
+
+        ProjectConfigurationResponse bookingResponse = brList.isNotEmpty ? brList.first : null;
+        if (bookingResponse == null) {
+          _v.onError("No Configuration Available");
+          return;
+        }
+
+        if (bookingResponse.returnCode) {
+          (_v as AddLeadView).onProjectConfigurationFetched(brList);
+        } else {
+          _v.onError(bookingResponse.message);
+        }
+
+        // DeleteLeadResponse deleteLeadResponse = DeleteLeadResponse.fromJson(response.data);
+        // deleteLeadResponse.leadId = leadData.sfdcid;
+        // (_v as LeadView).onLeadDeleted(leadData);
+      })
+      ..catchError((e) {
+        // Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }

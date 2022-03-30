@@ -4,8 +4,10 @@ import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
 import 'package:piramal_channel_partner/ui/lead/addLead/add_lead_view.dart';
+import 'package:piramal_channel_partner/ui/lead/addLead/helper/add_lead_constants.dart';
 import 'package:piramal_channel_partner/ui/lead/addLead/model/create_lead_request.dart';
 import 'package:piramal_channel_partner/ui/lead/addLead/model/pick_list_response.dart';
+import 'package:piramal_channel_partner/ui/lead/addLead/model/project_configuration_response.dart';
 import 'package:piramal_channel_partner/ui/lead/lead_presenter.dart';
 import 'package:piramal_channel_partner/ui/lead/model/all_lead_response.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
@@ -23,7 +25,7 @@ class EditLeadScreen extends StatefulWidget {
 class _EditLeadScreenState extends State<EditLeadScreen> implements AddLeadView {
   final subTextStyle = textStyleSubText14px500w;
   final mainTextStyle = textStyle14px500w;
-  final List<String> projectList = ["Piramal Aranya", "Piramal Vaikunth", "Piramal Revanta", "Piramal Mahalaxm"];
+  final List<String> projectList = [];
   final List<String> configurationList = ["1 BHK", "2 BHK", "3 BHK"];
   final List<String> budgetList = [
     "0.75 Cr - 1.0 Cr",
@@ -39,6 +41,7 @@ class _EditLeadScreenState extends State<EditLeadScreen> implements AddLeadView 
   ];
 
   final List<String> locationList = ["Mumbai"];
+  final List<String> subUrbanList = [""];
 
   CreateLeadRequest createLeadRequest = CreateLeadRequest();
   LeadPresenter leadPresenter;
@@ -56,7 +59,8 @@ class _EditLeadScreenState extends State<EditLeadScreen> implements AddLeadView 
     createLeadRequest.configuration = response.configuration;
     createLeadRequest.budget = response.budget;
     createLeadRequest.location = response.location;
-    createLeadRequest.accountId = response.sfdcid;
+    createLeadRequest.accountID = response.sfdcid;
+    createLeadRequest.emailID = response.emailID;
 
     // for mate  time
     String date = response?.dateofvisit;
@@ -80,12 +84,14 @@ class _EditLeadScreenState extends State<EditLeadScreen> implements AddLeadView 
               verticalSpace(22.0),
               Text("Add Lead", style: textStyle24px500w),
               verticalSpace(20.0),
-              buildProfileDetailCard("Name of the Customer", "Enter customer name", 0),
-              buildProfileDetailCard("Mobile Number", "Enter customer mobile number", 1),
-              buildProfileDetailCard2("Interested In", "Piramal Mahalaxmi", projectList, 2),
-              buildProfileDetailCard2("Configuration", "2 Bedroom", configurationList, 3),
-              buildProfileDetailCard2("Budget", "INR 5 Crore ", budgetList, 4),
-              buildProfileDetailCard2("Location", "Navi Mumbai", locationList, 5),
+              buildProfileDetailCard("Name of the Customer", "Enter customer name", 00),
+              buildProfileDetailCard("Mobile Number", "Enter customer mobile number", 11),
+              buildProfileDetailCard("Email Id", "Enter customer email address", 33),
+              buildProfileDetailCard2("Interested In", "Piramal Mahalaxmi", projectList, AddLeadConstant.INTERESTED_DROP),
+              buildProfileDetailCard2("Configuration", "2 Bedroom", configurationList, AddLeadConstant.CONFIGURATION_DROP),
+              buildProfileDetailCard2("Budget", "INR 5 Crore ", budgetList, AddLeadConstant.BUDGET_DROP),
+              buildProfileDetailCard2("Location", "Navi Mumbai", locationList, AddLeadConstant.LOCATION_DROP),
+              buildProfileDetailCard2("Sub Urban", "", subUrbanList, AddLeadConstant.SUB_URBAN_DROP),
               buildProfileDetailCard3("Date of Visit", "27 October 2021"),
               Center(
                 child: PmlButton(
@@ -135,10 +141,12 @@ class _EditLeadScreenState extends State<EditLeadScreen> implements AddLeadView 
               suffixStyle: TextStyle(color: AppColors.textColor),
             ),
             onChanged: (String val) {
-              if (captureNo == 0) {
+              if (captureNo == 00) {
                 createLeadRequest.name = val;
-              } else if (captureNo == 1) {
+              } else if (captureNo == 11) {
                 createLeadRequest.mobilenumber = val;
+              } else if (captureNo == 33) {
+                createLeadRequest.emailID = val;
               }
             },
           ),
@@ -181,25 +189,33 @@ class _EditLeadScreenState extends State<EditLeadScreen> implements AddLeadView 
                         );
                       }).toList(),
                       onChanged: (value) {
+                        // hideKeyboard = true;
                         switch (captureNo) {
-                          case 2:
+                          case AddLeadConstant.INTERESTED_DROP:
+                            createLeadRequest.budget = null;
+                            createLeadRequest.configuration = null;
+                            leadPresenter.getProjectConfigurationByProject(context, value);
                             createLeadRequest.projectInterested = value;
                             break;
-                          case 3:
+                          case AddLeadConstant.CONFIGURATION_DROP:
                             createLeadRequest.configuration = value;
                             break;
-                          case 4:
+                          case AddLeadConstant.BUDGET_DROP:
                             createLeadRequest.budget = value;
                             break;
-                          case 5:
+                          case AddLeadConstant.LOCATION_DROP:
                             createLeadRequest.location = value;
                             break;
+                          case AddLeadConstant.SUB_URBAN_DROP:
+                            createLeadRequest.subUrban = value;
+                            break;
                         }
+
                         setState(() {});
                       },
                     ),
                   ),
-                 ],
+                ],
               )
             ],
           ),
@@ -211,23 +227,29 @@ class _EditLeadScreenState extends State<EditLeadScreen> implements AddLeadView 
 
   String getItemByCaptureNo(int captureNo) {
     switch (captureNo) {
-      case 0:
+      case 00:
         return createLeadRequest?.name;
         break;
-      case 1:
+      case 11:
         return createLeadRequest?.mobilenumber;
         break;
-      case 2:
+      case 33:
+        return createLeadRequest?.emailID;
+        break;
+      case AddLeadConstant.INTERESTED_DROP:
         return createLeadRequest?.projectInterested;
         break;
-      case 3:
+      case AddLeadConstant.CONFIGURATION_DROP:
         return createLeadRequest?.configuration;
         break;
-      case 4:
+      case AddLeadConstant.BUDGET_DROP:
         return createLeadRequest?.budget;
         break;
-      case 5:
+      case AddLeadConstant.LOCATION_DROP:
         return createLeadRequest?.location;
+        break;
+      case AddLeadConstant.SUB_URBAN_DROP:
+        return createLeadRequest?.subUrban;
         break;
       default:
         return "";
@@ -296,23 +318,33 @@ class _EditLeadScreenState extends State<EditLeadScreen> implements AddLeadView 
 
   @override
   void onPickListFetched(List<PickListResponse> pickList) {
-    pickList.forEach((element) => _(element));
+    pickList.forEach((element) => addListByPickListType(element));
     setState(() {});
   }
 
-  void _(PickListResponse element) {
+  void addListByPickListType(PickListResponse element) {
     switch (element?.fieldName) {
-      case "Configuration__c":
+      case AddLeadConstant.CONFIGURATION_C:
         _v(configurationList, element.values);
         break;
-      case "Project_Interested__c":
+      case AddLeadConstant.PROJECT_INTERESTED_C:
         _v(projectList, element.values);
+        if (projectList.isNotEmpty) {
+          createLeadRequest.projectInterested = projectList[0];
+          leadPresenter.getProjectConfigurationByProject(context, createLeadRequest.projectInterested);
+        }
         break;
-      case "Budget__c":
+      case AddLeadConstant.BUDGET_C:
         _v(budgetList, element.values);
         break;
-      case "Location__c":
+      case AddLeadConstant.LOCATION_C:
         _v(locationList, element.values);
+        break;
+      case AddLeadConstant.SUB_URBAN_C:
+        _v(subUrbanList, element.values);
+        if (subUrbanList.isNotEmpty) {
+          createLeadRequest.subUrban = subUrbanList[0];
+        }
         break;
     }
   }
@@ -324,5 +356,31 @@ class _EditLeadScreenState extends State<EditLeadScreen> implements AddLeadView 
       stringList.removeLast();
       list.addAll(stringList);
     }
+  }
+
+  @override
+  void onProjectConfigurationFetched(List<ProjectConfigurationResponse> list) {
+    list.forEach((projectConfig) {
+      if (projectConfig?.fieldName == AddLeadConstant.BUDGET_I) {
+        List<String> bList = projectConfig?.values?.split(",") ?? [];
+        if (bList.isNotEmpty) bList.removeLast();
+        budgetList.clear();
+        budgetList.addAll(bList);
+
+        if (createLeadRequest.budget == null) {
+          createLeadRequest.budget = budgetList.isEmpty ? "" : budgetList[0];
+        }
+      } else if (projectConfig?.fieldName == AddLeadConstant.CONFIGURATION_I) {
+        List<String> cList = projectConfig?.values?.split(",") ?? [];
+        if (cList.isNotEmpty) cList.removeLast();
+        configurationList.clear();
+        configurationList.addAll(cList);
+        if (createLeadRequest.configuration == null) {
+          createLeadRequest.configuration = configurationList.isEmpty ? "" : configurationList[0];
+        }
+      }
+    });
+
+    setState(() {});
   }
 }

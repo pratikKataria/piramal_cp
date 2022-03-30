@@ -1,17 +1,20 @@
-/// sfdcid : "a2xp0000000eyB1AAI"
+/// suburban : ""
+/// sfdcid : "a2xp0000000exg2AAA"
 /// returnCode : true
 /// ProjectInterested : "Piramal Revanta"
-/// Name : "Testing Patil"
-/// MobileNumber : "7020034541"
+/// Name : "Devashish"
+/// MobileNumber : "9881560816"
 /// message : "Success"
 /// Location : "Mumbai"
-/// Dateofvisit : "2022-02-11T00:00:00.000Z"
-/// CustomerAccountId : "001N000001S7nkdIAB"
-/// Configuration : "3 BHK"
-/// Budget : "6 Cr – 8 Cr"
+/// EmailID : ""
+/// Dateofvisit : "2022-02-08T00:00:00.000Z"
+/// CustomerAccountId : "001p000000y1SqWAAU"
+/// Configuration : "1 BHK"
+/// Budget : ""
 
 class AllLeadResponse {
   AllLeadResponse({
+      String suburban, 
       String sfdcid, 
       bool returnCode, 
       String projectInterested, 
@@ -19,10 +22,12 @@ class AllLeadResponse {
       String mobileNumber, 
       String message, 
       String location, 
+      String emailID, 
       String dateofvisit, 
       String customerAccountId, 
       String configuration, 
       String budget,}){
+    _suburban = suburban;
     _sfdcid = sfdcid;
     _returnCode = returnCode;
     _projectInterested = projectInterested;
@@ -30,6 +35,7 @@ class AllLeadResponse {
     _mobileNumber = mobileNumber;
     _message = message;
     _location = location;
+    _emailID = emailID;
     _dateofvisit = dateofvisit;
     _customerAccountId = customerAccountId;
     _configuration = configuration;
@@ -37,6 +43,7 @@ class AllLeadResponse {
 }
 
   AllLeadResponse.fromJson(dynamic json) {
+    _suburban = json['suburban'];
     _sfdcid = json['sfdcid'];
     _returnCode = json['returnCode'];
     _projectInterested = json['ProjectInterested'];
@@ -44,11 +51,13 @@ class AllLeadResponse {
     _mobileNumber = json['MobileNumber'];
     _message = json['message'];
     _location = json['Location'];
+    _emailID = json['EmailID'];
     _dateofvisit = json['Dateofvisit'];
     _customerAccountId = json['CustomerAccountId'];
     _configuration = json['Configuration'];
     _budget = json['Budget'];
   }
+  String _suburban;
   String _sfdcid;
   bool _returnCode;
   String _projectInterested;
@@ -56,11 +65,13 @@ class AllLeadResponse {
   String _mobileNumber;
   String _message;
   String _location;
+  String _emailID;
   String _dateofvisit;
   String _customerAccountId;
   String _configuration;
   String _budget;
 
+  String get suburban => _suburban;
   String get sfdcid => _sfdcid;
   bool get returnCode => _returnCode;
   String get projectInterested => _projectInterested;
@@ -68,6 +79,7 @@ class AllLeadResponse {
   String get mobileNumber => _mobileNumber;
   String get message => _message;
   String get location => _location;
+  String get emailID => _emailID;
   String get dateofvisit => _dateofvisit;
   String get customerAccountId => _customerAccountId;
   String get configuration => _configuration;
@@ -75,6 +87,7 @@ class AllLeadResponse {
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
+    map['suburban'] = _suburban;
     map['sfdcid'] = _sfdcid;
     map['returnCode'] = _returnCode;
     map['ProjectInterested'] = _projectInterested;
@@ -82,6 +95,7 @@ class AllLeadResponse {
     map['MobileNumber'] = _mobileNumber;
     map['message'] = _message;
     map['Location'] = _location;
+    map['EmailID'] = _emailID;
     map['Dateofvisit'] = _dateofvisit;
     map['CustomerAccountId'] = _customerAccountId;
     map['Configuration'] = _configuration;

@@ -39,6 +39,7 @@ class ProjectPresenter {
     var body = {
       "projectList": [{}]
     };
+
     Dialogs.showLoader(context, "Please wait fetching your project list ...");
     apiController.post(EndPoints.ALL_PROJECT_LIST, body: body, headers: await Utility.header())
       ..then((response) {
@@ -232,3 +233,6 @@ class ProjectPresenter {
       });
   }
 }
+
+
+

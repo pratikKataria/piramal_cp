@@ -19,7 +19,9 @@ import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
 
 class SignupScreen extends StatefulWidget {
-  const SignupScreen({Key key}) : super(key: key);
+  final String emailMobileAutoPopulateValue;
+
+  const SignupScreen(this.emailMobileAutoPopulateValue, {Key key}) : super(key: key);
 
   @override
   _SignupScreenState createState() => _SignupScreenState();
@@ -46,6 +48,14 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
     super.initState();
     corePresenter = CorePresenter(this);
     corePresenter.getAccessToken();
+    autoPopulateEmailMobile();
+  }
+
+  void autoPopulateEmailMobile() {
+    String value = widget.emailMobileAutoPopulateValue;
+    if (value == null && value.isEmpty) return;
+    if (Utility.isNumeric(value)) signupRequest.primaryMobNo = value;
+    else signupRequest.email = value;
   }
 
   @override
@@ -78,6 +88,7 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
                   signupRequest.primaryMobNo = v;
                   return;
                 },
+                initialValue: signupRequest.primaryMobNo,
                 limit: 10,
                 showChildButton: true,
                 childButtonText: "Get OTP",
@@ -126,6 +137,7 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
                   emailOTPVerified = false;
                   return;
                 },
+                initialValue: signupRequest.email,
                 showChildButton: true,
                 childButtonText: "Get OTP",
                 limit: 250,
@@ -222,7 +234,8 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
       String childButtonText: "",
       Function onClick,
       bool verified: false,
-      int limit: 1}) {
+      int limit: 1,
+      String initialValue:"",}) {
     return Container(
       height: 38,
       decoration: BoxDecoration(
@@ -246,6 +259,7 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
               maxLines: 1,
               textCapitalization: TextCapitalization.none,
               style: subTextStyle,
+              initialValue: initialValue,
               keyboardType: number ? TextInputType.number : TextInputType.text,
               decoration: InputDecoration(
                 border: InputBorder.none,
@@ -296,6 +310,7 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
       height: 36,
       text: "Next",
       onTap: () {
+        if (!isAllFieldOk()) return;
 
         if (!mobileOTPVerified) {
           onError("Please verify mobile");
@@ -307,10 +322,45 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
           return;
         }
 
+
         // corePresenter.singUp(context, signupRequest);
         Navigator.pushNamed(context, Screens.kUploadDocumentScreen, arguments: signupRequest);
       },
     );
+  }
+
+  bool isAllFieldOk() {
+    if (signupRequest.name.isEmpty) {
+      onError("Please enter name");
+      return false;
+    }
+
+    // if (signupRequest.primaryContactPerson.isEmpty) {
+    //   onError("Please enter primary contact person name");
+    //   return false;
+    // }
+
+    if (signupRequest.primaryMobNo.isEmpty) {
+      onError("Please enter primary mobile number");
+      return false;
+    }
+
+    if (signupRequest.email.isEmpty) {
+      onError("Please enter email");
+      return false;
+    }
+
+    if (signupRequest.relationshipManager.isEmpty) {
+      onError("Please enter relationship manager");
+      return false;
+    }
+
+    if (signupRequest.pan.isEmpty) {
+      onError("Please enter pancard number");
+      return false;
+    }
+
+    return true;
   }
 
   @override

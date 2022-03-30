@@ -146,7 +146,7 @@ class _ProjectScreenState extends State<ProjectScreen> implements ProjectView {
                     ],
                   ),
                   verticalSpace(10.0),
-                  Text("South Mumbai - India", style: textStyleSubText14px500w),
+                  Text("${projectData?.projectLocation}", style: textStyleSubText14px500w),
                 ],
               ),
             ),

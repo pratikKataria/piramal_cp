@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
+import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/utils/navigator_gk.dart';
@@ -20,7 +21,7 @@ class PersistentBottomNavigation extends StatelessWidget {
         children: [
           buildBottomNavigationButton(Images.kIconHome, "Home", () {}, context),
           buildBottomNavigationButton(Images.kIconExplore, "Explore", () {}, context),
-          buildBottomNavigationButton(Images.kIconTodayFollowup, "Today's SV", () {}, context),
+          buildBottomNavigationButton(Images.kIconTodayFollowup, Screens.kTodayFollowUpScreen, () {}, context),
           buildBottomNavigationButton(Images.kIconNotification, "Notifications", () {}, context),
           // buildBottomNavigationButton(Images.kIconLeaderboard, "Leaderboard", () {}),
         ],

@@ -52,7 +52,7 @@ class CorePresenter {
       });
   }
 
-  void sendOTP(String value) async {
+  void sendEmailMobileOTP(String value) async {
     //check for internal token
     if (await AuthUser.getInstance().hasToken()) {
       _v.onError("Token not found");
@@ -63,8 +63,9 @@ class CorePresenter {
     if (!await NetworkCheck.check()) return;
 
     //if incoming value is mobile number
-    if (value.length == 10 && checkForMobileNumber(value)) {
-      sendMobileOTP(value);
+    if (checkForMobileNumber(value)) {
+      if (value.length == 10) sendMobileOTP(value);
+      else _v.onError("please enter valid mobile number");
       return;
     }
 
@@ -181,7 +182,7 @@ class CorePresenter {
       });
   }
 
-  void verifyEmail(String value) async {
+  void verifyMobileEmail(String value) async {
     //check for internal token
     if (await AuthUser.getInstance().hasToken()) {
       _v.onError("Token not found");
@@ -206,7 +207,9 @@ class CorePresenter {
         LoginResponse loginResponse = LoginResponse.fromJson(response.data);
         LoginView loginView = _v as LoginView;
         if (loginResponse.returnCode)
-          loginView.onEmailVerified(loginResponse);
+          loginView.onVerificationSuccess(loginResponse);
+        else if (loginResponse?.accountId ==null)
+          loginView.onVerificationFailed();
         else
           loginView.onError(loginResponse.message);
       })
@@ -235,7 +238,7 @@ class CorePresenter {
         LoginResponse loginResponse = LoginResponse.fromJson(response.data);
         LoginView loginView = _v as LoginView;
         if (loginResponse.returnCode)
-          loginView.onEmailVerified(loginResponse);
+          loginView.onVerificationSuccess(loginResponse);
         else
           loginView.onError(loginResponse.message);
       })

@@ -1,89 +1,104 @@
-/// Name : "Test Mobile App"
-/// ProjectInterested : "Piramal Aranya"
-/// Budget : "1.0 Cr - 1.5 Cr"
-/// Configuration : "1 BHK"
+/// Name : "Shankaran"
+/// CustomerAccountId : "001p000000zIm0jAAC"
+/// ProjectInterested : "Piramal Mahalaxmi"
+/// Budget : ">9 Cr"
+/// Configuration : "3 BHK(L)"
 /// Location : "Mumbai"
-/// Mobilenumber : "9960390011"
-/// Dateofvisit : "2022-12-2"
-/// CustomerAccountId : "001p000000y1SqW"
+/// Mobilenumber : "9405988587"
+/// Dateofvisit : "2022-03-29"
+/// AccountID : "001p000000zIm0jAAC"
+/// EmailID : "test@gmail.com"
+/// SubUrban : "Andheri"
 
 class CreateLeadRequest {
   CreateLeadRequest({
-    String name,
-    String projectInterested,
-    String budget,
-    String configuration,
-    String location,
-    String mobilenumber,
-    String dateofvisit,
-    String customerAccountId,
-    String accountId,
-  }) {
+      String name, 
+      String customerAccountId, 
+      String projectInterested, 
+      String budget, 
+      String configuration, 
+      String location, 
+      String mobilenumber, 
+      String dateofvisit, 
+      String accountID, 
+      String emailID, 
+      String subUrban,}){
     _name = name;
+    _customerAccountId = customerAccountId;
     _projectInterested = projectInterested;
     _budget = budget;
     _configuration = configuration;
     _location = location;
     _mobilenumber = mobilenumber;
     _dateofvisit = dateofvisit;
-    _customerAccountId = customerAccountId;
-    _accountId = accountId;
-  }
+    _accountID = accountID;
+    _emailID = emailID;
+    _subUrban = subUrban;
+}
 
   CreateLeadRequest.fromJson(dynamic json) {
     _name = json['Name'];
+    _customerAccountId = json['CustomerAccountId'];
     _projectInterested = json['ProjectInterested'];
     _budget = json['Budget'];
     _configuration = json['Configuration'];
     _location = json['Location'];
     _mobilenumber = json['Mobilenumber'];
     _dateofvisit = json['Dateofvisit'];
-    _customerAccountId = json['CustomerAccountId'];
-    _accountId = json['AccountID'];
+    _accountID = json['AccountID'];
+    _emailID = json['EmailID'];
+    _subUrban = json['SubUrban'];
   }
-
   String _name;
+  String _customerAccountId;
   String _projectInterested;
   String _budget;
   String _configuration;
   String _location;
   String _mobilenumber;
   String _dateofvisit;
-  String _customerAccountId;
-  String _accountId;
+  String _accountID;
+  String _emailID;
+  String _subUrban;
 
   String get name => _name;
-
-  String get projectInterested => _projectInterested;
-
-  String get budget => _budget;
-
-  String get configuration => _configuration;
-
-  String get location => _location;
-
-  String get mobilenumber => _mobilenumber;
-
-  String get dateofvisit => _dateofvisit;
-
   String get customerAccountId => _customerAccountId;
+  String get projectInterested => _projectInterested;
+  String get budget => _budget;
+  String get configuration => _configuration;
+  String get location => _location;
+  String get mobilenumber => _mobilenumber;
+  String get dateofvisit => _dateofvisit;
+  String get accountID => _accountID;
+  String get emailID => _emailID;
+  String get subUrban => _subUrban;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['Name'] = _name;
+    map['CustomerAccountId'] = _customerAccountId;
     map['ProjectInterested'] = _projectInterested;
     map['Budget'] = _budget;
     map['Configuration'] = _configuration;
     map['Location'] = _location;
     map['Mobilenumber'] = _mobilenumber;
     map['Dateofvisit'] = _dateofvisit;
-    map['CustomerAccountId'] = _customerAccountId;
-    map['RecordID'] = _accountId;
+    map['AccountID'] = _accountID;
+    map['EmailID'] = _emailID;
+    map['SubUrban'] = _subUrban;
     return map;
   }
 
-  set customerAccountId(String value) {
-    _customerAccountId = value;
+  set subUrban(String value) {
+    _subUrban = value;
+  }
+
+  set emailID(String value) {
+    _emailID = value;
+  }
+
+  set accountID(String value) {
+    _accountID = value;
   }
 
   set dateofvisit(String value) {
@@ -110,13 +125,11 @@ class CreateLeadRequest {
     _projectInterested = value;
   }
 
-  set name(String value) {
-    _name = value;
+  set customerAccountId(String value) {
+    _customerAccountId = value;
   }
 
-  String get accountId => _accountId;
-
-  set accountId(String value) {
-    _accountId = value;
+  set name(String value) {
+    _name = value;
   }
 }

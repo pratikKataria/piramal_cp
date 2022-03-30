@@ -26,17 +26,15 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> implements LoginView {
   final subTextStyle = textStyleSubText14px500w;
-
   final mainTextStyle = textStyle14px500w;
 
   final TextEditingController emailTextController = TextEditingController();
   final TextEditingController otpTextController = TextEditingController();
 
   BuildContext _context;
+  TokenResponse _tokenResponse;
 
   int otp;
-
-  TokenResponse _tokenResponse;
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +62,9 @@ class _LoginScreenState extends State<LoginScreen> implements LoginView {
               verticalSpace(10.0),
               InkWell(
                 onTap: () {
-                  Navigator.pushNamed(context, Screens.kSignupScreen);
+                  Navigator.pushNamed(context, Screens.kSignupScreen, arguments: emailTextController.text.toString());
+                  emailTextController.clear();
+                  otp = null;
                 },
                 child: Container(
                   padding: EdgeInsets.all(10.0),
@@ -194,11 +194,16 @@ class _LoginScreenState extends State<LoginScreen> implements LoginView {
 
     Dialogs.showLoader(context, "Verifying ...");
     CorePresenter presenter = CorePresenter(this);
-    presenter.verifyEmail(emailTextController.text.toString());
+    presenter.verifyMobileEmail(emailTextController.text.toString());
+  }
+
+  resetOTP() {
+    otp = null;
+    setState(() {});
   }
 
   @override
-  onTokenGenerated(TokenResponse tokenResponse) {
+  void onTokenGenerated(TokenResponse tokenResponse) {
     _tokenResponse = tokenResponse;
 
     //Save token
@@ -207,7 +212,7 @@ class _LoginScreenState extends State<LoginScreen> implements LoginView {
 
     //sent otp request
     CorePresenter presenter = CorePresenter(this);
-    presenter.sendOTP(emailTextController.text.toString());
+    presenter.sendEmailMobileOTP(emailTextController.text.toString());
   }
 
   @override
@@ -224,13 +229,8 @@ class _LoginScreenState extends State<LoginScreen> implements LoginView {
     Dialogs.hideLoader(context);
   }
 
-  resetOTP() {
-    otp = null;
-    setState(() {});
-  }
-
   @override
-  onEmailVerified(LoginResponse loginResponse) async {
+  void onVerificationSuccess(LoginResponse loginResponse) async {
     //Save userId
     Dialogs.hideLoader(context);
     var currentUser = await AuthUser.getInstance().getCurrentUser();
@@ -242,5 +242,10 @@ class _LoginScreenState extends State<LoginScreen> implements LoginView {
 
     var provider = Provider.of<BaseProvider>(context, listen: false);
     provider.showToolTip();
+  }
+
+  @override
+  void onVerificationFailed() {
+    Utility.showErrorToastB(context, "Please use correct id or Create new account");
   }
 }

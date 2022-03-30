@@ -78,7 +78,7 @@ class _ProjectScreenMyAssistState extends State<ProjectScreenMyAssist> implement
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text("${projectData.projectName}", style: textStyleRegular18pxW500),
-                  Text("South Mumbai - India", style: textStyleSubText14px500w),
+                  Text("${projectData.projectLocation}", style: textStyleSubText14px500w),
                 ],
               ),
             ),

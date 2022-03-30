@@ -78,20 +78,20 @@ class SignupRequest {
   String _listOfpartners;
   String _tnCFlag;
 
-  String get name => _name;
-  String get primaryContactPerson => _primaryContactPerson;
-  String get primaryMobNo => _primaryMobNo;
-  String get email => _email;
-  String get relationshipManager => _relationshipManager;
-  String get pan => _pan;
-  String get reraID => _reraID;
-  String get typeoffirm => _typeoffirm;
-  String get reraCertificatePDF => _reraCertificatePDF;
-  String get panCard => _panCard;
-  String get lISTofDirectors => _lISTofDirectors;
-  String get partnershipDeeds => _partnershipDeeds;
-  String get listOfpartners => _listOfpartners;
-  String get tnCFlag => _tnCFlag;
+  String get name => _name ?? "";
+  String get primaryContactPerson => _primaryContactPerson ?? "";
+  String get primaryMobNo => _primaryMobNo ?? "";
+  String get email => _email ?? "";
+  String get relationshipManager => _relationshipManager ?? "";
+  String get pan => _pan ?? "";
+  String get reraID => _reraID ?? "";
+  String get typeoffirm => _typeoffirm ?? "";
+  String get reraCertificatePDF => _reraCertificatePDF ?? "";
+  String get panCard => _panCard ?? "";
+  String get lISTofDirectors => _lISTofDirectors ?? "";
+  String get partnershipDeeds => _partnershipDeeds ?? "";
+  String get listOfpartners => _listOfpartners ?? "";
+  String get tnCFlag => _tnCFlag ?? "";
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};

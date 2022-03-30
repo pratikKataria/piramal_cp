@@ -101,7 +101,7 @@ class _CurrentPromotionScreenState extends State<CurrentPromotionScreen> impleme
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(child: Text("${currentPromoData.name}", style: textStyle24px500w)),
+                    Expanded(child: Text("${currentPromoData.project}", style: textStyle24px500w)),
                     Row(
                       children: [
                         WhatsAppButton(currentPromoData?.mobilenumber),

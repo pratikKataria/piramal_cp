@@ -47,4 +47,5 @@ class EndPoints {
   static const String GET_PROJECT_DOWNLOAD_LINK = BASE_URL + "/CP_Mobile_App/Download";
   static const String NOTIFICATION_LIST = BASE_URL + "/CP_Mobile_App/CPNotificationList";
   static const String READ_NOTIFICATION = BASE_URL + "/CP_Mobile_App/CPNotificationMarkRead";
+  static const String GET_CONFIGURATION_BY_PROJECT = BASE_URL + "/CP_Mobile_App/DependentPickListCPLead";
 }
