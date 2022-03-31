@@ -23,6 +23,8 @@ class _LeadScreenState extends State<LeadScreen> implements LeadView {
 
   LeadPresenter leadPresenter;
   List<AllLeadResponse> listOfList = [];
+  List<String> projectList = [""];
+  String projectFilterVal = "";
 
   @override
   void initState() {
@@ -37,6 +39,16 @@ class _LeadScreenState extends State<LeadScreen> implements LeadView {
     final perTop18 = Utility.screenHeight(context) * 0.18;
     return Scaffold(
       backgroundColor: AppColors.screenBackgroundColor,
+      floatingActionButton: PmlButton(
+        height: 45.0,
+        width: 45.0,
+        color: AppColors.black,
+        child: Icon(Icons.add, size: 24, color: AppColors.screenBackgroundColor),
+        onTap: () async {
+          var created = await Navigator.pushNamed(context, Screens.kAddLeadScreen);
+          if (created is bool && created) leadPresenter.getLeadListS(context);
+        },
+      ),
       body: Container(
         margin: EdgeInsets.symmetric(horizontal: 20.0),
         child: Column(
@@ -47,16 +59,7 @@ class _LeadScreenState extends State<LeadScreen> implements LeadView {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text("Leads", style: textStyle24px500w),
-                PmlButton(
-                  height: 28.0,
-                  text: "Add Lead",
-                  color: AppColors.colorSecondary,
-                  padding: EdgeInsets.symmetric(horizontal: 20.0),
-                  onTap: () async {
-                    var created = await Navigator.pushNamed(context, Screens.kAddLeadScreen);
-                    if (created is bool && created) leadPresenter.getLeadListS(context);
-                  },
-                )
+                buildProfileDetailCard2("mText", "", projectList),
               ],
             ),
             verticalSpace(33.0),
@@ -70,6 +73,43 @@ class _LeadScreenState extends State<LeadScreen> implements LeadView {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Container buildProfileDetailCard2(String mText, String sText, List dropDownValue) {
+    return Container(
+      padding: EdgeInsets.all(2.0),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(6.0),
+      ),
+      child: Stack(
+        children: [
+          Container(
+            width: Utility.screenWidth(context) * .30,
+            margin: EdgeInsets.only(top: 4.5),
+            child: Text(projectFilterVal, style: textStyleSubText14px500w, overflow: TextOverflow.ellipsis),
+          ),
+          Container(
+            width: Utility.screenWidth(context) * .35,
+            height: 20.0,
+            child: DropdownButton<String>(
+              isExpanded: true,
+              underline: Container(),
+              items: <String>[...dropDownValue].map((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              onChanged: (value) {
+                projectFilterVal = value;
+                setState(() {});
+              },
+            ),
+          )
+        ],
       ),
     );
   }
@@ -177,6 +217,10 @@ class _LeadScreenState extends State<LeadScreen> implements LeadView {
   void onAllLeadFetched(List<AllLeadResponse> leadList) {
     listOfList.clear();
     listOfList.addAll(leadList);
+
+    //add projects to project list
+    projectList.clear();
+    listOfList.forEach((lead) async => projectList.add(lead.projectInterested));
     setState(() {});
   }
 
