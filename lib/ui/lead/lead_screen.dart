@@ -22,7 +22,8 @@ class _LeadScreenState extends State<LeadScreen> implements LeadView {
   final mainTextStyle = textStyle14px500w;
 
   LeadPresenter leadPresenter;
-  List<AllLeadResponse> listOfList = [];
+  List<AllLeadResponse> listOfLeads = [];
+  List<AllLeadResponse> projectCachedBuffer = [];
   List<String> projectList = [""];
   String projectFilterVal = "";
 
@@ -68,7 +69,7 @@ class _LeadScreenState extends State<LeadScreen> implements LeadView {
                 onRefresh: () {
                   leadPresenter.getLeadList(context);
                 },
-                children: listOfList.map<Widget>((e) => cardViewLead(e)).toList(),
+                children: listOfLeads.map<Widget>((e) => cardViewLead(e)).toList(),
               ),
             ),
           ],
@@ -77,40 +78,68 @@ class _LeadScreenState extends State<LeadScreen> implements LeadView {
     );
   }
 
-  Container buildProfileDetailCard2(String mText, String sText, List dropDownValue) {
-    return Container(
-      padding: EdgeInsets.all(2.0),
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(6.0),
-      ),
-      child: Stack(
-        children: [
-          Container(
-            width: Utility.screenWidth(context) * .30,
-            margin: EdgeInsets.only(top: 4.5),
-            child: Text(projectFilterVal, style: textStyleSubText14px500w, overflow: TextOverflow.ellipsis),
+  Row buildProfileDetailCard2(String mText, String sText, List dropDownValue) {
+    return Row(
+      children: [
+        Container(
+          padding: EdgeInsets.all(2.0),
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(6.0),
           ),
-          Container(
-            width: Utility.screenWidth(context) * .35,
-            height: 20.0,
-            child: DropdownButton<String>(
-              isExpanded: true,
-              underline: Container(),
-              items: <String>[...dropDownValue].map((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              onChanged: (value) {
-                projectFilterVal = value;
-                setState(() {});
-              },
-            ),
-          )
-        ],
-      ),
+          child: Stack(
+            children: [
+              Container(
+                width: Utility.screenWidth(context) * .30,
+                margin: EdgeInsets.only(top: 4.5),
+                child: Text(projectFilterVal, style: textStyleSubText14px500w, overflow: TextOverflow.ellipsis),
+              ),
+              Container(
+                width: Utility.screenWidth(context) * .30,
+                height: 20.0,
+                child: DropdownButton<String>(
+                  isExpanded: true,
+                  underline: Container(),
+                  hint: Text("${projectFilterVal.isEmpty? "Select project" : ""}", style: textStyle12px500w),
+                  items: <String>[...dropDownValue].map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value, style: textStyle12px500w),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    projectFilterVal = value;
+
+                    //list filtering by project
+                    if (projectFilterVal != null && projectFilterVal.isNotEmpty) {
+                      listOfLeads.clear();
+                      projectCachedBuffer.forEach((lead) {
+                        if (projectFilterVal == lead.projectInterested) listOfLeads.add(lead);
+                      });
+                    }
+
+                    setState(() {});
+                  },
+                ),
+              )
+            ],
+          ),
+        ),
+        horizontalSpace(10.0),
+        if (projectFilterVal.isNotEmpty) PmlButton(
+          height: 24.0,
+          width: 24.0,
+          color: AppColors.white,
+          child: Icon(Icons.close, size: 16),
+          onTap: () async {
+            projectFilterVal = "";
+            listOfLeads.clear();
+            listOfLeads.addAll(projectCachedBuffer);
+
+            setState(() {});
+          },
+        ),
+      ],
     );
   }
 
@@ -215,12 +244,14 @@ class _LeadScreenState extends State<LeadScreen> implements LeadView {
 
   @override
   void onAllLeadFetched(List<AllLeadResponse> leadList) {
-    listOfList.clear();
-    listOfList.addAll(leadList);
+    listOfLeads.clear();
+    projectCachedBuffer.clear();
+    listOfLeads.addAll(leadList);
+    projectCachedBuffer.addAll(leadList);
 
     //add projects to project list
     projectList.clear();
-    listOfList.forEach((lead) async => projectList.add(lead.projectInterested));
+    listOfLeads.forEach((lead) async => projectList.add(lead.projectInterested));
     setState(() {});
   }
 
@@ -231,7 +262,7 @@ class _LeadScreenState extends State<LeadScreen> implements LeadView {
 
   @override
   void onLeadDeleted(AllLeadResponse response) {
-    listOfList.remove(response);
+    listOfLeads.remove(response);
     setState(() {});
   }
 }
