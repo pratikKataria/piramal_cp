@@ -71,16 +71,23 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // new Image.asset(listOfImages[index], fit: BoxFit.fill) Container(
-          if (projectCarouselImages.isNotEmpty) Container(
-            height: 180.0,
-            child: Swiper(
-              itemBuilder: (BuildContext context, int index) {
-                return Image.memory(Utility.convertMemoryImage((projectCarouselImages[index]??"")));
-              },
-              itemCount: 3,
-              pagination: new SwiperPagination(),
+          if (projectCarouselImages.isNotEmpty)
+            Container(
+              height: 180.0,
+              child: Swiper(
+                itemBuilder: (BuildContext context, int index) {
+                  return Container(
+                    margin: EdgeInsets.symmetric(horizontal: 5.0),
+                    child: Image.memory(
+                      Utility.convertMemoryImage((projectCarouselImages[index] ?? "")),
+                      fit: BoxFit.fill,
+                    ),
+                  );
+                },
+                itemCount: 3,
+                pagination: new SwiperPagination(),
+              ),
             ),
-          ),
           verticalSpace(20.0),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),

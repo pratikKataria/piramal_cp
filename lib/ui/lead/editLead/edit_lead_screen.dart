@@ -61,6 +61,7 @@ class _EditLeadScreenState extends State<EditLeadScreen> implements AddLeadView 
     createLeadRequest.location = response.location;
     createLeadRequest.accountID = response.sfdcid;
     createLeadRequest.emailID = response.emailID;
+    createLeadRequest.subUrban = response.suburban;
 
     // for mate  time
     String date = response?.dateofvisit;
@@ -192,8 +193,8 @@ class _EditLeadScreenState extends State<EditLeadScreen> implements AddLeadView 
                         // hideKeyboard = true;
                         switch (captureNo) {
                           case AddLeadConstant.INTERESTED_DROP:
-                            createLeadRequest.budget = null;
-                            createLeadRequest.configuration = null;
+                            createLeadRequest.budget = "";
+                            createLeadRequest.configuration = "";
                             leadPresenter.getProjectConfigurationByProject(context, value);
                             createLeadRequest.projectInterested = value;
                             break;
@@ -330,7 +331,7 @@ class _EditLeadScreenState extends State<EditLeadScreen> implements AddLeadView 
       case AddLeadConstant.PROJECT_INTERESTED_C:
         _v(projectList, element.values);
         if (projectList.isNotEmpty) {
-          createLeadRequest.projectInterested = projectList[0];
+          // createLeadRequest.projectInterested = projectList[0];
           leadPresenter.getProjectConfigurationByProject(context, createLeadRequest.projectInterested);
         }
         break;
@@ -343,7 +344,7 @@ class _EditLeadScreenState extends State<EditLeadScreen> implements AddLeadView 
       case AddLeadConstant.SUB_URBAN_C:
         _v(subUrbanList, element.values);
         if (subUrbanList.isNotEmpty) {
-          createLeadRequest.subUrban = subUrbanList[0];
+          // createLeadRequest.subUrban = subUrbanList[0];
         }
         break;
     }
@@ -368,7 +369,7 @@ class _EditLeadScreenState extends State<EditLeadScreen> implements AddLeadView 
         budgetList.addAll(bList);
 
         if (createLeadRequest.budget == null) {
-          createLeadRequest.budget = budgetList.isEmpty ? "" : budgetList[0];
+          // createLeadRequest.budget = budgetList.isEmpty ? "" : budgetList[0];
         }
       } else if (projectConfig?.fieldName == AddLeadConstant.CONFIGURATION_I) {
         List<String> cList = projectConfig?.values?.split(",") ?? [];
@@ -376,7 +377,7 @@ class _EditLeadScreenState extends State<EditLeadScreen> implements AddLeadView 
         configurationList.clear();
         configurationList.addAll(cList);
         if (createLeadRequest.configuration == null) {
-          createLeadRequest.configuration = configurationList.isEmpty ? "" : configurationList[0];
+          // createLeadRequest.configuration = configurationList.isEmpty ? "" : configurationList[0];
         }
       }
     });

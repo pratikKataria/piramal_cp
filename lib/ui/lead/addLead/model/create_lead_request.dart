@@ -45,7 +45,7 @@ class CreateLeadRequest {
     _location = json['Location'];
     _mobilenumber = json['Mobilenumber'];
     _dateofvisit = json['Dateofvisit'];
-    _accountID = json['AccountID'];
+    _accountID = json['RecordID'];
     _emailID = json['EmailID'];
     _subUrban = json['SubUrban'];
   }
@@ -83,7 +83,7 @@ class CreateLeadRequest {
     map['Location'] = _location;
     map['Mobilenumber'] = _mobilenumber;
     map['Dateofvisit'] = _dateofvisit;
-    map['AccountID'] = _accountID;
+    map['RecordID'] = _accountID;
     map['EmailID'] = _emailID;
     map['SubUrban'] = _subUrban;
     return map;

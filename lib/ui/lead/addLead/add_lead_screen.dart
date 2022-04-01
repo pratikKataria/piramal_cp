@@ -53,6 +53,7 @@ class _AddLeadScreenState extends State<AddLeadScreen> implements AddLeadView {
     createLeadRequest.configuration = configurationList[0];
     createLeadRequest.budget = budgetList[0];
     createLeadRequest.location = locationList[0];
+
     DateTime date = DateTime.now();
     createLeadRequest.dateofvisit = "${date.year}-${date.month}-${date.day}";
   }
@@ -162,10 +163,7 @@ class _AddLeadScreenState extends State<AddLeadScreen> implements AddLeadView {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                "$mText",
-                style: textStyle14px500w,
-              ),
+              Text("$mText", style: textStyle14px500w),
               Stack(
                 children: [
                   Positioned(

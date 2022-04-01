@@ -100,7 +100,7 @@ class _LeadScreenState extends State<LeadScreen> implements LeadView {
                 child: DropdownButton<String>(
                   isExpanded: true,
                   underline: Container(),
-                  hint: Text("${projectFilterVal.isEmpty? "Select project" : ""}", style: textStyle12px500w),
+                  hint: Text("${projectFilterVal.isEmpty ? "Select project" : ""}", style: textStyle12px500w),
                   items: <String>[...dropDownValue].map((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
@@ -126,19 +126,20 @@ class _LeadScreenState extends State<LeadScreen> implements LeadView {
           ),
         ),
         horizontalSpace(10.0),
-        if (projectFilterVal.isNotEmpty) PmlButton(
-          height: 24.0,
-          width: 24.0,
-          color: AppColors.white,
-          child: Icon(Icons.close, size: 16),
-          onTap: () async {
-            projectFilterVal = "";
-            listOfLeads.clear();
-            listOfLeads.addAll(projectCachedBuffer);
+        if (projectFilterVal.isNotEmpty)
+          PmlButton(
+            height: 24.0,
+            width: 24.0,
+            color: AppColors.white,
+            child: Icon(Icons.close, size: 16),
+            onTap: () async {
+              projectFilterVal = "";
+              listOfLeads.clear();
+              listOfLeads.addAll(projectCachedBuffer);
 
-            setState(() {});
-          },
-        ),
+              setState(() {});
+            },
+          ),
       ],
     );
   }
@@ -251,7 +252,10 @@ class _LeadScreenState extends State<LeadScreen> implements LeadView {
 
     //add projects to project list
     projectList.clear();
-    listOfLeads.forEach((lead) async => projectList.add(lead.projectInterested));
+    listOfLeads.forEach((lead) {
+      bool isProjectAlreadyPresent = projectList.contains(lead.projectInterested);
+      if (!isProjectAlreadyPresent) projectList.add(lead.projectInterested);
+    });
     setState(() {});
   }
 

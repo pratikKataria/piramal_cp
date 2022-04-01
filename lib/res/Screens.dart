@@ -8,7 +8,7 @@ abstract class Screens {
    static const kCustomerProfileDetailWalkin = "kCustomerProfileDetailWalkin";
    static const kCustomerProfileDetailBooking = "kCustomerProfileDetailBooking";
    static const kExploreScreen = "Explore";
-   static const kTodayFollowUpScreen = "Today's FV";
+   static const kTodayFollowUpScreen = "Today's FU";
    static const kNotificationsScreen = "Notifications";
 
    static const kProjectScreen = "kProjectScreen";
