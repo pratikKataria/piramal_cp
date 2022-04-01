@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -54,7 +56,17 @@ Future<void> main() async {
   await Utility.statusBarAndNavigationBarColor();
   await Utility.portrait();
 
-  await Firebase.initializeApp();
+  // await Firebase.initializeApp();
+  if (Platform.isIOS) {
+    await Firebase.initializeApp(
+        options: const FirebaseOptions(
+            apiKey: "AIzaSyA9PpNpiNMkyI0nnxnjgboSHLji_2jqnqw",
+            appId: "1:970701622319:ios:124e18c9d426b905030ada",
+            messagingSenderId: "970701622319",
+            projectId: "cp-mobile-app-a7646"));
+  } else {
+    await Firebase.initializeApp();
+  }
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   await flutterLocalNotificationsPlugin
