@@ -174,17 +174,19 @@ class ApiController {
     // headerMap["NoEncryption"] = 'true';
     Utility.log(tag, "Api Call :\n $url \n Inputs :\n ${body.toString()} \n Payload :\n ${payload}  \n Header :\n $headers");
 
-    Response response = await dio.get(url,
-        queryParameters: payload,
-        options: Options(
+    Response response = await dio.get(
+      url,
+      queryParameters: payload,
+      options: Options(
           responseType: ResponseType.bytes,
-          followRedirects: false,
           contentType: ContentType.json.toString(),
+          followRedirects: false,
           receiveTimeout: 300000,
           sendTimeout: 300000,
           method: "GET",
-          headers: headerMap,
-        ));
+          headers: headerMap),
+    );
+    print(response.headers);
 
     Utility.log(
       tag,

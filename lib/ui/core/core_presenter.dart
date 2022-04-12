@@ -64,8 +64,10 @@ class CorePresenter {
 
     //if incoming value is mobile number
     if (checkForMobileNumber(value)) {
-      if (value.length == 10) sendMobileOTP(value);
-      else _v.onError("please enter valid mobile number");
+      if (value.length == 10)
+        sendMobileOTP(value);
+      else
+        _v.onError("please enter valid mobile number");
       return;
     }
 
@@ -208,7 +210,7 @@ class CorePresenter {
         LoginView loginView = _v as LoginView;
         if (loginResponse.returnCode)
           loginView.onVerificationSuccess(loginResponse);
-        else if (loginResponse?.accountId ==null)
+        else if (loginResponse?.accountId == null)
           loginView.onVerificationFailed();
         else
           loginView.onError(loginResponse.message);
@@ -387,6 +389,44 @@ class CorePresenter {
       })
       ..catchError((e) {
         Dialogs.hideLoader(context);
+        ApiErrorParser.getResult(e, _v);
+      });
+  }
+
+  void test() async {
+
+    Map<String, String> header = {
+      "accesstoken": "JN:ms:user:e89ceb4401ec440262c010302b76c55e:665670f7-1e70-428b-9263-337730147205",
+      "devicetype": "phone",
+      "os": "android",
+      "version": "3.3.4",
+      "Content-Type": "application/x-www-form-urlencoded",
+      "Host": "jionewsapi.media.jio.com",
+      "Connection": "Keep-Alive",
+      "Accept-Encoding": "gzip",
+      "User-Agent": "okhttp/3.14.1"
+    };
+
+    Map enc = {
+      "issueId": 36120,
+      "uuid": "171c01c8-4311-4856-bbdc-ff726f738f81",
+    };
+
+    FormData formData = new FormData();
+    formData = FormData.fromMap(enc);
+
+    apiController.post("https://jionewsapi.media.jio.com/download/apis/v1.1/mags/issues", body: formData, headers: header)
+      ..then((response) {
+        Utility.log(tag, response.data);
+        // TermsAndConditionResponse termsAndConditionResponse = TermsAndConditionResponse.fromJson(response.data);
+        // UploadDocumentView view = _v as UploadDocumentView;
+        // if (termsAndConditionResponse.returnCode) {
+        //   view.onTermsAndConditionFetched(termsAndConditionResponse);
+        // } else {
+        //   _v.onError(termsAndConditionResponse.message);
+        // }
+      })
+      ..catchError((e) {
         ApiErrorParser.getResult(e, _v);
       });
   }

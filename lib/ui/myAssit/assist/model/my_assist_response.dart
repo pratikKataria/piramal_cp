@@ -74,7 +74,7 @@ class MyAssistResponse {
   String get siteHeadMobile => _siteHeadMobile;
   String get siteHeadLabel => _siteHeadLabel;
   String get siteHead => _siteHead;
-  bool get returnCode => _returnCode;
+  bool get returnCode => _returnCode?? false;
   String get relationshipManagerName => _relationshipManagerName;
   String get relationshipManagerMobile => _relationshipManagerMobile;
   String get relationshipManagerLabel => _relationshipManagerLabel;

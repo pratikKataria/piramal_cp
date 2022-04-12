@@ -30,6 +30,11 @@ abstract class AppColors {
   static const background = Color(0xFFECF0F3);
   static const red = Colors.red;
 
+  //Shimmer color
+  static const baseLightColor = Color(0xFFF5F5F5);
+  static const highLightColor = Color(0xFFE6E6E6);
+  static const shimmerBackgroundColor = Color(0xFFEAEAEA);
+
   //App Specific color
   static const screenBackgroundColor = Color(0xFFF6F6F6);
   static const chipColor = Color(0xFFCBD2D5);

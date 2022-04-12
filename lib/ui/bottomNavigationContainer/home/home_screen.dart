@@ -534,6 +534,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
     setState(() {});
     _homePresenter.getWalkInListV2(context);
   }
+
 }
 
 /*   Text("Lead Status", style: textStyleRegular16px400w),

@@ -1,3 +1,5 @@
+
+
 /// website : "https://maharera.mahaonline.gov.in/"
 /// threeDtoururl : "https://www.piramalvaikunth.com/e-tour/"
 /// returnCode : true
@@ -10,17 +12,20 @@
 /// message : "SUCCESS"
 
 class ProjectOverviewResponse {
+  List<String> projectBottomImagesList = [];
+
   ProjectOverviewResponse({
-      String website, 
-      String threeDtoururl, 
-      bool returnCode, 
-      String recordid, 
-      String projectphotos, 
-      String projectName, 
-      String projectmap, 
-      String projectDescription, 
-      String projectCity, 
-      String message,}){
+    String website,
+    String threeDtoururl,
+    bool returnCode,
+    String recordid,
+    String projectphotos,
+    String projectName,
+    String projectmap,
+    String projectDescription,
+    String projectCity,
+    String message,
+  }) {
     _website = website;
     _threeDtoururl = threeDtoururl;
     _returnCode = returnCode;
@@ -31,7 +36,7 @@ class ProjectOverviewResponse {
     _projectDescription = projectDescription;
     _projectCity = projectCity;
     _message = message;
-}
+  }
 
   ProjectOverviewResponse.fromJson(dynamic json) {
     _website = json['website'];
@@ -45,6 +50,7 @@ class ProjectOverviewResponse {
     _projectCity = json['ProjectCity'];
     _message = json['message'];
   }
+
   String _website;
   String _threeDtoururl;
   bool _returnCode;
@@ -57,14 +63,23 @@ class ProjectOverviewResponse {
   String _message;
 
   String get website => _website;
+
   String get threeDtoururl => _threeDtoururl;
+
   bool get returnCode => _returnCode;
+
   String get recordid => _recordid;
+
   String get projectphotos => _projectphotos;
+
   String get projectName => _projectName;
+
   String get projectmap => _projectmap;
+
   String get projectDescription => _projectDescription;
+
   String get projectCity => _projectCity;
+
   String get message => _message;
 
   Map<String, dynamic> toJson() {
@@ -81,5 +96,4 @@ class ProjectOverviewResponse {
     map['message'] = _message;
     return map;
   }
-
 }

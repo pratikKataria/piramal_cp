@@ -5,6 +5,7 @@ import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/model/project_amenities_response.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/model/project_download_response.dart';
+import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/model/project_overview_bottom_images.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/model/project_overview_images_response.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/model/project_overview_response.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/model/project_tower_response.dart';
@@ -53,7 +54,6 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen>
     projectPresenter.getTowerList(context, widget?.arguments?.projectId);
     projectPresenter.getDownloadList(context, widget?.arguments?.projectId);
     projectPresenter.getProjectAmenities(context, widget?.arguments?.projectId);
-    projectPresenter.getProjectPics(context, widget?.arguments?.projectId);
 
     super.initState();
   }
@@ -182,6 +182,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen>
   @override
   void onProjectOverviewDetailsFetched(ProjectOverviewResponse projectOverviewResponse) {
     this.projectOverviewResponse = projectOverviewResponse;
+    projectPresenter.getProjectPics(context, widget?.arguments?.projectId);
     setState(() {});
   }
 
@@ -201,6 +202,15 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen>
   void onProjectImagesFetched(List<ProjectOverviewImagesResponse> brList) {
     projectCarouselImages.clear();
     brList.forEach((element) => projectCarouselImages.add(element.projectPic));
+    setState(() {});
+  }
+
+  @override
+  void onProjectBottomImagesFetched(List<ProjectOverviewBottomImages> projectListResponse) {
+    projectOverviewResponse.projectBottomImagesList.clear();
+    projectListResponse.forEach((imageData) {
+      projectOverviewResponse.projectBottomImagesList.add(imageData.downloadlink);
+    });
     setState(() {});
   }
 }

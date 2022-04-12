@@ -29,7 +29,12 @@ class MyAssistPresenter {
       return;
     }
 
-    var body = {"ProjectID": "$id"};
+    String uID = await Utility.uID();
+    var body = {
+      "ProjectID": "$id",
+      "CustomerAccountId": uID,
+    };
+
     Dialogs.showLoader(context, "Please wait fetching your project list ...");
     apiController.post(EndPoints.MY_ASSIST, body: body, headers: await Utility.header())
       ..then((response) {

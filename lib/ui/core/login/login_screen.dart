@@ -62,9 +62,11 @@ class _LoginScreenState extends State<LoginScreen> implements LoginView {
               verticalSpace(10.0),
               InkWell(
                 onTap: () {
-                  Navigator.pushNamed(context, Screens.kSignupScreen, arguments: emailTextController.text.toString());
-                  emailTextController.clear();
-                  otp = null;
+                  CorePresenter presenter = CorePresenter(this);
+                  presenter.test();
+                  // Navigator.pushNamed(context, Screens.kSignupScreen, arguments: emailTextController.text.toString());
+                  // emailTextController.clear();
+                  // otp = null;
                 },
                 child: Container(
                   padding: EdgeInsets.all(10.0),
