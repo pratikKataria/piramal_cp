@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer' as dev;
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
@@ -57,8 +56,8 @@ class Utility {
   );
 
   static log(var tag, var message) {
-    dev.log('\n\n*****************\n$tag\n$message\n*****************\n\n');
-    // print('\n\n*****************\n$tag\n$message\n*****************\n\n');
+    // dev.log('\n\n*****************\n$tag\n$message\n*****************\n\n');
+    print('\n\n*****************\n$tag\n$message\n*****************\n\n');
   }
 
   static void showErrorToast(BuildContext context, String text) async {
@@ -149,7 +148,7 @@ class Utility {
     );
   }
 
-  static void showSuccessToastB(BuildContext context, String text) async {
+  static void showSuccessToastB(BuildContext context, String text, {int duration}) async {
     FToast fToast = FToast(context);
     Widget toast = Container(
       padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 6.0),
@@ -167,7 +166,7 @@ class Utility {
     fToast.showToast(
       child: toast,
       gravity: ToastGravity.BOTTOM,
-      toastDuration: const Duration(seconds: 4),
+      toastDuration: Duration(seconds: duration ?? 4),
     );
   }
 
@@ -271,19 +270,22 @@ class Utility {
   }
 
   static String calculateReturnDateString(String deliveryDate, int timePeriodDays) {
-    DateTime deliveryDateTime = DateTime.parse(deliveryDate).toLocal();;
+    DateTime deliveryDateTime = DateTime.parse(deliveryDate).toLocal();
+    ;
     DateTime returnTime = DateTime(deliveryDateTime.year, deliveryDateTime.month, deliveryDateTime.day + 7);
     return '${returnTime.day}/${returnTime.month}/${returnTime.year}';
   }
 
   static DateTime calculateReturnDate(String deliveryDate, int timePeriodDays) {
-    DateTime deliveryDateTime = DateTime.parse(deliveryDate).toLocal();;
+    DateTime deliveryDateTime = DateTime.parse(deliveryDate).toLocal();
+    ;
     DateTime returnTime = DateTime(deliveryDateTime.year, deliveryDateTime.month, deliveryDateTime.day + 7);
     return returnTime;
   }
 
   static int calculateExtendDays(String deliveryDate, int timePeriodDays) {
-    DateTime deliveryDateTime = DateTime.parse(deliveryDate).toLocal();;
+    DateTime deliveryDateTime = DateTime.parse(deliveryDate).toLocal();
+    ;
     DateTime returnDate = calculateReturnDate(deliveryDate, timePeriodDays);
     int days = deliveryDateTime.difference(returnDate).inDays;
     return days;
@@ -318,7 +320,8 @@ class Utility {
 
   static String formatDate(String date) {
     if (date != null && date.isNotEmpty) {
-      DateTime dateTime = DateTime.parse(date).toLocal();;
+      DateTime dateTime = DateTime.parse(date).toLocal();
+      ;
       String formattedDate = DateFormat("MMM dd").format(dateTime);
       return formattedDate;
     }
@@ -440,7 +443,6 @@ class Utility {
     }
     return double.tryParse(s) != null;
   }
-
 }
 
 Widget verticalSpace(double height) => SizedBox(

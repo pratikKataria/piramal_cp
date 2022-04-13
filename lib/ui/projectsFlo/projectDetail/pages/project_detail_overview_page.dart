@@ -118,7 +118,6 @@ class ProjectDetailOverviewPage extends StatelessWidget {
                         return;
                       }
 
-                      Utility.showSuccessToastB(context, "Downloading image");
                       Random random = new Random();
                       int randomNumber = random.nextInt(100);
                       var path = await ExternalPath.getExternalStoragePublicDirectory(ExternalPath.DIRECTORY_PICTURES);
@@ -160,6 +159,6 @@ class ProjectDetailOverviewPage extends StatelessWidget {
       },
     );
 
-    if (downloaded) Utility.showSuccessToastB(context, "Image Downloaded");
+    if (downloaded) Utility.showSuccessToastB(context, "Image downloaded at Storage/Picture", duration: 6);
   }
 }

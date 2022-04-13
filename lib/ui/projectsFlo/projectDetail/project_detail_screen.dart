@@ -54,6 +54,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen>
     projectPresenter.getTowerList(context, widget?.arguments?.projectId);
     projectPresenter.getDownloadList(context, widget?.arguments?.projectId);
     projectPresenter.getProjectAmenities(context, widget?.arguments?.projectId);
+    projectPresenter.getProjectBannerPics(context, widget?.arguments?.projectId);
 
     super.initState();
   }
@@ -182,7 +183,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen>
   @override
   void onProjectOverviewDetailsFetched(ProjectOverviewResponse projectOverviewResponse) {
     this.projectOverviewResponse = projectOverviewResponse;
-    projectPresenter.getProjectPics(context, widget?.arguments?.projectId);
+    projectPresenter.getProjectBottomPics(context, widget?.arguments?.projectId);
     setState(() {});
   }
 

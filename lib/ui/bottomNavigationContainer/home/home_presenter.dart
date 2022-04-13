@@ -85,10 +85,10 @@ class HomePresenter {
     var body = {"CustomerAccountId": "$uID"};
     // var body = {"CustomerAccountId": "001p000000y1SqW"};
 
-    Dialogs.showLoader(context, "Please wait fetching your data ...");
+    // Dialogs.showLoader(context, "Please wait fetching your data ...");
     apiController.post(EndPoints.GET_WALK_IN, body: body, headers: await Utility.header())
       ..then((response) {
-        Dialogs.hideLoader(context);
+        // Dialogs.hideLoader(context);
         List<BookingResponse> brList = [];
         var listOfDynamic = response.data as List;
         listOfDynamic.forEach((element) => brList.add(BookingResponse.fromJson(element)));
@@ -106,12 +106,12 @@ class HomePresenter {
         }
       })
       ..catchError((e) {
-        Dialogs.hideLoader(context);
+        // Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }
 
-  void getWalkInListV2(BuildContext context) async {
+  void getWalkInListV2s(BuildContext context) async {
     //check for internal token
     if (await AuthUser.getInstance().hasToken()) {
       _v.onError("Token not found");

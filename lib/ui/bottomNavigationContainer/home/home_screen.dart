@@ -292,9 +292,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
   void onWalkInListFetched(List<BookingResponse> wList) {
     walkInList.clear();
     walkInList.addAll(wList);
-    //call Booking list api
-    _homePresenter.getBookingList(context);
-    //filter project form the response and add it to the project list
+     //filter project form the response and add it to the project list
     walkInList.forEach((booking) => addProjectListValue(booking.projectInterested));
     setState(() {});
   }
@@ -307,7 +305,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
     AuthUser.getInstance().updateUser(currentUser);
 
     //sent request again
-    _homePresenter.getWalkInListV2(context);
+    _homePresenter.getWalkInListV2s(context);
   }
 
   @override
@@ -444,7 +442,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
   @override
   void onTaggingDone() {
     Utility.showSuccessToastB(context, "Tagging completed");
-    _homePresenter.getWalkInListV2(context);
+    _homePresenter.getWalkInListV2s(context);
   }
 
   @override
@@ -453,6 +451,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
       case Constants.ADMIN:
         await updateUserCreds(accountStatusResponse?.customerAccountID);
         _homePresenter.getWalkInList(context);
+        _homePresenter.getBookingList(context);
         break;
       case Constants.GUEST_USER:
         break;
@@ -462,6 +461,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
       case Constants.APPROVED:
         await updateUserCreds(accountStatusResponse?.customerAccountID);
         _homePresenter.getWalkInList(context);
+        _homePresenter.getBookingList(context);
         break;
     }
   }
@@ -532,7 +532,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
     _tabController.index = 0;
     currentSelectedTab = "Walk in";
     setState(() {});
-    _homePresenter.getWalkInListV2(context);
+    _homePresenter.getWalkInListV2s(context);
   }
 
 }
