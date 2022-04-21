@@ -26,23 +26,23 @@ class ProjectDetailDownloadPage extends StatelessWidget {
       child: ListView(
         children: [
           line(),
-          cardViewListDownloadsV2(
-            Image.asset(Images.kIconHome, color: AppColors.colorSecondary, width: 20.0),
-            "Masterplan",
-            projectDownloadResponse[0],
-            projectDownloadResponse[0].masterPlanLink,
-            Constants.MASTER_PLAN,
-          ),
+          // cardViewListDownloadsV2(
+          //   Image.asset(Images.kIconHome, color: AppColors.colorSecondary, width: 20.0),
+          //   "Masterplan",
+          //   projectDownloadResponse[0],
+          //   projectDownloadResponse[0].masterPlanLink,
+          //   Constants.MASTER_PLAN,
+          // ),
 
           cardViewListDownloadsV2(
             Image.asset(Images.kIconBrochure, color: AppColors.colorSecondary, width: 15.0),
             "Brochure",
-            projectDownloadResponse[1],
-            projectDownloadResponse[1].brochure,
+            projectDownloadResponse[0],
+            projectDownloadResponse[0].brochure,
             Constants.BROCHURE,
           ),
 
-          for (int i = 2; i < projectDownloadResponse.length; i++) cardViewListDownloads(context, projectDownloadResponse[i]),
+          // for (int i = 2; i < projectDownloadResponse.length; i++) cardViewListDownloads(context, projectDownloadResponse[i]),
           // ...projectDownloadResponse.map<Widget>((e) => cardViewListDownloads(e)).toList(),
         ],
       ),
@@ -61,7 +61,7 @@ class ProjectDetailDownloadPage extends StatelessWidget {
             Spacer(),
 
             //whats app and download
-            WhatsAppButton(response.message),
+            WhatsAppButton(response.siteManagerMobile),
             horizontalSpace(8.0),
             DownloadButton("${response?.projectId}", "$identifier"),
           ],
