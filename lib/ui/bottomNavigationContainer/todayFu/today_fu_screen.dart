@@ -205,11 +205,8 @@ class _TodayFollowUpScreenState extends State<TodayFollowUpScreen> with SingleTi
         ..nextFollowUp = element.nextFollowUp
         // ..taggingStatus = element.completeTaggingStatus
         ..taskId = element.taskid;
-      if (element.stageName == "WalkIn") {
+
         walkInListWidgets.add(bookingResponse);
-      } else {
-        bookingListWidgets.add(bookingResponse);
-      }
     });
 
     setState(() {});

@@ -1,16 +1,15 @@
 import 'dart:math';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/api/api_controller_expo.dart';
 import 'package:piramal_channel_partner/api/api_end_points.dart';
 import 'package:piramal_channel_partner/api/api_error_parser.dart';
+import 'package:piramal_channel_partner/ui/base/base_presenter.dart';
 import 'package:piramal_channel_partner/ui/core/core_view.dart';
 import 'package:piramal_channel_partner/ui/core/login/login_view.dart';
 import 'package:piramal_channel_partner/ui/core/login/model/login_response.dart';
 import 'package:piramal_channel_partner/ui/core/login/model/otp_response.dart';
-import 'package:piramal_channel_partner/ui/core/login/model/token_response.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/document_upload_request.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/document_upload_response.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/relation_manager_list_response.dart';
@@ -24,33 +23,11 @@ import 'package:piramal_channel_partner/utils/Dialogs.dart';
 import 'package:piramal_channel_partner/utils/NetworkCheck.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 
-class CorePresenter {
+class CorePresenter extends BasePresenter {
   CoreView _v;
   final tag = "CorePresenter";
 
-  CorePresenter(this._v);
-
-  void getAccessToken() async {
-    if (!await NetworkCheck.check()) return;
-
-    var bodyReq = {
-      "grant_type": "password",
-      "client_id": "3MVG9Se4BnchkASnJ0eDEZX9z9D7w5.Useb0G1N5w8TloI60n3z2sLOgAP.kQJMu4cDVDD6R8ZoiI52dTnngF",
-      "client_secret": "ABBF4E5B2A89FD49A3FE015D63A715BDA2D7CA9CE54AD3991560E98276387FB4",
-      "username": "aniket.khillari1010@stetig.in",
-      "password": "Mobileapp@123u0vS6ZiRg9RNJHRVr9WeO1jpY",
-    };
-
-    var body = FormData.fromMap(bodyReq);
-    apiController.post(EndPoints.ACCESS_TOKEN, body: body)
-      ..then((response) {
-        TokenResponse tokenResponse = TokenResponse.fromJson(response.data);
-        _v.onTokenGenerated(tokenResponse);
-      })
-      ..catchError((e) {
-        Utility.log(tag, e.toString());
-      });
-  }
+  CorePresenter(this._v) : super(_v);
 
   void sendEmailMobileOTP(String value) async {
     //check for internal token
@@ -389,44 +366,6 @@ class CorePresenter {
       })
       ..catchError((e) {
         Dialogs.hideLoader(context);
-        ApiErrorParser.getResult(e, _v);
-      });
-  }
-
-  void test() async {
-
-    Map<String, String> header = {
-      "accesstoken": "JN:ms:user:e89ceb4401ec440262c010302b76c55e:665670f7-1e70-428b-9263-337730147205",
-      "devicetype": "phone",
-      "os": "android",
-      "version": "3.3.4",
-      "Content-Type": "application/x-www-form-urlencoded",
-      "Host": "jionewsapi.media.jio.com",
-      "Connection": "Keep-Alive",
-      "Accept-Encoding": "gzip",
-      "User-Agent": "okhttp/3.14.1"
-    };
-
-    Map enc = {
-      "issueId": 36120,
-      "uuid": "171c01c8-4311-4856-bbdc-ff726f738f81",
-    };
-
-    FormData formData = new FormData();
-    formData = FormData.fromMap(enc);
-
-    apiController.post("https://jionewsapi.media.jio.com/download/apis/v1.1/mags/issues", body: formData, headers: header)
-      ..then((response) {
-        Utility.log(tag, response.data);
-        // TermsAndConditionResponse termsAndConditionResponse = TermsAndConditionResponse.fromJson(response.data);
-        // UploadDocumentView view = _v as UploadDocumentView;
-        // if (termsAndConditionResponse.returnCode) {
-        //   view.onTermsAndConditionFetched(termsAndConditionResponse);
-        // } else {
-        //   _v.onError(termsAndConditionResponse.message);
-        // }
-      })
-      ..catchError((e) {
         ApiErrorParser.getResult(e, _v);
       });
   }
