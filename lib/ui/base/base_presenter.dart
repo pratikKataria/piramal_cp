@@ -4,6 +4,7 @@ import 'package:piramal_channel_partner/api/api_end_points.dart';
 import 'package:piramal_channel_partner/env/environment_values.dart';
 import 'package:piramal_channel_partner/ui/base/BaseView.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/home_view.dart';
+import 'package:piramal_channel_partner/ui/core/login/login_view.dart';
 import 'package:piramal_channel_partner/ui/core/login/model/token_response.dart';
 import 'package:piramal_channel_partner/utils/NetworkCheck.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
@@ -20,15 +21,19 @@ class BasePresenter {
       return;
     }
 
-
     var bodyReq = EnvironmentValues.getTokenBody();
 
     var body = FormData.fromMap(bodyReq);
     apiController.post(EndPoints.ACCESS_TOKEN, body: body)
       ..then((response) {
         TokenResponse tokenResponse = TokenResponse.fromJson(response.data);
-        HomeView loginView = _v as HomeView;
-        loginView.onTokenRegenerated(tokenResponse);
+        if (_v is HomeView) {
+          HomeView loginView = _v as HomeView;
+          loginView.onTokenRegenerated(tokenResponse);
+        } else if (_v is LoginView) {
+          LoginView loginView = _v as LoginView;
+          loginView.onTokenGenerated(tokenResponse);
+        }
       })
       ..catchError((e) {});
   }
