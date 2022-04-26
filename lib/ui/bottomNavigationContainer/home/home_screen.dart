@@ -432,7 +432,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
       bookingList.forEach((element) => bookingWidgetList.add(BookingCardWidget(element, _homePresenter)));
     } else {
       bookingList.forEach((element) {
-        if (filterValue == element.projectInterested) bookingWidgetList.add(BookingCardWidget(element, _homePresenter));
+        if (filterValue == element.projectFinalized) bookingWidgetList.add(BookingCardWidget(element, _homePresenter));
       });
     }
 
