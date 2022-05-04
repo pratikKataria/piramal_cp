@@ -6,6 +6,7 @@ import 'package:piramal_channel_partner/ui/base/BaseView.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/home_view.dart';
 import 'package:piramal_channel_partner/ui/core/login/login_view.dart';
 import 'package:piramal_channel_partner/ui/core/login/model/token_response.dart';
+import 'package:piramal_channel_partner/ui/core/signup/signup_view.dart';
 import 'package:piramal_channel_partner/utils/NetworkCheck.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 
@@ -32,6 +33,9 @@ class BasePresenter {
           loginView.onTokenRegenerated(tokenResponse);
         } else if (_v is LoginView) {
           LoginView loginView = _v as LoginView;
+          loginView.onTokenGenerated(tokenResponse);
+        } else if (_v is SignupView) {
+          SignupView loginView = _v as SignupView;
           loginView.onTokenGenerated(tokenResponse);
         }
       })

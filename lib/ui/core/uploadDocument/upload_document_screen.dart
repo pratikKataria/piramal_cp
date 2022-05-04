@@ -20,6 +20,7 @@ import 'package:provider/provider.dart';
 
 class UploadDocumentScreen extends StatefulWidget {
   final SignupRequest request;
+
   const UploadDocumentScreen(this.request, {Key key}) : super(key: key);
 
   @override
@@ -131,7 +132,6 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> implements 
                 },
               ),
               verticalSpace(15.0),
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -164,7 +164,6 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> implements 
                   ),
                 ],
               ),
-
               loginButton(context),
               verticalSpace(15.0),
             ],
@@ -332,20 +331,10 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> implements 
   void showDetailDialog(BuildContext context, String message) {
     AlertDialog alert = AlertDialog(
       contentPadding: EdgeInsets.all(0.0),
-      backgroundColor: Colors.transparent,
-      content: Stack(
+      backgroundColor: Colors.white,
+      content: Column(
         children: [
-          Container(
-            decoration: BoxDecoration(
-              color: AppColors.white,
-              borderRadius: BorderRadius.circular(6),
-            ),
-            margin: EdgeInsets.all(10.0),
-            padding: EdgeInsets.all(10.0),
-            child: ListView(
-              children: [Text("$message")],
-            ),
-          ),
+          verticalSpace(20.0),
           Positioned(
             right: 0,
             top: 0,
@@ -359,6 +348,17 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> implements 
               },
             ),
           ),
+          Container(
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(6),
+            ),
+            margin: EdgeInsets.all(10.0),
+            padding: EdgeInsets.all(10.0),
+            child: SingleChildScrollView(
+              child: Text("$message"),
+            ),
+          ),
         ],
       ),
     );
@@ -370,5 +370,4 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> implements 
       },
     );
   }
-
 }

@@ -54,8 +54,10 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
   void autoPopulateEmailMobile() {
     String value = widget.emailMobileAutoPopulateValue;
     if (value == null && value.isEmpty) return;
-    if (Utility.isNumeric(value)) signupRequest.primaryMobNo = value;
-    else signupRequest.email = value;
+    if (Utility.isNumeric(value))
+      signupRequest.primaryMobNo = value;
+    else
+      signupRequest.email = value;
   }
 
   @override
@@ -94,8 +96,7 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
                 childButtonText: "Get OTP",
                 number: true,
                 onClick: () {
-                  Dialogs.showLoader(context, "Sending OTP to ${signupRequest.primaryMobNo}");
-                  corePresenter.sendMobileOTP(signupRequest.primaryMobNo);
+                  corePresenter.sendMobileOTP(context, signupRequest.primaryMobNo);
                   mobileOTPVerified = false;
                   setState(() {});
                 },
@@ -142,8 +143,11 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
                 childButtonText: "Get OTP",
                 limit: 250,
                 onClick: () {
-                  Dialogs.showLoader(context, "Sending OTP to ${signupRequest.email}");
-                  corePresenter.sendOTPX(signupRequest.email);
+                  if (signupRequest.email == null || signupRequest.email.isEmpty) {
+                    onError("Please enter email address");
+                    return;
+                  }
+                  corePresenter.sendOTPX(context, signupRequest.email);
                 },
               ),
               verticalSpace(10.0),
@@ -227,15 +231,18 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
     );
   }
 
-  Container input(String helperText, Function onX(String value),
-      {bool number: false,
-      bool important: false,
-      bool showChildButton: false,
-      String childButtonText: "",
-      Function onClick,
-      bool verified: false,
-      int limit: 1,
-      String initialValue:"",}) {
+  Container input(
+    String helperText,
+    Function onX(String value), {
+    bool number: false,
+    bool important: false,
+    bool showChildButton: false,
+    String childButtonText: "",
+    Function onClick,
+    bool verified: false,
+    int limit: 1,
+    String initialValue: "",
+  }) {
     return Container(
       height: 38,
       decoration: BoxDecoration(
@@ -322,7 +329,6 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
           return;
         }
 
-
         // corePresenter.singUp(context, signupRequest);
         Navigator.pushNamed(context, Screens.kUploadDocumentScreen, arguments: signupRequest);
       },
@@ -365,7 +371,6 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
 
   @override
   onError(String message) {
-    Dialogs.hideLoader(context);
     Utility.showErrorToastB(context, message);
   }
 

@@ -29,7 +29,7 @@ class CorePresenter extends BasePresenter {
 
   CorePresenter(this._v) : super(_v);
 
-  void sendEmailMobileOTP(String value) async {
+  void sendEmailMobileOTP(BuildContext context, String value) async {
     //check for internal token
     if (await AuthUser.getInstance().hasToken()) {
       _v.onError("Token not found");
@@ -42,7 +42,7 @@ class CorePresenter extends BasePresenter {
     //if incoming value is mobile number
     if (checkForMobileNumber(value)) {
       if (value.length == 10)
-        sendMobileOTP(value);
+        sendMobileOTP(context, value);
       else
         _v.onError("please enter valid mobile number");
       return;
@@ -54,8 +54,10 @@ class CorePresenter extends BasePresenter {
       "GenOTP": "$mobileOtp",
     };
 
+    Dialogs.showLoader(context, "Sending OTP ...");
     apiController.post(EndPoints.SEND_OTP, body: body, headers: await Utility.header())
       ..then((response) {
+        Dialogs.hideLoader(context);
         OTPResponse otpResponse = OTPResponse.fromJson(response.data);
         if (otpResponse.returnCode == false) {
           _v.onError(otpResponse.message);
@@ -72,11 +74,12 @@ class CorePresenter extends BasePresenter {
         signupView.onOtpSent(mobileOtp, 1);
       })
       ..catchError((e) {
+        Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }
 
-  void sendOTPX(String value) async {
+  void sendOTPX(BuildContext context, String value) async {
     //check for internal token
     if (await AuthUser.getInstance().hasToken()) {
       _v.onError("Token not found");
@@ -88,7 +91,7 @@ class CorePresenter extends BasePresenter {
 
     //if incoming value is mobile number
     if (value.length == 10 && checkForMobileNumber(value)) {
-      sendMobileOTP(value);
+      sendMobileOTP(context, value);
       return;
     }
 
@@ -98,8 +101,10 @@ class CorePresenter extends BasePresenter {
       "GenOTP": "$mobileOtp",
     };
 
+    Dialogs.showLoader(context, "Sending OTP to $value");
     apiController.post(EndPoints.SEND_OTP_V1, body: body, headers: await Utility.header())
       ..then((response) {
+        Dialogs.hideLoader(context);
         OTPResponse otpResponse = OTPResponse.fromJson(response.data);
         if (otpResponse.returnCode == false) {
           _v.onError(otpResponse.message);
@@ -116,6 +121,7 @@ class CorePresenter extends BasePresenter {
         signupView.onOtpSent(mobileOtp, 0);
       })
       ..catchError((e) {
+        Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }
@@ -129,10 +135,15 @@ class CorePresenter extends BasePresenter {
     }
   }
 
-  void sendMobileOTP(String value) async {
+  void sendMobileOTP(BuildContext context, String value) async {
     //check for internal token
     if (await AuthUser.getInstance().hasToken()) {
       _v.onError("Token not found");
+      return;
+    }
+
+    if (value == null || value.isEmpty) {
+      _v.onError("Please enter mobile number");
       return;
     }
 
@@ -143,8 +154,10 @@ class CorePresenter extends BasePresenter {
 
     String queryParams =
         "username=7506775158&password=Stetig@123&To=$value&senderid=VM-PRLCRM&feedid=372501&Text=Your%20OTP%20for%20MyPiramal%20App%20is%20$mobileOtp%20kindly%20use%20this%20for%20login";
+    Dialogs.showLoader(context, "Sending OTP to $value");
     apiController.get("${EndPoints.SEND_MOBILE_OTP}$queryParams", headers: await Utility.header())
       ..then((response) {
+        Dialogs.hideLoader(context);
         Utility.log(tag, response.data);
 
         if (_v is LoginView) {
@@ -157,11 +170,12 @@ class CorePresenter extends BasePresenter {
         signupView.onOtpSent(mobileOtp, 1);
       })
       ..catchError((e) {
+        Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }
 
-  void verifyMobileEmail(String value) async {
+  void verifyMobileEmail(BuildContext context, String value) async {
     //check for internal token
     if (await AuthUser.getInstance().hasToken()) {
       _v.onError("Token not found");
@@ -173,7 +187,7 @@ class CorePresenter extends BasePresenter {
 
     //if incoming value is mobile number
     if (value.length == 10 && checkForMobileNumber(value)) {
-      verifyMobile(value);
+      verifyMobile(context, value);
       return;
     }
 
@@ -181,8 +195,10 @@ class CorePresenter extends BasePresenter {
       "EmailId": "$value",
     };
 
+    Dialogs.showLoader(context, "Verifying ...");
     apiController.post(EndPoints.VERIFY_EMAIL, body: body, headers: await Utility.header())
       ..then((response) {
+        Dialogs.hideLoader(context);
         LoginResponse loginResponse = LoginResponse.fromJson(response.data);
         LoginView loginView = _v as LoginView;
         if (loginResponse.returnCode)
@@ -193,12 +209,13 @@ class CorePresenter extends BasePresenter {
           loginView.onError(loginResponse.message);
       })
       ..catchError((e) {
+        Dialogs.hideLoader(context);
         _v.onError(e.message);
         Utility.log(tag, e.toString());
       });
   }
 
-  void verifyMobile(String email) async {
+  void verifyMobile(BuildContext context, String email) async {
     //check for internal token
     if (await AuthUser.getInstance().hasToken()) {
       _v.onError("Token not found");
@@ -212,8 +229,10 @@ class CorePresenter extends BasePresenter {
       "MobileNumber": "$email",
     };
 
+    Dialogs.showLoader(context, "Verifying ...");
     apiController.post(EndPoints.VERIFY_MOBILE, body: body, headers: await Utility.header())
       ..then((response) {
+        Dialogs.hideLoader(context);
         LoginResponse loginResponse = LoginResponse.fromJson(response.data);
         LoginView loginView = _v as LoginView;
         if (loginResponse.returnCode)
@@ -222,6 +241,7 @@ class CorePresenter extends BasePresenter {
           loginView.onError(loginResponse.message);
       })
       ..catchError((e) {
+        Dialogs.hideLoader(context);
         _v.onError(e.message);
         Utility.log(tag, e.toString());
       });

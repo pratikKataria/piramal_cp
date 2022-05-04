@@ -12,7 +12,6 @@ import 'package:piramal_channel_partner/ui/core/login/model/login_response.dart'
 import 'package:piramal_channel_partner/ui/core/login/model/token_response.dart';
 import 'package:piramal_channel_partner/user/AuthUser.dart';
 import 'package:piramal_channel_partner/user/CurrentUser.dart';
-import 'package:piramal_channel_partner/utils/Dialogs.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
 import 'package:provider/provider.dart';
@@ -33,6 +32,15 @@ class _LoginScreenState extends State<LoginScreen> implements LoginView {
 
   BuildContext _context;
   TokenResponse _tokenResponse;
+  CorePresenter presenter;
+
+  @override
+  void initState() {
+    super.initState();
+    //sent otp request
+    presenter = CorePresenter(this);
+    presenter.getAccessToken();
+  }
 
   int otp;
 
@@ -181,9 +189,7 @@ class _LoginScreenState extends State<LoginScreen> implements LoginView {
   }
 
   void sendOTP() {
-    Dialogs.showLoader(context, "Sending OTP ...");
-    CorePresenter presenter = CorePresenter(this);
-    presenter.getAccessToken();
+    presenter.sendEmailMobileOTP(context, emailTextController.text.toString());
   }
 
   void verifyOTP() {
@@ -192,9 +198,7 @@ class _LoginScreenState extends State<LoginScreen> implements LoginView {
       return;
     }
 
-    Dialogs.showLoader(context, "Verifying ...");
-    CorePresenter presenter = CorePresenter(this);
-    presenter.verifyMobileEmail(emailTextController.text.toString());
+    presenter.verifyMobileEmail(context, emailTextController.text.toString());
   }
 
   resetOTP() {
@@ -209,15 +213,10 @@ class _LoginScreenState extends State<LoginScreen> implements LoginView {
     //Save token
     var currentUser = CurrentUser()..tokenResponse = tokenResponse;
     AuthUser.getInstance().saveToken(currentUser);
-
-    //sent otp request
-    CorePresenter presenter = CorePresenter(this);
-    presenter.sendEmailMobileOTP(emailTextController.text.toString());
   }
 
   @override
   onOtpSent(int otp) {
-    Dialogs.hideLoader(context);
     Utility.showSuccessToastB(_context, "OTP Sent Successfully");
     this.otp = otp;
     setState(() {});
@@ -226,13 +225,11 @@ class _LoginScreenState extends State<LoginScreen> implements LoginView {
   @override
   onError(String message) {
     Utility.showErrorToastB(_context, message);
-    Dialogs.hideLoader(context);
   }
 
   @override
   void onVerificationSuccess(LoginResponse loginResponse) async {
     //Save userId
-    Dialogs.hideLoader(context);
     var currentUser = await AuthUser.getInstance().getCurrentUser();
     currentUser.userCredentials = loginResponse;
     AuthUser.getInstance().login(currentUser);
