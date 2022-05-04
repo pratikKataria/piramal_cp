@@ -251,42 +251,30 @@ class WalkInCardWidget extends StatelessWidget {
       datePicked.microsecond,
     );
 
+    bool isPassed = checkPastTime(picked);
+    if (!isPassed) {
+      Utility.showErrorToastB(context, "Please select future time");
+      return;
+    }
+
     if (picked != null) {
       _presenter.scheduleTime(context, _bookingResponse.name, _bookingResponse.sfdcid, x);
     }
   }
+
+  bool checkPastTime(TimeOfDay picked) {
+    TimeOfDay currentTime = TimeOfDay.now();
+
+    if (picked.hour < currentTime.hour) {
+      return false;
+    }
+
+    if (picked.hour == currentTime.hour) {
+      if (picked.minute < currentTime.minute) {
+        return false;
+      }
+    }
+
+    return true;
+  }
 }
-
-/*
-
-   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-
-        var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-          'alarm_notif',
-          'alarm_notif',
-        );
-
-        var iOSPlatformChannelSpecifics =
-            IOSNotificationDetails(sound: 'a_long_cold_sting.wav', presentAlert: true, presentBadge: true, presentSound: true);
-
-        var platformChannelSpecifics = NotificationDetails(
-          android: androidPlatformChannelSpecifics,
-          iOS: iOSPlatformChannelSpecifics,
-        );
-
-        tz.initializeTimeZones();
-        // tz.setLocalLocation(tz.getLocation('Europe/Warsaw'));
-        var currentDateTime = tz.TZDateTime.now(tz.local).add(Duration(seconds: 2));
-        await flutterLocalNotificationsPlugin.zonedSchedule(
-          412,
-          "title",
-          "body",
-          await tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
-          platformChannelSpecifics,
-          androidAllowWhileIdle: true,
-          uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
-        );
-
-
-
-*/
