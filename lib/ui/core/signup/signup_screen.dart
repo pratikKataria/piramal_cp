@@ -190,7 +190,7 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
                 padding: EdgeInsets.symmetric(horizontal: 10.0),
                 child: DropdownButton<String>(
                   isExpanded: true,
-                  hint: Text("Select Relation Manager", style: subTextStyle),
+                  hint: Text("Relationship Manager", style: subTextStyle),
                   value: relationManagerListResponse,
                   underline: Container(),
                   items: <String>[...rmList].map((String value) {
@@ -350,10 +350,10 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
       return false;
     }
 
-    if (signupRequest.relationshipManager.isEmpty) {
-      onError("Please enter relationship manager");
-      return false;
-    }
+    // if (signupRequest.relationshipManager.isEmpty) {
+    //   onError("Please enter relationship manager");
+    //   return false;
+    // }
 
     if (signupRequest.pan.isEmpty) {
       onError("Please enter pancard number");
