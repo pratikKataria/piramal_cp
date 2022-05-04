@@ -11,7 +11,7 @@ import 'package:piramal_channel_partner/ui/currentPromotions/model/current_promo
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/download_button.dart';
 import 'package:piramal_channel_partner/widgets/refresh_list_view.dart';
-import 'package:piramal_channel_partner/widgets/whats_app_button.dart';
+import 'package:piramal_channel_partner/widgets/whats_app_button_v2.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CurrentPromotionScreen extends StatefulWidget {
@@ -104,7 +104,7 @@ class _CurrentPromotionScreenState extends State<CurrentPromotionScreen> impleme
                     Expanded(child: Text("${currentPromoData.project}", style: textStyle24px500w)),
                     Row(
                       children: [
-                        WhatsAppButton(currentPromoData?.mobilenumber),
+                        WhatsAppButtonV2(currentPromoData?.download),
                         horizontalSpace(8.0),
                         InkWell(
                           onTap: () {

@@ -176,11 +176,15 @@ class WalkInCardWidget extends StatelessWidget {
   Color getRatingColor(String rating) {
     switch (rating?.toUpperCase()) {
       case "HOT":
-        return AppColors.colorPrimary;
+        return AppColors.hot;
       case "WARM":
-        return AppColors.colorPrimaryLight;
+        return AppColors.warm;
       case "COLD":
-        return AppColors.colorCOLD;
+        return AppColors.cold;
+      case "WON":
+        return AppColors.won;
+      case "LOST":
+        return AppColors.lost;
       default:
         return AppColors.colorPrimary;
     }

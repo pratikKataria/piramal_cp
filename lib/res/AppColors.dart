@@ -44,4 +44,11 @@ abstract class AppColors {
   static const attendButtonColor = Color(0xFF40C14D);
 
   static const colorCOLD = Color(0xFF007CFF);
+
+  static const hot = Color(0xFF169D49);
+  static const warm = Color(0xFFFFE600);
+  static const cold = Color(0xFFFD321F);
+  static const lost = Color(0xFF939693);
+  static const won = Color(0xFF007CFF);
+
 }
