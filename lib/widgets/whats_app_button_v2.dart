@@ -66,13 +66,10 @@ class WhatsAppButtonV2 extends StatelessWidget {
 
   openWhatsapp(BuildContext context, String link) async {
     String whatsapp = link ?? "Hi";
-    var whatsappURl_android = "http://api.whatsapp.com/send?text=$whatsapp";
+    whatsapp = whatsapp.replaceAll("&", "%26");
+    var whatsappURl_android = "http://api.whatsapp.com/send?text=${Uri.parse(whatsapp)}";
     var whatappURL_ios = "https://api.whatsapp.com/send?text=${Uri.parse(whatsapp)}";
-
-    // if (link == null) {
-    //   Utility.showErrorToastB(context, "Mobile number not found");
-    //   return;
-    // }
+    print(whatsappURl_android);
 
     if (Platform.isIOS) {
       // for iOS phone only
@@ -88,7 +85,6 @@ class WhatsAppButtonV2 extends StatelessWidget {
         await launch(whatsappURl_android);
       } else {
         Utility.showErrorToastB(context, "Failed to open Whatsapp");
-        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: new Text("whatsapp no installed")));
       }
     }
   }

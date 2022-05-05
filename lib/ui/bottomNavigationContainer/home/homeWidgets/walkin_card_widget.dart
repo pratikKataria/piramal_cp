@@ -151,21 +151,6 @@ class WalkInCardWidget extends StatelessWidget {
                   ),
                 ),
               ),
-
-              // InkWell(
-              //   onTap: () {
-              //     _presenter.getCustomerUnitDetail(context);
-              //   },
-              //   child: Container(
-              //     width: 35,
-              //     height: 35,
-              //     decoration: BoxDecoration(
-              //       shape: BoxShape.circle,
-              //       color: AppColors.colorSecondary,
-              //     ),
-              //     child: Icon(Icons.add, color: AppColors.white),
-              //   ),
-              // ),
             ],
           ),
         ],
@@ -260,7 +245,6 @@ class WalkInCardWidget extends StatelessWidget {
       Utility.showErrorToastB(context, "Please select future time");
       return;
     }
-
     if (picked != null) {
       _presenter.scheduleTime(context, _bookingResponse.name, _bookingResponse.sfdcid, x);
     }

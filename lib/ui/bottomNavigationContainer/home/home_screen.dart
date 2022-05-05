@@ -311,7 +311,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
   @override
   Future<void> onSiteVisitScheduled(ScheduleVisitResponse visitResponse) async {
     // Navigator.pop(context);
-    Utility.showSuccessToastB(context, "Visit Scheduled");
+    Utility.showSuccessToastB(context, "FUP scheduled.");
 
     if (visitResponse.schDate != null) {
       String localTimeZone = await AwesomeNotifications().getLocalTimeZoneIdentifier();
