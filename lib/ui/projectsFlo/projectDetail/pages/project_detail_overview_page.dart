@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:external_path/external_path.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:piramal_channel_partner/api/api_controller.dart';
@@ -97,12 +98,13 @@ class ProjectDetailOverviewPage extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          insetPadding: EdgeInsets.symmetric(horizontal: 4.0),
           actions: <Widget>[
             Stack(
               children: [
                 CachedImageWidget(
                   width: Utility.screenWidth(context),
-                  height: 250.0,
+                  height: 180.0,
                   imageUrl: image,
                   radius: 0.0,
                   fit: BoxFit.fill,
