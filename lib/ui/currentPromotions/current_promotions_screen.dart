@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
@@ -104,7 +103,7 @@ class _CurrentPromotionScreenState extends State<CurrentPromotionScreen> impleme
                     Expanded(child: Text("${currentPromoData.project}", style: textStyle24px500w)),
                     Row(
                       children: [
-                        WhatsAppButtonV2(currentPromoData?.download),
+                        WhatsAppButtonV2(currentPromoData?.sfdcid, Constants.CURRENT_PROMOTION),
                         horizontalSpace(8.0),
                         InkWell(
                           onTap: () {
@@ -122,7 +121,7 @@ class _CurrentPromotionScreenState extends State<CurrentPromotionScreen> impleme
                           ),
                         ),
                         horizontalSpace(8.0),
-                        DownloadButton(currentPromoData?.sfdcid,  Constants.CURRENT_PROMOTION),
+                        DownloadButton(currentPromoData?.sfdcid, Constants.CURRENT_PROMOTION),
                       ],
                     ),
                   ],

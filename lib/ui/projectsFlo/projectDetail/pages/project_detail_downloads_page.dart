@@ -62,7 +62,7 @@ class ProjectDetailDownloadPage extends StatelessWidget {
             Spacer(),
 
             //whats app and download
-            WhatsAppButtonV2(response.siteManagerMobile),
+            WhatsAppButtonV2("${response?.projectId}", "$identifier"),
             horizontalSpace(8.0),
             DownloadButton("${response?.projectId}", "$identifier"),
           ],
