@@ -263,6 +263,12 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> implements 
       height: 36,
       text: "Next",
       onTap: () {
+
+        if (typeOfFirm == null || typeOfFirm.isEmpty) {
+          onError("Please select type of firm");
+          return;
+        }
+
         if (!checkedValue) {
           onError("Please select terms and condition");
           return;
@@ -335,18 +341,14 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> implements 
       content: Column(
         children: [
           verticalSpace(20.0),
-          Positioned(
-            right: 0,
-            top: 0,
-            child: PmlButton(
-              width: 30,
-              height: 30,
-              color: AppColors.colorPrimary,
-              child: Icon(Icons.close, color: AppColors.white, size: 16.0),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
+          PmlButton(
+            width: 30,
+            height: 30,
+            color: AppColors.colorPrimary,
+            child: Icon(Icons.close, color: AppColors.white, size: 16.0),
+            onTap: () {
+              Navigator.pop(context);
+            },
           ),
           Container(
             decoration: BoxDecoration(
@@ -356,7 +358,7 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> implements 
             margin: EdgeInsets.all(10.0),
             padding: EdgeInsets.all(10.0),
             child: SingleChildScrollView(
-              child: Text("$message"),
+              child: Text("$message", style: textStyle14px500w),
             ),
           ),
         ],
