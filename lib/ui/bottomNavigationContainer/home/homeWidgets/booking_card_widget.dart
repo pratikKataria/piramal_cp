@@ -47,6 +47,7 @@ class BookingCardWidget extends StatelessWidget {
               baseProvider.setBottomNavScreen(Screens.kCustomerProfileDetailBooking);
             },
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 /*       ClipRRect(
                   borderRadius: BorderRadius.circular(80.0),
@@ -64,6 +65,8 @@ class BookingCardWidget extends StatelessWidget {
                     // Text("Next Follow up: ${Utility.formatDate(_bookingResponse.nextFollowUp)}", style: textStyleSubText14px500w),
                   ],
                 ),
+                
+                if (_bookingResponse.CRMApproved) Image.asset(Images.kIconApproved, height: 34.0)
               ],
             ),
           ),

@@ -241,7 +241,7 @@ class _WalkinCustomerProfileDetailScreenState extends State<WalkinCustomerProfil
   }
 
   @override
-  void onInvoiceDetailFetched(InvoiceResponse projectUnitResponse) {}
+  void onInvoiceDetailFetched(List<InvoiceResponse> projectUnitResponse) {}
 
   @override
   void onProjectUnitResponseFetched(ProjectUnitResponse projectUnitResponse) {}

@@ -12,7 +12,7 @@
 /// ApartmentFinalized : null
 
 class BookingResponse {
-   String taskId = "";
+  String taskId = "";
 
   BookingResponse({
     dynamic towerFinalized,
@@ -30,6 +30,7 @@ class BookingResponse {
     int createdDays,
     String projectInterested,
     dynamic apartmentFinalized,
+    bool crmApproved,
   }) {
     _towerFinalized = towerFinalized;
     _stageName = stageName;
@@ -46,6 +47,7 @@ class BookingResponse {
     _projectInterested = projectInterested;
     _nextFollowUp = nextFollowUp;
     _completeTagging = completeTagging;
+    _CRMApproved = crmApproved;
   }
 
   BookingResponse.fromJson(dynamic json) {
@@ -64,6 +66,7 @@ class BookingResponse {
     _projectInterested = json['ProjectInterested'];
     _nextFollowUp = json['NextFollowUp'];
     _completeTagging = json['CompleteTagging'];
+    _CRMApproved = json['CRMApproved'];
   }
 
   String _nextFollowUp;
@@ -81,6 +84,14 @@ class BookingResponse {
   int _createdDays;
   dynamic _apartmentFinalized;
   bool _completeTagging;
+  bool _CRMApproved;
+
+
+  bool get CRMApproved => _CRMApproved;
+
+  set CRMApproved(bool value) {
+    _CRMApproved = value;
+  }
 
   String get nextFollowUp => _nextFollowUp;
 
@@ -129,6 +140,7 @@ class BookingResponse {
     map['ProjectInterested'] = _projectInterested;
     map['NextFollowUp'] = _nextFollowUp;
     map['CompleteTagging'] = _completeTagging;
+    map['CRMApproved'] = _CRMApproved;
     return map;
   }
 

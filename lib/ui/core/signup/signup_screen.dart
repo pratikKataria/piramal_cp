@@ -10,6 +10,7 @@ import 'package:piramal_channel_partner/ui/core/login/model/token_response.dart'
 import 'package:piramal_channel_partner/ui/core/signup/model/relation_manager_list_response.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/signup_request.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/signup_response.dart';
+import 'package:piramal_channel_partner/ui/core/signup/model/signup_validation_check_response.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/terms_and_condition_response.dart';
 import 'package:piramal_channel_partner/ui/core/signup/signup_view.dart';
 import 'package:piramal_channel_partner/user/AuthUser.dart';
@@ -212,15 +213,25 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
                 ),
               ),
               verticalSpace(10.0),
-              input("Permanent Account Number (PAN)", (String v) {
-                signupRequest.pan = v;
-                return;
-              }, important: true, limit: 10),
+              input(
+                "Permanent Account Number (PAN)",
+                (String v) {
+                  signupRequest.pan = v;
+                  return;
+                },
+                important: true,
+                limit: 10,
+              ),
               verticalSpace(10.0),
-              input("RERA Registration ID", (String v) {
-                signupRequest.reraID = v;
-                return;
-              }, limit: 20),
+              input(
+                "RERA Registration ID",
+                (String v) {
+                  signupRequest.reraID = v;
+                  return;
+                },
+                important: true,
+                limit: 20,
+              ),
               verticalSpace(40.0),
               loginButton(context),
               verticalSpace(20.0),
@@ -330,7 +341,7 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
         }
 
         // corePresenter.singUp(context, signupRequest);
-        Navigator.pushNamed(context, Screens.kUploadDocumentScreen, arguments: signupRequest);
+        corePresenter.postCheckUserExist(context, signupRequest);
       },
     );
   }
@@ -356,13 +367,19 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
       return false;
     }
 
-    // if (signupRequest.relationshipManager.isEmpty) {
-    //   onError("Please enter relationship manager");
-    //   return false;
-    // }
+    if (signupRequest.relationshipManager.isEmpty) {
+      onError("Please enter relationship manager");
+      return false;
+    }
 
     if (signupRequest.pan.isEmpty) {
       onError("Please enter pancard number");
+      return false;
+    }
+
+
+    if (signupRequest.reraID.isEmpty) {
+      onError("Please enter rera reg. id");
       return false;
     }
 
@@ -475,5 +492,15 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
         return alert;
       },
     );
+  }
+
+  @override
+  void newUserChecked(SignupValidationCheckResponse termsAndConditionResponse) {
+    if (termsAndConditionResponse.isDuplicate) {
+      onError(termsAndConditionResponse.message);
+      return;
+    }
+
+    Navigator.pushNamed(context, Screens.kUploadDocumentScreen, arguments: signupRequest);
   }
 }

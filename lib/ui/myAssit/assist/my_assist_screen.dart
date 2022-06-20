@@ -69,7 +69,7 @@ class _MyAssistScreenState extends State<MyAssistScreen>
                       assistResponse?.headOfDepartmentMobile,
                       assistResponse?.projectName,
                     ),
-                    cardViewAssist(
+                    cardViewAssistV2(
                       assistResponse?.siteHead,
                       assistResponse?.siteHeadLabel,
                       assistResponse?.siteHeadMobile,
@@ -102,15 +102,16 @@ class _MyAssistScreenState extends State<MyAssistScreen>
               ),
             ),
             horizontalSpace(14.0),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(name, style: textStyle20px500w),
-                Text(profile, style: textStyleSubText14px500w),
-                Text(project, style: textStyleSubText14px500w),
-              ],
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(name, style: textStyle20px500w),
+                  Text(profile, style: textStyleSubText14px500w),
+                  Text(project, style: textStyleSubText14px500w),
+                ],
+              ),
             ),
-            const Spacer(),
             PmlButton(
               onTap: () {
                 String numberString = "tel://$number";
@@ -131,6 +132,55 @@ class _MyAssistScreenState extends State<MyAssistScreen>
       ],
     );
   }
+
+  cardViewAssistV2(String name, String profile, String number, String project) {
+    return Column(
+      children: [
+        verticalSpace(24.0),
+        Row(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(80.0),
+              child: Container(
+                height: 46,
+                width: 46,
+                padding: const EdgeInsets.all(10.0),
+                color: AppColors.assistIconBackgroundColor,
+                child: Image.asset(Images.kIconicAssistPerson),
+              ),
+            ),
+            horizontalSpace(14.0),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(name, style: textStyle20px500w),
+                  Text(profile, style: textStyleSubText14px500w),
+                  Text(project, style: textStyleSubText14px500w),
+                ],
+              ),
+            ),
+            // PmlButton(
+            //   onTap: () {
+            //     String numberString = "tel://$number";
+            //     launch(numberString);
+            //   },
+            //   height: 32.0,
+            //   width: 32.0,
+            //   color: AppColors.colorPrimaryLight,
+            //   padding: const EdgeInsets.all(10.0),
+            //   child: Image.asset(Images.kIconPhone),
+            // ),
+            // horizontalSpace(10.0),
+            // WhatsAppButton(number),
+          ],
+        ),
+        verticalSpace(24.0),
+        line(),
+      ],
+    );
+  }
+
 
   @override
   void onAssistDataFetched(MyAssistResponse myAssistResponse) {

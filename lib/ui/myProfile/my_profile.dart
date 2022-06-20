@@ -76,22 +76,17 @@ class _MyProfileScreenState extends State<MyProfileScreen> implements MyProfileV
                   width: 32.0,
                   child: Icon(Icons.edit, color: AppColors.white, size: 16),
                   onTap: () async {
-                    bool allDocumentUploaded = assistResponse.listOfpartnersPDFUPLOADED &&
-                        assistResponse.lISTofDirectorsPDFUPLOADED &&
-                        assistResponse.panCardPDFUPLOADED &&
-                        assistResponse.reraCertificatePDFUPLOADED &&
-                        assistResponse.partnershipDeedsPDFUPLOADED;
 
-                    if (allDocumentUploaded) {
+
+                    if (assistResponse.PendingDocuments.isEmpty) {
                       Utility.showSuccessToastB(context, "All documents already uploaded");
                       return;
                     }
 
-                    var hasUpdate =
-                        await Navigator.pushNamed(context, Screens.kUploadPendingDocumentScreen, arguments: assistResponse);
-                    if (hasUpdate is bool && hasUpdate) {
+                    /*var hasUpdate = */await Navigator.pushNamed(context, Screens.kUploadPendingDocumentScreen, arguments: assistResponse);
+                    // if (hasUpdate is bool && hasUpdate) {
                       leadPresenter.getProfileDataS(context);
-                    }
+                    // }
                   },
                 )
               ],

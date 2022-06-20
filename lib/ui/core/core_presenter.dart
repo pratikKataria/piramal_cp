@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/api/api_controller_expo.dart';
@@ -15,8 +16,11 @@ import 'package:piramal_channel_partner/ui/core/signup/model/document_upload_res
 import 'package:piramal_channel_partner/ui/core/signup/model/relation_manager_list_response.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/signup_request.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/signup_response.dart';
+import 'package:piramal_channel_partner/ui/core/signup/model/signup_validation_check_response.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/terms_and_condition_response.dart';
 import 'package:piramal_channel_partner/ui/core/signup/signup_view.dart';
+import 'package:piramal_channel_partner/ui/core/uploadDocument/model/post_user_document_response.dart';
+import 'package:piramal_channel_partner/ui/core/uploadDocument/model/type_of_document_response.dart';
 import 'package:piramal_channel_partner/ui/core/uploadDocument/upload_document_view.dart';
 import 'package:piramal_channel_partner/user/AuthUser.dart';
 import 'package:piramal_channel_partner/utils/Dialogs.dart';
@@ -382,6 +386,185 @@ class CorePresenter extends BasePresenter {
           view.onTermsAndConditionFetched(termsAndConditionResponse);
         } else {
           _v.onError(termsAndConditionResponse.message);
+        }
+      })
+      ..catchError((e) {
+        Dialogs.hideLoader(context);
+        ApiErrorParser.getResult(e, _v);
+      });
+  }
+
+  void postCheckUserExist(BuildContext context, SignupRequest signupRequest) async {
+    //check for internal token
+    if (await AuthUser.getInstance().hasToken()) {
+      _v.onError("Token not found");
+      return;
+    }
+
+    //check network
+    if (!await NetworkCheck.check()) return;
+
+    Map body = {
+      "Mobile": signupRequest.primaryMobNo,
+      "Email": signupRequest.email,
+      "PAN": signupRequest.pan,
+      "RERA": signupRequest.reraID,
+    };
+
+    Dialogs.showLoader(context, "Checking user please wait ...");
+    apiController.post(EndPoints.SIGNUP_VALIDATION_CHECK, body: body, headers: await Utility.header())
+      ..then((response) {
+        Utility.log(tag, response.data);
+        Dialogs.hideLoader(context);
+        SignupValidationCheckResponse termsAndConditionResponse = SignupValidationCheckResponse.fromJson(response.data);
+        SignupView view = _v as SignupView;
+        // if (termsAndConditionResponse.returnCode) {
+        view.newUserChecked(termsAndConditionResponse);
+        // } else {
+        //   _v.onError(termsAndConditionResponse.message);
+        // }
+      })
+      ..catchError((e) {
+        Dialogs.hideLoader(context);
+        ApiErrorParser.getResult(e, _v);
+      });
+  }
+
+  void postUserDocuments(BuildContext context, String typeOfFirm, String mobileAppBroker, Map<String, String> documents) async {
+    //check for internal token
+    if (await AuthUser.getInstance().hasToken()) {
+      _v.onError("Token not found");
+      return;
+    }
+
+    //check network
+    if (!await NetworkCheck.check()) return;
+    List<Map<String, String>> bodyList = [];
+    documents.forEach((key, value) {
+      bodyList.add(
+        {
+          "MobileAppBrokerId": mobileAppBroker,
+          "TypeOfFirm": typeOfFirm,
+          "DocType": key,
+          "DocFile": value,
+        },
+      );
+      return;
+    });
+
+    Dialogs.showLoader(context, "Please wait uploading user document");
+    List<PostUserDocumentResponse> postUserDocumentResponseList = [];
+    await Future.wait(bodyList.map(
+      (e) async => apiController.post(EndPoints.POST_DOCUMENTS_SIGNUP, body: e, headers: await Utility.header())
+        ..then((response) {
+          Utility.log(tag, response.data);
+          PostUserDocumentResponse postUserDocumentResponse = PostUserDocumentResponse.fromJson(response.data);
+          postUserDocumentResponseList.add(postUserDocumentResponse);
+        })
+        ..catchError((e) {
+          ApiErrorParser.getResult(e, _v);
+        }),
+    ));
+    Dialogs.hideLoader(context);
+
+    bool allOk = true;
+    postUserDocumentResponseList.forEach((element) {
+      if (element.returnCode == false) allOk = false;
+    });
+
+    if (allOk)
+      (_v as UploadDocumentView).allDocumentUploadedSuccessfully();
+    else
+      (_v as UploadDocumentView).allDocumentUploadedWithError();
+  }
+
+  void getDocumentListByTypeOfFirm(BuildContext context, List<String> typeOfFirmList) async {
+    //check for internal token
+    if (await AuthUser.getInstance().hasToken()) {
+      _v.onError("Token not found");
+      return;
+    }
+
+    //check network
+    if (!await NetworkCheck.check()) return;
+
+    Map<String, TypeOfDocumentResponse> responseMap = {};
+
+    Dialogs.showLoader(context, "Please wait fetching document list");
+    await Future.wait<Response>(
+      typeOfFirmList
+          .map((e) async => apiController.post(EndPoints.TYPE_OF_FIRM, body: {"Typeoffirm": e}, headers: await Utility.header())
+            ..then((response) {
+              Utility.log(tag, response.data);
+              responseMap[e] = TypeOfDocumentResponse.fromJson(response.data);
+            })
+            ..catchError((e) {
+              ApiErrorParser.getResult(e, _v);
+            }))
+          .toList(),
+    );
+    Dialogs.hideLoader(context);
+
+    if (_v is UploadDocumentView) (_v as UploadDocumentView).onFirmsDocumentFetched(responseMap);
+  }
+
+  void getDocumentListByTypeOfFirmSingle(BuildContext context, String value) async {
+    //check for internal token
+    if (await AuthUser.getInstance().hasToken()) {
+      _v.onError("Token not found");
+      return;
+    }
+
+    //check network
+    if (!await NetworkCheck.check()) return;
+
+    Map<String, TypeOfDocumentResponse> responseMap = {};
+
+    Dialogs.showLoader(context, "Please wait fetching document list");
+    apiController.post(EndPoints.TYPE_OF_FIRM, body: {"Typeoffirm": value}, headers: await Utility.header())
+      ..then((response) {
+        Dialogs.hideLoader(context);
+        Utility.log(tag, response.data);
+        TypeOfDocumentResponse typeOfDocumentResponse = TypeOfDocumentResponse.fromJson(response.data);
+        (_v as UploadDocumentView).onTypeOfFirmFetchedV2(typeOfDocumentResponse);
+      })
+      ..catchError((e) {
+        Dialogs.hideLoader(context);
+        ApiErrorParser.getResult(e, _v);
+      });
+
+    if (_v is UploadDocumentView) (_v as UploadDocumentView).onFirmsDocumentFetched(responseMap);
+  }
+
+  void postUserDocumentsV2(BuildContext context, String docType, String file) async {
+    //check for internal token
+    if (await AuthUser.getInstance().hasToken()) {
+      _v.onError("Token not found");
+      return;
+    }
+
+    //check network
+    if (!await NetworkCheck.check()) return;
+    String uID = await Utility.uID();
+
+    Map body = {
+      "CustomerAccountId": uID,
+      "DocType": docType,
+      "DocFile": file,
+    };
+
+    Dialogs.showLoader(context, "Please wait uploading user document");
+    List<PostUserDocumentResponse> postUserDocumentResponseList = [];
+    apiController.post(EndPoints.POST_PENDING_DOCUMENTS, body: body, headers: await Utility.header())
+      ..then((response) {
+        Dialogs.hideLoader(context);
+        Utility.log(tag, response.data);
+        PostUserDocumentResponse postUserDocumentResponse = PostUserDocumentResponse.fromJson(response.data);
+        postUserDocumentResponseList.add(postUserDocumentResponse);
+        if (postUserDocumentResponse.returnCode) {
+          (_v as UploadDocumentView).allDocumentUploadedSuccessfullyV2(docType);
+        } else {
+          _v.onError(postUserDocumentResponse.message);
         }
       })
       ..catchError((e) {

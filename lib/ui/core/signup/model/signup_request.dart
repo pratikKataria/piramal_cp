@@ -16,21 +16,22 @@
 class SignupRequest {
   String mobileOTP;
   String emailOTP;
+
   SignupRequest({
-      String name, 
-      String primaryContactPerson, 
-      String primaryMobNo, 
-      String email, 
-      String relationshipManager, 
-      String pan, 
-      String reraID, 
-      String typeoffirm, 
-      String reraCertificatePDF, 
-      String panCard, 
-      String lISTofDirectors, 
-      String partnershipDeeds, 
-      String listOfpartners, 
-      String tnCFlag,}){
+    String name,
+    String primaryContactPerson,
+    String primaryMobNo,
+    String email,
+    String relationshipManager,
+    String pan,
+    String reraID,
+    String typeoffirm,
+    String reraCertificatePDF,
+    String panCard,
+    String lISTofDirectors,
+    String partnershipDeeds,
+    String listOfpartners,
+    String tnCFlag,}) {
     _name = name;
     _primaryContactPerson = primaryContactPerson;
     _primaryMobNo = primaryMobNo;
@@ -45,7 +46,7 @@ class SignupRequest {
     _partnershipDeeds = partnershipDeeds;
     _listOfpartners = listOfpartners;
     _tnCFlag = tnCFlag;
-}
+  }
 
   SignupRequest.fromJson(dynamic json) {
     _name = json['Name'];
@@ -63,6 +64,7 @@ class SignupRequest {
     _listOfpartners = json['listOfpartners'];
     _tnCFlag = json['TnCFlag'];
   }
+
   String _name;
   String _primaryContactPerson;
   String _primaryMobNo;
@@ -79,18 +81,31 @@ class SignupRequest {
   String _tnCFlag;
 
   String get name => _name ?? "";
+
   String get primaryContactPerson => _primaryContactPerson ?? "";
+
   String get primaryMobNo => _primaryMobNo ?? "";
+
   String get email => _email ?? "";
+
   String get relationshipManager => _relationshipManager ?? "";
+
   String get pan => _pan ?? "";
+
   String get reraID => _reraID ?? "";
+
   String get typeoffirm => _typeoffirm ?? "";
+
   String get reraCertificatePDF => _reraCertificatePDF ?? "";
+
   String get panCard => _panCard ?? "";
+
   String get lISTofDirectors => _lISTofDirectors ?? "";
+
   String get partnershipDeeds => _partnershipDeeds ?? "";
+
   String get listOfpartners => _listOfpartners ?? "";
+
   String get tnCFlag => _tnCFlag ?? "";
 
   Map<String, dynamic> toJson() {
@@ -103,11 +118,6 @@ class SignupRequest {
     map['Pan'] = _pan;
     map['ReraID'] = _reraID;
     map['Typeoffirm'] = _typeoffirm;
-    map['ReraCertificatePDF'] = _reraCertificatePDF;
-    map['PanCard'] = _panCard;
-    map['LISTofDirectors'] = _lISTofDirectors;
-    map['partnershipDeeds'] = _partnershipDeeds;
-    map['listOfpartners'] = _listOfpartners;
     map['TnCFlag'] = true;
     return map;
   }

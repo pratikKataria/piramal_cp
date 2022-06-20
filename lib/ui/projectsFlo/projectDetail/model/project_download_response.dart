@@ -17,6 +17,7 @@ class ProjectDownloadResponse {
     String floorplanlink,
     String towerID,
     String brochure,
+    String brochureWhatsappLink,
   }) {
     _towerName = towerName;
     _siteManagerMobile = siteManagerMobile;
@@ -27,6 +28,7 @@ class ProjectDownloadResponse {
     _floorplanlink = floorplanlink;
     _brochure = brochure;
     _towerID = towerID;
+    _brochureWhatsappLink = brochureWhatsappLink;
   }
 
   ProjectDownloadResponse.fromJson(dynamic json) {
@@ -39,6 +41,7 @@ class ProjectDownloadResponse {
     _floorplanlink = json['floorplanlink'];
     _brochure = json['brochure'];
     _towerID = json['TowerID'];
+    _brochureWhatsappLink = json['BrochureWhatsappLink'];
   }
 
   String _towerName;
@@ -50,6 +53,7 @@ class ProjectDownloadResponse {
   String _floorplanlink;
   String _brochure;
   String _towerID;
+  String _brochureWhatsappLink;
 
   String get towerName => _towerName;
 
@@ -69,6 +73,12 @@ class ProjectDownloadResponse {
 
   String get towerID => _towerID;
 
+  String get brochureWhatsappLink => _brochureWhatsappLink;
+
+  set brochureWhatsappLink(String value) {
+    _brochureWhatsappLink = value;
+  }
+
   set towerID(String value) {
     _towerID = value;
   }
@@ -84,6 +94,7 @@ class ProjectDownloadResponse {
     map['floorplanlink'] = _floorplanlink;
     map['brochure'] = _brochure;
     map['TowerID'] = _towerID;
+    map['BrochureWhatsappLink'] = _brochureWhatsappLink;
     return map;
   }
 }

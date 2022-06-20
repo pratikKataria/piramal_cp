@@ -11,6 +11,7 @@ import 'package:piramal_channel_partner/ui/core/signup/model/document_upload_req
 import 'package:piramal_channel_partner/ui/core/signup/model/document_upload_response.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/signup_response.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/terms_and_condition_response.dart';
+import 'package:piramal_channel_partner/ui/core/uploadDocument/model/type_of_document_response.dart';
 import 'package:piramal_channel_partner/ui/core/uploadDocument/upload_document_view.dart';
 import 'package:piramal_channel_partner/ui/myProfile/model/my_profile_response.dart';
 import 'package:piramal_channel_partner/user/AuthUser.dart';
@@ -21,6 +22,7 @@ import 'package:provider/provider.dart';
 
 class UploadPendingDocumentScreen extends StatefulWidget {
   final MyProfileResponse assistResponse;
+
   const UploadPendingDocumentScreen(this.assistResponse, {Key key}) : super(key: key);
 
   @override
@@ -31,14 +33,12 @@ class _UploadPendingDocumentScreenState extends State<UploadPendingDocumentScree
   final subTextStyle = textStyleSubText14px500w;
   final mainTextStyle = textStyle14px500w;
 
-  String reraFileName = "";
-  String panCardFileName = "";
-  String directorsFileName = "";
-  String partnerShipFileName = "";
-  String partnersFileName = "";
-  String typeOfFirm = "";
-
-  List<String> typeOfFirms = [];
+  Map<String, TypeOfDocumentResponse> typeOfFirmMap = {};
+  Map<String, String> selectedFiles = {};
+  Map<String, String> selectedFilesNames = {};
+  TypeOfDocumentResponse typeOfDocumentResponse;
+  List<String> allRequiredDocuments = [];
+  List<String> pendingDocumentList = [];
 
   DocumentUploadRequest documentUploadRequest = DocumentUploadRequest();
   CorePresenter presenter;
@@ -46,144 +46,51 @@ class _UploadPendingDocumentScreenState extends State<UploadPendingDocumentScree
   @override
   void initState() {
     presenter = CorePresenter(this);
-    presenter.getTypeOfFirm(context);
+    presenter.getDocumentListByTypeOfFirmSingle(context, widget.assistResponse.typeOfFirm);
+
+    pendingDocumentList.clear();
+    pendingDocumentList.addAll(widget.assistResponse.PendingDocuments.split(","));
+    if (pendingDocumentList.last == null) pendingDocumentList.removeLast();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     // 18% from top
-    return Scaffold(
-      body: Container(
-        margin: EdgeInsets.symmetric(horizontal: 20.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              verticalSpace(20.0),
-              Text("Upload Pending Document", style: textStyle20px500w),
-              verticalSpace(20.0),
-              // buildProfileDetailCard("Type of Firm", "Partnership Firm"),
-             if (!widget.assistResponse.reraCertificatePDFUPLOADED) buildProfileDetailCard2(
-                "RERA Certificate",
-                "$reraFileName",
-                () async {
-                  List<String> file = await Utility.pickFile(context);
-                  String fileBytes = file[0];
-                  String name = file[1];
-                  documentUploadRequest.reraCertificatePDF = fileBytes;
-                  reraFileName = name;
-                  setState(() {});
-                },
-              ),
-              if (!widget.assistResponse.panCardPDFUPLOADED) buildProfileDetailCard2(
-                "PAN Card",
-                "$panCardFileName",
-                () async {
-                  List<String> file = await Utility.pickFile(context);
-                  String fileBytes = file[0];
-                  String name = file[1];
-                  documentUploadRequest.PanCard = fileBytes;
-                  panCardFileName = name;
-                  setState(() {});
-                },
-              ),
-              if (!widget.assistResponse.lISTofDirectorsPDFUPLOADED)  buildProfileDetailCard2(
-                "List of Directors",
-                "$directorsFileName",
-                () async {
-                  List<String> file = await Utility.pickFile(context);
-                  String fileBytes = file[0];
-                  String name = file[1];
-                  documentUploadRequest.lISTofDirectors = fileBytes;
-                  directorsFileName = name;
-                  setState(() {});
-                },
-              ),
-              if (!widget.assistResponse.partnershipDeedsPDFUPLOADED)  buildProfileDetailCard2(
-                "Partnership Deed",
-                "$partnerShipFileName",
-                () async {
-                  List<String> file = await Utility.pickFile(context);
-                  String fileBytes = file[0];
-                  String name = file[1];
-                  documentUploadRequest.partnershipDeeds = fileBytes;
-                  partnerShipFileName = name;
-                  setState(() {});
-                },
-              ),
-              if (!widget.assistResponse.listOfpartnersPDFUPLOADED)  buildProfileDetailCard2(
-                "List of Partners",
-                "$partnersFileName",
-                () async {
-                  List<String> file = await Utility.pickFile(context);
-                  String fileBytes = file[0];
-                  String name = file[1];
-                  documentUploadRequest.listOfpartners = fileBytes;
-                  partnersFileName = name;
-                  setState(() {});
-                },
-              ),
-              verticalSpace(15.0),
-              loginButton(context),
-              verticalSpace(15.0),
-            ],
+    return WillPopScope(
+      onWillPop: () {
+        Navigator.pop(context, true);
+        return;
+      },
+      child: Scaffold(
+        body: Container(
+          margin: EdgeInsets.symmetric(horizontal: 20.0),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                verticalSpace(20.0),
+                Text("Upload Pending Document", style: textStyle20px500w),
+                verticalSpace(20.0),
+                // buildProfileDetailCard("Type of Firm", "Partnership Firm"),
+
+                ...uploadDocumentButtonList(),
+
+                verticalSpace(15.0),
+                // loginButton(context),
+                // verticalSpace(15.0),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Container buildProfileDetailCard(String mText, String sText) {
+  Container buildProfileDetailCard2(String mText) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 18.0),
-      margin: EdgeInsets.only(bottom: 12.0),
-      decoration: BoxDecoration(
-        color: AppColors.screenBackgroundColor,
-        borderRadius: BorderRadius.circular(6.0),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text("$mText", style: textStyle14px500w),
-          Container(
-            height: 35.0,
-            decoration: BoxDecoration(
-              color: AppColors.inputFieldBackgroundColor,
-              borderRadius: BorderRadius.circular(6.0),
-            ),
-            padding: EdgeInsets.only(right: 10.0),
-            child: DropdownButton<String>(
-              isExpanded: true,
-              hint: Text("Select type of firm", style: subTextStyle),
-              value: typeOfFirm,
-              underline: Container(),
-              items: <String>[...typeOfFirms].map((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value, style: subTextStyle),
-                );
-              }).toList(),
-              onChanged: (value) {
-                typeOfFirm = value;
-                // widget?.request?.typeoffirm = typeOfFirm;
-                // relationManagerListResponse = value;
-                // signupRequest.relationshipManager = value;
-                // signupRequest.typeoffirm = value.
-                setState(() {});
-              },
-            ),
-          ),
-          // Text("$sText", style: textStyleSubText14px500w),
-        ],
-      ),
-    );
-  }
-
-  Container buildProfileDetailCard2(String mText, String sText, Function onClick) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 18.0),
-      margin: EdgeInsets.only(bottom: 12.0),
+      margin: EdgeInsets.only(bottom: 12.0, right: 10.0),
       decoration: BoxDecoration(
         color: AppColors.screenBackgroundColor,
         borderRadius: BorderRadius.circular(6.0),
@@ -195,11 +102,26 @@ class _UploadPendingDocumentScreenState extends State<UploadPendingDocumentScree
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text("$mText", style: textStyle14px500w),
-              Text("$sText", style: textStyleSubText14px500w),
+              Container(
+                width: 150.0,
+                child: Text(
+                  selectedFilesNames.containsKey(mText) ? selectedFilesNames[mText] : "",
+                  style: textStyleSubText14px500w,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
             ],
           ),
           InkWell(
-            onTap: onClick,
+            onTap: () async {
+              List<String> file = await Utility.pickFile(context);
+              String fileBytes = file[0];
+              String name = file[1];
+              selectedFilesNames[mText] = name;
+              // selectedFiles[mText] = fileBytes;
+              presenter.postUserDocumentsV2(context, mText, fileBytes);
+              setState(() {});
+            },
             child: Container(
               width: 30,
               height: 30,
@@ -236,6 +158,12 @@ class _UploadPendingDocumentScreenState extends State<UploadPendingDocumentScree
     );
   }
 
+  List<Container> uploadDocumentButtonList() {
+    List<Container> uploadButtons = [];
+    pendingDocumentList.forEach((element) => uploadButtons.add(buildProfileDetailCard2(element)));
+    return uploadButtons;
+  }
+
   @override
   void onDocumentUploaded(DocumentUploadResponse documentUploadResponse) {
     Utility.showSuccessToastB(context, "Document Uploaded Successfully");
@@ -256,9 +184,9 @@ class _UploadPendingDocumentScreenState extends State<UploadPendingDocumentScree
 
   @override
   void onTypeOfFirmFetched(List<String> brList) {
-    typeOfFirms.clear();
-    typeOfFirms.addAll(brList);
-    typeOfFirm = typeOfFirms?.first ?? "";
+    allRequiredDocuments.clear();
+    allRequiredDocuments.addAll(brList);
+    // typeOfFirm = typeOfFirms?.first ?? "";
     // widget?.request?.typeoffirm = typeOfFirm;
     setState(() {});
   }
@@ -285,5 +213,37 @@ class _UploadPendingDocumentScreenState extends State<UploadPendingDocumentScree
   @override
   void onTermsAndConditionFetched(TermsAndConditionResponse termsAndConditionResponse) {
     //ignore
+  }
+
+  @override
+  void onFirmsDocumentFetched(Map<String, TypeOfDocumentResponse> responseMap) {}
+
+  @override
+  void allDocumentUploadedSuccessfully() {}
+
+  @override
+  void allDocumentUploadedWithError() {}
+
+  @override
+  void onTypeOfFirmFetchedV2(TypeOfDocumentResponse typeOfDocumentResponse) {
+    this.typeOfDocumentResponse = typeOfDocumentResponse;
+    allRequiredDocuments.clear();
+    allRequiredDocuments.addAll(typeOfDocumentResponse.values.split(","));
+
+    dynamic lastValue = allRequiredDocuments.last;
+    if (lastValue == null) allRequiredDocuments.removeLast();
+
+    setState(() {});
+  }
+
+  @override
+  void allDocumentUploadedSuccessfullyV2(String docType) {
+    pendingDocumentList.remove(docType);
+
+    if (pendingDocumentList.isEmpty) {
+      Utility.showSuccessToastB(context, "All Documents Uploaded");
+      Navigator.pop(context);
+    }
+    setState(() {});
   }
 }

@@ -8,7 +8,7 @@ import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/model/proje
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/download_button.dart';
 import 'package:piramal_channel_partner/widgets/whats_app_button.dart';
-import 'package:piramal_channel_partner/widgets/whats_app_button_v2.dart';
+import 'package:piramal_channel_partner/widgets/whats_app_button_v3.dart';
 
 class ProjectDetailDownloadPage extends StatelessWidget {
   final List<ProjectDownloadResponse> projectDownloadResponse = [];
@@ -62,7 +62,7 @@ class ProjectDetailDownloadPage extends StatelessWidget {
             Spacer(),
 
             //whats app and download
-            WhatsAppButtonV2("${response?.projectId}", "$identifier"),
+            WhatsAppButtonV3(response?.siteManagerMobile, response?.brochureWhatsappLink),
             horizontalSpace(8.0),
             DownloadButton("${response?.projectId}", "$identifier"),
           ],

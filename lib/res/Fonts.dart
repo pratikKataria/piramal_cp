@@ -288,6 +288,18 @@ const textStyleGrey10px500w = TextStyle(
     fontWeight: FontWeight.w500,
     fontSize: 10);
 
+const textStyleSubText10px500w = TextStyle(
+    color: AppColors.textColorSubText,
+    fontFamily: kFontFamily,
+    fontWeight: FontWeight.w500,
+    fontSize: 10);
+
+const textStyleBlack10px500w = TextStyle(
+    color: AppColors.textColorBlack,
+    fontFamily: kFontFamily,
+    fontWeight: FontWeight.w500,
+    fontSize: 10);
+
 const textStylePrimary12px500w = TextStyle(
     color: AppColors.colorPrimary,
     fontFamily: kFontFamily,

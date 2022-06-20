@@ -43,9 +43,9 @@ class MyAssistResponse {
 }
 
   MyAssistResponse.fromJson(dynamic json) {
-    _siteHeadMobile = json['SiteHeadMobile'];
-    _siteHeadLabel = json['SiteHeadLabel'];
-    _siteHead = json['SiteHead'];
+    _siteHeadMobile = json['ChannelHeadMobile'];
+    _siteHeadLabel = json['ChannelHeadLabel'];
+    _siteHead = json['ChannelHeadName'];
     _returnCode = json['returnCode'];
     _relationshipManagerName = json['RelationshipManagerName'];
     _relationshipManagerMobile = json['RelationshipManagerMobile'];
@@ -87,9 +87,9 @@ class MyAssistResponse {
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    map['SiteHeadMobile'] = _siteHeadMobile;
-    map['SiteHeadLabel'] = _siteHeadLabel;
-    map['SiteHead'] = _siteHead;
+    map['ChannelHeadMobile'] = _siteHeadMobile;
+    map['ChannelHeadLabel'] = _siteHeadLabel;
+    map['ChannelHeadName'] = _siteHead;
     map['returnCode'] = _returnCode;
     map['RelationshipManagerName'] = _relationshipManagerName;
     map['RelationshipManagerMobile'] = _relationshipManagerMobile;

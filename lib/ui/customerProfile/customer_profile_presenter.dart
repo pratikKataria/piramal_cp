@@ -111,8 +111,18 @@ class CustomerProfilePresenter extends BasePresenter {
     apiController.post(EndPoints.GET_INVOICE, body: body, headers: await Utility.header())
       ..then((response) {
         Dialogs.hideLoader(context);
-        InvoiceResponse projectUnitResponse = InvoiceResponse.fromJson(response.data);
-        _v.onInvoiceDetailFetched(projectUnitResponse);
+
+        List<InvoiceResponse> brList = [];
+        var listOfDynamic = response.data as List;
+        listOfDynamic.forEach((element) => brList.add(InvoiceResponse.fromJson(element)));
+
+        InvoiceResponse bookingResponse = brList.isNotEmpty ? brList.first : null;
+        if (bookingResponse == null) {
+          _v.onError(Screens.kErrorTxt);
+          return;
+        }
+
+        _v.onInvoiceDetailFetched(brList);
       })
       ..catchError((e) {
         Dialogs.hideLoader(context);

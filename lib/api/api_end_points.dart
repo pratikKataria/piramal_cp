@@ -52,4 +52,9 @@ class EndPoints {
   static final String READ_NOTIFICATION = BASE_URL + "/CP_Mobile_App/CPNotificationMarkRead";
   static final String GET_CONFIGURATION_BY_PROJECT = BASE_URL + "/CP_Mobile_App/DependentPickListCPLead";
   static final String PROJECT_OVERVIEW_IMAGES = BASE_URL + "/CP_Mobile_App/DownloadImage";
+  static final String SIGNUP_VALIDATION_CHECK = BASE_URL + "/CP_Mobile_App/SignUpValidation";
+  static final String TYPE_OF_FIRM = BASE_URL + "/CP_Mobile_App/DependentPickListTypeOfFirm";
+  static final String POST_DOCUMENTS_SIGNUP = BASE_URL + "/CP_Mobile_App/CPDocumentUpload";
+  static final String POST_PENDING_DOCUMENTS = BASE_URL + "/CP_Mobile_App/AccountDocumentUpload";
+
 }

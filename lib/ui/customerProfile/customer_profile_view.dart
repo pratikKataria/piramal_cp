@@ -6,5 +6,5 @@ import 'package:piramal_channel_partner/ui/customerProfile/booked/model/invoice_
 abstract class CustomerProfileView extends BaseView {
   void onSiteVisitScheduled(ScheduleVisitResponse visitResponse);
   void onProjectUnitResponseFetched(ProjectUnitResponse projectUnitResponse);
-  void onInvoiceDetailFetched(InvoiceResponse projectUnitResponse);
+  void onInvoiceDetailFetched(List<InvoiceResponse>  projectUnitResponse);
 }

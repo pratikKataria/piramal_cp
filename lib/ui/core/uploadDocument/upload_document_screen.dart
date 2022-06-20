@@ -11,6 +11,7 @@ import 'package:piramal_channel_partner/ui/core/signup/model/document_upload_res
 import 'package:piramal_channel_partner/ui/core/signup/model/signup_request.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/signup_response.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/terms_and_condition_response.dart';
+import 'package:piramal_channel_partner/ui/core/uploadDocument/model/type_of_document_response.dart';
 import 'package:piramal_channel_partner/ui/core/uploadDocument/upload_document_view.dart';
 import 'package:piramal_channel_partner/user/AuthUser.dart';
 import 'package:piramal_channel_partner/utils/Dialogs.dart';
@@ -30,19 +31,12 @@ class UploadDocumentScreen extends StatefulWidget {
 class _UploadDocumentScreenState extends State<UploadDocumentScreen> implements UploadDocumentView {
   final subTextStyle = textStyleSubText14px500w;
   final mainTextStyle = textStyle14px500w;
-
-  String reraFileName = "";
-  String panCardFileName = "";
-  String directorsFileName = "";
-  String partnerShipFileName = "";
-  String partnersFileName = "";
   String typeOfFirm = "";
-
   bool checkedValue = false;
-
   List<String> typeOfFirms = [];
-
-  // DocumentUploadRequest documentUploadRequest = DocumentUploadRequest();
+  Map<String, TypeOfDocumentResponse> typeOfFirmMap = {};
+  Map<String, String> selectedFiles = {};
+  Map<String, String> selectedFilesNames = {};
   CorePresenter presenter;
 
   @override
@@ -58,116 +52,63 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> implements 
     return Scaffold(
       body: Container(
         margin: EdgeInsets.symmetric(horizontal: 20.0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              verticalSpace(20.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Image.asset(Images.kAppIcon, width: 100),
-                  Text("Sign Up", style: textStyle20px500w),
-                ],
+        child: Column(
+          children: [
+            verticalSpace(20.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Image.asset(Images.kAppIcon, width: 100),
+                Text("Sign Up", style: textStyle20px500w),
+              ],
+            ),
+            verticalSpace(20.0),
+            buildProfileDetailCard("Type of Firm", "Partnership Firm"),
+            Expanded(
+              child: Scrollbar(
+                interactive: true,
+                isAlwaysShown: true,
+                child: ListView(
+                  children: uploadDocumentButtonList(),
+                ),
               ),
-              verticalSpace(20.0),
-              buildProfileDetailCard("Type of Firm", "Partnership Firm"),
-              buildProfileDetailCard2(
-                "RERA Certificate",
-                "$reraFileName",
-                () async {
-                  List<String> file = await Utility.pickFile(context);
-                  String fileBytes = file[0];
-                  String name = file[1];
-                  widget.request.reraCertificatePDF = fileBytes;
-                  reraFileName = name;
-                  setState(() {});
-                },
-              ),
-              buildProfileDetailCard2(
-                "PAN Card",
-                "$panCardFileName",
-                () async {
-                  List<String> file = await Utility.pickFile(context);
-                  String fileBytes = file[0];
-                  String name = file[1];
-                  widget.request.panCard = fileBytes;
-                  panCardFileName = name;
-                  setState(() {});
-                },
-              ),
-              buildProfileDetailCard2(
-                "List of Directors",
-                "$directorsFileName",
-                () async {
-                  List<String> file = await Utility.pickFile(context);
-                  String fileBytes = file[0];
-                  String name = file[1];
-                  widget.request.lISTofDirectors = fileBytes;
-                  directorsFileName = name;
-                  setState(() {});
-                },
-              ),
-              buildProfileDetailCard2(
-                "Partnership Deed",
-                "$partnerShipFileName",
-                () async {
-                  List<String> file = await Utility.pickFile(context);
-                  String fileBytes = file[0];
-                  String name = file[1];
-                  widget.request.partnershipDeeds = fileBytes;
-                  partnerShipFileName = name;
-                  setState(() {});
-                },
-              ),
-              buildProfileDetailCard2(
-                "List of Partners",
-                "$partnersFileName",
-                () async {
-                  List<String> file = await Utility.pickFile(context);
-                  String fileBytes = file[0];
-                  String name = file[1];
-                  widget.request.listOfpartners = fileBytes;
-                  partnersFileName = name;
-                  setState(() {});
-                },
-              ),
-              verticalSpace(15.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Checkbox(
-                    value: checkedValue,
-                    onChanged: (newValue) {
-                      setState(() {
-                        checkedValue = newValue;
-                      });
-                    },
+            ),
+            verticalSpace(15.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Checkbox(
+                  value: checkedValue,
+                  onChanged: (newValue) {
+                    setState(() {
+                      checkedValue = newValue;
+                    });
+                  },
+                ),
+                InkWell(
+                  onTap: () {
+                    presenter.getTermsAndCondition(context);
+                  },
+                  child: Stack(
+                    children: [
+                      Text("I Agree to the Terms & Conditions", style: textStyle14px500w),
+                      Positioned(
+                        right: 0,
+                        left: 0,
+                        bottom: 0,
+                        child: Container(
+                          height: 1,
+                          color: AppColors.black,
+                        ),
+                      )
+                    ],
                   ),
-                  InkWell(
-                    onTap: () {
-                      presenter.getTermsAndCondition(context);
-                    },
-                    child: Stack(
-                      children: [
-                        Text("I Agree to the Terms & Conditions", style: textStyle14px500w),
-                        Positioned(
-                          right: 0,
-                          left: 0,
-                          bottom: 0,
-                          child: Container(
-                            height: 1,
-                            color: AppColors.black,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              loginButton(context),
-              verticalSpace(15.0),
-            ],
-          ),
+                ),
+              ],
+            ),
+            loginButton(context),
+            verticalSpace(15.0),
+          ],
         ),
       ),
     );
@@ -206,6 +147,8 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> implements 
               onChanged: (value) {
                 typeOfFirm = value;
                 widget?.request?.typeoffirm = typeOfFirm;
+                selectedFilesNames.clear();
+                selectedFiles.clear();
                 // relationManagerListResponse = value;
                 // signupRequest.relationshipManager = value;
                 // signupRequest.typeoffirm = value.
@@ -219,10 +162,10 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> implements 
     );
   }
 
-  Container buildProfileDetailCard2(String mText, String sText, Function onClick) {
+  Container buildProfileDetailCard2(String mText) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 18.0),
-      margin: EdgeInsets.only(bottom: 12.0),
+      margin: EdgeInsets.only(bottom: 12.0, right: 10.0),
       decoration: BoxDecoration(
         color: AppColors.screenBackgroundColor,
         borderRadius: BorderRadius.circular(6.0),
@@ -234,11 +177,25 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> implements 
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text("$mText", style: textStyle14px500w),
-              Text("$sText", style: textStyleSubText14px500w),
+              Container(
+                width: 150.0,
+                child: Text(
+                  selectedFilesNames.containsKey(mText) ? selectedFilesNames[mText] : "",
+                  style: textStyleSubText14px500w,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
             ],
           ),
           InkWell(
-            onTap: onClick,
+            onTap: () async {
+              List<String> file = await Utility.pickFile(context);
+              String fileBytes = file[0];
+              String name = file[1];
+              selectedFilesNames[mText] = name;
+              selectedFiles[mText] = fileBytes;
+              setState(() {});
+            },
             child: Container(
               width: 30,
               height: 30,
@@ -263,7 +220,6 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> implements 
       height: 36,
       text: "Next",
       onTap: () {
-
         if (typeOfFirm == null || typeOfFirm.isEmpty) {
           onError("Please select type of firm");
           return;
@@ -282,6 +238,20 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> implements 
         // Navigator.pushNamed(context, Screens.kHomeBase);
       },
     );
+  }
+
+  List<Container> uploadDocumentButtonList() {
+    List<Container> uploadButtons = [];
+    if (typeOfFirmMap.isNotEmpty && typeOfFirmMap.containsKey(typeOfFirm) && typeOfFirmMap[typeOfFirm] != null) {
+      TypeOfDocumentResponse response = TypeOfDocumentResponse.fromJson(typeOfFirmMap[typeOfFirm].toJson());
+
+      if (response.values == null) return [];
+
+      List<String> values = response.values.split(",");
+      values.removeLast();
+      values.forEach((element) => uploadButtons.add(buildProfileDetailCard2(element)));
+    }
+    return uploadButtons;
   }
 
   @override
@@ -307,6 +277,7 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> implements 
     typeOfFirms.addAll(brList);
     typeOfFirm = typeOfFirms?.first ?? "";
     widget?.request?.typeoffirm = typeOfFirm;
+    presenter.getDocumentListByTypeOfFirm(context, typeOfFirms);
     setState(() {});
   }
 
@@ -320,13 +291,7 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> implements 
     currentUser.userCredentials = loginResponse;
     AuthUser.getInstance().login(currentUser);
 
-    Navigator.pop(context); // login
-    Navigator.pop(context); // signup
-    Navigator.pop(context); // upload
-    Navigator.pushNamed(context, Screens.kHomeBase);
-
-    var provider = Provider.of<BaseProvider>(context, listen: false);
-    provider.showToolTip();
+    presenter.postUserDocuments(context, typeOfFirm, signupResponse.brokerAccountID, selectedFiles);
   }
 
   @override
@@ -372,4 +337,42 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> implements 
       },
     );
   }
+
+  @override
+  void onFirmsDocumentFetched(Map<String, TypeOfDocumentResponse> responseMap) {
+    typeOfFirmMap.clear();
+    typeOfFirmMap.addAll(responseMap);
+    setState(() {});
+  }
+
+  @override
+  void allDocumentUploadedSuccessfully() {
+    Navigator.pop(context); // login
+    Navigator.pop(context); // signup
+    Navigator.pop(context); // upload
+    Navigator.pushNamed(context, Screens.kHomeBase);
+
+    var provider = Provider.of<BaseProvider>(context, listen: false);
+    provider.showToolTip();
+  }
+
+  @override
+  void allDocumentUploadedWithError() {
+    onError("Their is problem uploading document");
+    onError("You can letter upload document from my profile");
+
+    Navigator.pop(context); // login
+    Navigator.pop(context); // signup
+    Navigator.pop(context); // upload
+    Navigator.pushNamed(context, Screens.kHomeBase);
+
+    var provider = Provider.of<BaseProvider>(context, listen: false);
+    provider.showToolTip();
+  }
+
+  @override
+  void onTypeOfFirmFetchedV2(TypeOfDocumentResponse typeOfDocumentResponse) {}
+
+  @override
+  void allDocumentUploadedSuccessfullyV2(String docType) {}
 }

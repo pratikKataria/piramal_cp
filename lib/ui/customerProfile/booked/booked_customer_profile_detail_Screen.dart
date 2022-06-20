@@ -29,6 +29,7 @@ class BookedCustomerProfileDetailScreen extends StatefulWidget {
 class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfileDetailScreen> implements CustomerProfileView {
   CustomerProfilePresenter _homePresenter;
   InvoiceResponse response;
+  List<InvoiceResponse> responseList = [];
 
   @override
   void initState() {
@@ -181,7 +182,7 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text("Download Invoice", style: textStyleRegular16px500px),
-                    DownloadButton("${response?.brokerageID}",  Constants.INVOICE),
+                    DownloadButton("${response?.brokerageID}", Constants.INVOICE),
                     // Icon(Icons.arrow_circle_down_outlined, size: 14.0, color: AppColors.colorSecondary),
                   ],
                 ),
@@ -214,10 +215,14 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
           ),
         ),
 
-        verticalSpace(30.0),
+        verticalSpace(20.0),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Image.asset(getInvoiceProgress()),
+          child: Column(
+            children: [
+              ...timelineViewBuilder(),
+            ],
+          ),
         ),
 
         verticalSpace(30.0),
@@ -244,6 +249,52 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
         return Images.kImagePD1;
         break;
     }
+  }
+
+  List<Column> timelineViewBuilder() {
+    List<Column> colList = [];
+
+    int currentStatusIndex = 99;
+    responseList?.forEach((element) {
+      if (element.currentStatus == element.status) currentStatusIndex = element.position;
+      print("elemen positon ${element.position} current status position $currentStatusIndex");
+      colList.insert(
+        element.position,
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (element.position != 0)
+              Container(
+                width: 2.0,
+                height: 50.0,
+                margin: EdgeInsets.only(left: 3.4),
+                decoration: BoxDecoration(
+                  color: element.position <= currentStatusIndex ? AppColors.black : AppColors.textColorHeather,
+                ),
+              ),
+            Row(
+              children: [
+                Container(
+                  width: 10.0,
+                  height: 10.0,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: element.position <= currentStatusIndex ? AppColors.black : AppColors.textColorHeather,
+                  ),
+                ),
+                horizontalSpace(10.0),
+                Text(
+                  element?.status ?? "",
+                  style: element.position <= currentStatusIndex ? textStyleBlack10px500w : textStyleSubText10px500w,
+                )
+              ],
+            ),
+          ],
+        ),
+      );
+    });
+
+    return colList;
   }
 
   Column buildDialogRow(String s, String m) {
@@ -361,8 +412,11 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
   }
 
   @override
-  void onInvoiceDetailFetched(InvoiceResponse projectUnitResponse) {
-    response = projectUnitResponse;
+  void onInvoiceDetailFetched(List<InvoiceResponse> projectUnitResponse) {
+    // response = projectUnitResponse;
+    if (projectUnitResponse.isNotEmpty) response = projectUnitResponse.first;
+    responseList.clear();
+    responseList.addAll(projectUnitResponse);
     setState(() {});
   }
 }
