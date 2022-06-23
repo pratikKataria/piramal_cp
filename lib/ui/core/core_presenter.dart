@@ -157,7 +157,7 @@ class CorePresenter extends BasePresenter {
     int mobileOtp = _genRandomNumber();
 
     String queryParams =
-        "username=7506775158&password=Stetig@123&To=$value&senderid=VM-PRLCRM&feedid=372501&Text=Your%20OTP%20for%20MyPiramal%20App%20is%20$mobileOtp%20kindly%20use%20this%20for%20login";
+        "username=7506775158&password=Stetig@123&To=$value&senderid=VM-PRLCRM&feedid=372501&Text=Your%20OTP%20for%20MyPiramal%20App%20is%20$mobileOtp%20kindly%20use%20this%20for%20login%20";
     Dialogs.showLoader(context, "Sending OTP to $value");
     apiController.get("${EndPoints.SEND_MOBILE_OTP}$queryParams", headers: await Utility.header())
       ..then((response) {

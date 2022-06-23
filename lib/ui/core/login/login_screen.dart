@@ -16,6 +16,7 @@ import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
 import 'package:provider/provider.dart';
 
+String appSignature;
 class LoginScreen extends StatefulWidget {
   LoginScreen({Key key}) : super(key: key);
 
@@ -216,8 +217,8 @@ class _LoginScreenState extends State<LoginScreen> implements LoginView {
   }
 
   @override
-  onOtpSent(int otp) {
-    Utility.showSuccessToastB(_context, "OTP Sent Successfully");
+  void onOtpSent(int otp) async {
+     Utility.showSuccessToastB(_context, "OTP Sent Successfully");
     this.otp = otp;
     setState(() {});
   }
