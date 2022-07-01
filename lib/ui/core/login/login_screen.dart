@@ -269,6 +269,7 @@ class _LoginScreenState extends State<LoginScreen> with CodeAutoFill implements 
   void onOtpSent(int otp) async {
     Utility.showSuccessToastB(_context, "OTP Sent Successfully");
     this.otp = otp;
+    setState(() {});
   }
 
   @override
