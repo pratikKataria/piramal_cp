@@ -6,8 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/api/api_controller_expo.dart';
 import 'package:piramal_channel_partner/api/api_end_points.dart';
 import 'package:piramal_channel_partner/api/api_error_parser.dart';
+import 'package:piramal_channel_partner/global/variables.dart';
 import 'package:piramal_channel_partner/ui/base/base_presenter.dart';
 import 'package:piramal_channel_partner/ui/core/core_view.dart';
+import 'package:piramal_channel_partner/ui/core/login/login_screen.dart';
 import 'package:piramal_channel_partner/ui/core/login/login_view.dart';
 import 'package:piramal_channel_partner/ui/core/login/model/login_response.dart';
 import 'package:piramal_channel_partner/ui/core/login/model/otp_response.dart';
@@ -157,7 +159,7 @@ class CorePresenter extends BasePresenter {
     int mobileOtp = _genRandomNumber();
 
     String queryParams =
-        "username=7506775158&password=Stetig@123&To=$value&senderid=VM-PRLCRM&feedid=372501&Text=Your%20OTP%20for%20MyPiramal%20App%20is%20$mobileOtp%20kindly%20use%20this%20for%20login%20";
+        "username=7506775158&password=Stetig@123&To=$value&senderid=PRLSLS&feedid=372501&Text=<%23> Your OTP for PRL CP App is $mobileOtp. Kindly use this for login. $appSignature";
     Dialogs.showLoader(context, "Sending OTP to $value");
     apiController.get("${EndPoints.SEND_MOBILE_OTP}$queryParams", headers: await Utility.header())
       ..then((response) {

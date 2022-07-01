@@ -48,7 +48,7 @@ dependencies:
   url_launcher: any
   intl: any
   pull_to_refresh: any
-  file_picker: any
+  file_picker: 4.4.0
   marquee: any
   cupertino_icons: any
   firebase_core: any
@@ -58,6 +58,7 @@ dependencies:
   awesome_notifications: ^0.6.21
   external_path: ^1.0.1
   permission_handler: 8.1.5
+  sms_autofill: ^2.2.0
 
 dev_dependencies:
   flutter_test:

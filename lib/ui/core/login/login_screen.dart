@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:piramal_channel_partner/global/variables.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
@@ -15,8 +16,8 @@ import 'package:piramal_channel_partner/user/CurrentUser.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
 import 'package:provider/provider.dart';
+import 'package:sms_autofill/sms_autofill.dart';
 
-String appSignature;
 class LoginScreen extends StatefulWidget {
   LoginScreen({Key key}) : super(key: key);
 
@@ -24,7 +25,7 @@ class LoginScreen extends StatefulWidget {
   _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> implements LoginView {
+class _LoginScreenState extends State<LoginScreen> with CodeAutoFill implements LoginView {
   final subTextStyle = textStyleSubText14px500w;
   final mainTextStyle = textStyle14px500w;
 
@@ -34,6 +35,8 @@ class _LoginScreenState extends State<LoginScreen> implements LoginView {
   BuildContext _context;
   TokenResponse _tokenResponse;
   CorePresenter presenter;
+  int otp;
+  bool firstTime = true;
 
   @override
   void initState() {
@@ -41,9 +44,27 @@ class _LoginScreenState extends State<LoginScreen> implements LoginView {
     //sent otp request
     presenter = CorePresenter(this);
     presenter.getAccessToken();
+
+    SmsAutoFill().getAppSignature.then((signature) {
+      setState(() {
+        appSignature = signature;
+      });
+    });
+    listenOtp();
   }
 
-  int otp;
+  @override
+  void dispose() {
+    super.dispose();
+    SmsAutoFill().unregisterListener();
+  }
+
+  void listenOtp() async {
+    await SmsAutoFill().unregisterListener();
+    listenForCode();
+    await SmsAutoFill().listenForCode;
+    print("OTP listen Called");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +85,7 @@ class _LoginScreenState extends State<LoginScreen> implements LoginView {
               emailField(),
               verticalSpace(10.0),
               if (otp != null) passwordField(),
+
               verticalSpace(18.0),
               // Text(kForgotPasswordText, style: subTextStyle),
               verticalSpace(30.0),
@@ -71,6 +93,7 @@ class _LoginScreenState extends State<LoginScreen> implements LoginView {
               verticalSpace(10.0),
               InkWell(
                 onTap: () {
+                  SmsAutoFill().unregisterListener();
                   Navigator.pushNamed(context, Screens.kSignupScreen, arguments: emailTextController.text.toString());
                   emailTextController.clear();
                   otp = null;
@@ -80,8 +103,32 @@ class _LoginScreenState extends State<LoginScreen> implements LoginView {
                   child: Text(kCreateAccountText, style: subTextStyle),
                 ),
               ),
+              invisibleOtpInputField(),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Opacity invisibleOtpInputField() {
+    return Opacity(
+      opacity: 0.0,
+      child: Container(
+        width: 0.0,
+        child: PinFieldAutoFill(
+          decoration: UnderlineDecoration(
+            textStyle: TextStyle(fontSize: 20, color: Colors.black),
+            colorBuilder: FixedColorBuilder(Colors.black.withOpacity(0.3)),
+          ),
+          currentCode: code,
+          onCodeSubmitted: (code) {},
+          onCodeChanged: (code) {
+            print(code);
+            if (code.length == 6) {
+              FocusScope.of(context).requestFocus(FocusNode());
+            }
+          },
         ),
       ),
     );
@@ -189,8 +236,10 @@ class _LoginScreenState extends State<LoginScreen> implements LoginView {
     );
   }
 
-  void sendOTP() {
+  void sendOTP() async {
     presenter.sendEmailMobileOTP(context, emailTextController.text.toString());
+    firstTime = false;
+    if (!firstTime) listenOtp();
   }
 
   void verifyOTP() {
@@ -202,7 +251,7 @@ class _LoginScreenState extends State<LoginScreen> implements LoginView {
     presenter.verifyMobileEmail(context, emailTextController.text.toString());
   }
 
-  resetOTP() {
+  void resetOTP() async {
     otp = null;
     setState(() {});
   }
@@ -218,9 +267,8 @@ class _LoginScreenState extends State<LoginScreen> implements LoginView {
 
   @override
   void onOtpSent(int otp) async {
-     Utility.showSuccessToastB(_context, "OTP Sent Successfully");
+    Utility.showSuccessToastB(_context, "OTP Sent Successfully");
     this.otp = otp;
-    setState(() {});
   }
 
   @override
@@ -245,5 +293,11 @@ class _LoginScreenState extends State<LoginScreen> implements LoginView {
   @override
   void onVerificationFailed() {
     Utility.showErrorToastB(context, "Please use correct id or Create new account");
+  }
+
+  @override
+  void codeUpdated() {
+    otpTextController.text = code;
+    setState(() {});
   }
 }

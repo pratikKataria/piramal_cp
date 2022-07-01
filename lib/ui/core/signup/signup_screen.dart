@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:piramal_channel_partner/global/variables.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
@@ -18,6 +19,7 @@ import 'package:piramal_channel_partner/user/CurrentUser.dart';
 import 'package:piramal_channel_partner/utils/Dialogs.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
+import 'package:sms_autofill/sms_autofill.dart';
 
 class SignupScreen extends StatefulWidget {
   final String emailMobileAutoPopulateValue;
@@ -28,7 +30,7 @@ class SignupScreen extends StatefulWidget {
   _SignupScreenState createState() => _SignupScreenState();
 }
 
-class _SignupScreenState extends State<SignupScreen> implements SignupView {
+class _SignupScreenState extends State<SignupScreen> with CodeAutoFill implements SignupView {
   final subTextStyle = textStyleSubText14px500w;
   final mainTextStyle = textStyle14px500w;
 
@@ -40,6 +42,7 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
 
   bool mobileOTPVerified = false;
   bool emailOTPVerified = false;
+  bool firstTime = true;
 
   int emailOTP;
   int mobileOTP;
@@ -50,6 +53,26 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
     corePresenter = CorePresenter(this);
     corePresenter.getAccessToken();
     autoPopulateEmailMobile();
+
+    SmsAutoFill().getAppSignature.then((signature) {
+      setState(() {
+        appSignature = signature;
+      });
+    });
+    listenOtp();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    SmsAutoFill().unregisterListener();
+  }
+
+  void listenOtp() async {
+    await SmsAutoFill().unregisterListener();
+    listenForCode();
+    await SmsAutoFill().listenForCode;
+    print("OTP listen Called");
   }
 
   void autoPopulateEmailMobile() {
@@ -99,12 +122,14 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
                 onClick: () {
                   corePresenter.sendMobileOTP(context, signupRequest.primaryMobNo);
                   mobileOTPVerified = false;
+                  firstTime = false;
+                  if (!firstTime) listenOtp();
                   setState(() {});
                 },
               ),
               verticalSpace(10.0),
               input(
-                "OTP",
+                signupRequest.mobileOTP ?? "OTP",
                 (String v) {
                   signupRequest.mobileOTP = v;
                   return;
@@ -235,8 +260,32 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
               verticalSpace(40.0),
               loginButton(context),
               verticalSpace(20.0),
+              invisibleOtpInputField(),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Opacity invisibleOtpInputField() {
+    return Opacity(
+      opacity: 0.0,
+      child: Container(
+        width: 0.0,
+        child: PinFieldAutoFill(
+          decoration: UnderlineDecoration(
+            textStyle: TextStyle(fontSize: 20, color: Colors.black),
+            colorBuilder: FixedColorBuilder(Colors.black.withOpacity(0.3)),
+          ),
+          currentCode: code,
+          onCodeSubmitted: (code) {},
+          onCodeChanged: (code) {
+            print(code);
+            if (code.length == 6) {
+              FocusScope.of(context).requestFocus(FocusNode());
+            }
+          },
         ),
       ),
     );
@@ -377,7 +426,6 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
       return false;
     }
 
-
     if (signupRequest.reraID.isEmpty) {
       onError("Please enter rera reg. id");
       return false;
@@ -502,5 +550,11 @@ class _SignupScreenState extends State<SignupScreen> implements SignupView {
     }
 
     Navigator.pushNamed(context, Screens.kUploadDocumentScreen, arguments: signupRequest);
+  }
+
+  @override
+  void codeUpdated() {
+    signupRequest.mobileOTP = code;
+    setState(() {});
   }
 }
