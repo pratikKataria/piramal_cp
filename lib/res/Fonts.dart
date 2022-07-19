@@ -316,6 +316,12 @@ const textStyleWhite10px500w = TextStyle(
     fontWeight: FontWeight.w500,
     fontSize: 10);
 
+const textStyleWhite8px500w = TextStyle(
+    color: AppColors.white,
+    fontFamily: kFontFamily,
+    fontWeight: FontWeight.w500,
+    fontSize: 8);
+
 const textStyleSubText10px400w = TextStyle(
     color: AppColors.textColorSubText,
     fontFamily: kFontFamily,

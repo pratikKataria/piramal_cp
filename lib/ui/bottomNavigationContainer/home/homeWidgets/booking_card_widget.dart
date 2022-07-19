@@ -65,8 +65,18 @@ class BookingCardWidget extends StatelessWidget {
                     // Text("Next Follow up: ${Utility.formatDate(_bookingResponse.nextFollowUp)}", style: textStyleSubText14px500w),
                   ],
                 ),
-                
-                if (_bookingResponse.CRMApproved) Image.asset(Images.kIconApproved, height: 34.0)
+                if (_bookingResponse.CRMApproved)
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(3.0)),
+                      color: AppColors.green,
+                    ),
+                    child: Text(
+                      "Approved",
+                      style: textStyleWhite10px500w,
+                    ),
+                  ) /*Image.asset(Images.kIconApproved, height: 34.0)*/
               ],
             ),
           ),
