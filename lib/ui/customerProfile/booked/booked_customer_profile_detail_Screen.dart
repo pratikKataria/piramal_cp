@@ -7,6 +7,7 @@ import 'package:piramal_channel_partner/res/constants.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/booking_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/project_unit_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/schedule_visit_response.dart';
+import 'package:piramal_channel_partner/ui/customerProfile/booked/model/generate_invoice_response.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/booked/model/invoice_response.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/customer_profile_presenter.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/customer_profile_view.dart';
@@ -27,15 +28,16 @@ class BookedCustomerProfileDetailScreen extends StatefulWidget {
 }
 
 class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfileDetailScreen> implements CustomerProfileView {
-  CustomerProfilePresenter _homePresenter;
+  CustomerProfilePresenter _presenter;
   InvoiceResponse response;
   List<InvoiceResponse> responseList = [];
+  bool _invoiceGenerated = false;
 
   @override
   void initState() {
-    _homePresenter = CustomerProfilePresenter(this);
+    _presenter = CustomerProfilePresenter(this);
     // _homePresenter.getWalkInList(context);
-    _homePresenter.getInvoice(context, widget?.response?.sfdcid);
+    _presenter.getInvoice(context, widget?.response?.sfdcid);
     super.initState();
   }
 
@@ -43,7 +45,7 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
   Widget build(BuildContext context) {
     return RefreshListView(
       onRefresh: () {
-        _homePresenter.getInvoice(context, widget?.response?.sfdcid);
+        _presenter.getInvoice(context, widget?.response?.sfdcid);
       },
       children: [
         Padding(
@@ -168,13 +170,18 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
                     color: AppColors.colorSecondary,
                     child: Icon(Icons.add, color: AppColors.white, size: 16.0),
                     onTap: () {
-                      _homePresenter.getCustomerUnitDetail(context, widget?.response?.sfdcid);
+                      _presenter.getCustomerUnitDetail(context, widget?.response?.sfdcid);
                     },
                   ),
                 ],
               ),
               verticalSpace(25.0),
-              Container(
+
+              //Generate invoice layout
+              if (!_invoiceGenerated) generateInvoiceWidget(),
+
+              //Download invoice layout
+              if (_invoiceGenerated) Container(
                 padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 6.0),
                 color: AppColors.screenBackgroundColor,
                 child: Row(
@@ -187,6 +194,7 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
                   ],
                 ),
               ),
+
               verticalSpace(25.0),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -231,24 +239,28 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
     );
   }
 
-  // 9.9% received
-  // Eligible to raise Invoice
-  // Invoice Approved
-  // Payment Released
-  String getInvoiceProgress() {
-    switch (response?.status) {
-      case "9.9% received":
-        return Images.kImagePD1;
-      case "Eligible to raise Invoice":
-        return Images.kImagePD2;
-      case "Invoice Approved":
-        return Images.kImagePD3;
-      case "Payment Released":
-        return Images.kImagePD4;
-      default:
-        return Images.kImagePD1;
-        break;
-    }
+  Container generateInvoiceWidget() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 6.0),
+      margin: EdgeInsets.only(bottom: 25.0),
+      color: AppColors.screenBackgroundColor,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text("Generate Invoice", style: textStyleRegular16px500px),
+          PmlButton(
+            width: 30,
+            height: 30,
+            padding: EdgeInsets.all(8.0),
+            onTap: () => _presenter.postGenerateInvoice(context, widget?.response?.sfdcid),
+            child: Image.asset(
+              Images.kIconDownload,
+            ),
+          )
+        ],
+      ),
+    );
   }
 
   List<Column> timelineViewBuilder() {
@@ -354,7 +366,7 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
     );
 
     if (picked != null) {
-      _homePresenter.scheduleTime(context, widget.response.sfdcid, x);
+      _presenter.scheduleTime(context, widget.response.sfdcid, x);
     }
   }
 
@@ -419,7 +431,39 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
     responseList.addAll(projectUnitResponse);
     setState(() {});
   }
+
+  @override
+  void onInvoiceGenerated(GenerateInvoiceResponse bookingResponse) {
+    _invoiceGenerated = true;
+    Utility.showSuccessToastB(context, "Invoice generated");
+    setState(() {});
+  }
 }
 // '"Eligible to Raise Invoice"
 // and "Invoice Approved"
 // values are swapped in app when  selected in SFDC
+
+/*
+
+
+  // 9.9% received
+  // Eligible to raise Invoice
+  // Invoice Approved
+  // Payment Released
+  String getInvoiceProgress() {
+    switch (response?.status) {
+      case "9.9% received":
+        return Images.kImagePD1;
+      case "Eligible to raise Invoice":
+        return Images.kImagePD2;
+      case "Invoice Approved":
+        return Images.kImagePD3;
+      case "Payment Released":
+        return Images.kImagePD4;
+      default:
+        return Images.kImagePD1;
+        break;
+    }
+  }
+
+*/

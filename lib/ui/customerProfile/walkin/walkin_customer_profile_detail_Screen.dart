@@ -6,6 +6,7 @@ import 'package:piramal_channel_partner/res/Images.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/booking_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/project_unit_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/schedule_visit_response.dart';
+import 'package:piramal_channel_partner/ui/customerProfile/booked/model/generate_invoice_response.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/booked/model/invoice_response.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/customer_profile_presenter.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/walkin/model/chatresponse.dart';
@@ -382,6 +383,9 @@ class _WalkinCustomerProfileDetailScreenState extends State<WalkinCustomerProfil
     print("no visit found");
     print("no visit found");
   }
+
+  @override
+  void onInvoiceGenerated(GenerateInvoiceResponse bookingResponse) {}
 }
 
 /*

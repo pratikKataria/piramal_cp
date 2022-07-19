@@ -7,6 +7,7 @@ import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/ui/base/base_presenter.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/project_unit_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/schedule_visit_response.dart';
+import 'package:piramal_channel_partner/ui/customerProfile/booked/model/generate_invoice_response.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/booked/model/invoice_response.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/customer_profile_view.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/walkin/model/chatresponse.dart';
@@ -200,6 +201,50 @@ class CustomerProfilePresenter extends BasePresenter {
         } else {
           // _v.onError(bookingResponse.message);
           v.onNoVisitFound();
+        }
+      })
+      ..catchError((e) {
+        Dialogs.hideLoader(context);
+        ApiErrorParser.getResult(e, _v);
+      });
+  }
+
+  void postGenerateInvoice(BuildContext context, String otyID) async {
+    //check for internal token
+    if (await AuthUser.getInstance().hasToken()) {
+      _v.onError("Token not found");
+      return;
+    }
+
+    //check network
+    if (!await NetworkCheck.check()) {
+      _v.onError("Network Error");
+      return;
+    }
+
+    String uId = await Utility.uID();
+    // var body = {"CustomerAccountID": "$uId", "opportunityid": "$otyID"};
+    var body = {
+      "opportunityid": otyID, //006p000000BExTl,
+      "CustomerAccountID": uId, //001p000000zxu63,
+      "generateInvoice": true,
+    };
+    // var body = {"CustomerAccountID": "001p000000y1SqWAAU", "opportunityid": "006p000000AeMAtAAN"};
+    Dialogs.showLoader(context, "Generating invoice ...");
+    apiController.post(EndPoints.POST_GENERATE_INVOICE, body: body, headers: await Utility.header())
+      ..then((response) {
+        Dialogs.hideLoader(context);
+
+        List<GenerateInvoiceResponse> brList = [];
+        var listOfDynamic = response.data as List;
+        listOfDynamic.forEach((element) => brList.add(GenerateInvoiceResponse.fromJson(element)));
+
+        GenerateInvoiceResponse bookingResponse = brList.isNotEmpty ? brList.first : null;
+
+        if (bookingResponse.returnCode) {
+          _v.onInvoiceGenerated(bookingResponse);
+        } else {
+          _v.onError(bookingResponse.message);
         }
       })
       ..catchError((e) {
