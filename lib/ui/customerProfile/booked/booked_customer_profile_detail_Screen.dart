@@ -253,7 +253,7 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
             width: 30,
             height: 30,
             padding: EdgeInsets.all(8.0),
-            onTap: () => _presenter.postGenerateInvoice(context, widget?.response?.sfdcid),
+            onTap: () => _presenter.postGenerateInvoice(context, widget?.response?.sfdcid, response?.brokerageID),
             child: Image.asset(
               Images.kIconDownload,
             ),

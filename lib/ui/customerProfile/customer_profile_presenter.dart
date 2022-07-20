@@ -209,7 +209,7 @@ class CustomerProfilePresenter extends BasePresenter {
       });
   }
 
-  void postGenerateInvoice(BuildContext context, String otyID) async {
+  void postGenerateInvoice(BuildContext context, String otyID, String brokerId) async {
     //check for internal token
     if (await AuthUser.getInstance().hasToken()) {
       _v.onError("Token not found");
@@ -228,6 +228,7 @@ class CustomerProfilePresenter extends BasePresenter {
       "opportunityid": otyID, //006p000000BExTl,
       "CustomerAccountID": uId, //001p000000zxu63,
       "generateInvoice": true,
+      "BrokerageId": brokerId,
     };
     // var body = {"CustomerAccountID": "001p000000y1SqWAAU", "opportunityid": "006p000000AeMAtAAN"};
     Dialogs.showLoader(context, "Generating invoice ...");
@@ -235,11 +236,7 @@ class CustomerProfilePresenter extends BasePresenter {
       ..then((response) {
         Dialogs.hideLoader(context);
 
-        List<GenerateInvoiceResponse> brList = [];
-        var listOfDynamic = response.data as List;
-        listOfDynamic.forEach((element) => brList.add(GenerateInvoiceResponse.fromJson(element)));
-
-        GenerateInvoiceResponse bookingResponse = brList.isNotEmpty ? brList.first : null;
+        GenerateInvoiceResponse bookingResponse = GenerateInvoiceResponse.fromJson(response.data);
 
         if (bookingResponse.returnCode) {
           _v.onInvoiceGenerated(bookingResponse);
