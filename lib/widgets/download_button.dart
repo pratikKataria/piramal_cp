@@ -11,8 +11,11 @@ import 'package:piramal_channel_partner/utils/Utility.dart';
 class DownloadButton extends StatelessWidget {
   final String projectId;
   final String fileIdentifier;
+  Function callBackFunction;
 
-  const DownloadButton(this.projectId, this.fileIdentifier, {Key key}) : super(key: key);
+  DownloadButton(this.projectId, this.fileIdentifier, {Function onActionComplete, Key key}) : super(key: key) {
+    callBackFunction = onActionComplete;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,12 +50,13 @@ class DownloadButton extends StatelessWidget {
 
     Dialogs.showLoader(context, "Getting your file ready please wait ...");
     apiController.post(EndPoints.GET_PROJECT_DOWNLOAD_LINK, body: body, headers: await Utility.header())
-      ..then((response) {
+      ..then((response) async {
         Dialogs.hideLoader(context);
         Utility.log("Download Button", response);
         ProjectDownloadLinkReponse projectDownloadLinkReponse = ProjectDownloadLinkReponse.fromJson(response.data);
 
         if (projectDownloadLinkReponse.returnCode) {
+          callBackFunction();
           Utility.launchUrlX(context, projectDownloadLinkReponse?.downloadlink);
         } else {
           Utility.showErrorToastB(context, projectDownloadLinkReponse.message);

@@ -386,6 +386,9 @@ class _WalkinCustomerProfileDetailScreenState extends State<WalkinCustomerProfil
 
   @override
   void onInvoiceGenerated(GenerateInvoiceResponse bookingResponse) {}
+
+  @override
+  void onTermsAndConditionFetched(String message) {}
 }
 
 /*

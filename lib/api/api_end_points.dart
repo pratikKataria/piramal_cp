@@ -57,4 +57,5 @@ class EndPoints {
   static final String POST_DOCUMENTS_SIGNUP = BASE_URL + "/CP_Mobile_App/CPDocumentUpload";
   static final String POST_PENDING_DOCUMENTS = BASE_URL + "/CP_Mobile_App/AccountDocumentUpload";
   static final String POST_GENERATE_INVOICE = BASE_URL + "/CP_Mobile_App/GenerateInvoice";
+  static final String POST_INVOICE_TERMS_AND_CONDITION = BASE_URL + "/CP_Mobile_App/InvoiceDownloadtermsAndConditions";
 }

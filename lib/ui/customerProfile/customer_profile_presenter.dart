@@ -9,6 +9,7 @@ import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/schedule_visit_response.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/booked/model/generate_invoice_response.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/booked/model/invoice_response.dart';
+import 'package:piramal_channel_partner/ui/customerProfile/booked/model/invoice_terms_and_condition.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/customer_profile_view.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/walkin/model/chatresponse.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/walkin/walkin_view.dart';
@@ -242,6 +243,38 @@ class CustomerProfilePresenter extends BasePresenter {
           _v.onInvoiceGenerated(bookingResponse);
         } else {
           _v.onError(bookingResponse.message);
+        }
+      })
+      ..catchError((e) {
+        Dialogs.hideLoader(context);
+        ApiErrorParser.getResult(e, _v);
+      });
+  }
+
+  void getTermsAndCondition(BuildContext context) async {
+    //check for internal token
+    if (await AuthUser.getInstance().hasToken()) {
+      _v.onError("Token not found");
+      return;
+    }
+
+    //check network
+    if (!await NetworkCheck.check()) {
+      _v.onError("Network Error");
+      return;
+    }
+
+    Dialogs.showLoader(context, "Getting T&C ...");
+    apiController.post(EndPoints.POST_INVOICE_TERMS_AND_CONDITION, headers: await Utility.header())
+      ..then((response) {
+        Dialogs.hideLoader(context);
+
+        InvoiceTermsAndCondition invoiceTermsAndCondition = InvoiceTermsAndCondition.fromJson(response.data);
+
+        if (invoiceTermsAndCondition.returnCode) {
+          _v.onTermsAndConditionFetched(invoiceTermsAndCondition.termsAndCondition);
+        } else {
+          _v.onError(invoiceTermsAndCondition.message);
         }
       })
       ..catchError((e) {

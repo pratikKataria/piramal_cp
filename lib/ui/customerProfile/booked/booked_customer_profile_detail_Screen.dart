@@ -181,19 +181,7 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
               if (!_invoiceGenerated) generateInvoiceWidget(),
 
               //Download invoice layout
-              if (_invoiceGenerated) Container(
-                padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 6.0),
-                color: AppColors.screenBackgroundColor,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("Download Invoice", style: textStyleRegular16px500px),
-                    DownloadButton("${response?.brokerageID}", Constants.INVOICE),
-                    // Icon(Icons.arrow_circle_down_outlined, size: 14.0, color: AppColors.colorSecondary),
-                  ],
-                ),
-              ),
+              if (_invoiceGenerated) downloadButtonWidget(),
 
               verticalSpace(25.0),
               Row(
@@ -257,6 +245,28 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
             child: Image.asset(
               Images.kIconDownload,
             ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Container downloadButtonWidget() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 6.0),
+      margin: EdgeInsets.only(bottom: 25.0),
+      color: AppColors.screenBackgroundColor,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text("Download Invoice", style: textStyleRegular16px500px),
+          PmlButton(
+            width: 30,
+            height: 30,
+            padding: EdgeInsets.all(8.0),
+            onTap: () => _presenter.getTermsAndCondition(context),
+            child: Image.asset(Images.kIconDownload),
           )
         ],
       ),
@@ -437,6 +447,89 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
     _invoiceGenerated = true;
     Utility.showSuccessToastB(context, "Invoice generated");
     setState(() {});
+  }
+
+  @override
+  void onTermsAndConditionFetched(String message) {
+    showTermsAndConditionDialog(message);
+    setState(() {});
+  }
+
+  void showTermsAndConditionDialog(String message) {
+    bool termsAndConditionValue = false;
+    AlertDialog alert = AlertDialog(
+      contentPadding: EdgeInsets.all(0.0),
+      backgroundColor: Colors.white,
+      content: StatefulBuilder(
+        builder: (BuildContext context, void Function(void Function()) ss) {
+          return Container(
+            width: double.maxFinite,
+            child: ListView(
+              children: [
+                verticalSpace(20.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    PmlButton(
+                      width: 30,
+                      height: 30,
+                      color: AppColors.colorPrimary,
+                      child: Icon(Icons.close, color: AppColors.white, size: 16.0),
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
+                ),
+                Container(
+                  margin: EdgeInsets.all(10.0),
+                  padding: EdgeInsets.all(10.0),
+                  child: Text(message??"",
+                      style: textStyle14px500w),
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 6.0),
+                  margin: EdgeInsets.only(bottom: 25.0),
+                  color: AppColors.screenBackgroundColor,
+                  child: Column(
+                    children: [
+                      if (termsAndConditionValue)
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text("Download Invoice", style: textStyle14px500w),
+                            Spacer(),
+                            DownloadButton("${response?.brokerageID}", Constants.INVOICE, onActionComplete: () {
+                              Navigator.pop(context);
+                            }),
+                            horizontalSpace(4.0),
+                          ],
+                        ),
+                      CheckboxListTile(
+                        value: termsAndConditionValue,
+                        contentPadding: EdgeInsets.all(0.0),
+                        title: Text("I accept the Terms And Condition", style: textStyle14px500w),
+                        onChanged: (value) {
+                          termsAndConditionValue = value;
+                          ss(() {});
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }
 // '"Eligible to Raise Invoice"
