@@ -9,7 +9,6 @@ import 'package:piramal_channel_partner/api/api_error_parser.dart';
 import 'package:piramal_channel_partner/global/variables.dart';
 import 'package:piramal_channel_partner/ui/base/base_presenter.dart';
 import 'package:piramal_channel_partner/ui/core/core_view.dart';
-import 'package:piramal_channel_partner/ui/core/login/login_screen.dart';
 import 'package:piramal_channel_partner/ui/core/login/login_view.dart';
 import 'package:piramal_channel_partner/ui/core/login/model/login_response.dart';
 import 'package:piramal_channel_partner/ui/core/login/model/otp_response.dart';
@@ -108,7 +107,7 @@ class CorePresenter extends BasePresenter {
     };
 
     Dialogs.showLoader(context, "Sending OTP to $value");
-    apiController.post(EndPoints.SEND_OTP_V1, body: body, headers: await Utility.header())
+    apiController.post(EndPoints.SEND_OTP_V2, body: body, headers: await Utility.header())
       ..then((response) {
         Dialogs.hideLoader(context);
         OTPResponse otpResponse = OTPResponse.fromJson(response.data);

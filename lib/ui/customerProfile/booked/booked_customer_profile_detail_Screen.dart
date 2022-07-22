@@ -460,11 +460,12 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
     AlertDialog alert = AlertDialog(
       contentPadding: EdgeInsets.all(0.0),
       backgroundColor: Colors.white,
+      scrollable: true, // <-- Set it to true
       content: StatefulBuilder(
         builder: (BuildContext context, void Function(void Function()) ss) {
           return Container(
             width: double.maxFinite,
-            child: ListView(
+            child: Column(
               children: [
                 verticalSpace(20.0),
                 Row(

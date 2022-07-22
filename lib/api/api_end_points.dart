@@ -14,6 +14,7 @@ class EndPoints {
   static final String MOBILE_LOGIN = BASE_URL + "/CP_Mobile_App/MobileLogincp";
   static final String SEND_OTP = BASE_URL + "/CP_Mobile_App/EmailOTPCP";
   static final String SEND_OTP_V1 = BASE_URL + "/CP_Mobile_App/CreateEmailOTPCP";
+  static final String SEND_OTP_V2 = BASE_URL + "/CP_Mobile_App/SignUpEmailOTPCP";
   static final String VERIFY_EMAIL = BASE_URL + "/CP_Mobile_App/EmailLoginCP";
   static final String VERIFY_MOBILE = BASE_URL + "/CP_Mobile_App/MobileLogincp";
   static final String SEND_MOBILE_OTP = "https://bulkpush.mytoday.com/BulkSms/SingleMsgApi?";

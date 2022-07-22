@@ -303,6 +303,7 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> implements 
     AlertDialog alert = AlertDialog(
       contentPadding: EdgeInsets.all(0.0),
       backgroundColor: Colors.white,
+      scrollable: true,
       content: Column(
         children: [
           verticalSpace(20.0),
@@ -322,9 +323,7 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> implements 
             ),
             margin: EdgeInsets.all(10.0),
             padding: EdgeInsets.all(10.0),
-            child: SingleChildScrollView(
-              child: Text("$message", style: textStyle14px500w),
-            ),
+            child: Text("$message", style: textStyle14px500w),
           ),
         ],
       ),
