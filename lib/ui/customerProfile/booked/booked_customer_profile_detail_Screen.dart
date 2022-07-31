@@ -18,6 +18,8 @@ import 'package:piramal_channel_partner/widgets/refresh_list_view.dart';
 import 'package:piramal_channel_partner/widgets/whats_app_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'model/invoice_number_request.dart';
+
 class BookedCustomerProfileDetailScreen extends StatefulWidget {
   final BookingResponse response;
 
@@ -30,8 +32,10 @@ class BookedCustomerProfileDetailScreen extends StatefulWidget {
 class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfileDetailScreen> implements CustomerProfileView {
   CustomerProfilePresenter _presenter;
   InvoiceResponse response;
+  InvoiceNumberRequest _invoiceNumberRequest = InvoiceNumberRequest();
   List<InvoiceResponse> responseList = [];
   bool _invoiceGenerated = false;
+  bool _invoiceNumberGenerated = false;
 
   @override
   void initState() {
@@ -177,11 +181,14 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
               ),
               verticalSpace(25.0),
 
+              //Invoice number input layout
+              if (!_invoiceNumberGenerated) invoiceNumberInput(),
+
               //Generate invoice layout
-              if (!_invoiceGenerated) generateInvoiceWidget(),
+              if (_invoiceNumberGenerated && !_invoiceGenerated) generateInvoiceWidget(),
 
               //Download invoice layout
-              if (_invoiceGenerated) downloadButtonWidget(),
+              if (_invoiceNumberGenerated && _invoiceGenerated) downloadButtonWidget(),
 
               verticalSpace(25.0),
               Row(
@@ -336,6 +343,60 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
     );
   }
 
+  Container invoiceNumberInput() {
+    return Container(
+      height: 38,
+      margin: EdgeInsets.only(bottom: 12.0),
+      decoration: BoxDecoration(
+        color: AppColors.inputFieldBackgroundColor,
+        borderRadius: BorderRadius.circular(6.0),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            width: 75,
+            margin: EdgeInsets.symmetric(horizontal: 12.0),
+            child: Text("Invoice", style: textStyle14px500w),
+          ),
+          Expanded(
+            child: TextFormField(
+              // obscureText: true,
+              textAlign: TextAlign.left,
+              maxLines: 1,
+              textCapitalization: TextCapitalization.none,
+              style: textStyleSubText14px500w,
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                hintText: "Enter invoice number",
+                hintStyle: textStyleSubText14px500w,
+                isDense: true,
+                suffixStyle: TextStyle(color: AppColors.textColor),
+              ),
+              onChanged: (String val) {
+                _invoiceNumberRequest.invoiceNumber = val;
+              },
+            ),
+          ),
+          InkWell(
+            onTap: () {
+               _invoiceNumberRequest.brokerId = response?.brokerageID;
+              _invoiceNumberRequest.otyId = widget?.response?.sfdcid;
+
+              if ((_invoiceNumberRequest?.invoiceNumber ?? "").isEmpty) onError("Please enter Invoice number");
+              else _presenter.postSaveInvoiceNumber(context, _invoiceNumberRequest);
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 10.0),
+              child: Text("Save", style: textStylePrimary14px500w),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
   @override
   onError(String message) {
     Utility.showErrorToastB(context, message);
@@ -439,6 +500,11 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
     if (projectUnitResponse.isNotEmpty) response = projectUnitResponse.first;
     responseList.clear();
     responseList.addAll(projectUnitResponse);
+
+    //check for invoice number is saved or not also check for generated invoice
+    _invoiceGenerated = response?.generatedInvoice ?? false;
+    _invoiceNumberGenerated = response?.invoiceNumberGenerated ?? false;
+
     setState(() {});
   }
 
@@ -485,8 +551,7 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
                 Container(
                   margin: EdgeInsets.all(10.0),
                   padding: EdgeInsets.all(10.0),
-                  child: Text(message??"",
-                      style: textStyle14px500w),
+                  child: Text(message ?? "", style: textStyle14px500w),
                 ),
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 6.0),
@@ -531,6 +596,12 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
         return alert;
       },
     );
+  }
+
+  @override
+  void onInvoiceNumberSaved() {
+    _invoiceNumberGenerated = true;
+    setState(() {});
   }
 }
 // '"Eligible to Raise Invoice"

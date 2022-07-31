@@ -389,6 +389,9 @@ class _WalkinCustomerProfileDetailScreenState extends State<WalkinCustomerProfil
 
   @override
   void onTermsAndConditionFetched(String message) {}
+
+  @override
+  void onInvoiceNumberSaved() {}
 }
 
 /*

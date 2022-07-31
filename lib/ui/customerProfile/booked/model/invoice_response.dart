@@ -6,37 +6,9 @@
 /// CurrentStatus : "Eligible to raise Invoice"
 /// BrokerageID : "a2vp0000000Q15aAAC"
 /// BookingApprovalDate : ""
-
+///  "InvoiceNumberGenerated": true,
+//   "GenerateInvoice": true,
 class InvoiceResponse {
-  InvoiceResponse({
-      String statusChangeDate, 
-      String status, 
-      bool returnCode, 
-      int position, 
-      String message, 
-      String currentStatus, 
-      String brokerageID, 
-      String bookingApprovalDate,}){
-    _statusChangeDate = statusChangeDate;
-    _status = status;
-    _returnCode = returnCode;
-    _position = position;
-    _message = message;
-    _currentStatus = currentStatus;
-    _brokerageID = brokerageID;
-    _bookingApprovalDate = bookingApprovalDate;
-}
-
-  InvoiceResponse.fromJson(dynamic json) {
-    _statusChangeDate = json['StatusChangeDate'];
-    _status = json['Status'];
-    _returnCode = json['returnCode'];
-    _position = json['Position'];
-    _message = json['message'];
-    _currentStatus = json['CurrentStatus'];
-    _brokerageID = json['BrokerageID'];
-    _bookingApprovalDate = json['BookingApprovalDate'];
-  }
   String _statusChangeDate;
   String _status;
   bool _returnCode;
@@ -45,6 +17,8 @@ class InvoiceResponse {
   String _currentStatus;
   String _brokerageID;
   String _bookingApprovalDate;
+  bool _invoiceNumberGenerated;
+  bool _generatedInvoice;
 
   String get statusChangeDate => _statusChangeDate;
   String get status => _status;
@@ -54,6 +28,10 @@ class InvoiceResponse {
   String get currentStatus => _currentStatus;
   String get brokerageID => _brokerageID;
   String get bookingApprovalDate => _bookingApprovalDate;
+  bool get generatedInvoice => _generatedInvoice;
+  bool get invoiceNumberGenerated => _invoiceNumberGenerated;
+
+
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -65,7 +43,22 @@ class InvoiceResponse {
     map['CurrentStatus'] = _currentStatus;
     map['BrokerageID'] = _brokerageID;
     map['BookingApprovalDate'] = _bookingApprovalDate;
+    map['InvoiceNumberGenerated'] = _invoiceNumberGenerated;
+    map['GenerateInvoice'] = _generatedInvoice;
+
     return map;
   }
 
+  InvoiceResponse.fromJson(dynamic json) {
+    _statusChangeDate = json['StatusChangeDate'];
+    _status = json['Status'];
+    _returnCode = json['returnCode'];
+    _position = json['Position'];
+    _message = json['message'];
+    _currentStatus = json['CurrentStatus'];
+    _brokerageID = json['BrokerageID'];
+    _bookingApprovalDate = json['BookingApprovalDate'];
+    _invoiceNumberGenerated = json['InvoiceNumberGenerated'];
+    _generatedInvoice = json['GenerateInvoice'];
+  }
 }

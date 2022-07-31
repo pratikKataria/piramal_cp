@@ -8,6 +8,8 @@ import 'package:piramal_channel_partner/ui/base/base_presenter.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/project_unit_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/schedule_visit_response.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/booked/model/generate_invoice_response.dart';
+import 'package:piramal_channel_partner/ui/customerProfile/booked/model/invoice_number_request.dart';
+import 'package:piramal_channel_partner/ui/customerProfile/booked/model/invoice_number_response.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/booked/model/invoice_response.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/booked/model/invoice_terms_and_condition.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/customer_profile_view.dart';
@@ -273,6 +275,47 @@ class CustomerProfilePresenter extends BasePresenter {
 
         if (invoiceTermsAndCondition.returnCode) {
           _v.onTermsAndConditionFetched(invoiceTermsAndCondition.termsAndCondition);
+        } else {
+          _v.onError(invoiceTermsAndCondition.message);
+        }
+      })
+      ..catchError((e) {
+        Dialogs.hideLoader(context);
+        ApiErrorParser.getResult(e, _v);
+      });
+  }
+
+  void postSaveInvoiceNumber(BuildContext context, InvoiceNumberRequest invoiceNumberRequest) async {
+    //check for internal token
+    if (await AuthUser.getInstance().hasToken()) {
+      _v.onError("Token not found");
+      return;
+    }
+
+    //check network
+    if (!await NetworkCheck.check()) {
+      _v.onError("Network Error");
+      return;
+    }
+
+    String uId = await Utility.uID();
+
+    Map<String, String> body = {
+      "opportunityid": invoiceNumberRequest.otyId,
+      "CustomerAccountID": uId,
+      "BrokerageId": invoiceNumberRequest.brokerId,
+      "InvoiceNum": invoiceNumberRequest.invoiceNumber,
+    };
+
+    Dialogs.showLoader(context, "Saving Invoice No. ...");
+    apiController.post(EndPoints.POST_SAVE_INVOICE_NO, body: body, headers: await Utility.header())
+      ..then((response) {
+        Dialogs.hideLoader(context);
+
+        InvoiceNumberResponse invoiceTermsAndCondition = InvoiceNumberResponse.fromJson(response.data);
+
+        if (invoiceTermsAndCondition.returnCode) {
+          _v.onInvoiceNumberSaved();
         } else {
           _v.onError(invoiceTermsAndCondition.message);
         }
