@@ -143,7 +143,7 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
                         color: AppColors.chipColor,
                       ),
                       padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-                      child: Text("Validity: ${widget.response?.projectFinalized} Days", style: textStyle14px500w),
+                      child: Text("${widget?.response?.projectFinalized?? "NA"}", style: textStyle14px500w),
                     ),
                   ],
                 ),

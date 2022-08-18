@@ -56,7 +56,12 @@ class DownloadButton extends StatelessWidget {
         ProjectDownloadLinkReponse projectDownloadLinkReponse = ProjectDownloadLinkReponse.fromJson(response.data);
 
         if (projectDownloadLinkReponse.returnCode) {
-          callBackFunction();
+          try {
+            callBackFunction();
+          } catch (xe) {
+            //call back function is null
+            Utility.log("Download button", "Exception: $xe");
+          }
           Utility.launchUrlX(context, projectDownloadLinkReponse?.downloadlink);
         } else {
           Utility.showErrorToastB(context, projectDownloadLinkReponse.message);
