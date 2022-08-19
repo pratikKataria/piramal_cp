@@ -182,7 +182,7 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
               verticalSpace(25.0),
 
               //Invoice number input layout
-              if (!_invoiceNumberGenerated) invoiceNumberInput(),
+              if ((response?.showInvoiceNumber??false) && !_invoiceNumberGenerated) invoiceNumberInput(),
 
               //Generate invoice layout
               if (_invoiceNumberGenerated && !_invoiceGenerated) generateInvoiceWidget(),
