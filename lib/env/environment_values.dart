@@ -26,8 +26,7 @@ abstract class EnvironmentValues {
 
   static get getBaseURL => EnvironmentControl.currentEnv == PROD
       ? "https://piramal-realty.my.salesforce.com/services/apexrest"
-      : "https://prl--PRLAPP.my.salesforce.com/services/apexrest";
-
+      : "https://prl--prlapp.sandbox.my.salesforce.com/services/apexrest";
   static get getAccessTokenURL => EnvironmentControl.currentEnv == PROD
       ? "https://login.salesforce.com/services/oauth2/token"
       : "https://test.salesforce.com/services/oauth2/token";
