@@ -242,7 +242,7 @@ class _LoginScreenState extends State<LoginScreen> with CodeAutoFill implements 
     if (!firstTime) listenOtp();
   }
 
-  void verifyOTP() => {
+  void verifyOTP()  {
     if (otpTextController.text.toString() != otp.toString()) {
       onError("Please enter correct OTP");
       return;
