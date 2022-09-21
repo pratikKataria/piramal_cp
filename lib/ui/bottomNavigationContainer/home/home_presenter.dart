@@ -13,13 +13,13 @@ import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/schedule_visit_response.dart';
 import 'package:piramal_channel_partner/ui/core/login/model/otp_response.dart';
 import 'package:piramal_channel_partner/ui/cpEvent/model/cp_event_response.dart';
+import 'package:piramal_channel_partner/ui/customerProfile/booked/model/payment_confirmation_response.dart';
 import 'package:piramal_channel_partner/user/AuthUser.dart';
 import 'package:piramal_channel_partner/utils/Dialogs.dart';
 import 'package:piramal_channel_partner/utils/NetworkCheck.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 
 import 'home_view.dart';
-import 'model/booking_response.dart';
 
 class HomePresenter {
   HomeView _v;
@@ -440,6 +440,40 @@ class HomePresenter {
         Dialogs.hideLoader(context);
         DeviceTokenResponse deviceTokenResponse = DeviceTokenResponse.fromJson(response.data);
         Utility.log(tag, "Device Token: ${deviceTokenResponse?.token}");
+      })
+      ..catchError((e) {
+        Dialogs.hideLoader(context);
+        ApiErrorParser.getResult(e, _v);
+      });
+  }
+
+  void acknowledgePayment(BuildContext context, String otyID, String brokerId) async {
+    //check for internal token
+    if (await AuthUser.getInstance().hasToken()) {
+      _v.onError("Token not found");
+      return;
+    }
+
+    //check network
+    if (!await NetworkCheck.check()) {
+      _v.onError("Network Error");
+      return;
+    }
+
+    String uID = await Utility.uID();
+    var body = {
+      "opportunityid": otyID,
+      "CustomerAccountID": uID,
+      "BrokerageId": brokerId,
+      "CPPaymentConfirmation": true,
+    };
+
+    Dialogs.showLoader(context, "Updating payment status ...");
+    apiController.post(EndPoints.PAYMENT_CONFIRMATION, body: body, headers: await Utility.header())
+      ..then((response) {
+        Dialogs.hideLoader(context);
+        PaymentConfirmationResponse projectUnitResponse = PaymentConfirmationResponse.fromJson(response.data);
+        _v.onPaymentAcknowledged();
       })
       ..catchError((e) {
         Dialogs.hideLoader(context);

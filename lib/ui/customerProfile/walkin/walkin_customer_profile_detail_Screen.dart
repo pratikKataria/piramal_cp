@@ -392,6 +392,9 @@ class _WalkinCustomerProfileDetailScreenState extends State<WalkinCustomerProfil
 
   @override
   void onInvoiceNumberSaved() {}
+
+  @override
+  void onPaymentAcknowledged() {}
 }
 
 /*

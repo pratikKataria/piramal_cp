@@ -22,6 +22,7 @@ class EndPoints {
   static final String GET_WALK_IN = BASE_URL + "/CP_Mobile_App/WalkinOpportunityDetails";
   static final String SCHEDULE_VISIT = BASE_URL + "/CP_Mobile_App/ScheduleSiteVisits";
   static final String UNIT_DETAIL = BASE_URL + "/CP_Mobile_App/CustomerUnitdetails";
+  static final String PAYMENT_CONFIRMATION = BASE_URL + "/CP_Mobile_App/PaymentConfirmationByCP";
   static final String ALL_LEAD_LIST = BASE_URL + "/CP_Mobile_App/Allleaddetails";
   static final String DELETE_LEAD = BASE_URL + "/CP_Mobile_App/DeleteCplead";
   static final String CREATE_LEAD = BASE_URL + "/CP_Mobile_App/CPLeadDetails";

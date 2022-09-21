@@ -292,7 +292,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
   void onWalkInListFetched(List<BookingResponse> wList) {
     walkInList.clear();
     walkInList.addAll(wList);
-     //filter project form the response and add it to the project list
+    //filter project form the response and add it to the project list
     walkInList.forEach((booking) => addProjectListValue(booking.projectInterested));
     setState(() {});
   }
@@ -369,10 +369,30 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                Text("Unit details", style: textStyle14px500w),
                 buildDialogRow("Unit Number", "${projectUnitResponse?.apartmentFinalized}"),
                 buildDialogRow("Tower", "${projectUnitResponse?.towerFinalized}"),
                 buildDialogRow("Carpet Area", "${projectUnitResponse?.carpetarea}"),
                 buildDialogRow("Agreement Value", "${projectUnitResponse?.totalAgreementValue}"),
+                verticalSpace(10.0),
+                Text("Payment details", style: textStyle14px500w),
+                buildDialogRow("Payment to Broker by BN Status", "${projectUnitResponse?.paymentToBrokerByBNStatus ?? ""}"),
+                buildDialogRow("Payment date", "${projectUnitResponse?.paymentDate ?? ""}"),
+                buildDialogRow("Amount Paid", "${projectUnitResponse?.amountPaid ?? ""}"),
+                buildDialogRow("Payment detail", "${projectUnitResponse?.paymentDetail ?? ""}"),
+                verticalSpace(10.0),
+                PmlButton(
+                  height: 30.0,
+                  text: !(projectUnitResponse?.paymentConfirmationByCP ?? false) ? "Acknowledge Payment" : "Payment Acknowledged",
+                  color: !(projectUnitResponse?.paymentConfirmationByCP ?? false)
+                      ? AppColors.colorPrimary
+                      : AppColors.colorPrimary.withOpacity(0.5),
+                  onTap: () async {
+                    if (!(projectUnitResponse?.paymentConfirmationByCP ?? false)) {
+                      _homePresenter.acknowledgePayment(context, projectUnitResponse.sfdcid, projectUnitResponse.brokerageRecordId);
+                    }
+                  },
+                )
               ],
             ),
           ),
@@ -535,6 +555,11 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
     _homePresenter.getWalkInListV2s(context);
   }
 
+  @override
+  void onPaymentAcknowledged() {
+    Utility.showSuccessToastB(context, "Payment Acknowledged");
+    Navigator.pop(context);
+  }
 }
 
 /*   Text("Lead Status", style: textStyleRegular16px400w),

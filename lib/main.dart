@@ -56,7 +56,7 @@ Future<void> main() async {
   await Utility.statusBarAndNavigationBarColor();
   await Utility.portrait();
 
-  // await Firebase.initializeApp();
+  // await Firebasep.initializeApp();
   if (Platform.isIOS) {
     await Firebase.initializeApp(
         options: const FirebaseOptions(

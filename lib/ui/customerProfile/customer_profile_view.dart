@@ -11,4 +11,5 @@ abstract class CustomerProfileView extends BaseView {
   void onInvoiceGenerated(GenerateInvoiceResponse bookingResponse);
   void onTermsAndConditionFetched(String termsAndCondition);
   void onInvoiceNumberSaved();
+  void onPaymentAcknowledged();
 }

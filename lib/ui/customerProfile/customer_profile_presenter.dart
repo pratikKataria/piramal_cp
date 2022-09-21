@@ -12,6 +12,7 @@ import 'package:piramal_channel_partner/ui/customerProfile/booked/model/invoice_
 import 'package:piramal_channel_partner/ui/customerProfile/booked/model/invoice_number_response.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/booked/model/invoice_response.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/booked/model/invoice_terms_and_condition.dart';
+import 'package:piramal_channel_partner/ui/customerProfile/booked/model/payment_confirmation_response.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/customer_profile_view.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/walkin/model/chatresponse.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/walkin/walkin_view.dart';
@@ -87,6 +88,40 @@ class CustomerProfilePresenter extends BasePresenter {
         Dialogs.hideLoader(context);
         ProjectUnitResponse projectUnitResponse = ProjectUnitResponse.fromJson(response.data);
         _v.onProjectUnitResponseFetched(projectUnitResponse);
+      })
+      ..catchError((e) {
+        Dialogs.hideLoader(context);
+        ApiErrorParser.getResult(e, _v);
+      });
+  }
+
+  void acknowledgePayment(BuildContext context, String otyID, String brokerId) async {
+    //check for internal token
+    if (await AuthUser.getInstance().hasToken()) {
+      _v.onError("Token not found");
+      return;
+    }
+
+    //check network
+    if (!await NetworkCheck.check()) {
+      _v.onError("Network Error");
+      return;
+    }
+
+    String uID = await Utility.uID();
+    var body = {
+      "opportunityid": otyID,
+      "CustomerAccountID": uID,
+      "BrokerageId": brokerId,
+      "CPPaymentConfirmation": true,
+    };
+
+    Dialogs.showLoader(context, "Updating payment status ...");
+    apiController.post(EndPoints.PAYMENT_CONFIRMATION, body: body, headers: await Utility.header())
+      ..then((response) {
+        Dialogs.hideLoader(context);
+        PaymentConfirmationResponse projectUnitResponse = PaymentConfirmationResponse.fromJson(response.data);
+        _v.onPaymentAcknowledged();
       })
       ..catchError((e) {
         Dialogs.hideLoader(context);

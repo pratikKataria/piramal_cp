@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
@@ -143,7 +142,7 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
                         color: AppColors.chipColor,
                       ),
                       padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-                      child: Text("${widget?.response?.projectFinalized?? "NA"}", style: textStyle14px500w),
+                      child: Text("${widget?.response?.projectFinalized ?? "NA"}", style: textStyle14px500w),
                     ),
                   ],
                 ),
@@ -182,7 +181,7 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
               verticalSpace(25.0),
 
               //Invoice number input layout
-              if ((response?.showInvoiceNumber??false) && !_invoiceNumberGenerated) invoiceNumberInput(),
+              if ((response?.showInvoiceNumber ?? false) && !_invoiceNumberGenerated) invoiceNumberInput(),
 
               //Generate invoice layout
               if (_invoiceNumberGenerated && !_invoiceGenerated) generateInvoiceWidget(),
@@ -381,11 +380,13 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
           ),
           InkWell(
             onTap: () {
-               _invoiceNumberRequest.brokerId = response?.brokerageID;
+              _invoiceNumberRequest.brokerId = response?.brokerageID;
               _invoiceNumberRequest.otyId = widget?.response?.sfdcid;
 
-              if ((_invoiceNumberRequest?.invoiceNumber ?? "").isEmpty) onError("Please enter Invoice number");
-              else _presenter.postSaveInvoiceNumber(context, _invoiceNumberRequest);
+              if ((_invoiceNumberRequest?.invoiceNumber ?? "").isEmpty)
+                onError("Please enter Invoice number");
+              else
+                _presenter.postSaveInvoiceNumber(context, _invoiceNumberRequest);
             },
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -462,10 +463,30 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                Text("Unit details", style: textStyle14px500w),
                 buildDialogRow("Unit Number", "${projectUnitResponse?.apartmentFinalized}"),
                 buildDialogRow("Tower", "${projectUnitResponse?.towerFinalized}"),
                 buildDialogRow("Carpet Area", "${projectUnitResponse?.carpetarea}"),
                 buildDialogRow("Agreement Value", "${projectUnitResponse?.totalAgreementValue}"),
+                verticalSpace(10.0),
+                Text("Payment details", style: textStyle14px500w),
+                buildDialogRow("Payment to Broker by BN Status", "${projectUnitResponse?.paymentToBrokerByBNStatus ?? ""}"),
+                buildDialogRow("Payment date", "${projectUnitResponse?.paymentDate ?? ""}"),
+                buildDialogRow("Amount Paid", "${projectUnitResponse?.amountPaid ?? ""}"),
+                buildDialogRow("Payment detail", "${projectUnitResponse?.paymentDetail ?? ""}"),
+                verticalSpace(10.0),
+                PmlButton(
+                  height: 30.0,
+                  text: !(projectUnitResponse?.paymentConfirmationByCP ?? false) ? "Acknowledge Payment" : "Payment Acknowledged",
+                  color: !(projectUnitResponse?.paymentConfirmationByCP ?? false)
+                      ? AppColors.colorPrimary
+                      : AppColors.colorPrimary.withOpacity(0.5),
+                  onTap: () async {
+                    if (!(projectUnitResponse?.paymentConfirmationByCP ?? false)) {
+                       _presenter.acknowledgePayment(context, widget?.response?.sfdcid, response.brokerageID);
+                    }
+                  },
+                )
               ],
             ),
           ),
@@ -602,6 +623,12 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
   void onInvoiceNumberSaved() {
     _invoiceNumberGenerated = true;
     setState(() {});
+  }
+
+  @override
+  void onPaymentAcknowledged() {
+    Utility.showSuccessToastB(context, "Payment Acknowledged");
+    Navigator.pop(context);
   }
 }
 // '"Eligible to Raise Invoice"
