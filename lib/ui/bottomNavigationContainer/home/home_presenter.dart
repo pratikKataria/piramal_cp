@@ -473,7 +473,8 @@ class HomePresenter {
       ..then((response) {
         Dialogs.hideLoader(context);
         PaymentConfirmationResponse projectUnitResponse = PaymentConfirmationResponse.fromJson(response.data);
-        _v.onPaymentAcknowledged();
+        if (projectUnitResponse.returnCode) _v.onPaymentAcknowledged();
+        else _v.onError(projectUnitResponse.message);
       })
       ..catchError((e) {
         Dialogs.hideLoader(context);

@@ -381,18 +381,21 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                 buildDialogRow("Amount Paid", "${projectUnitResponse?.amountPaid ?? ""}"),
                 buildDialogRow("Payment detail", "${projectUnitResponse?.paymentDetail ?? ""}"),
                 verticalSpace(10.0),
-                PmlButton(
-                  height: 30.0,
-                  text: !(projectUnitResponse?.paymentConfirmationByCP ?? false) ? "Acknowledge Payment" : "Payment Acknowledged",
-                  color: !(projectUnitResponse?.paymentConfirmationByCP ?? false)
-                      ? AppColors.colorPrimary
-                      : AppColors.colorPrimary.withOpacity(0.5),
-                  onTap: () async {
-                    if (!(projectUnitResponse?.paymentConfirmationByCP ?? false)) {
-                      _homePresenter.acknowledgePayment(context, projectUnitResponse.sfdcid, projectUnitResponse.brokerageRecordId);
-                    }
-                  },
-                )
+                if (projectUnitResponse?.paymentByBN ?? false)
+                  PmlButton(
+                    height: 30.0,
+                    text:
+                        !(projectUnitResponse?.paymentConfirmationByCP ?? false) ? "Acknowledge Payment" : "Payment Acknowledged",
+                    color: !(projectUnitResponse?.paymentConfirmationByCP ?? false)
+                        ? AppColors.colorPrimary
+                        : AppColors.colorPrimary.withOpacity(0.5),
+                    onTap: () async {
+                      if (!(projectUnitResponse?.paymentConfirmationByCP ?? false)) {
+                        _homePresenter.acknowledgePayment(
+                            context, projectUnitResponse.sfdcid, projectUnitResponse.brokerageRecordId);
+                      }
+                    },
+                  )
               ],
             ),
           ),

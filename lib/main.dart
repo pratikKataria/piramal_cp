@@ -67,6 +67,7 @@ Future<void> main() async {
   } else {
     await Firebase.initializeApp();
   }
+
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   await flutterLocalNotificationsPlugin

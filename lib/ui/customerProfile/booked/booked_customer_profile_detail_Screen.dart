@@ -475,18 +475,20 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
                 buildDialogRow("Amount Paid", "${projectUnitResponse?.amountPaid ?? ""}"),
                 buildDialogRow("Payment detail", "${projectUnitResponse?.paymentDetail ?? ""}"),
                 verticalSpace(10.0),
-                PmlButton(
-                  height: 30.0,
-                  text: !(projectUnitResponse?.paymentConfirmationByCP ?? false) ? "Acknowledge Payment" : "Payment Acknowledged",
-                  color: !(projectUnitResponse?.paymentConfirmationByCP ?? false)
-                      ? AppColors.colorPrimary
-                      : AppColors.colorPrimary.withOpacity(0.5),
-                  onTap: () async {
-                    if (!(projectUnitResponse?.paymentConfirmationByCP ?? false)) {
-                       _presenter.acknowledgePayment(context, widget?.response?.sfdcid, response.brokerageID);
-                    }
-                  },
-                )
+                if (projectUnitResponse?.paymentByBN ?? false)
+                  PmlButton(
+                    height: 30.0,
+                    text:
+                        !(projectUnitResponse?.paymentConfirmationByCP ?? false) ? "Acknowledge Payment" : "Payment Acknowledged",
+                    color: !(projectUnitResponse?.paymentConfirmationByCP ?? false)
+                        ? AppColors.colorPrimary
+                        : AppColors.colorPrimary.withOpacity(0.5),
+                    onTap: () async {
+                      if (!(projectUnitResponse?.paymentConfirmationByCP ?? false)) {
+                        _presenter.acknowledgePayment(context, widget?.response?.sfdcid, response.brokerageID);
+                      }
+                    },
+                  )
               ],
             ),
           ),
