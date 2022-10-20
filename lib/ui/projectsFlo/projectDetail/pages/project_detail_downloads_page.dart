@@ -6,7 +6,7 @@ import 'package:piramal_channel_partner/res/Images.dart';
 import 'package:piramal_channel_partner/res/constants.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/model/project_download_response.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
-import 'package:piramal_channel_partner/widgets/download_button.dart';
+import 'package:piramal_channel_partner/widgets/download_button_lwc.dart';
 import 'package:piramal_channel_partner/widgets/whats_app_button.dart';
 import 'package:piramal_channel_partner/widgets/whats_app_button_v3.dart';
 
@@ -64,7 +64,7 @@ class ProjectDetailDownloadPage extends StatelessWidget {
             //whats app and download
             WhatsAppButtonV3(response?.siteManagerMobile, response?.brochureWhatsappLink),
             horizontalSpace(8.0),
-            DownloadButton("${response?.projectId}", "$identifier"),
+            DownloadButtonLwc("${response?.projectId}", "$identifier"),
           ],
         ),
         verticalSpace(20.0),
@@ -87,7 +87,7 @@ class ProjectDetailDownloadPage extends StatelessWidget {
             //whats app and download
             WhatsAppButton(response?.message),
             horizontalSpace(8.0),
-            DownloadButton("${response.towerID}", Constants.FLOOR_PLAN),
+            DownloadButtonLwc("${response.towerID}", Constants.FLOOR_PLAN),
           ],
         ),
         verticalSpace(20.0),

@@ -8,7 +8,7 @@ import 'package:piramal_channel_partner/ui/currentPromotions/current_promo_prese
 import 'package:piramal_channel_partner/ui/currentPromotions/current_promo_view.dart';
 import 'package:piramal_channel_partner/ui/currentPromotions/model/current_promo_response.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
-import 'package:piramal_channel_partner/widgets/download_button.dart';
+import 'package:piramal_channel_partner/widgets/download_button_lwc.dart';
 import 'package:piramal_channel_partner/widgets/refresh_list_view.dart';
 import 'package:piramal_channel_partner/widgets/whats_app_button_v2.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -121,7 +121,7 @@ class _CurrentPromotionScreenState extends State<CurrentPromotionScreen> impleme
                           ),
                         ),
                         horizontalSpace(8.0),
-                        DownloadButton(currentPromoData?.sfdcid, Constants.CURRENT_PROMOTION),
+                        DownloadButtonLwc(currentPromoData?.sfdcid, Constants.CURRENT_PROMOTION),
                       ],
                     ),
                   ],
