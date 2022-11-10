@@ -84,7 +84,7 @@ class _CurrentPromotionScreenState extends State<CurrentPromotionScreen> impleme
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Container(
-            height: 130.0,
+            height: 152.0,
             decoration: BoxDecoration(
                 image: DecorationImage(
               image: MemoryImage(Utility.convertMemoryImage(currentPromoData.image)),
