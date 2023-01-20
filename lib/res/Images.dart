@@ -4,66 +4,58 @@
 
 class Images {
   static const base = 'assets/images/';
-  static const kStoryImgOne = base + 'img_story_one.png';
-  static const kStoryImgTwo = base + 'img_story_three.png';
-  static const kStoryImgThree = base + 'img_story_two.png';
-  static const kAppLogo = base + 'ic_app_logo.png';
-  static const kOnboardingNext = base + 'ic_next.png';
 
-  static const kGoogleImage = base + 'ic_google.png';
-  static const kFacebookImage = base + 'ic_facebook.png';
+  static const kAppIcon = base + "ic_app_logo.png";
 
-  static const kIconPerson = base + 'ic_person.png';
-  static const kIconPhone = base + 'ic_phone.png';
-  static const kIconLock = base + 'ic_lock.png';
-  static const kIconBack = base + 'ic_back.png';
+  static const kIconCalender = base + "ic_callender.png";
+  static const kIconFilter = base + "ic_filter.png";
+  static const kIconMenu = base + "ic_menu.png";
+  static const kIconPhone = base + "ic_phone.png";
+  static const kIconWhatsApp = base + "ic_whats_app.png";
 
-  static const kIconAboutUs = base + 'ic_about_us.png';
-  static const kIconEditProfile = base + 'ic_edit_profile.png';
-  static const kIconFeedback = base + 'ic_feedback.png';
-  static const kIconRateUs = base + 'ic_rate_us.png';
-  static const kIconRefer = base + 'ic_refer.png';
-  static const kIconSettings = base + 'ic_settings.png';
-  static const kIconTestHistory = base + 'ic_test_history.png';
-  static const kIconTnc = base + 'ic_tnc.png';
-  static const kIconFriend = base + 'ic_tnc.png';
-  static const kIconEmail = base + 'ic_email.png';
-  static const kIconHamburger = base + 'ic_hamburger.png';
-  static const kIconCheckbox = base + 'ic_checkbox.png';
-  static const kIconPen = base + 'ic_edit.png';
-  static const kIconBin = base + 'ic_delete.png';
-  static const kIconReferFriend = base + 'ic_refer.png';
-  static const kIconCircleRightArrow = base + 'ic_right.png';
+  static const kIconAssist = base + "ic_assists.png";
+  static const kIconCpEvents = base + "ic_cp_events.png";
+  static const kIconCurrentPromotion = base + "ic_current_promotions.png";
+  static const kIconHome = base + "ic_home.png";
+  static const kIconLeads = base + "ic_leads.png";
+  static const kIconProjects = base + "ic_projects.png";
+  static const kIconSetting = base + "ic_setting.png";
+  static const kIconicIntelligence = base + "ic_intelligence.png";
+  static const kIconicAssistPerson = base + "ic_assist_person.png";
+  static const kIconClock = base + "ic_clock.png";
+  static const kIconCpEventCalender = base + "ic_event_calender.png";
+  static const kIconChatLeft = base + "ic_chat_left.png";
+  static const kIconChatRight = base + "ic_chat_right.png";
+  static const kIconProject = base + "img_place.png";
+  static const kIconAmenities = base + "ic_amenities.png";
+  static const kIconDownload = base + "ic_download.png";
+  static const kIconOverview = base + "ic_overview.png";
+  static const kIconTower = base + "ic_tower.png";
+  static const kIconBrochure = base + "ic_brochure.png";
+  static const kIconPlan = base + "ic_plan.png";
+  static const kIconExplore = base + "ic_explore.png";
+  static const kIconLeaderboard = base + "ic_leaderboard.png";
+  static const kIconNotification = base + "ic_notification.png";
+  static const kIconTodayFollowup = base + "ic_today_followup.png";
+  static const kIconClose = base + "ic_close.png";
+  static const kIconUpload = base + "ic_upload.png";
+  static const kIconApproved = base + "ic_approved.png";
 
-  static const kPlaceHolderStream = base + 'ic_place_holder_sream.png';
-  static const kPlaceHolderProfile = base + 'ic_profile_temp.png';
-  static const kPlaceHolderBanner = base + 'img_placehoder_banner.png';
-  static const kPlaceHolderBanner2 = base + 'ic_banner_place_holder2.png';
+  static const kImageComingSoon = base + "img_comming_soon.png";
+  static const kImagePD1 = base + "img_pd_1.png";
+  static const kImagePD2 = base + "img_pd_2.png";
+  static const kImagePD3 = base + "img_pd_3.png";
+  static const kImagePD4 = base + "img_pd_4.png";
+  static const kIconRedirect = base + "ic_project_redirect.png";
 
-  static const kIconDocument = base + 'ic_document.png';
-  static const kIconHome = base + 'ic_home.png';
-  static const kIconChapter = base + 'ic_chapter.png';
 
-  static const kIconNetworkErrorPlaceHolder = base + 'ic_placeholder_network_error.png';
-
-  static const kIconComingSoon = base + 'ic_comming_soon.png';
-  static const kIconReportSuccess = base + 'ic_report_success.png';
-  static const kIconExpireToken = base + 'ic_expire.png';
-
-//placeholder delete from here
-  static const kPlaceHolderO1 = base + "ic_ob1.png";
-  static const kPlaceHolderO2 = base + "ic_ob2.png";
-  static const kPlaceHolderO3 = base + "ic_ob3.png";
-  static const kPlaceHolderO4 = base + "ic_ob4.png";
-  static const kPlaceHolderO5 = base + "ic_ob5.png";
-
-  static const kPlaceHolderReportO1 = base + "ic_report_1.png";
-  static const kPlaceHolderReportO2 = base + "ic_report_1.png";
-  static const kPlaceHolderReportO3 = base + "ic_report_1.png";
-
-  static const kPlaceHolderImgBasedQuestion = base + "img_based_question_placeholder.png";
-  static const kPlaceHolderImgBasedQuestion2 = base + "img_based_choose_placeholder.png";
-
-  static const kPlaceHolderO6 = base + "ic_profile_placeholder.png";
-  static const kIconCheckboxPlaceholder = base + 'ic_checkbox_placeholder.png';
+  static const kImgPlaceholder = base + "img_placeholder.png";
+  static const kImgPlaceholder1 = base + "img_placeholder_1.png";
+  static const kImgEventPlaceholder = base + "img_event_placeholder.png";
+  static const kImgEventPlaceholder1 = base + "img_event_placeholder_1.png";
+  static const kImgPlaceholderMap = base + "img_place_map.png";
+  static const kImgPlaceholderAmenities = base + "img_placeholder_amenities.png";
+  static const kImgPlaceholderCarousel1 = base + "img_carousel_1.png";
+  static const kImgPlaceholderCarousel2 = base + "img_carousel_2.png";
+  static const kImgPlaceholderCarousel3 = base + "img_carousel_3.png";
 }

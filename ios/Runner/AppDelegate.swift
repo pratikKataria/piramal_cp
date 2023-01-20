@@ -1,6 +1,6 @@
 import UIKit
 import Flutter
-
+//com.stetig.piramalChannelPartner
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
   override func application(
