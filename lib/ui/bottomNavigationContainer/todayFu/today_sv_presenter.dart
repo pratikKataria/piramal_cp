@@ -34,14 +34,14 @@ class TodaySVPresenter {
     String userId = await Utility.uID();
     var body = {"CustomerAccountID": "$userId"} /*001p000000y1SqW*/;
     apiController.post(EndPoints.TODAY_SV, body: body, headers: await Utility.header())
-      ..then((response) {
+      ..then((response) async {
         List<TodaySvResponse> brList = [];
         var listOfDynamic = response.data as List;
         listOfDynamic.forEach((element) => brList.add(TodaySvResponse.fromJson(element)));
 
         _v.onSvListFetched(brList);
       })
-      ..catchError((e) {
+      ..catchError((e) async {
         _v.onError(e.message);
         Utility.log(tag, e.toString());
       });
@@ -77,8 +77,8 @@ class TodaySVPresenter {
 
     Dialogs.showLoader(context, "Tagging customer please wait ...");
     apiController.post(EndPoints.COMPLETE_TAGGING, body: body, headers: await Utility.header())
-      ..then((response) {
-        Dialogs.hideLoader(context);
+      ..then((response) async {
+        await Dialogs.hideLoader(context);
         List<OTPResponse> brList = [];
         var listOfDynamic = response.data as List;
         listOfDynamic.forEach((element) => brList.add(OTPResponse.fromJson(element)));
@@ -95,8 +95,8 @@ class TodaySVPresenter {
           _v.onError(bookingResponse.message);
         }
       })
-      ..catchError((e) {
-        Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }

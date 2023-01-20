@@ -35,8 +35,8 @@ class CPEventPresenter {
 
     Dialogs.showLoader(context, "Fetching cp event data ...");
     apiController.post(EndPoints.CP_EVENT_LIST, body: body, headers: await Utility.header())
-      ..then((response) {
-        Dialogs.hideLoader(context);
+      ..then((response) async {
+        await Dialogs.hideLoader(context);
         List<CpEventResponse> brList = [];
         var listOfDynamic = response.data as List;
         listOfDynamic.forEach((element) => brList.add(CpEventResponse.fromJson(element)));
@@ -53,8 +53,8 @@ class CPEventPresenter {
           _v.onError(bookingResponse.message);
         }
       })
-      ..catchError((e) {
-        Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }
@@ -91,8 +91,8 @@ class CPEventPresenter {
 
     Dialogs.showLoader(context, "Updating event status ...");
     apiController.post(EndPoints.CP_EVENT_AVAILABILITY, body: body, headers: await Utility.header())
-      ..then((response) {
-        Dialogs.hideLoader(context);
+      ..then((response) async {
+        await Dialogs.hideLoader(context);
         CpEventStatusUpdateResponse cpEventStatusUpdateResponse = CpEventStatusUpdateResponse.fromJson(response.data);
         if (cpEventStatusUpdateResponse.returnCode) {
           _v.onCpEventStatusUpdated(cpEventStatusUpdateResponse);
@@ -100,8 +100,8 @@ class CPEventPresenter {
           _v.onError(cpEventStatusUpdateResponse.message);
         }
       })
-      ..catchError((e) {
-        Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }

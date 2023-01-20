@@ -32,7 +32,7 @@ class BasePresenter {
 
     var body = FormData.fromMap(bodyReq);
     apiController.post(EndPoints.ACCESS_TOKEN, body: body)
-      ..then((response) {
+      ..then((response) async {
         TokenResponse tokenResponse = TokenResponse.fromJson(response.data);
         if (_v is HomeView) {
           HomeView loginView = _v as HomeView;
@@ -45,7 +45,7 @@ class BasePresenter {
           loginView.onTokenGenerated(tokenResponse);
         }
       })
-      ..catchError((e) {});
+      ..catchError((e) async {});
   }
 
   void downloadFile(String link) async {
@@ -55,13 +55,13 @@ class BasePresenter {
     }
 
     apiController.get(link)
-      ..then((response) {
+      ..then((response) async {
         Utility.log(tag, response);
         // TokenResponse tokenResponse = TokenResponse.fromJson(response.data);
         // HomeView loginView = _v as HomeView;
         // loginView.onTokenRegenerated(tokenResponse);
       })
-      ..catchError((e) {});
+      ..catchError((e) async {});
   }
 
   void openFileUsingLWC(BuildContext context, String recordId) async {
@@ -78,8 +78,8 @@ class BasePresenter {
 
     Dialogs.showLoader(context, "Preparing lwc download page ...");
     apiController.post(EndPoints.DOWNLOAD_LWC, body: body, headers: await Utility.header())
-      ..then((response) {
-        Dialogs.hideLoader(context);
+      ..then((response) async {
+        await Dialogs.hideLoader(context);
         Utility.log(tag, response);
         LwcDownloadResponse lwcDownloadResponse = LwcDownloadResponse.fromJson(response.data);
         if (_v is LwcView) {
@@ -90,8 +90,8 @@ class BasePresenter {
           _v.onError("No Lwc View Found");
         }
       })
-      ..catchError((e) {
-        Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }

@@ -51,7 +51,7 @@ class DownloadButton extends StatelessWidget {
     Dialogs.showLoader(context, "Getting your file ready please wait ...");
     apiController.post(EndPoints.GET_PROJECT_DOWNLOAD_LINK, body: body, headers: await Utility.header())
       ..then((response) async {
-        Dialogs.hideLoader(context);
+        await Dialogs.hideLoader(context);
         Utility.log("Download Button", response);
         ProjectDownloadLinkReponse projectDownloadLinkReponse = ProjectDownloadLinkReponse.fromJson(response.data);
 
@@ -67,8 +67,8 @@ class DownloadButton extends StatelessWidget {
           Utility.showErrorToastB(context, projectDownloadLinkReponse.message);
         }
       })
-      ..catchError((e) {
-        Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
         Utility.log("Download Button", e);
         Utility.showErrorToastB(context, "$e");
       });

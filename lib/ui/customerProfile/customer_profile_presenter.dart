@@ -50,8 +50,8 @@ class CustomerProfilePresenter extends BasePresenter {
 
     Dialogs.showLoader(context, "Please wait scheduling your visit ...");
     apiController.post(EndPoints.SCHEDULE_VISIT, body: body, headers: await Utility.header())
-      ..then((response) {
-        Dialogs.hideLoader(context);
+      ..then((response) async {
+        await Dialogs.hideLoader(context);
         ScheduleVisitResponse visitResponse = ScheduleVisitResponse.fromJson(response.data);
         visitResponse.schDate = visitDate;
         if (visitResponse.returnCode) {
@@ -60,8 +60,8 @@ class CustomerProfilePresenter extends BasePresenter {
           _v.onError(visitResponse.message);
         }
       })
-      ..catchError((e) {
-        Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }
@@ -84,13 +84,13 @@ class CustomerProfilePresenter extends BasePresenter {
 
     Dialogs.showLoader(context, "Fetching unit details ...");
     apiController.post(EndPoints.UNIT_DETAIL, body: body, headers: await Utility.header())
-      ..then((response) {
-        Dialogs.hideLoader(context);
+      ..then((response) async {
+        await Dialogs.hideLoader(context);
         ProjectUnitResponse projectUnitResponse = ProjectUnitResponse.fromJson(response.data);
         _v.onProjectUnitResponseFetched(projectUnitResponse);
       })
-      ..catchError((e) {
-        Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }
@@ -118,8 +118,8 @@ class CustomerProfilePresenter extends BasePresenter {
 
     Dialogs.showLoader(context, "Updating payment status ...");
     apiController.post(EndPoints.PAYMENT_CONFIRMATION, body: body, headers: await Utility.header())
-      ..then((response) {
-        Dialogs.hideLoader(context);
+      ..then((response) async {
+        await Dialogs.hideLoader(context);
         PaymentConfirmationResponse projectUnitResponse = PaymentConfirmationResponse.fromJson(response.data);
         if (projectUnitResponse.returnCode) {
           _v.onPaymentAcknowledged();
@@ -127,8 +127,8 @@ class CustomerProfilePresenter extends BasePresenter {
           _v.onError(projectUnitResponse.message);
         }
       })
-      ..catchError((e) {
-        Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }
@@ -152,8 +152,8 @@ class CustomerProfilePresenter extends BasePresenter {
     // var body = {"CustomerAccountID": "001p000000y1SqWAAU", "opportunityid": "006p000000AeMAtAAN"};
     Dialogs.showLoader(context, "Fetching details ...");
     apiController.post(EndPoints.GET_INVOICE, body: body, headers: await Utility.header())
-      ..then((response) {
-        Dialogs.hideLoader(context);
+      ..then((response) async {
+        await Dialogs.hideLoader(context);
 
         List<InvoiceResponse> brList = [];
         var listOfDynamic = response.data as List;
@@ -167,8 +167,8 @@ class CustomerProfilePresenter extends BasePresenter {
 
         _v.onInvoiceDetailFetched(brList);
       })
-      ..catchError((e) {
-        Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }
@@ -194,14 +194,14 @@ class CustomerProfilePresenter extends BasePresenter {
     };
     Dialogs.showLoader(context, "Adding comment ...");
     apiController.post(EndPoints.ADD_COMMENTS, body: body, headers: await Utility.header())
-      ..then((response) {
-        Dialogs.hideLoader(context);
+      ..then((response) async {
+        await Dialogs.hideLoader(context);
         (_v as WalkinView).onCommentAdded();
         // InvoiceResponse projectUnitResponse = InvoiceResponse.fromJson(response.data);
         // _v.onInvoiceDetailFetched(projectUnitResponse);
       })
-      ..catchError((e) {
-        Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
         // (_v as WalkinView).onCommentAddError("$e");
         ApiErrorParser.getResult(e, _v);
       });
@@ -225,8 +225,8 @@ class CustomerProfilePresenter extends BasePresenter {
 
     Dialogs.showLoader(context, "Please wait fetching your project list ...");
     apiController.post(EndPoints.GET_COMMENTS, body: body, headers: await Utility.header())
-      ..then((response) {
-        Dialogs.hideLoader(context);
+      ..then((response) async {
+        await Dialogs.hideLoader(context);
         List<Chatresponse> projectListResponse = [];
         var listOfDynamic = response.data as List;
         listOfDynamic.forEach((element) => projectListResponse.add(Chatresponse.fromJson(element)));
@@ -245,8 +245,8 @@ class CustomerProfilePresenter extends BasePresenter {
           v.onNoVisitFound();
         }
       })
-      ..catchError((e) {
-        Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }
@@ -275,8 +275,8 @@ class CustomerProfilePresenter extends BasePresenter {
     // var body = {"CustomerAccountID": "001p000000y1SqWAAU", "opportunityid": "006p000000AeMAtAAN"};
     Dialogs.showLoader(context, "Generating invoice ...");
     apiController.post(EndPoints.POST_GENERATE_INVOICE, body: body, headers: await Utility.header())
-      ..then((response) {
-        Dialogs.hideLoader(context);
+      ..then((response) async {
+        await Dialogs.hideLoader(context);
 
         GenerateInvoiceResponse bookingResponse = GenerateInvoiceResponse.fromJson(response.data);
 
@@ -286,8 +286,8 @@ class CustomerProfilePresenter extends BasePresenter {
           _v.onError(bookingResponse.message);
         }
       })
-      ..catchError((e) {
-        Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }
@@ -307,8 +307,8 @@ class CustomerProfilePresenter extends BasePresenter {
 
     Dialogs.showLoader(context, "Getting T&C ...");
     apiController.post(EndPoints.POST_INVOICE_TERMS_AND_CONDITION, headers: await Utility.header())
-      ..then((response) {
-        Dialogs.hideLoader(context);
+      ..then((response) async {
+        await Dialogs.hideLoader(context);
 
         InvoiceTermsAndCondition invoiceTermsAndCondition = InvoiceTermsAndCondition.fromJson(response.data);
 
@@ -318,8 +318,8 @@ class CustomerProfilePresenter extends BasePresenter {
           _v.onError(invoiceTermsAndCondition.message);
         }
       })
-      ..catchError((e) {
-        Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }
@@ -348,8 +348,8 @@ class CustomerProfilePresenter extends BasePresenter {
 
     Dialogs.showLoader(context, "Saving Invoice No. ...");
     apiController.post(EndPoints.POST_SAVE_INVOICE_NO, body: body, headers: await Utility.header())
-      ..then((response) {
-        Dialogs.hideLoader(context);
+      ..then((response) async {
+        await Dialogs.hideLoader(context);
 
         InvoiceNumberResponse invoiceTermsAndCondition = InvoiceNumberResponse.fromJson(response.data);
 
@@ -359,8 +359,8 @@ class CustomerProfilePresenter extends BasePresenter {
           _v.onError(invoiceTermsAndCondition.message);
         }
       })
-      ..catchError((e) {
-        Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }

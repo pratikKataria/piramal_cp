@@ -49,7 +49,7 @@ class NotificationPresenter {
           // _v.onError(bookingResponse.message);
         }
       })
-      ..catchError((e) {
+      ..catchError((e) async {
         ApiErrorParser.getResult(e, _v);
       });
   }
@@ -87,7 +87,7 @@ class NotificationPresenter {
           // _v.onError(bookingResponse.message);
         }
       })
-      ..catchError((e) {
+      ..catchError((e) async {
         ApiErrorParser.getResult(e, _v);
       });
   }

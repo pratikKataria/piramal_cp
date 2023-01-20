@@ -34,8 +34,8 @@ class MyProfilePresenter {
 
     Dialogs.showLoader(context, "Please wait fetching your project list ...");
     apiController.post(EndPoints.MY_PROFILE, body: body, headers: await Utility.header())
-      ..then((response) {
-        Dialogs.hideLoader(context);
+      ..then((response) async {
+        await Dialogs.hideLoader(context);
         MyProfileResponse myAssistResponse = MyProfileResponse.fromJson(response.data);
         if (myAssistResponse.returnCode) {
           _v.onProfileDataFetch(myAssistResponse);
@@ -43,8 +43,8 @@ class MyProfilePresenter {
           _v.onError(myAssistResponse.message);
         }
       })
-      ..catchError((e) {
-        Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }
@@ -67,11 +67,11 @@ class MyProfilePresenter {
     // var body = {"CustomerAccountID": "001p000000y1SqWAAU"};
 
     apiController.post(EndPoints.MY_PROFILE, body: body, headers: await Utility.header())
-      ..then((response) {
+      ..then((response) async {
         MyProfileResponse myAssistResponse = MyProfileResponse.fromJson(response.data);
         _v.onProfileDataFetch(myAssistResponse);
       })
-      ..catchError((e) {
+      ..catchError((e) async {
         ApiErrorParser.getResult(e, _v);
       });
   }
@@ -98,12 +98,12 @@ class MyProfilePresenter {
 
     Dialogs.showLoader(context, "Uploading profile please wait ...");
     apiController.post(EndPoints.PROFILE_PIC_UPLOAD, body: body, headers: await Utility.header())
-      ..then((response) {
-        Dialogs.hideLoader(context);
+      ..then((response) async {
+        await Dialogs.hideLoader(context);
          _v.onProfileUploaded();
       })
-      ..catchError((e) {
-        Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }

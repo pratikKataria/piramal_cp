@@ -6,12 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/api/api_controller_expo.dart';
 import 'package:piramal_channel_partner/api/api_end_points.dart';
 import 'package:piramal_channel_partner/api/api_error_parser.dart';
+import 'package:piramal_channel_partner/env/environment_values.dart';
 import 'package:piramal_channel_partner/global/variables.dart';
 import 'package:piramal_channel_partner/ui/base/base_presenter.dart';
 import 'package:piramal_channel_partner/ui/core/core_view.dart';
 import 'package:piramal_channel_partner/ui/core/login/login_view.dart';
 import 'package:piramal_channel_partner/ui/core/login/model/login_response.dart';
 import 'package:piramal_channel_partner/ui/core/login/model/otp_response.dart';
+import 'package:piramal_channel_partner/ui/core/login/model/token_response.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/document_upload_request.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/document_upload_response.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/relation_manager_list_response.dart';
@@ -61,8 +63,8 @@ class CorePresenter extends BasePresenter {
 
     Dialogs.showLoader(context, "Sending OTP ...");
     apiController.post(EndPoints.SEND_OTP, body: body, headers: await Utility.header())
-      ..then((response) {
-        Dialogs.hideLoader(context);
+      ..then((response) async {
+        await Dialogs.hideLoader(context);
         OTPResponse otpResponse = OTPResponse.fromJson(response.data);
         if (otpResponse.returnCode == false) {
           _v.onError(otpResponse.message);
@@ -78,8 +80,8 @@ class CorePresenter extends BasePresenter {
         SignupView signupView = _v as SignupView;
         signupView.onOtpSent(mobileOtp, 1);
       })
-      ..catchError((e) {
-        Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }
@@ -108,8 +110,8 @@ class CorePresenter extends BasePresenter {
 
     Dialogs.showLoader(context, "Sending OTP to $value");
     apiController.post(EndPoints.SEND_OTP_V2, body: body, headers: await Utility.header())
-      ..then((response) {
-        Dialogs.hideLoader(context);
+      ..then((response) async {
+        await Dialogs.hideLoader(context);
         OTPResponse otpResponse = OTPResponse.fromJson(response.data);
         if (otpResponse.returnCode == false) {
           _v.onError(otpResponse.message);
@@ -125,8 +127,8 @@ class CorePresenter extends BasePresenter {
         SignupView signupView = _v as SignupView;
         signupView.onOtpSent(mobileOtp, 0);
       })
-      ..catchError((e) {
-        Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }
@@ -161,8 +163,8 @@ class CorePresenter extends BasePresenter {
         "username=7506775158&password=Stetig@123&To=$value&senderid=PRLSLS&feedid=372501&Text=<%23> Your OTP for PRL CP App is $mobileOtp. Kindly use this for login. $appSignature";
     Dialogs.showLoader(context, "Sending OTP to $value");
     apiController.get("${EndPoints.SEND_MOBILE_OTP}$queryParams", headers: await Utility.header())
-      ..then((response) {
-        Dialogs.hideLoader(context);
+      ..then((response) async {
+        await Dialogs.hideLoader(context);
         Utility.log(tag, response.data);
 
         if (_v is LoginView) {
@@ -174,8 +176,8 @@ class CorePresenter extends BasePresenter {
         SignupView signupView = _v as SignupView;
         signupView.onOtpSent(mobileOtp, 1);
       })
-      ..catchError((e) {
-        Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }
@@ -202,8 +204,8 @@ class CorePresenter extends BasePresenter {
 
     Dialogs.showLoader(context, "Verifying ...");
     apiController.post(EndPoints.VERIFY_EMAIL, body: body, headers: await Utility.header())
-      ..then((response) {
-        Dialogs.hideLoader(context);
+      ..then((response) async {
+        await Dialogs.hideLoader(context);
         LoginResponse loginResponse = LoginResponse.fromJson(response.data);
         LoginView loginView = _v as LoginView;
         if (loginResponse.returnCode)
@@ -213,8 +215,8 @@ class CorePresenter extends BasePresenter {
         else
           loginView.onError(loginResponse.message);
       })
-      ..catchError((e) {
-        Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
         _v.onError(e.message);
         Utility.log(tag, e.toString());
       });
@@ -236,8 +238,8 @@ class CorePresenter extends BasePresenter {
 
     Dialogs.showLoader(context, "Verifying ...");
     apiController.post(EndPoints.VERIFY_MOBILE, body: body, headers: await Utility.header())
-      ..then((response) {
-        Dialogs.hideLoader(context);
+      ..then((response) async {
+        await Dialogs.hideLoader(context);
         LoginResponse loginResponse = LoginResponse.fromJson(response.data);
         LoginView loginView = _v as LoginView;
         if (loginResponse.returnCode)
@@ -245,8 +247,8 @@ class CorePresenter extends BasePresenter {
         else
           loginView.onError(loginResponse.message);
       })
-      ..catchError((e) {
-        Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
         _v.onError(e.message);
         Utility.log(tag, e.toString());
       });
@@ -264,8 +266,8 @@ class CorePresenter extends BasePresenter {
 
     Dialogs.showLoader(context, "Please wait creating user ...");
     apiController.post(EndPoints.SIGN_UP, body: request.toJson(), headers: await Utility.header())
-      ..then((response) {
-        Dialogs.hideLoader(context);
+      ..then((response) async {
+        await Dialogs.hideLoader(context);
         Utility.log(tag, response.data);
         SignupResponse signupResponse = SignupResponse.fromJson(response.data);
         UploadDocumentView signUpView = _v as UploadDocumentView;
@@ -274,8 +276,8 @@ class CorePresenter extends BasePresenter {
         else
           signUpView.onError(signupResponse.message);
       })
-      ..catchError((e) {
-        Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }
@@ -291,7 +293,7 @@ class CorePresenter extends BasePresenter {
     if (!await NetworkCheck.check()) return;
 
     apiController.post(EndPoints.GET_R_MANAGER_LIST, headers: await Utility.header())
-      ..then((response) {
+      ..then((response) async {
         Utility.log(tag, response.data);
         List<RelationManagerListResponse> brList = [];
         var listOfDynamic = response.data as List;
@@ -301,7 +303,7 @@ class CorePresenter extends BasePresenter {
         SignupView signUpView = _v as SignupView;
         signUpView.onRelationManagerListFetched(brList);
       })
-      ..catchError((e) {
+      ..catchError((e) async {
         ApiErrorParser.getResult(e, _v);
       });
   }
@@ -317,7 +319,7 @@ class CorePresenter extends BasePresenter {
     if (!await NetworkCheck.check()) return;
 
     apiController.post(EndPoints.GET_R_MANAGER_LIST, headers: await Utility.header())
-      ..then((response) {
+      ..then((response) async {
         Utility.log(tag, response.data);
         List<String> brList = [];
 
@@ -334,7 +336,7 @@ class CorePresenter extends BasePresenter {
         UploadDocumentView signUpView = _v as UploadDocumentView;
         signUpView.onTypeOfFirmFetched(brList);
       })
-      ..catchError((e) {
+      ..catchError((e) async {
         ApiErrorParser.getResult(e, _v);
       });
   }
@@ -353,15 +355,15 @@ class CorePresenter extends BasePresenter {
 
     Dialogs.showLoader(context, "Please wait uploading document ...");
     apiController.post(EndPoints.CP_EMP_DOC_UPLOAD, body: request.toJson(), headers: await Utility.header())
-      ..then((response) {
-        Dialogs.hideLoader(context);
+      ..then((response) async {
+        await Dialogs.hideLoader(context);
         Utility.log(tag, response.data);
         DocumentUploadResponse documentUploadResponse = DocumentUploadResponse.fromJson(response.data);
         UploadDocumentView signUpView = _v as UploadDocumentView;
         signUpView.onDocumentUploaded(documentUploadResponse);
       })
-      ..catchError((e) {
-        Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }
@@ -378,9 +380,9 @@ class CorePresenter extends BasePresenter {
 
     Dialogs.showLoader(context, "Getting terms and condition please wait ...");
     apiController.post(EndPoints.TERMS_AND_CONDITION, headers: await Utility.header())
-      ..then((response) {
+      ..then((response) async {
         Utility.log(tag, response.data);
-        Dialogs.hideLoader(context);
+        await Dialogs.hideLoader(context);
         TermsAndConditionResponse termsAndConditionResponse = TermsAndConditionResponse.fromJson(response.data);
         UploadDocumentView view = _v as UploadDocumentView;
         if (termsAndConditionResponse.returnCode) {
@@ -389,8 +391,8 @@ class CorePresenter extends BasePresenter {
           _v.onError(termsAndConditionResponse.message);
         }
       })
-      ..catchError((e) {
-        Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }
@@ -414,9 +416,9 @@ class CorePresenter extends BasePresenter {
 
     Dialogs.showLoader(context, "Checking user please wait ...");
     apiController.post(EndPoints.SIGNUP_VALIDATION_CHECK, body: body, headers: await Utility.header())
-      ..then((response) {
+      ..then((response) async {
         Utility.log(tag, response.data);
-        Dialogs.hideLoader(context);
+        await Dialogs.hideLoader(context);
         SignupValidationCheckResponse termsAndConditionResponse = SignupValidationCheckResponse.fromJson(response.data);
         SignupView view = _v as SignupView;
         // if (termsAndConditionResponse.returnCode) {
@@ -425,8 +427,8 @@ class CorePresenter extends BasePresenter {
         //   _v.onError(termsAndConditionResponse.message);
         // }
       })
-      ..catchError((e) {
-        Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }
@@ -457,16 +459,16 @@ class CorePresenter extends BasePresenter {
     List<PostUserDocumentResponse> postUserDocumentResponseList = [];
     await Future.wait(bodyList.map(
       (e) async => apiController.post(EndPoints.POST_DOCUMENTS_SIGNUP, body: e, headers: await Utility.header())
-        ..then((response) {
+        ..then((response) async {
           Utility.log(tag, response.data);
           PostUserDocumentResponse postUserDocumentResponse = PostUserDocumentResponse.fromJson(response.data);
           postUserDocumentResponseList.add(postUserDocumentResponse);
         })
-        ..catchError((e) {
+        ..catchError((e) async {
           ApiErrorParser.getResult(e, _v);
         }),
     ));
-    Dialogs.hideLoader(context);
+    await Dialogs.hideLoader(context);
 
     bool allOk = true;
     postUserDocumentResponseList.forEach((element) {
@@ -495,16 +497,16 @@ class CorePresenter extends BasePresenter {
     await Future.wait<Response>(
       typeOfFirmList
           .map((e) async => apiController.post(EndPoints.TYPE_OF_FIRM, body: {"Typeoffirm": e}, headers: await Utility.header())
-            ..then((response) {
+            ..then((response) async {
               Utility.log(tag, response.data);
               responseMap[e] = TypeOfDocumentResponse.fromJson(response.data);
             })
-            ..catchError((e) {
+            ..catchError((e) async {
               ApiErrorParser.getResult(e, _v);
             }))
           .toList(),
     );
-    Dialogs.hideLoader(context);
+    await Dialogs.hideLoader(context);
 
     if (_v is UploadDocumentView) (_v as UploadDocumentView).onFirmsDocumentFetched(responseMap);
   }
@@ -523,14 +525,14 @@ class CorePresenter extends BasePresenter {
 
     Dialogs.showLoader(context, "Please wait fetching document list");
     apiController.post(EndPoints.TYPE_OF_FIRM, body: {"Typeoffirm": value}, headers: await Utility.header())
-      ..then((response) {
-        Dialogs.hideLoader(context);
+      ..then((response) async {
+        await Dialogs.hideLoader(context);
         Utility.log(tag, response.data);
         TypeOfDocumentResponse typeOfDocumentResponse = TypeOfDocumentResponse.fromJson(response.data);
         (_v as UploadDocumentView).onTypeOfFirmFetchedV2(typeOfDocumentResponse);
       })
-      ..catchError((e) {
-        Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
 
@@ -557,8 +559,8 @@ class CorePresenter extends BasePresenter {
     Dialogs.showLoader(context, "Please wait uploading user document");
     List<PostUserDocumentResponse> postUserDocumentResponseList = [];
     apiController.post(EndPoints.POST_PENDING_DOCUMENTS, body: body, headers: await Utility.header())
-      ..then((response) {
-        Dialogs.hideLoader(context);
+      ..then((response) async {
+        await Dialogs.hideLoader(context);
         Utility.log(tag, response.data);
         PostUserDocumentResponse postUserDocumentResponse = PostUserDocumentResponse.fromJson(response.data);
         postUserDocumentResponseList.add(postUserDocumentResponse);
@@ -568,10 +570,27 @@ class CorePresenter extends BasePresenter {
           _v.onError(postUserDocumentResponse.message);
         }
       })
-      ..catchError((e) {
-        Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
+  }
+
+  void getAccessToken2() async {
+    if (!await NetworkCheck.check()) {
+      _v.onError("No Network Found");
+      return;
+    }
+
+    var bodyReq = EnvironmentValues.getTokenBody();
+
+    var body = FormData.fromMap(bodyReq);
+    apiController.post(EndPoints.ACCESS_TOKEN, body: body)
+      ..then((response) async {
+        TokenResponse tokenResponse = TokenResponse.fromJson(response.data);
+        if (_v is LoginView) (_v as LoginView).onTokenGenerated2(tokenResponse);
+      })
+      ..catchError((e) async {});
   }
 
   int _genRandomNumber() {

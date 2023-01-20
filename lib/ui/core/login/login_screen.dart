@@ -37,6 +37,7 @@ class _LoginScreenState extends State<LoginScreen> with CodeAutoFill implements 
   CorePresenter presenter;
   int otp;
   bool firstTime = true;
+  bool isTokenGenerated = false;
 
   @override
   void initState() {
@@ -226,12 +227,15 @@ class _LoginScreenState extends State<LoginScreen> with CodeAutoFill implements 
       height: 36,
       text: "$text",
       onTap: () {
-        if (otp == null)
-          sendOTP();
-        else
+        FocusScope.of(context).unfocus();
+        if (otp == null) {
+          if (isTokenGenerated)
+            sendOTP();
+          else
+            presenter.getAccessToken2();
+        } else {
           verifyOTP();
-
-        // Navigator.pushNamed(context, Screens.kHomeBase);
+        }
       },
     );
   }
@@ -263,6 +267,7 @@ class _LoginScreenState extends State<LoginScreen> with CodeAutoFill implements 
     //Save token
     var currentUser = CurrentUser()..tokenResponse = tokenResponse;
     AuthUser.getInstance().saveToken(currentUser);
+    isTokenGenerated = true;
   }
 
   @override
@@ -300,5 +305,17 @@ class _LoginScreenState extends State<LoginScreen> with CodeAutoFill implements 
   void codeUpdated() {
     otpTextController.text = code;
     setState(() {});
+  }
+
+  @override
+  void onTokenGenerated2(TokenResponse tokenResponse) {
+    _tokenResponse = tokenResponse;
+
+    //Save token
+    var currentUser = CurrentUser()..tokenResponse = tokenResponse;
+    AuthUser.getInstance().saveToken(currentUser);
+
+    //
+    sendOTP();
   }
 }

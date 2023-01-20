@@ -462,7 +462,7 @@ class _SignupScreenState extends State<SignupScreen> with CodeAutoFill implement
     LoginResponse loginResponse = LoginResponse();
     loginResponse.accountId = signupResponse.brokerAccountID;
 
-    Dialogs.hideLoader(context);
+    await Dialogs.hideLoader(context);
     var currentUser = await AuthUser.getInstance().getCurrentUser();
     currentUser.userCredentials = loginResponse;
     AuthUser.getInstance().login(currentUser);
@@ -485,9 +485,9 @@ class _SignupScreenState extends State<SignupScreen> with CodeAutoFill implement
   }
 
   @override
-  onOtpSent(int otp, provider) {
+  onOtpSent(int otp, provider) async {
     Utility.showSuccessToastB(context, "OTP sent successfully");
-    Dialogs.hideLoader(context);
+    await Dialogs.hideLoader(context);
     //0 for email and 1 for mobile
     if (provider == 1)
       mobileOTP = otp;

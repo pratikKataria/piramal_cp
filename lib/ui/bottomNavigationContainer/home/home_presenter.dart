@@ -62,7 +62,7 @@ class HomePresenter {
           // _v.onError(bookingResponse.message);
         }
       })
-      ..catchError((e) {
+      ..catchError((e) async {
         _v.onError(e.message);
         ApiErrorParser.getResult(e, _v);
       });
@@ -87,8 +87,8 @@ class HomePresenter {
 
     // Dialogs.showLoader(context, "Please wait fetching your data ...");
     apiController.post(EndPoints.GET_WALK_IN, body: body, headers: await Utility.header())
-      ..then((response) {
-        // Dialogs.hideLoader(context);
+      ..then((response) async {
+        // await Dialogs.hideLoader(context);
         List<BookingResponse> brList = [];
         var listOfDynamic = response.data as List;
         listOfDynamic.forEach((element) => brList.add(BookingResponse.fromJson(element)));
@@ -105,8 +105,8 @@ class HomePresenter {
           // _v.onError(bookingResponse.message);
         }
       })
-      ..catchError((e) {
-        // Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        // await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }
@@ -129,7 +129,7 @@ class HomePresenter {
     // var body = {"CustomerAccountId": "001p000000y1SqW"};
 
     apiController.post(EndPoints.GET_WALK_IN, body: body, headers: await Utility.header())
-      ..then((response) {
+      ..then((response) async {
         List<BookingResponse> brList = [];
         var listOfDynamic = response.data as List;
         listOfDynamic.forEach((element) => brList.add(BookingResponse.fromJson(element)));
@@ -146,7 +146,7 @@ class HomePresenter {
           // _v.onError(bookingResponse.message);
         }
       })
-      ..catchError((e) {
+      ..catchError((e) async {
         ApiErrorParser.getResult(e, _v);
       });
   }
@@ -173,8 +173,8 @@ class HomePresenter {
     };
     Dialogs.showLoader(context, "Please wait scheduling your visit ...");
     apiController.post(EndPoints.SCHEDULE_VISIT, body: body, headers: await Utility.header())
-      ..then((response) {
-        Dialogs.hideLoader(context);
+      ..then((response) async {
+        await Dialogs.hideLoader(context);
         ScheduleVisitResponse visitResponse = ScheduleVisitResponse.fromJson(response.data);
         visitResponse.schDate = visitDate;
         visitResponse.opportunityName = name??"";
@@ -184,8 +184,8 @@ class HomePresenter {
           _v.onError(visitResponse.message);
         }
       })
-      ..catchError((e) {
-        Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }
@@ -209,8 +209,8 @@ class HomePresenter {
 
     // Dialogs.showLoader(context, "Fetching cp event data ...");
     apiController.post(EndPoints.CP_EVENT_LIST, body: body, headers: await Utility.header())
-      ..then((response) {
-        // Dialogs.hideLoader(context);
+      ..then((response) async {
+        // await Dialogs.hideLoader(context);
         List<CpEventResponse> brList = [];
         var listOfDynamic = response.data as List;
         listOfDynamic.forEach((element) => brList.add(CpEventResponse.fromJson(element)));
@@ -227,8 +227,8 @@ class HomePresenter {
           _v.noEventPresent();
         }
       })
-      ..catchError((e) {
-        // Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        // await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }
@@ -254,8 +254,8 @@ class HomePresenter {
 
     Dialogs.showLoader(context, "Fetching unit details ...");
     apiController.post(EndPoints.PROJECT_UNIT_DETAILS, body: body, headers: await Utility.header())
-      ..then((response) {
-        Dialogs.hideLoader(context);
+      ..then((response) async {
+        await Dialogs.hideLoader(context);
         ProjectUnitResponse projectUnitResponse = ProjectUnitResponse.fromJson(response.data);
         if (projectUnitResponse.returnCode) {
           _v.onProjectUnitResponseFetched(projectUnitResponse);
@@ -263,8 +263,8 @@ class HomePresenter {
           _v.onError(projectUnitResponse.message);
         }
       })
-      ..catchError((e) {
-        Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }
@@ -298,8 +298,8 @@ class HomePresenter {
 
     Dialogs.showLoader(context, "Tagging customer please wait ...");
     apiController.post(EndPoints.COMPLETE_TAGGING, body: body, headers: await Utility.header())
-      ..then((response) {
-        Dialogs.hideLoader(context);
+      ..then((response) async {
+        await Dialogs.hideLoader(context);
         List<OTPResponse> brList = [];
         var listOfDynamic = response.data as List;
         listOfDynamic.forEach((element) => brList.add(OTPResponse.fromJson(element)));
@@ -316,8 +316,8 @@ class HomePresenter {
           _v.onError(bookingResponse.message);
         }
       })
-      ..catchError((e) {
-        Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }
@@ -347,8 +347,8 @@ class HomePresenter {
 
     // Dialogs.showLoader(context, "Tagging customer please wait ...");
     apiController.post(EndPoints.GET_ACCOUNT_STATUS, body: body, headers: await Utility.header())
-      ..then((response) {
-        // Dialogs.hideLoader(context);
+      ..then((response) async {
+        // await Dialogs.hideLoader(context);
 
         AccountStatusResponse bookingResponse = AccountStatusResponse.fromJson(response.data);
         if (bookingResponse == null) {
@@ -362,8 +362,8 @@ class HomePresenter {
           _v.onError(bookingResponse.message);
         }
       })
-      ..catchError((e) {
-        // Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        // await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }
@@ -393,8 +393,8 @@ class HomePresenter {
 
     Dialogs.showLoader(context, "Please wait fetching your data ...");
     apiController.post(EndPoints.GET_ACCOUNT_STATUS, body: body, headers: await Utility.header())
-      ..then((response) {
-        Dialogs.hideLoader(context);
+      ..then((response) async {
+        await Dialogs.hideLoader(context);
 
         AccountStatusResponse bookingResponse = AccountStatusResponse.fromJson(response.data);
         if (bookingResponse == null) {
@@ -408,8 +408,8 @@ class HomePresenter {
           _v.onError(bookingResponse.message);
         }
       })
-      ..catchError((e) {
-        Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }
@@ -436,13 +436,13 @@ class HomePresenter {
     Utility.log(tag, "Device Token: $deviceToken");
 
     apiController.post(EndPoints.POST_DEVICE_TOKEN, body: body, headers: await Utility.header())
-      ..then((response) {
-        Dialogs.hideLoader(context);
+      ..then((response) async {
+        await Dialogs.hideLoader(context);
         DeviceTokenResponse deviceTokenResponse = DeviceTokenResponse.fromJson(response.data);
         Utility.log(tag, "Device Token: ${deviceTokenResponse?.token}");
       })
-      ..catchError((e) {
-        Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }
@@ -470,14 +470,14 @@ class HomePresenter {
 
     Dialogs.showLoader(context, "Updating payment status ...");
     apiController.post(EndPoints.PAYMENT_CONFIRMATION, body: body, headers: await Utility.header())
-      ..then((response) {
-        Dialogs.hideLoader(context);
+      ..then((response) async {
+        await Dialogs.hideLoader(context);
         PaymentConfirmationResponse projectUnitResponse = PaymentConfirmationResponse.fromJson(response.data);
         if (projectUnitResponse.returnCode) _v.onPaymentAcknowledged();
         else _v.onError(projectUnitResponse.message);
       })
-      ..catchError((e) {
-        Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }

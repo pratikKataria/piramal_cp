@@ -42,8 +42,8 @@ class LeadPresenter {
 
     Dialogs.showLoader(context, "Please wait fetching your lead data ...");
     apiController.post(EndPoints.ALL_LEAD_LIST, body: body, headers: await Utility.header())
-      ..then((response) {
-        Dialogs.hideLoader(context);
+      ..then((response) async {
+        await Dialogs.hideLoader(context);
         List<AllLeadResponse> brList = [];
         var listOfDynamic = response.data as List;
         listOfDynamic.forEach((element) => brList.add(AllLeadResponse.fromJson(element)));
@@ -59,8 +59,8 @@ class LeadPresenter {
           _v.onError(bookingResponse.message);
         }
       })
-      ..catchError((e) {
-        Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }
@@ -83,7 +83,7 @@ class LeadPresenter {
     // var body = {"CustomerAccountId": "001N000001S7nkdIAB"};
 
     apiController.post(EndPoints.ALL_LEAD_LIST, body: body, headers: await Utility.header())
-      ..then((response) {
+      ..then((response) async {
         List<AllLeadResponse> brList = [];
         var listOfDynamic = response.data as List;
         listOfDynamic.forEach((element) => brList.add(AllLeadResponse.fromJson(element)));
@@ -100,7 +100,7 @@ class LeadPresenter {
           _v.onError(bookingResponse.message);
         }
       })
-      ..catchError((e) {
+      ..catchError((e) async {
         ApiErrorParser.getResult(e, _v);
       });
   }
@@ -123,14 +123,14 @@ class LeadPresenter {
     };
     Dialogs.showLoader(context, "Deleting your lead data ...");
     apiController.post(EndPoints.DELETE_LEAD, body: body, headers: await Utility.header())
-      ..then((response) {
-        Dialogs.hideLoader(context);
+      ..then((response) async {
+        await Dialogs.hideLoader(context);
         DeleteLeadResponse deleteLeadResponse = DeleteLeadResponse.fromJson(response.data);
         deleteLeadResponse.leadId = leadData.sfdcid;
         (_v as LeadView).onLeadDeleted(leadData);
       })
-      ..catchError((e) {
-        Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }
@@ -154,16 +154,16 @@ class LeadPresenter {
 
     Dialogs.showLoader(context, "Creating your lead ...");
     apiController.post(EndPoints.CREATE_LEAD, body: request.toJson(), headers: await Utility.header())
-      ..then((response) {
-        Dialogs.hideLoader(context);
+      ..then((response) async {
+        await Dialogs.hideLoader(context);
         CreateLeadResponse createLeadResponse = CreateLeadResponse.fromJson(response.data);
         (_v as AddLeadView).onLeadCreated();
         // DeleteLeadResponse deleteLeadResponse = DeleteLeadResponse.fromJson(response.data);
         // deleteLeadResponse.leadId = leadData.sfdcid;
         // (_v as LeadView).onLeadDeleted(leadData);
       })
-      ..catchError((e) {
-        Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }
@@ -188,16 +188,16 @@ class LeadPresenter {
     // CustomerAccountId
     Dialogs.showLoader(context, "Updating your lead ...");
     apiController.post(EndPoints.CREATE_LEAD, body: request.toJson(), headers: await Utility.header())
-      ..then((response) {
-        Dialogs.hideLoader(context);
+      ..then((response) async {
+        await Dialogs.hideLoader(context);
         CreateLeadResponse createLeadResponse = CreateLeadResponse.fromJson(response.data);
         (_v as AddLeadView).onLeadCreated();
         // DeleteLeadResponse deleteLeadResponse = DeleteLeadResponse.fromJson(response.data);
         // deleteLeadResponse.leadId = leadData.sfdcid;
         // (_v as LeadView).onLeadDeleted(leadData);
       })
-      ..catchError((e) {
-        Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }
@@ -217,8 +217,8 @@ class LeadPresenter {
 
     Dialogs.showLoader(context, "Please wait getting picklist ...");
     apiController.post(EndPoints.GET_PICK_LIST, headers: await Utility.header())
-      ..then((response) {
-        Dialogs.hideLoader(context);
+      ..then((response) async {
+        await Dialogs.hideLoader(context);
         List<PickListResponse> brList = [];
         var listOfDynamic = response.data as List;
         listOfDynamic.forEach((element) {
@@ -227,8 +227,8 @@ class LeadPresenter {
 
         (_v as AddLeadView).onPickListFetched(brList);
       })
-      ..catchError((e) {
-        Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }
@@ -249,8 +249,8 @@ class LeadPresenter {
     // CustomerAccountId
     // Dialogs.showLoader(context, "Updating your lead ...");
     apiController.post(EndPoints.GET_CONFIGURATION_BY_PROJECT, body: {"Project": projectName}, headers: await Utility.header())
-      ..then((response) {
-        // Dialogs.hideLoader(context);
+      ..then((response) async {
+        // await Dialogs.hideLoader(context);
 
         List<ProjectConfigurationResponse> brList = [];
         var listOfDynamic = response.data as List;
@@ -272,8 +272,8 @@ class LeadPresenter {
         // deleteLeadResponse.leadId = leadData.sfdcid;
         // (_v as LeadView).onLeadDeleted(leadData);
       })
-      ..catchError((e) {
-        // Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        // await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }

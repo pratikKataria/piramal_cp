@@ -196,7 +196,7 @@ class _UploadPendingDocumentScreenState extends State<UploadPendingDocumentScree
     LoginResponse loginResponse = LoginResponse();
     loginResponse.accountId = signupResponse.brokerAccountID;
 
-    Dialogs.hideLoader(context);
+    await Dialogs.hideLoader(context);
     var currentUser = await AuthUser.getInstance().getCurrentUser();
     currentUser.userCredentials = loginResponse;
     AuthUser.getInstance().login(currentUser);

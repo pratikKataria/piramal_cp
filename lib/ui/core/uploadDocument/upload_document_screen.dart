@@ -286,7 +286,7 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> implements 
     LoginResponse loginResponse = LoginResponse();
     loginResponse.accountId = signupResponse.brokerAccountID;
 
-    Dialogs.hideLoader(context);
+    await Dialogs.hideLoader(context);
     var currentUser = await AuthUser.getInstance().getCurrentUser();
     currentUser.userCredentials = loginResponse;
     AuthUser.getInstance().login(currentUser);

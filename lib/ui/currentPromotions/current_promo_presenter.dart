@@ -35,8 +35,8 @@ class CurrentPromoPresenter {
     Dialogs.showLoader(context, "Fetching promotion data ...");
 
     apiController.post(EndPoints.CURRENT_PROMOTIONS, body: body, headers: await Utility.header())
-      ..then((response) {
-        Dialogs.hideLoader(context);
+      ..then((response) async {
+        await Dialogs.hideLoader(context);
         List<CurrentPromoResponse> listOfPromotions = [];
         var listOfDynamic = response.data as List;
         listOfDynamic.forEach((element) {
@@ -45,8 +45,8 @@ class CurrentPromoPresenter {
 
         _v.onCurrentPromoListFetched(listOfPromotions);
       })
-      ..catchError((e) {
-        Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }

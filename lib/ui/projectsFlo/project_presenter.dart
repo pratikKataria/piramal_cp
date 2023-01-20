@@ -44,8 +44,8 @@ class ProjectPresenter {
 
     Dialogs.showLoader(context, "Please wait fetching your project list ...");
     apiController.post(EndPoints.ALL_PROJECT_LIST, body: body, headers: await Utility.header())
-      ..then((response) {
-        Dialogs.hideLoader(context);
+      ..then((response) async {
+        await Dialogs.hideLoader(context);
         List<ProjectListResponse> projectListResponse = [];
         var listOfDynamic = response.data as List;
         listOfDynamic.forEach((element) {
@@ -54,8 +54,8 @@ class ProjectPresenter {
 
         (_v as ProjectView).onProjectListFetched(projectListResponse);
       })
-      ..catchError((e) {
-        Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }
@@ -84,13 +84,13 @@ class ProjectPresenter {
     // var body = {"ProjectID": "a03N0000005NHiTIAW"};
     Dialogs.showLoader(context, "Please wait fetching your project details ...");
     apiController.post(EndPoints.PROJECT_OVERVIEW, body: body, headers: await Utility.header())
-      ..then((response) {
-        Dialogs.hideLoader(context);
+      ..then((response) async {
+        await Dialogs.hideLoader(context);
         ProjectOverviewResponse projectOverviewResponse = ProjectOverviewResponse.fromJson(response.data);
         (_v as ProjectDetailView).onProjectOverviewDetailsFetched(projectOverviewResponse);
       })
-      ..catchError((e) {
-        Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }
@@ -112,13 +112,13 @@ class ProjectPresenter {
     // var body = {"ProjectID": "a03N0000005NHiTIAW"};
     // Dialogs.showLoader(context, "Please wait fetching your project list ...");
     apiController.post(EndPoints.PROJECT_AMENITIES, body: body, headers: await Utility.header())
-      ..then((response) {
-        // Dialogs.hideLoader(context);
+      ..then((response) async {
+        // await Dialogs.hideLoader(context);
         ProjectAmenitiesResponse projectAmenitiesResponse = ProjectAmenitiesResponse.fromJson(response.data);
         (_v as ProjectDetailView).onProjectAmenitiesFetched(projectAmenitiesResponse);
       })
-      ..catchError((e) {
-        // Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        // await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }
@@ -139,8 +139,8 @@ class ProjectPresenter {
     var body = {"ProjectID": "$projectId"};
     // Dialogs.showLoader(context, "Please wait fetching your project list ...");
     apiController.post(EndPoints.PROJECT_TOWER, body: body, headers: await Utility.header())
-      ..then((response) {
-        // Dialogs.hideLoader(context);
+      ..then((response) async {
+        // await Dialogs.hideLoader(context);
 
         List<ProjectTowerResponse> projectListResponse = [];
         var listOfDynamic = response.data as List;
@@ -150,8 +150,8 @@ class ProjectPresenter {
 
         (_v as ProjectDetailView).onProjectTowerListFetched(projectListResponse);
       })
-      ..catchError((e) {
-        // Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        // await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }
@@ -173,8 +173,8 @@ class ProjectPresenter {
   //   // var body = {"ProjectID": "a03N0000005NHiTIAW"};
   //   // Dialogs.showLoader(context, "Please wait fetching your project list ...");
   //   apiController.post(EndPoints.PROJECT_IMAGES, body: body, headers: await Utility.header())
-  //     ..then((response) {
-  //       // Dialogs.hideLoader(context);
+  //     ..then((response) async {
+  //       // await Dialogs.hideLoader(context);
   //       List<ProjectOverviewImagesResponse> brList = [];
   //       var listOfDynamic = response.data as List;
   //       listOfDynamic.forEach((element) => brList.add(ProjectOverviewImagesResponse.fromJson(element)));
@@ -193,8 +193,8 @@ class ProjectPresenter {
   //         // _v.onError(bookingResponse.message);
   //       }
   //     })
-  //     ..catchError((e) {
-  //       // Dialogs.hideLoader(context);
+  //     ..catchError((e) async {
+  //       // await Dialogs.hideLoader(context);
   //       ApiErrorParser.getResult(e, _v);
   //     });
   // }
@@ -216,8 +216,8 @@ class ProjectPresenter {
     // var body = {"ProjectID": "a03N0000005NHiTIAW"};
     // Dialogs.showLoader(context, "Please wait fetching your project list ...");
     apiController.post(EndPoints.PROJECT_GALLERY, body: body, headers: await Utility.header())
-      ..then((response) {
-        // Dialogs.hideLoader(context);
+      ..then((response) async {
+        // await Dialogs.hideLoader(context);
 
         List<ProjectDownloadResponse> projectListResponse = [];
         var listOfDynamic = response.data as List;
@@ -229,8 +229,8 @@ class ProjectPresenter {
 
         (_v as ProjectDetailView).onProjectDownloadListFetched(projectListResponse);
       })
-      ..catchError((e) {
-        // Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        // await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }
@@ -251,14 +251,14 @@ class ProjectPresenter {
     var body = {"LinkedEntityId": projectId};
 
     apiController.post(EndPoints.PROJECT_OVERVIEW_IMAGES, body: body, headers: await Utility.header())
-      ..then((response) {
+      ..then((response) async {
         List<ProjectOverviewBottomImages> brList = [];
         var listOfDynamic = response.data as List;
         listOfDynamic.forEach((element) => brList.add(ProjectOverviewBottomImages.fromJson(element)));
         ProjectOverviewBottomImages imageData = brList.isEmpty ? null : brList.first;
         if (imageData != null && imageData.returnCode) (_v as ProjectDetailView).onProjectBottomImagesFetched(brList);
       })
-      ..catchError((e) {
+      ..catchError((e) async {
         ApiErrorParser.getResult(e, _v);
       });
   }
@@ -280,8 +280,8 @@ class ProjectPresenter {
     // var body = {"ProjectID": "a03N0000005NHiTIAW"};
     // Dialogs.showLoader(context, "Please wait fetching your project list ...");
     apiController.post(EndPoints.PROJECT_IMAGES, body: body, headers: await Utility.header())
-      ..then((response) {
-        // Dialogs.hideLoader(context);
+      ..then((response) async {
+        // await Dialogs.hideLoader(context);
         List<ProjectOverviewImagesResponse> brList = [];
         var listOfDynamic = response.data as List;
         listOfDynamic.forEach((element) => brList.add(ProjectOverviewImagesResponse.fromJson(element)));
@@ -300,8 +300,8 @@ class ProjectPresenter {
           _v.onError(bookingResponse.message);
         }
       })
-      ..catchError((e) {
-        // Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        // await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }

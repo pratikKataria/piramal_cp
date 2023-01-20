@@ -46,8 +46,8 @@ class WhatsAppButtonV2 extends StatelessWidget {
 
     Dialogs.showLoader(context, "Getting your file ready please wait ...");
     apiController.post(EndPoints.GET_PROJECT_DOWNLOAD_LINK, body: body, headers: await Utility.header())
-      ..then((response) {
-        Dialogs.hideLoader(context);
+      ..then((response) async {
+        await Dialogs.hideLoader(context);
         Utility.log("Download Button", response);
         ProjectDownloadLinkReponse projectDownloadLinkReponse = ProjectDownloadLinkReponse.fromJson(response.data);
 
@@ -57,8 +57,8 @@ class WhatsAppButtonV2 extends StatelessWidget {
           Utility.showErrorToastB(context, projectDownloadLinkReponse.message);
         }
       })
-      ..catchError((e) {
-        Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
         Utility.log("Download Button", e);
         Utility.showErrorToastB(context, "$e");
       });

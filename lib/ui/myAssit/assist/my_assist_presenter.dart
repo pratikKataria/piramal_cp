@@ -37,8 +37,8 @@ class MyAssistPresenter {
 
     Dialogs.showLoader(context, "Please wait fetching your project list ...");
     apiController.post(EndPoints.MY_ASSIST, body: body, headers: await Utility.header())
-      ..then((response) {
-        Dialogs.hideLoader(context);
+      ..then((response) async {
+        await Dialogs.hideLoader(context);
         MyAssistResponse m = MyAssistResponse.fromJson(response.data);
         if (m.returnCode) {
           _v.onAssistDataFetched(m);
@@ -46,8 +46,8 @@ class MyAssistPresenter {
           _v.onError(m.message);
         }
       })
-      ..catchError((e) {
-        Dialogs.hideLoader(context);
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }
