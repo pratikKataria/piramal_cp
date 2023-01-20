@@ -83,13 +83,15 @@ class _CurrentPromotionScreenState extends State<CurrentPromotionScreen> impleme
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Container(
-            height: 152.0,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-              image: MemoryImage(Utility.convertMemoryImage(currentPromoData.image)),
-              fit: BoxFit.fill,
-            )),
+          AspectRatio(
+            aspectRatio: 16/9,
+            child: Container(
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                image: MemoryImage(Utility.convertMemoryImage(currentPromoData.image)),
+                fit: BoxFit.fill,
+              )),
+            ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),

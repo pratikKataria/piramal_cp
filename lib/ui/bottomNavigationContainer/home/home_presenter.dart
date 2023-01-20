@@ -224,7 +224,7 @@ class HomePresenter {
         if (bookingResponse.returnCode) {
           _v.onEventFetched(brList);
         } else {
-          // _v.onError(bookingResponse.message);
+          _v.noEventPresent();
         }
       })
       ..catchError((e) {

@@ -89,14 +89,15 @@ class _CPEventScreenState extends State<CPEventScreen> implements CPEventView {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Container(
-            height: 130.0,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-              image: /*NetworkImage("${cpEventData?.eventImage??""}") */ MemoryImage(
-                  Utility.convertMemoryImage(cpEventData.eventImage)),
-              fit: BoxFit.fill,
-            )),
+          AspectRatio(
+            aspectRatio: 16/9,
+            child: Container(
+               decoration: BoxDecoration(
+                  image: DecorationImage(
+                image: MemoryImage(Utility.convertMemoryImage(cpEventData.eventImage)),
+                fit: BoxFit.fill,
+              )),
+            ),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 20.0, top: 10.0, bottom: 10.0),

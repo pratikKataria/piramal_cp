@@ -86,13 +86,15 @@ class _ProjectScreenState extends State<ProjectScreen> implements ProjectView {
           children: [
             Stack(
               children: [
-                Container(
-                  height: 130.0,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                    image: MemoryImage(Utility.convertMemoryImage(projectData.projectImage)),
-                    fit: BoxFit.fill,
-                  )),
+                AspectRatio(
+                  aspectRatio: 16/9,
+                  child: Container(
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                      image: MemoryImage(Utility.convertMemoryImage(projectData.projectImage)),
+                      fit: BoxFit.fill,
+                    )),
+                  ),
                 ),
                 Positioned(
                   right: 10,

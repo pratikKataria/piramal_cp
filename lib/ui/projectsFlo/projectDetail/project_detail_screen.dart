@@ -74,7 +74,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen>
           // new Image.asset(listOfImages[index], fit: BoxFit.fill) Container(
           if (projectCarouselImages.isNotEmpty)
             Container(
-              height: 180.0,
+              height: 210.0,
               child: Swiper(
                 itemBuilder: (BuildContext context, int index) {
                   return Container(

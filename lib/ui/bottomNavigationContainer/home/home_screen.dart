@@ -563,6 +563,12 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
     Utility.showSuccessToastB(context, "Payment Acknowledged");
     Navigator.pop(context);
   }
+
+  @override
+  void noEventPresent() {
+    events = "Currently no events available";
+    setState(() {});
+  }
 }
 
 /*   Text("Lead Status", style: textStyleRegular16px400w),

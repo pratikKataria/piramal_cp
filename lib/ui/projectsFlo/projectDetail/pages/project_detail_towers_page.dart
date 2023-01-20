@@ -48,13 +48,15 @@ class ProjectDetailTowerPage extends StatelessWidget {
         children: [
           Stack(
             children: [
-              Container(
-                height: 152.0,
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                  image: MemoryImage(Utility.convertMemoryImage(response.towerImage)),
-                  fit: BoxFit.fill,
-                )),
+              AspectRatio(
+                aspectRatio: 16/9,
+                child: Container(
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                    image: MemoryImage(Utility.convertMemoryImage(response.towerImage)),
+                    fit: BoxFit.fill,
+                  )),
+                ),
               ),
               Positioned(
                 right: 10,

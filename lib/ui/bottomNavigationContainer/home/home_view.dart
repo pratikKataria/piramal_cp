@@ -17,5 +17,6 @@ abstract class HomeView extends BaseView{
   void onProjectUnitResponseFetched(ProjectUnitResponse projectUnitResponse);
   void onTaggingDone();
   void onAccountStatusChecked(AccountStatusResponse projectUnitResponse);
-  void onPaymentAcknowledged() {}
+  void onPaymentAcknowledged();
+  void noEventPresent();
 }

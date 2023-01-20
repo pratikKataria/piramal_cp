@@ -104,7 +104,7 @@ class ProjectDetailOverviewPage extends StatelessWidget {
               children: [
                 CachedImageWidget(
                   width: Utility.screenWidth(context),
-                  height: 180.0,
+                  height: 200.0,
                   imageUrl: image,
                   radius: 0.0,
                   fit: BoxFit.fill,
