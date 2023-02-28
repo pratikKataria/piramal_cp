@@ -1,7 +1,7 @@
 name: piramal_channel_partner
 description: A new Flutter project.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-version: 1.0.2+6
+version: 1.0.3+7
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
