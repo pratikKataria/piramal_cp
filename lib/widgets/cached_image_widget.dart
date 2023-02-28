@@ -20,39 +20,40 @@ class CachedImageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CachedNetworkImage(
-        width: width == null ? 120 : width,
-        height: height == null ? 160 : height,
-        imageUrl: '$imageUrl',
-        placeholder: (context, url) => Shimmer.fromColors(
-              baseColor: AppColors.baseLightColor,
-              highlightColor: AppColors.highLightColor,
-              child: Container(
-                width: width == null ? 120 : width,
-                height: height == null ? 160 : height,
+    return AspectRatio(
+      aspectRatio: 16 / 9,
+      child: CachedNetworkImage(
+          imageUrl: '$imageUrl',
+          placeholder: (context, url) => Shimmer.fromColors(
+                baseColor: AppColors.baseLightColor,
+                highlightColor: AppColors.highLightColor,
+                child: Container(
+                  width: width == null ? 120 : width,
+                  height: height == null ? 160 : height,
+                  decoration: BoxDecoration(
+                    color: AppColors.shimmerBackgroundColor,
+                    borderRadius: BorderRadius.circular(radius ?? 12),
+                  ),
+                ),
+              ),
+          imageBuilder: (context, imageProvider) => Container(
                 decoration: BoxDecoration(
-                  color: AppColors.shimmerBackgroundColor,
                   borderRadius: BorderRadius.circular(radius ?? 12),
+                  image: DecorationImage(
+                    image: imageProvider,
+                    fit: fit ?? BoxFit.cover,
+                  ),
                 ),
               ),
-            ),
-        imageBuilder: (context, imageProvider) => Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(radius ?? 12),
-                image: DecorationImage(
-                  image: imageProvider,
-                  fit: fit??BoxFit.cover,
+          errorWidget: (context, url, error) => Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(radius ?? 12),
+                  image: DecorationImage(
+                    image: AssetImage(placeHolderImage ?? Images.kAppIcon),
+                    fit: BoxFit.fill,
+                  ),
                 ),
-              ),
-            ),
-        errorWidget: (context, url, error) => Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(radius ?? 12),
-                image: DecorationImage(
-                  image: AssetImage(placeHolderImage ?? Images.kAppIcon),
-                  fit: BoxFit.fill,
-                ),
-              ),
-            ));
+              )),
+    );
   }
 }

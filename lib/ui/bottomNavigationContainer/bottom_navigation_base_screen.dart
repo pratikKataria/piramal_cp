@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/todayFu/today_fu_screen.dart';
+import 'package:piramal_channel_partner/ui/core/uploadDocument/upload_document_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'explore/explore_screen.dart';
 import 'home/home_screen.dart';
 import 'notificationSc/notification_screen.dart';
+import 'upload/upload_screen.dart';
 
 class BottomNavigationBaseScreen extends StatelessWidget {
   final GlobalKey<NotificationScreenState> nGK = GlobalKey<NotificationScreenState>();
@@ -22,6 +24,7 @@ class BottomNavigationBaseScreen extends StatelessWidget {
     allDestinations = {
       Screens.kHomeScreen: HomeScreen(key: hGK),
       Screens.kExploreScreen: ExploreScreen(),
+      Screens.kUpload: UploadScreen(),
       Screens.kNotificationsScreen: NotificationScreen(key: nGK),
       Screens.kTodayFollowUpScreen: TodayFollowUpScreen(),
     };

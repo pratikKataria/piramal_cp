@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:path/path.dart' as p;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -396,7 +397,25 @@ class Utility {
       String base64Image = base64Encode(imageBytes);
       return [base64Image, result.names.single];
     } catch (e) {
-      Utility.showErrorToastB(context, e.toString());
+      Utility.showErrorToastB(context, "No File Selected");
+      return ["", ""];
+    }
+  }
+
+  static Future<List<String>> pickFile2(BuildContext context) async {
+    try {
+      FilePickerResult result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ["pdf", "xlsx", "jpg", "jpeg", "png", "csv"],
+      );
+
+      File file = File(result.files.single.path);
+      List<int> imageBytes = file.readAsBytesSync();
+      String base64Image = base64Encode(imageBytes);
+      String extension = p.extension(file.path).replaceAll(".", ""); // '.dart
+      return [base64Image, result.names.single, extension];
+    } catch (e) {
+      Utility.showErrorToastB(context, "No File Selected");
       return ["", ""];
     }
   }

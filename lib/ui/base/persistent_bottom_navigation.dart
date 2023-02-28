@@ -21,6 +21,7 @@ class PersistentBottomNavigation extends StatelessWidget {
         children: [
           buildBottomNavigationButton(Images.kIconHome, "Home", () {}, context),
           buildBottomNavigationButton(Images.kIconExplore, "Explore", () {}, context),
+          buildBottomNavigationButton(Images.kIconUpload, Screens.kUpload, () {}, context),
           buildBottomNavigationButton(Images.kIconTodayFollowup, Screens.kTodayFollowUpScreen, () {}, context),
           buildBottomNavigationButton(Images.kIconNotification, "Notifications", () {}, context),
           // buildBottomNavigationButton(Images.kIconLeaderboard, "Leaderboard", () {}),

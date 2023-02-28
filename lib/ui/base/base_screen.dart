@@ -84,7 +84,7 @@ class BaseScreen extends StatelessWidget {
     return Consumer<BaseProvider>(
       builder: (_, provider, __) {
         bool isBase = provider.currentScreen == Screens.kHomeScreen ||
-            provider.currentScreen == Screens.kExploreScreen ||
+            provider.currentScreen == Screens.kExploreScreen || provider.currentScreen == Screens.kUpload ||
             provider.currentScreen == Screens.kTodayFollowUpScreen ||
             provider.currentScreen == Screens.kNotificationsScreen;
 

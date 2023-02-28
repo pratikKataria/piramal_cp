@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
@@ -8,6 +9,7 @@ import 'package:piramal_channel_partner/ui/currentPromotions/current_promo_prese
 import 'package:piramal_channel_partner/ui/currentPromotions/current_promo_view.dart';
 import 'package:piramal_channel_partner/ui/currentPromotions/model/current_promo_response.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
+import 'package:piramal_channel_partner/widgets/cached_image_widget.dart';
 import 'package:piramal_channel_partner/widgets/download_button_lwc.dart';
 import 'package:piramal_channel_partner/widgets/refresh_list_view.dart';
 import 'package:piramal_channel_partner/widgets/whats_app_button_v2.dart';
@@ -83,7 +85,7 @@ class _CurrentPromotionScreenState extends State<CurrentPromotionScreen> impleme
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          AspectRatio(
+          /*AspectRatio(
             aspectRatio: 16/9,
             child: Container(
               decoration: BoxDecoration(
@@ -91,6 +93,22 @@ class _CurrentPromotionScreenState extends State<CurrentPromotionScreen> impleme
                 image: MemoryImage(Utility.convertMemoryImage(currentPromoData.image)),
                 fit: BoxFit.fill,
               )),
+            ),
+          ),*/
+          Container(
+            height: 210.0,
+            margin: EdgeInsets.only(top: 5.0),
+            child: Swiper(
+              pagination: SwiperPagination(
+                builder: DotSwiperPaginationBuilder(size: 6.0, activeSize: 8, activeColor: AppColors.colorPrimary),
+              ),
+              itemBuilder: (BuildContext context, int index) {
+                return Container(
+                  margin: EdgeInsets.symmetric(horizontal: 5.0),
+                  child: CachedImageWidget(imageUrl: currentPromoData.projectImageList[index] ?? ""),
+                );
+              },
+              itemCount: currentPromoData.projectImageList.length,
             ),
           ),
           Padding(

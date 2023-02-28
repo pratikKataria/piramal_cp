@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
+import 'package:piramal_channel_partner/widgets/animated_close_button.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
 import 'Utility.dart';
@@ -23,9 +24,11 @@ class Dialogs {
               horizontalSpace(20.0),
               Container(width: 24.0, height: 24.0, child: CircularProgressIndicator()),
               horizontalSpace(20.0),
+
               Expanded(
                 child: Text('$description', style: textStylePrimary14px500w, overflow: TextOverflow.ellipsis),
               ),
+              AnimatedCloseButton(),
             ],
           ),
         ));
@@ -41,7 +44,7 @@ class Dialogs {
   static Future<Object> hideLoader(BuildContext context) async {
     // Navigator.pop(context);
 
-    await Future.delayed(Duration(milliseconds: 300));
+    await Future.delayed(Duration(milliseconds: 400));
 
     if (_dialog != null) {
       _dialog.hide().then((value) {
@@ -51,7 +54,7 @@ class Dialogs {
       });
     }
 
-    await Future.delayed(Duration(milliseconds: 300));
+    await Future.delayed(Duration(milliseconds: 400));
     return Future(() => true);
   }
 
