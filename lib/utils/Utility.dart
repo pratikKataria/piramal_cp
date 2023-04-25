@@ -1,14 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:path/path.dart' as p;
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
@@ -62,7 +61,8 @@ class Utility {
   }
 
   static void showErrorToast(BuildContext context, String text) async {
-    FToast fToast = FToast(context);
+    FToast fToast = FToast();
+    fToast.init(context);
     Widget toast = Container(
       padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 6.0),
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0), color: AppColors.colorPrimary),
@@ -84,7 +84,8 @@ class Utility {
   }
 
   static void showErrorToastC(BuildContext context, String text) async {
-    FToast fToast = FToast(context);
+    FToast fToast = FToast();
+    fToast.init(context);
     Widget toast = Container(
       padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 6.0),
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0), color: AppColors.red),
@@ -106,7 +107,8 @@ class Utility {
   }
 
   static void showErrorToastT(BuildContext context, String text) async {
-    FToast fToast = FToast(context);
+    FToast fToast = FToast();
+    fToast.init(context);
     Widget toast = Container(
       padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 6.0),
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0), color: AppColors.red),
@@ -128,7 +130,8 @@ class Utility {
   }
 
   static void showErrorToastB(BuildContext context, String text) async {
-    FToast fToast = FToast(context);
+    FToast fToast = FToast();
+    fToast.init(context);
     Widget toast = Container(
       padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 6.0),
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0), color: AppColors.red),
@@ -150,7 +153,7 @@ class Utility {
   }
 
   static void showSuccessToastB(BuildContext context, String text, {int duration}) async {
-    FToast fToast = FToast(context);
+    FToast fToast = FToast();
     Widget toast = Container(
       padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 6.0),
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0), color: Colors.green[900]),

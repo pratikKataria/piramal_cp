@@ -1,3 +1,4 @@
+/*
 
 import 'dart:io';
 
@@ -31,7 +32,7 @@ class PushNotificationService {
         flutterLocalNotificationsPlugin.show(
             notification.hashCode,
             notification.title,
-            notification.body,
+            "404",
             NotificationDetails(
               android: AndroidNotificationDetails(
                 channel.id,
@@ -44,3 +45,4 @@ class PushNotificationService {
     });
   }
 }
+*/

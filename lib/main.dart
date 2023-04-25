@@ -1,6 +1,9 @@
+import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:dio/dio.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -47,6 +50,56 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterL
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
+
+  RemoteNotification notification = message.notification;
+  AndroidNotification android = message.notification?.android;
+
+  AndroidBitmap androidBitmap;
+  BigPictureStyleInformation styleInformation;
+
+  String error = "Error Message -> ";
+
+  try {
+    print("Message Received: ${message.data}");
+    String image = /*message.data["image"]*/"https://images.unsplash.com/photo-1488372759477-a7f4aa078cb6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80";
+    // print(image);
+
+    /* final Response response = await Dio().get(image, options: Options(responseType: ResponseType.bytes));
+        Uint8List imageBase64 = response.data; //Uint8List
+        androidBitmap = ByteArrayAndroidBitmap.fromBase64String(base64Encode(imageBase64));
+        styleInformation = BigPictureStyleInformation(androidBitmap);*/
+
+    final Response response = await Dio().get(image, options: Options(responseType: ResponseType.bytes));
+    error = "$error ${response.statusCode} ${response.data} ";
+
+    Uint8List imageBase64 = response.data; //Uint8List
+    androidBitmap = ByteArrayAndroidBitmap.fromBase64String(base64Encode(imageBase64));
+    styleInformation = BigPictureStyleInformation(androidBitmap);
+  } catch (er) {
+    error = "$error $er";
+    print(er);
+  }
+
+  error = " $error ${notification.body}";
+
+  if (notification != null && android != null) {
+    flutterLocalNotificationsPlugin.show(
+      notification.hashCode,
+      "400",
+      "404",
+      NotificationDetails(
+        android: AndroidNotificationDetails(
+          channel.id,
+          channel.name,
+          playSound: true,
+          icon: '@mipmap/ic_launcher_foreground',
+          largeIcon: androidBitmap,
+          styleInformation: styleInformation,
+        ),
+      ),
+    );
+  }
+
   print('A bg message just showed up :  ${message.messageId}');
 }
 
@@ -75,7 +128,7 @@ Future<void> main() async {
       ?.createNotificationChannel(channel);
 
   AwesomeNotifications().initialize(
-      // set the icon to null if you want to use the default app icon
+    // set the icon to null if you want to use the default app icon
       'resource://drawable/ic_app_logo',
       [
         NotificationChannel(
@@ -191,43 +244,57 @@ class MyApp extends StatelessWidget {
     );
   }
 
-  void RegisterFirebaseNotification() {
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+  Future<void> RegisterFirebaseNotification() async {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       RemoteNotification notification = message.notification;
       AndroidNotification android = message.notification?.android;
-      print("Message Received: ${message.data}");
+
+      AndroidBitmap androidBitmap;
+      BigPictureStyleInformation styleInformation;
+
+      String error = "Error Message -> ";
+
+      try {
+        print("Message Received: ${message.data}");
+        String image = /*message.data["image"]*/"https://images.unsplash.com/photo-1488372759477-a7f4aa078cb6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80";
+        // print(image);
+
+        /* final Response response = await Dio().get(image, options: Options(responseType: ResponseType.bytes));
+        Uint8List imageBase64 = response.data; //Uint8List
+        androidBitmap = ByteArrayAndroidBitmap.fromBase64String(base64Encode(imageBase64));
+        styleInformation = BigPictureStyleInformation(androidBitmap);*/
+
+        final Response response = await Dio().get(image, options: Options(responseType: ResponseType.bytes));
+        error = "$error ${response.statusCode} ${response.data} ";
+
+        Uint8List imageBase64 = response.data; //Uint8List
+        androidBitmap = ByteArrayAndroidBitmap.fromBase64String(base64Encode(imageBase64));
+        styleInformation = BigPictureStyleInformation(androidBitmap);
+      } catch (er) {
+        error = "$error $er";
+        print(er);
+      }
+
+      error = " $error ${notification.body}";
 
       if (notification != null && android != null) {
         flutterLocalNotificationsPlugin.show(
-            notification.hashCode,
-            notification.title,
-            notification.body,
-            NotificationDetails(
-              android: AndroidNotificationDetails(
-                channel.id,
-                channel.name,
-                playSound: true,
-                icon: '@mipmap/ic_launcher_foreground',
-              ),
-            ));
+          notification.hashCode,
+          "400",
+          "404",
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              channel.id,
+              channel.name,
+              playSound: true,
+              icon: '@mipmap/ic_launcher_foreground',
+              largeIcon: androidBitmap,
+              styleInformation: styleInformation,
+            ),
+          ),
+        );
       }
     });
-  }
-
-  void showNotification() {
-    flutterLocalNotificationsPlugin.show(
-        0,
-        "Testing",
-        "How you doin ?",
-        NotificationDetails(
-            android: AndroidNotificationDetails(
-          channel.id,
-          channel.name,
-          importance: Importance.high,
-          color: Colors.blue,
-          playSound: true,
-          icon: '@mipmap/ic_launcher',
-        )));
   }
 
   checkAuthUser(authResult) {
