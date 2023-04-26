@@ -154,6 +154,7 @@ class Utility {
 
   static void showSuccessToastB(BuildContext context, String text, {int duration}) async {
     FToast fToast = FToast();
+    fToast.init(context);
     Widget toast = Container(
       padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 6.0),
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0), color: Colors.green[900]),
