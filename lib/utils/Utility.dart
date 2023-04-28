@@ -58,6 +58,8 @@ class Utility {
   static log(var tag, var message) {
     // dev.log('\n\n*****************\n$tag\n$message\n*****************\n\n');
     print('\n\n*****************\n$tag\n$message\n*****************\n\n');
+
+    // log("Run --> ","\n\n*****************\n$tag\n$message\n*****************\n\n");
   }
 
   static void showErrorToast(BuildContext context, String text) async {

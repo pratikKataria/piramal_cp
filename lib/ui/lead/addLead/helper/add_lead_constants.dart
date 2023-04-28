@@ -8,6 +8,7 @@ abstract class AddLeadConstant {
   static const String PROJECT_INTERESTED_C = "Project_Interested__c";
   static const String BUDGET_C = "Budget__c";
   static const String LOCATION_C = "Location__c";
+  static const String CP_LEAD_STATUS = "CP Lead Status";
 
   //DropDown identifier
   static const int INTERESTED_DROP = 1;
@@ -15,4 +16,5 @@ abstract class AddLeadConstant {
   static const int BUDGET_DROP = 3;
   static const int LOCATION_DROP = 4;
   static const int SUB_URBAN_DROP = 5;
+  static const int CP_LEAD_STATUS_DROP = 6;
  }

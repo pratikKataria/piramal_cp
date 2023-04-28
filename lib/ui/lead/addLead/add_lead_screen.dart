@@ -39,6 +39,7 @@ class _AddLeadScreenState extends State<AddLeadScreen> implements AddLeadView {
     "Other",
   ];
   final List<String> subUrbanList = [""];
+  List<String> listOfCpLeadStatus = [""];
 
   CreateLeadRequest createLeadRequest = CreateLeadRequest();
   LeadPresenter leadPresenter;
@@ -84,6 +85,7 @@ class _AddLeadScreenState extends State<AddLeadScreen> implements AddLeadView {
                 buildProfileDetailCard2("Budget", "INR 5 Crore ", budgetList, AddLeadConstant.BUDGET_DROP),
                 buildProfileDetailCard2("Location", "Navi Mumbai", locationList, AddLeadConstant.LOCATION_DROP),
                 buildProfileDetailCard2("Sub Urban", "", subUrbanList, AddLeadConstant.SUB_URBAN_DROP),
+                buildProfileDetailCard2("CP Lead Status", "", listOfCpLeadStatus, AddLeadConstant.CP_LEAD_STATUS_DROP),
                 buildProfileDetailCard3("Date of Visit", "27 October 2021"),
                 Center(
                   child: PmlButton(
@@ -321,11 +323,14 @@ class _AddLeadScreenState extends State<AddLeadScreen> implements AddLeadView {
       case AddLeadConstant.LOCATION_C:
         _v(locationList, element.values);
         break;
+      case AddLeadConstant.CP_LEAD_STATUS:
+        _v(listOfCpLeadStatus, element.values);
+        if (listOfCpLeadStatus.isNotEmpty) createLeadRequest.subUrban = listOfCpLeadStatus.first;
+        break;
       case AddLeadConstant.SUB_URBAN_C:
         _v(subUrbanList, element.values);
-        if (subUrbanList.isNotEmpty) {
-          createLeadRequest.subUrban = subUrbanList[0];
-        }
+        if (subUrbanList.isNotEmpty) createLeadRequest.subUrban = subUrbanList[0];
+
         break;
     }
   }
