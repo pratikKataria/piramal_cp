@@ -1,6 +1,7 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
+import 'package:piramal_channel_partner/extension/extention%20function.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Screens.dart';
@@ -21,12 +22,14 @@ import 'package:piramal_channel_partner/ui/lead/lead_view.dart';
 import 'package:piramal_channel_partner/ui/lead/model/all_lead_response.dart';
 import 'package:piramal_channel_partner/user/AuthUser.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
+import 'package:piramal_channel_partner/widgets/cached_image_widget.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
 import 'package:piramal_channel_partner/widgets/pml_outline_button.dart';
 import 'package:piramal_channel_partner/widgets/refresh_list_view.dart';
 import 'package:provider/provider.dart';
 
 String currentSelectedTab = "Lead";
+bool currentPromoShowing = false;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key key}) : super(key: key);
@@ -43,6 +46,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
   List<BookingResponse> bookingList = [];
   List<BookingResponse> walkInList = [];
   List<AllLeadResponse> listOfLeads = [];
+  Set<String> listOfMonths = {};
   List<String> projectList = [];
 
   String events = "Currently no events available";
@@ -166,6 +170,31 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                   .toList(),
             ),
           ),
+          if (listOfMonths.isNotEmpty) ...[
+            verticalSpace(8.0),
+            Text("Months", style: textStyleRegular16px400w),
+            verticalSpace(8.0),
+            Container(
+              height: 25.0,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: listOfMonths
+                    .map<Widget>((e) => PmlOutlineButton(
+                          onTap: () {
+                            filterValue = e == filterValue ? null : e;
+                            setState(() {});
+                          },
+                          text: "${e.formatDate}",
+                          padding: EdgeInsets.symmetric(horizontal: 15.0),
+                          margin: EdgeInsets.only(right: 10.0),
+                          height: 25.0,
+                          fillColor: filterValue == e ? AppColors.colorSecondary : AppColors.screenBackgroundColor,
+                          textStyle: filterValue == e ? textStyleWhite12px500w : textStyle12px500w,
+                        ))
+                    .toList(),
+              ),
+            ),
+          ],
           if (_tabController.index == 2) verticalSpace(20.0),
           if (_tabController.index == 2)
             Row(
@@ -463,6 +492,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
     bookingList.addAll(brList);
     //filter project form the response and add it to the project list
     bookingList.forEach((booking) => addProjectListValue(booking.projectFinalized));
+    bookingList.where((element) => element.bookingDate != null).forEach((booking) => listOfMonths.add(booking.bookingDate));
     setState(() {});
   }
 
@@ -472,6 +502,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
     walkInList.addAll(wList);
     //filter project form the response and add it to the project list
     walkInList.forEach((booking) => addProjectListValue(booking.projectInterested));
+    walkInList.where((element) => element.walkingDate != null).forEach((booking) => listOfMonths.add(booking.walkingDate));
     setState(() {});
   }
 
@@ -626,20 +657,6 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
         .where((element) => (filterValue == null || filterValue == element.projectFinalized) && dueInvoice == element.dueInvoice) // filter out by project
         .map((element) => BookingCardWidget(element, _homePresenter)) // convert to map then to widget
         .toList(); // provide list
-
-    return bookingList
-        .where((element) {
-          if (filterValue == null) {
-            return true;
-          } else if (filterValue == "projectFinalized") {
-            return element.projectFinalized == true;
-          } else if (filterValue == "dueInvoice") {
-            return dueInvoice;
-          }
-          return false;
-        })
-        .map((element) => BookingCardWidget(element, _homePresenter))
-        .toList();
   }
 
   @override
@@ -665,6 +682,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
         await updateUserCreds(accountStatusResponse?.customerAccountID);
         _homePresenter.getWalkInList(context);
         _homePresenter.getBookingList(context);
+        _homePresenter.getCurrentPromotionBlocker(context);
         break;
     }
   }
@@ -760,6 +778,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
       bool isProjectAlreadyPresent = projectList.contains(lead.projectInterested);
       if (!isProjectAlreadyPresent) projectList.add(lead.projectInterested);
     });
+    // listOfLeads.forEach((booking) => listOfMonths.add(booking.));
     setState(() {});
   }
 
@@ -768,56 +787,95 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
     listOfLeads.remove(response);
     setState(() {});
   }
+
+  @override
+  void onCurrentPromotionPageBlockerDataFetched(List<String> pageBlockersImagesList) {
+    if (pageBlockersImagesList == null) return;
+
+    dialogz(pageBlockersImagesList);
+  }
+
+
+  void dialogz(List<String> pageBlockersImagesList) {
+    if (currentPromoShowing == false)
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          int indexOfCurrentImage = 0;
+          return StatefulBuilder(builder: (context, alertDialogState) {
+            return AlertDialog(
+              backgroundColor: Colors.transparent,
+              elevation: 0.0,
+              insetPadding: EdgeInsets.zero,
+              actions: <Widget>[
+                Center(
+                  child: Container(
+                    width: 35.0,
+                    height: 35.0,
+                    // padding: const EdgeInsets.all(6.0),
+                    decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+                    child: Icon(Icons.close, size: 14, color: AppColors.colorPrimary),
+                  ).onClick(() {
+                    Navigator.pop(context);
+                  }),
+                ),
+                verticalSpace(20.0),
+                Container(
+                  width: Utility.screenWidth(context),
+                  height: Utility.screenWidth(context),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: Container(
+                      color: Colors.white,
+                      padding: EdgeInsets.all(8.0),
+                      child: CachedImageWidget(
+                        imageUrl: pageBlockersImagesList[indexOfCurrentImage],
+                        radius: 0.0,
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                  ),
+                ),
+                verticalSpace(20.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 35.0,
+                      height: 35.0,
+                      // padding: const EdgeInsets.all(6.0),
+                      decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+                      child: Icon(Icons.arrow_back_ios, size: 14),
+                    ).onClick(() {
+                      if (indexOfCurrentImage > 0) {
+                        indexOfCurrentImage--;
+                      }
+                      alertDialogState(() {});
+                    }),
+                    horizontalSpace(20.0),
+                    Text("${indexOfCurrentImage + 1}/${pageBlockersImagesList.length}", style: textStyleWhite14px600w),
+                    horizontalSpace(20.0),
+                    Container(
+                      width: 35.0,
+                      height: 35.0,
+                      // padding: const EdgeInsets.all(6.0),
+                      decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+                      child: Icon(Icons.arrow_forward_ios, size: 14),
+                    ).onClick(() {
+                      if (indexOfCurrentImage < pageBlockersImagesList.length - 1) {
+                        indexOfCurrentImage++;
+                      }
+                      alertDialogState(() {});
+                    }),
+                  ],
+                )
+              ],
+            );
+          });
+        },
+      ).then((value) {
+        currentPromoShowing = false;
+      });
+    currentPromoShowing = true;
+  }
 }
-
-/*   Text("Lead Status", style: textStyleRegular16px400w),
-          verticalSpace(8.0),
-          Row(
-            children: [
-              PmlOutlineButton(
-                text: "Hot",
-                padding: EdgeInsets.symmetric(horizontal: 15.0),
-                height: 25.0,
-                textStyle: textStylePrimary12px500w,
-              ),
-              horizontalSpace(10.0),
-              PmlOutlineButton(
-                text: "Warm",
-                padding: EdgeInsets.symmetric(horizontal: 15.0),
-                height: 25.0,
-                textStyle: textStylePrimary12px500w,
-              ),
-              horizontalSpace(10.0),
-              PmlOutlineButton(
-                text: "Cold",
-                padding: EdgeInsets.symmetric(horizontal: 15.0),
-                height: 25.0,
-                textStyle: textStyleBlue12px500w,
-              ),
-            ],
-          ),*/
-
-// Tab(
-//   child: currentSelectedTab == "All"
-//       ? PmlOutlineButton(
-//           text: "All",
-//           height: 28.0,
-//           textStyle: textStyle12px500w,
-//           onTap: () {
-//             currentSelectedTab = "All";
-//             _tabController.index = 0;
-//             setState(() {});
-//           },
-//         )
-//       : PmlButton(
-//           text: "All",
-//           height: 28.0,
-//           textStyle: textStyleWhite12px500w,
-//           color: AppColors.colorSecondary,
-//           onTap: () {
-//             currentSelectedTab = "All";
-//             _tabController.index = 0;
-//             setState(() {});
-//           },
-//         ),
-// ),

@@ -19,4 +19,5 @@ abstract class HomeView extends BaseView{
   void onAccountStatusChecked(AccountStatusResponse projectUnitResponse);
   void onPaymentAcknowledged();
   void noEventPresent();
+  void onCurrentPromotionPageBlockerDataFetched(List<String> pageBlockersImagesList);
 }

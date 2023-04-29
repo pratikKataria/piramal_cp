@@ -8,6 +8,7 @@ import 'package:piramal_channel_partner/api/api_error_parser.dart';
 import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/account_status_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/booking_response.dart';
+import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/current_promotion_blocker_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/device_token_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/project_unit_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/schedule_visit_response.dart';
@@ -481,4 +482,33 @@ class HomePresenter {
         ApiErrorParser.getResult(e, _v);
       });
   }
+
+  void getCurrentPromotionBlocker(BuildContext context) async {
+    //check for internal token
+    if (await AuthUser.getInstance().hasToken()) {
+      _v.onError("Token not found");
+      return;
+    }
+
+    //check network
+    if (!await NetworkCheck.check()) {
+      _v.onError("Network Error");
+      return;
+    }
+
+    apiController.post(EndPoints.CP_CURRENT_PROMO_BLOCKER, headers: await Utility.header())
+      ..then((Response response) {
+        CurrentPromotionBlockerResponse currentPromotionBlockerResponse = CurrentPromotionBlockerResponse.fromJson(response.data);
+        if (currentPromotionBlockerResponse.returnCode) {
+          _v.onCurrentPromotionPageBlockerDataFetched(currentPromotionBlockerResponse.pageBlockersImagesList);
+        } else {
+          _v.onError(currentPromotionBlockerResponse.message);
+        }
+      })
+      ..catchError((e) async {
+        _v.onError(e.message);
+        ApiErrorParser.getResult(e, _v);
+      });
+  }
+
 }

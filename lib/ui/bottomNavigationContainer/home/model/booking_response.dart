@@ -13,6 +13,8 @@
 
 class BookingResponse {
   String taskId = "";
+  String bookingDate;
+  String walkingDate;
   bool dueInvoice = false;
 
   BookingResponse({
@@ -69,6 +71,7 @@ class BookingResponse {
     _completeTagging = json['CompleteTagging'];
     _CRMApproved = json['CRMApproved'];
     dueInvoice = json['Due_Invoice'];
+    walkingDate = json['Walkin_Date'];
   }
 
   String _nextFollowUp;
@@ -144,6 +147,7 @@ class BookingResponse {
     map['CompleteTagging'] = _completeTagging;
     map['CRMApproved'] = _CRMApproved;
     map['Due_Invoice'] = dueInvoice;
+    map['Walkin_Date'] = walkingDate;
     return map;
   }
 
