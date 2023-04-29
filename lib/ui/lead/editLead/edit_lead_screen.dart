@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
@@ -42,6 +41,7 @@ class _EditLeadScreenState extends State<EditLeadScreen> implements AddLeadView 
 
   final List<String> locationList = ["Mumbai"];
   final List<String> subUrbanList = [""];
+  List<String> listOfCpLeadStatus = [""];
 
   CreateLeadRequest createLeadRequest = CreateLeadRequest();
   LeadPresenter leadPresenter;
@@ -93,6 +93,7 @@ class _EditLeadScreenState extends State<EditLeadScreen> implements AddLeadView 
               buildProfileDetailCard2("Budget", "INR 5 Crore ", budgetList, AddLeadConstant.BUDGET_DROP),
               buildProfileDetailCard2("Location", "Navi Mumbai", locationList, AddLeadConstant.LOCATION_DROP),
               buildProfileDetailCard2("Sub Urban", "", subUrbanList, AddLeadConstant.SUB_URBAN_DROP),
+              buildProfileDetailCard2("CP Lead Status", "", listOfCpLeadStatus, AddLeadConstant.CP_LEAD_STATUS_DROP),
               buildProfileDetailCard3("Date of Visit", "27 October 2021"),
               Center(
                 child: PmlButton(
@@ -210,6 +211,9 @@ class _EditLeadScreenState extends State<EditLeadScreen> implements AddLeadView 
                           case AddLeadConstant.SUB_URBAN_DROP:
                             createLeadRequest.subUrban = value;
                             break;
+                          case AddLeadConstant.CP_LEAD_STATUS_DROP:
+                            createLeadRequest.cpLeadStatus = value;
+                            break;
                         }
 
                         setState(() {});
@@ -251,6 +255,9 @@ class _EditLeadScreenState extends State<EditLeadScreen> implements AddLeadView 
         break;
       case AddLeadConstant.SUB_URBAN_DROP:
         return createLeadRequest?.subUrban;
+        break;
+      case 6:
+        return createLeadRequest?.cpLeadStatus;
         break;
       default:
         return "";
@@ -340,6 +347,10 @@ class _EditLeadScreenState extends State<EditLeadScreen> implements AddLeadView 
         break;
       case AddLeadConstant.LOCATION_C:
         _v(locationList, element.values);
+        break;
+      case AddLeadConstant.CP_LEAD_STATUS:
+        _v(listOfCpLeadStatus, element.values);
+        if (listOfCpLeadStatus.isNotEmpty) createLeadRequest.cpLeadStatus = listOfCpLeadStatus.first;
         break;
       case AddLeadConstant.SUB_URBAN_C:
         _v(subUrbanList, element.values);

@@ -13,6 +13,8 @@
 /// Budget : ""
 
 class AllLeadResponse {
+ String cpLeadStatus;
+
   AllLeadResponse({
       String suburban, 
       String sfdcid, 
@@ -56,6 +58,7 @@ class AllLeadResponse {
     _customerAccountId = json['CustomerAccountId'];
     _configuration = json['Configuration'];
     _budget = json['Budget'];
+    cpLeadStatus = json['CP_Lead_Status'];
   }
   String _suburban;
   String _sfdcid;
@@ -100,6 +103,7 @@ class AllLeadResponse {
     map['CustomerAccountId'] = _customerAccountId;
     map['Configuration'] = _configuration;
     map['Budget'] = _budget;
+    map['CP_Lead_Status'] = cpLeadStatus;
     return map;
   }
 

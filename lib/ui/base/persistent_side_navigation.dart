@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:piramal_channel_partner/generated/assets.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
@@ -63,6 +64,12 @@ class PersistentSideNavigation extends StatelessWidget {
               verticalSpace(vSpacing),
               line(),
 
+              //Video
+              verticalSpace(vSpacing),
+              sideNavButton(provider, Screens.kVideoScreen, Assets.imagesIcVideo, "Video"),
+              verticalSpace(vSpacing),
+              line(),
+
               //View/Add Leads
               verticalSpace(vSpacing),
               sideNavButton(provider, Screens.kLeadScreen, Images.kIconLeads, "View/Add Leads"),
@@ -115,7 +122,7 @@ class PersistentSideNavigation extends StatelessWidget {
         height: 45,
         child: Row(
           children: [
-            Image.asset(icon, width: iconSize),
+            Image.asset(icon, width: iconSize, color: AppColors.colorPrimary),
             horizontalSpace(iconPadding),
             Text("$displayText", style: textStyle),
           ],

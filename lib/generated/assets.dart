@@ -31,12 +31,14 @@ class Assets {
   static const String imagesIcOverview = 'assets/images/ic_overview.png';
   static const String imagesIcPhone = 'assets/images/ic_phone.png';
   static const String imagesIcPlan = 'assets/images/ic_plan.png';
+  static const String imagesIcPlay = 'assets/images/ic_play.png';
   static const String imagesIcProjectRedirect = 'assets/images/ic_project_redirect.png';
   static const String imagesIcProjects = 'assets/images/ic_projects.png';
   static const String imagesIcSetting = 'assets/images/ic_setting.png';
   static const String imagesIcTodayFollowup = 'assets/images/ic_today_followup.png';
   static const String imagesIcTower = 'assets/images/ic_tower.png';
   static const String imagesIcUpload = 'assets/images/ic_upload.png';
+  static const String imagesIcVideo = 'assets/images/ic_video.png';
   static const String imagesIcWhatsApp = 'assets/images/ic_whats_app.png';
   static const String imagesImgCarousel1 = 'assets/images/img_carousel_1.png';
   static const String imagesImgCarousel2 = 'assets/images/img_carousel_2.png';

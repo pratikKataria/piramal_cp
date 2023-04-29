@@ -11,6 +11,7 @@
 /// SubUrban : "Andheri"
 
 class CreateLeadRequest {
+  String cpLeadStatus = "";
   CreateLeadRequest({
       String name, 
       String customerAccountId, 
@@ -48,6 +49,7 @@ class CreateLeadRequest {
     _accountID = json['RecordID'];
     _emailID = json['EmailID'];
     _subUrban = json['SubUrban'];
+    cpLeadStatus = json['CP_Lead_Status'];
   }
   String _name;
   String _customerAccountId;
@@ -86,6 +88,7 @@ class CreateLeadRequest {
     map['RecordID'] = _accountID;
     map['EmailID'] = _emailID;
     map['SubUrban'] = _subUrban;
+    map['CP_Lead_Status'] = cpLeadStatus;
     return map;
   }
 

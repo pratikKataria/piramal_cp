@@ -16,6 +16,7 @@ import 'package:piramal_channel_partner/res/Strings.dart';
 import 'package:piramal_channel_partner/ui/base/base_screen.dart';
 import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/bottom_navigation_base_screen.dart';
+import 'package:piramal_channel_partner/ui/constructionUpdates/construction_update_screen.dart';
 import 'package:piramal_channel_partner/ui/core/signup/signup_screen.dart';
 import 'package:piramal_channel_partner/ui/core/uploadDocument/upload_document_screen.dart';
 import 'package:piramal_channel_partner/ui/cpEvent/cp_event_screen.dart';
@@ -29,6 +30,7 @@ import 'package:piramal_channel_partner/ui/myAssit/projectList/project_screen.da
 import 'package:piramal_channel_partner/ui/myProfile/my_profile.dart';
 import 'package:piramal_channel_partner/ui/myProfile/uploadPendingDocument/upload_pending_document_screen.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/projectList/project_screen.dart';
+import 'package:piramal_channel_partner/ui/videoScreen/video_screen.dart';
 import 'package:piramal_channel_partner/utils/scroll_behavior.dart';
 import 'package:provider/provider.dart';
 
@@ -231,6 +233,12 @@ class MyApp extends StatelessWidget {
               break;
             case Screens.kEditLeadScreen:
               return RouteTransition(widget: EditLeadScreen(settings.arguments));
+              break;
+            case Screens.kConstructionUpdate:
+              return RouteTransition(widget: ConstructionUpdateScreen(settings.arguments));
+              break;
+            case Screens.kVideoScreen:
+              return RouteTransition(widget: VideoScreen());
               break;
             default:
               return RouteTransition(widget: BottomNavigationBaseScreen());

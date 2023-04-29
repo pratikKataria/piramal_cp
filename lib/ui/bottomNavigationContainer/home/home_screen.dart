@@ -1,9 +1,9 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
+import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/res/constants.dart';
 import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/homeWidgets/booking_card_widget.dart';
@@ -16,12 +16,17 @@ import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/schedule_visit_response.dart';
 import 'package:piramal_channel_partner/ui/core/login/model/token_response.dart';
 import 'package:piramal_channel_partner/ui/cpEvent/model/cp_event_response.dart';
+import 'package:piramal_channel_partner/ui/lead/lead_presenter.dart';
+import 'package:piramal_channel_partner/ui/lead/lead_view.dart';
+import 'package:piramal_channel_partner/ui/lead/model/all_lead_response.dart';
 import 'package:piramal_channel_partner/user/AuthUser.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
 import 'package:piramal_channel_partner/widgets/pml_outline_button.dart';
 import 'package:piramal_channel_partner/widgets/refresh_list_view.dart';
 import 'package:provider/provider.dart';
+
+String currentSelectedTab = "Lead";
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key key}) : super(key: key);
@@ -30,22 +35,28 @@ class HomeScreen extends StatefulWidget {
   HomeScreenState createState() => HomeScreenState();
 }
 
-class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin implements HomeView {
+class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin implements HomeView, LeadView {
   TabController _tabController;
   HomePresenter _homePresenter;
+  LeadPresenter _leadPresenter;
 
   List<BookingResponse> bookingList = [];
   List<BookingResponse> walkInList = [];
+  List<AllLeadResponse> listOfLeads = [];
   List<String> projectList = [];
 
   String events = "Currently no events available";
-  String currentSelectedTab = "Walk in";
   String filterValue;
+  bool dueInvoice = false;
 
   @override
   void initState() {
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
     _homePresenter = HomePresenter(this);
+    _leadPresenter = LeadPresenter(this);
+
+    _leadPresenter.getLeadListS(context);
+
     _homePresenter.getAccountStatus(context);
     _homePresenter.getEventList(context);
     _homePresenter.postDeviceToken(context);
@@ -95,6 +106,14 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
               controller: _tabController,
               physics: NeverScrollableScrollPhysics(),
               children: [
+                RefreshListView(
+                  margin: EdgeInsets.symmetric(horizontal: 20.0),
+                  onRefresh: () {
+                    _leadPresenter.getLeadList(context);
+                  },
+                  children:
+                      listOfLeads.where((element) => filterValue == null || filterValue == element.projectInterested).map<Widget>((element) => cardViewLead(element)).toList(),
+                ),
                 RefreshListView(
                   children: getWalkInListByFilterValue(),
                   onRefresh: () {
@@ -147,6 +166,24 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                   .toList(),
             ),
           ),
+          if (_tabController.index == 2) verticalSpace(20.0),
+          if (_tabController.index == 2)
+            Row(
+              children: [
+                PmlOutlineButton(
+                  onTap: () {
+                    dueInvoice = !dueInvoice;
+                    setState(() {});
+                  },
+                  text: "Due Invoice",
+                  padding: EdgeInsets.symmetric(horizontal: 15.0),
+                  margin: EdgeInsets.only(right: 10.0),
+                  height: 25.0,
+                  fillColor: dueInvoice ? AppColors.colorSecondary : AppColors.screenBackgroundColor,
+                  textStyle: dueInvoice ? textStyleWhite12px500w : textStyle12px500w,
+                ),
+              ],
+            ),
         ],
       ),
     );
@@ -165,6 +202,30 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
       },
       tabs: [
         Tab(
+          child: currentSelectedTab == "Lead"
+              ? PmlButton(
+                  text: "Lead",
+                  height: 28.0,
+                  textStyle: textStyleWhite12px500w,
+                  color: AppColors.colorSecondary,
+                  onTap: () {
+                    currentSelectedTab = "Lead";
+                    _tabController.index = 0;
+                    setState(() {});
+                  },
+                )
+              : PmlOutlineButton(
+                  text: "Lead",
+                  height: 28.0,
+                  textStyle: textStyle12px500w,
+                  onTap: () {
+                    currentSelectedTab = "Lead";
+                    _tabController.index = 0;
+                    setState(() {});
+                  },
+                ),
+        ),
+        Tab(
           child: currentSelectedTab == "Walk in"
               ? PmlButton(
                   text: "Walk in",
@@ -173,7 +234,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                   color: AppColors.colorSecondary,
                   onTap: () {
                     currentSelectedTab = "Walk in";
-                    _tabController.index = 0;
+                    _tabController.index = 1;
                     setState(() {});
                   },
                 )
@@ -183,7 +244,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                   textStyle: textStyle12px500w,
                   onTap: () {
                     currentSelectedTab = "Walk in";
-                    _tabController.index = 0;
+                    _tabController.index = 1;
                     setState(() {});
                   },
                 ),
@@ -197,7 +258,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                   color: AppColors.colorSecondary,
                   onTap: () {
                     currentSelectedTab = "Booking";
-                    _tabController.index = 1;
+                    _tabController.index = 2;
                     setState(() {});
                   },
                 )
@@ -207,7 +268,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                   textStyle: textStyle12px500w,
                   onTap: () {
                     currentSelectedTab = "Booking";
-                    _tabController.index = 1;
+                    _tabController.index = 2;
                     setState(() {});
                   },
                 ),
@@ -274,6 +335,120 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
     );
   }
 
+  cardViewLead(AllLeadResponse leadData) {
+    return Container(
+      height: 150,
+      padding: EdgeInsets.symmetric(horizontal: 20.0),
+      margin: EdgeInsets.only(bottom: 18.0),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(6.0),
+        boxShadow: [
+          BoxShadow(
+            // box-shadow: 0px 10px 30px 0px #0000000D;
+            color: AppColors.colorSecondary.withOpacity(0.1),
+            blurRadius: 20.0,
+            spreadRadius: 5.0,
+            offset: Offset(0, 8),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Row(
+            children: [
+              /*      ClipRRect(
+                borderRadius: BorderRadius.circular(80.0),
+                child: Container(
+                  height: 46,
+                  width: 46,
+                  child: Image.asset(Images.kImgPlaceholder, fit: BoxFit.fill),
+                ),
+              ),
+              horizontalSpace(14.0),*/
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "${leadData.name}",
+                      style: textStyle20px500w,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text("${leadData.mobileNumber}", style: textStyleSubText14px500w),
+                  ],
+                ),
+              ),
+              Spacer(),
+              PmlButton(
+                height: 32.0,
+                width: 32.0,
+                color: AppColors.screenBackgroundColor,
+                child: Icon(Icons.edit, size: 16),
+                onTap: () async {
+                  var created = await Navigator.pushNamed(context, Screens.kEditLeadScreen, arguments: leadData);
+                  if (created is bool && created) _leadPresenter.getLeadListS(context);
+                },
+              ),
+              horizontalSpace(10.0),
+              PmlButton(
+                height: 32.0,
+                width: 32.0,
+                color: AppColors.colorPrimaryLight,
+                child: Icon(Icons.delete, color: AppColors.colorPrimary, size: 16),
+                onTap: () => _leadPresenter.deleteLead(context, leadData),
+              ),
+            ],
+          ),
+          line(),
+          Wrap(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(6),
+                  color: AppColors.chipColor,
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+                child: Text("${leadData.projectInterested}", style: textStyle14px500w),
+              ),
+              horizontalSpace(10.0),
+              if (leadData.cpLeadStatus != null && leadData.cpLeadStatus.isNotEmpty)
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(6),
+                    color: AppColors.chipColor,
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+                  child: Text("${leadData.cpLeadStatus}", style: textStyle14px500w),
+                ),
+            ],
+          ),
+
+          /* Container(
+            height: 30,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: [
+                horizontalSpace(10.0),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(6),
+                    color: AppColors.chipColor,
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+                  child: Text("Piramal Mahalaxmi", style: textStyle14px500w),
+                ),
+              ],
+            ),
+          ),*/
+        ],
+      ),
+    );
+  }
+
   @override
   onError(String message) {
     Utility.showErrorToastB(context, message);
@@ -306,6 +481,8 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
 
     //sent request again
     _homePresenter.getWalkInListV2s(context);
+    _homePresenter.getBookingList(context);
+    _leadPresenter.getLeadListS(context);
   }
 
   @override
@@ -384,15 +561,11 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                 if (projectUnitResponse?.paymentByBN ?? false)
                   PmlButton(
                     height: 30.0,
-                    text:
-                        !(projectUnitResponse?.paymentConfirmationByCP ?? false) ? "Acknowledge Payment" : "Payment Acknowledged",
-                    color: !(projectUnitResponse?.paymentConfirmationByCP ?? false)
-                        ? AppColors.colorPrimary
-                        : AppColors.colorPrimary.withOpacity(0.5),
+                    text: !(projectUnitResponse?.paymentConfirmationByCP ?? false) ? "Acknowledge Payment" : "Payment Acknowledged",
+                    color: !(projectUnitResponse?.paymentConfirmationByCP ?? false) ? AppColors.colorPrimary : AppColors.colorPrimary.withOpacity(0.5),
                     onTap: () async {
                       if (!(projectUnitResponse?.paymentConfirmationByCP ?? false)) {
-                        _homePresenter.acknowledgePayment(
-                            context, projectUnitResponse.sfdcid, projectUnitResponse.brokerageRecordId);
+                        _homePresenter.acknowledgePayment(context, projectUnitResponse.sfdcid, projectUnitResponse.brokerageRecordId);
                       }
                     },
                   )
@@ -437,29 +610,33 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
   getWalkInListByFilterValue() {
     List<Widget> walkInWidgetList = [];
 
-    if (filterValue == null) {
-      walkInList.forEach((element) => walkInWidgetList.add(WalkInCardWidget(element, _homePresenter)));
-    } else {
-      walkInList.forEach((element) {
-        if (filterValue == element.projectInterested) walkInWidgetList.add(WalkInCardWidget(element, _homePresenter));
-      });
-    }
+    walkInWidgetList = walkInList
+        .where((element) => filterValue == null || filterValue == element.projectInterested) // filter out by project
+        .map((element) => WalkInCardWidget(element, _homePresenter)) // convert to map then to widget
+        .toList(); // provide list
 
     return walkInWidgetList;
   }
 
-  getBookingListByFilterValue() {
-    List<Widget> bookingWidgetList = [];
+  List<Widget> getBookingListByFilterValue() {
+    return bookingList
+        .where((element) => (filterValue == null || filterValue == element.projectFinalized) && dueInvoice == element.dueInvoice) // filter out by project
+        .map((element) => BookingCardWidget(element, _homePresenter)) // convert to map then to widget
+        .toList(); // provide list
 
-    if (filterValue == null) {
-      bookingList.forEach((element) => bookingWidgetList.add(BookingCardWidget(element, _homePresenter)));
-    } else {
-      bookingList.forEach((element) {
-        if (filterValue == element.projectFinalized) bookingWidgetList.add(BookingCardWidget(element, _homePresenter));
-      });
-    }
-
-    return bookingWidgetList;
+    return bookingList
+        .where((element) {
+          if (filterValue == null) {
+            return true;
+          } else if (filterValue == "projectFinalized") {
+            return element.projectFinalized == true;
+          } else if (filterValue == "dueInvoice") {
+            return dueInvoice;
+          }
+          return false;
+        })
+        .map((element) => BookingCardWidget(element, _homePresenter))
+        .toList();
   }
 
   @override
@@ -552,8 +729,6 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
   }
 
   void updateHome() {
-    _tabController.index = 0;
-    currentSelectedTab = "Walk in";
     setState(() {});
     _homePresenter.getWalkInListV2s(context);
   }
@@ -567,6 +742,27 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
   @override
   void noEventPresent() {
     events = "Currently no events available";
+    setState(() {});
+  }
+
+  @override
+  void onAllLeadFetched(List<AllLeadResponse> brList) {
+    listOfLeads.clear();
+    listOfLeads.addAll(brList);
+
+    // add projects to project list
+    // projectList.clear();
+
+    listOfLeads.forEach((lead) {
+      bool isProjectAlreadyPresent = projectList.contains(lead.projectInterested);
+      if (!isProjectAlreadyPresent) projectList.add(lead.projectInterested);
+    });
+    setState(() {});
+  }
+
+  @override
+  void onLeadDeleted(AllLeadResponse response) {
+    listOfLeads.remove(response);
     setState(() {});
   }
 }

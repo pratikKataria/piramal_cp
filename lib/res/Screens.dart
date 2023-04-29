@@ -15,6 +15,7 @@ abstract class Screens {
    static const kProjectScreen = "kProjectScreen";
    static const kCurrentPromotionsScreen = "kCurrentPromotions";
    static const kLeadScreen = "kLead";
+   static const kVideoScreen = "kVideoScreen";
    static const kAddLeadScreen = "kAddLead";
    static const kCPEventScreen = "kCpEventScreen";
    static const kMyAssistScreen = "kMyAssistScreen";
@@ -26,6 +27,7 @@ abstract class Screens {
    static const kUploadDocumentScreen = "kUploadDocumentScreen";
    static const kEditLeadScreen = "kEditLeadScreen";
    static const kUploadPendingDocumentScreen = "kUploadPendingDocumentScreen";
+   static const kConstructionUpdate = "kConstructionUpdate";
 
    static const kErrorTxt = "No Data Found";
 }

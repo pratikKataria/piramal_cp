@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
@@ -142,6 +141,8 @@ class _AddLeadScreenState extends State<AddLeadScreen> implements AddLeadView {
                 createLeadRequest.mobilenumber = val;
               } else if (captureNo == 3) {
                 createLeadRequest.emailID = val;
+              } else if (captureNo == AddLeadConstant.CP_LEAD_STATUS_DROP) {
+                createLeadRequest.emailID = val;
               }
             },
           ),
@@ -199,6 +200,9 @@ class _AddLeadScreenState extends State<AddLeadScreen> implements AddLeadView {
                           case AddLeadConstant.LOCATION_DROP:
                             createLeadRequest.location = value;
                             break;
+                          case AddLeadConstant.CP_LEAD_STATUS_DROP:
+                            createLeadRequest.cpLeadStatus = value;
+                            break;
                           case AddLeadConstant.SUB_URBAN_DROP:
                             createLeadRequest.subUrban = value;
                             break;
@@ -233,6 +237,9 @@ class _AddLeadScreenState extends State<AddLeadScreen> implements AddLeadView {
         break;
       case 5:
         return createLeadRequest.subUrban;
+        break;
+      case 6:
+        return createLeadRequest.cpLeadStatus;
         break;
       default:
         return "";
@@ -325,7 +332,7 @@ class _AddLeadScreenState extends State<AddLeadScreen> implements AddLeadView {
         break;
       case AddLeadConstant.CP_LEAD_STATUS:
         _v(listOfCpLeadStatus, element.values);
-        if (listOfCpLeadStatus.isNotEmpty) createLeadRequest.subUrban = listOfCpLeadStatus.first;
+        if (listOfCpLeadStatus.isNotEmpty) createLeadRequest.cpLeadStatus = listOfCpLeadStatus.first;
         break;
       case AddLeadConstant.SUB_URBAN_C:
         _v(subUrbanList, element.values);

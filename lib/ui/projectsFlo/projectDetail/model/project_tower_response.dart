@@ -6,6 +6,7 @@
 /// message : "SUCCESS"
 
 class ProjectTowerResponse {
+  String towerId = "";
   ProjectTowerResponse({
       String towerName, 
       String towerWebsite, 
@@ -28,6 +29,7 @@ class ProjectTowerResponse {
     _returnCode = json['returnCode'];
     _projectName = json['ProjectName'];
     _message = json['message'];
+    towerId = json['TowerId'];
   }
   String _towerName;
   String _towerWebsite;
@@ -51,6 +53,7 @@ class ProjectTowerResponse {
     map['returnCode'] = _returnCode;
     map['ProjectName'] = _projectName;
     map['message'] = _message;
+    map['TowerId'] = towerId;
     return map;
   }
 

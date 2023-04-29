@@ -13,6 +13,7 @@
 
 class BookingResponse {
   String taskId = "";
+  bool dueInvoice = false;
 
   BookingResponse({
     dynamic towerFinalized,
@@ -67,6 +68,7 @@ class BookingResponse {
     _nextFollowUp = json['NextFollowUp'];
     _completeTagging = json['CompleteTagging'];
     _CRMApproved = json['CRMApproved'];
+    dueInvoice = json['Due_Invoice'];
   }
 
   String _nextFollowUp;
@@ -141,6 +143,7 @@ class BookingResponse {
     map['NextFollowUp'] = _nextFollowUp;
     map['CompleteTagging'] = _completeTagging;
     map['CRMApproved'] = _CRMApproved;
+    map['Due_Invoice'] = dueInvoice;
     return map;
   }
 

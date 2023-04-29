@@ -213,14 +213,29 @@ class _LeadScreenState extends State<LeadScreen> implements LeadView {
             ],
           ),
           line(),
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(6),
-              color: AppColors.chipColor,
-            ),
-            padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-            child: Text("${leadData.projectInterested}", style: textStyle14px500w),
+          Wrap(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(6),
+                  color: AppColors.chipColor,
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+                child: Text("${leadData.projectInterested}", style: textStyle14px500w),
+              ),
+              horizontalSpace(10.0),
+              if (leadData.cpLeadStatus != null && leadData.cpLeadStatus.isNotEmpty) Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(6),
+                  color: AppColors.chipColor,
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+                child: Text("${leadData.cpLeadStatus}", style: textStyle14px500w),
+              ),
+
+            ],
           ),
+
           /* Container(
             height: 30,
             child: ListView(

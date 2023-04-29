@@ -63,4 +63,6 @@ class EndPoints {
   static final String POST_SAVE_INVOICE_NO = BASE_URL + "/CP_Mobile_App/InvoiceNumber";
   static final String DOWNLOAD_LWC = BASE_URL + "/CP_Mobile_App/brochureDownloadLWC";
   static final String UPLOAD = BASE_URL + "/CP_Mobile_App/addCPDocuments";
+  static final String CP_APP_CONSTRUCTION_UPDATES = BASE_URL + "/CP_Mobile_App/CP_App_Construction_Updates";
+  static final String CP_APP_OFFER_VIDEOS = BASE_URL + "/CP_Mobile_App/CP_App_Offer_Videos";
 }
