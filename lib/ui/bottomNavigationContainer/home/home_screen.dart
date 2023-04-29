@@ -389,6 +389,8 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                 color: AppColors.screenBackgroundColor,
                 child: Icon(Icons.edit, size: 16),
                 onTap: () async {
+                  BaseProvider baseProvider = Provider.of<BaseProvider>(context, listen: false);
+                  baseProvider.setBottomNavScreen(Screens.kEditLeadScreen);
                   var created = await Navigator.pushNamed(context, Screens.kEditLeadScreen, arguments: leadData);
                   if (created is bool && created) _leadPresenter.getLeadListS(context);
                 },
@@ -405,6 +407,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
           ),
           line(),
           Wrap(
+            runSpacing: 10.0,
             children: [
               Container(
                 decoration: BoxDecoration(
@@ -412,7 +415,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                   color: AppColors.chipColor,
                 ),
                 padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-                child: Text("${leadData.projectInterested}", style: textStyle14px500w),
+                child: Text("${leadData.projectInterested}", style: textStyle12px500w),
               ),
               horizontalSpace(10.0),
               if (leadData.cpLeadStatus != null && leadData.cpLeadStatus.isNotEmpty)
