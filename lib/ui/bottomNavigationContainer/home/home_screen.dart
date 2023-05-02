@@ -1,4 +1,5 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
 import 'package:piramal_channel_partner/extension/extention%20function.dart';
@@ -13,10 +14,10 @@ import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/home_p
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/home_view.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/account_status_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/booking_response.dart';
+import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/cp_banner_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/project_unit_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/schedule_visit_response.dart';
 import 'package:piramal_channel_partner/ui/core/login/model/token_response.dart';
-import 'package:piramal_channel_partner/ui/cpEvent/model/cp_event_response.dart';
 import 'package:piramal_channel_partner/ui/lead/lead_presenter.dart';
 import 'package:piramal_channel_partner/ui/lead/lead_view.dart';
 import 'package:piramal_channel_partner/ui/lead/model/all_lead_response.dart';
@@ -49,8 +50,9 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
   Set<String> listOfMonths = {};
   List<String> projectList = [];
 
-  String events = "Currently no events available";
+  List<BannerDataList> listOfBannerStrings = [BannerDataList(bannerName: "No event available")];
   String filterValue;
+  String filterDate;
   bool dueInvoice = false;
 
   @override
@@ -59,11 +61,12 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
     _homePresenter = HomePresenter(this);
     _leadPresenter = LeadPresenter(this);
 
-    _leadPresenter.getLeadListS(context);
+    if (kReleaseMode) _leadPresenter.getLeadListS(context);
 
-    _homePresenter.getAccountStatus(context);
+    if (kReleaseMode) _homePresenter.getAccountStatus(context);
     _homePresenter.getEventList(context);
-    _homePresenter.postDeviceToken(context);
+    if (kReleaseMode) _homePresenter.postDeviceToken(context);
+    if (kReleaseMode) _homePresenter.getCurrentPromotionBlocker(context);
     super.initState();
   }
 
@@ -180,16 +183,16 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                 scrollDirection: Axis.horizontal,
                 children: listOfMonths
                     .map<Widget>((e) => PmlOutlineButton(
-                          onTap: () {
-                            filterValue = e == filterValue ? null : e;
+                  onTap: () {
+                            filterDate = e == filterDate ? null : e;
                             setState(() {});
                           },
                           text: "${e.formatDate}",
                           padding: EdgeInsets.symmetric(horizontal: 15.0),
                           margin: EdgeInsets.only(right: 10.0),
                           height: 25.0,
-                          fillColor: filterValue == e ? AppColors.colorSecondary : AppColors.screenBackgroundColor,
-                          textStyle: filterValue == e ? textStyleWhite12px500w : textStyle12px500w,
+                          fillColor: filterDate == e ? AppColors.colorSecondary : AppColors.screenBackgroundColor,
+                          textStyle: filterDate == e ? textStyleWhite12px500w : textStyle12px500w,
                         ))
                     .toList(),
               ),
@@ -314,7 +317,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
           padding: EdgeInsets.only(bottom: 6.0),
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.0), color: AppColors.colorPrimary),
           child: Marquee(
-            text: '\n $events',
+            text: '\n ${listOfBannerStrings.map((e) => e.bannerName).join("      \u2022      ")}',
             style: textStyleWhite12px600w,
             scrollAxis: Axis.horizontal,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -327,7 +330,12 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
             decelerationDuration: Duration(milliseconds: 200),
             decelerationCurve: Curves.easeOut,
           ),
-        ),
+        ).onClick(() {
+          if (listOfBannerStrings.isNotEmpty) {
+            String check = listOfBannerStrings.first.bannerName;
+            if (check != "No event available") showDialogBanner();
+          }
+        }),
         Positioned(
           top: 35.0,
           bottom: 0,
@@ -345,6 +353,72 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
         ),
       ],
     );
+  }
+
+  void showDialogBanner() {
+    showDialog<BannerDataList>(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: Colors.transparent,
+            content: Wrap(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(20.0),
+                  child: Container(
+                    color: AppColors.white,
+                    padding: EdgeInsets.all(20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Events", style: textStyle14px500w),
+                        verticalSpace(10.0),
+                        ...listOfBannerStrings.map((e) {
+                          return Container(
+                            color: AppColors.inputFieldBackgroundColor,
+                            padding: EdgeInsets.all(20.0),
+                            margin: EdgeInsets.only(bottom: 10.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(child: Text(e.bannerName, style: textStyleSubText14px500w)),
+                                    horizontalSpace(10.0),
+                                    Icon(
+                                      Icons.arrow_circle_right_outlined,
+                                      color: AppColors.colorPrimary,
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ).onClick(() {
+                            Navigator.pop(context, e);
+                          });
+                        }).toList(),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }).then((BannerDataList value) {
+      switch (value.bannerType) {
+        case "1":
+          Navigator.pushNamed(context, Screens.kCPEventScreen);
+          BaseProvider baseProvider = Provider.of<BaseProvider>(context, listen: false);
+          baseProvider.setBottomNavScreen(Screens.kCPEventScreen);
+          break;
+        case "2":
+          Navigator.pushNamed(context, Screens.kCurrentPromotionsScreen);
+          BaseProvider baseProvider = Provider.of<BaseProvider>(context, listen: false);
+          baseProvider.setBottomNavScreen(Screens.kCurrentPromotionsScreen);
+          break;
+      }
+    });
   }
 
   Column buildDialogRow(String s, String m) {
@@ -514,8 +588,8 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
     AuthUser.getInstance().updateUser(currentUser);
 
     //sent request again
-    _homePresenter.getWalkInListV2s(context);
-    _homePresenter.getBookingList(context);
+    if (kReleaseMode) _homePresenter.getWalkInListV2s(context);
+    if (kReleaseMode) _homePresenter.getBookingList(context);
     _leadPresenter.getLeadListS(context);
   }
 
@@ -553,9 +627,10 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
   }
 
   @override
-  void onEventFetched(List<CpEventResponse> brList) {
-    events = "";
-    brList.forEach((element) => events = "$events${element.eventName}     \u2022    ");
+  void onEventFetched(List<BannerDataList> brList) {
+    listOfBannerStrings.clear();
+    listOfBannerStrings.addAll(brList);
+    // brList.forEach((element) => events = "$events${element.eventName}     \u2022    ");
     setState(() {});
   }
 
@@ -599,7 +674,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                     color: !(projectUnitResponse?.paymentConfirmationByCP ?? false) ? AppColors.colorPrimary : AppColors.colorPrimary.withOpacity(0.5),
                     onTap: () async {
                       if (!(projectUnitResponse?.paymentConfirmationByCP ?? false)) {
-                        _homePresenter.acknowledgePayment(context, projectUnitResponse.sfdcid, projectUnitResponse.brokerageRecordId);
+                        if (kReleaseMode) _homePresenter.acknowledgePayment(context, projectUnitResponse.sfdcid, projectUnitResponse.brokerageRecordId);
                       }
                     },
                   )
@@ -641,11 +716,11 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
     }
   }
 
-  getWalkInListByFilterValue() {
+  List<Widget> getWalkInListByFilterValue() {
     List<Widget> walkInWidgetList = [];
 
     walkInWidgetList = walkInList
-        .where((element) => filterValue == null || filterValue == element.projectInterested) // filter out by project
+        .where((element) => filterValue == null || filterValue == element.projectInterested || filterDate == element.bookingDate) // filter out by project
         .map((element) => WalkInCardWidget(element, _homePresenter)) // convert to map then to widget
         .toList(); // provide list
 
@@ -654,7 +729,8 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
 
   List<Widget> getBookingListByFilterValue() {
     return bookingList
-        .where((element) => (filterValue == null || filterValue == element.projectFinalized) && dueInvoice == element.dueInvoice) // filter out by project
+        .where((element) =>
+            (filterValue == null || filterValue == element.projectFinalized) && dueInvoice == element.dueInvoice || filterDate == element.bookingDate) // filter out by project
         .map((element) => BookingCardWidget(element, _homePresenter)) // convert to map then to widget
         .toList(); // provide list
   }
@@ -662,7 +738,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
   @override
   void onTaggingDone() {
     Utility.showSuccessToastB(context, "Tagging completed");
-    _homePresenter.getWalkInListV2s(context);
+    if (kReleaseMode) _homePresenter.getWalkInListV2s(context);
   }
 
   @override
@@ -670,8 +746,8 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
     switch (accountStatusResponse.applicationStatus) {
       case Constants.ADMIN:
         await updateUserCreds(accountStatusResponse?.customerAccountID);
-        _homePresenter.getWalkInList(context);
-        _homePresenter.getBookingList(context);
+        if (kReleaseMode) _homePresenter.getWalkInList(context);
+        if (kReleaseMode) _homePresenter.getBookingList(context);
         break;
       case Constants.GUEST_USER:
         break;
@@ -680,9 +756,9 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
         break;
       case Constants.APPROVED:
         await updateUserCreds(accountStatusResponse?.customerAccountID);
-        _homePresenter.getWalkInList(context);
-        _homePresenter.getBookingList(context);
-        _homePresenter.getCurrentPromotionBlocker(context);
+        if (kReleaseMode) _homePresenter.getWalkInList(context);
+        if (kReleaseMode) _homePresenter.getBookingList(context);
+        if (kReleaseMode) _homePresenter.getCurrentPromotionBlocker(context);
         break;
     }
   }
@@ -751,7 +827,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
 
   void updateHome() {
     setState(() {});
-    _homePresenter.getWalkInListV2s(context);
+    if (kReleaseMode) _homePresenter.getWalkInListV2s(context);
   }
 
   @override
@@ -762,7 +838,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
 
   @override
   void noEventPresent() {
-    events = "Currently no events available";
+    // events = "Currently no events available";
     setState(() {});
   }
 

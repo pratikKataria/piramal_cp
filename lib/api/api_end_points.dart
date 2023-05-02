@@ -66,4 +66,5 @@ class EndPoints {
   static final String CP_APP_CONSTRUCTION_UPDATES = BASE_URL + "/CP_Mobile_App/CP_App_Construction_Updates";
   static final String CP_APP_OFFER_VIDEOS = BASE_URL + "/CP_Mobile_App/CP_App_Offer_Videos";
   static final String CP_CURRENT_PROMO_BLOCKER = BASE_URL + "/CP_Mobile_App/CP_App_Page_Bloclkers";
+  static final String CP_APP_BANNER = BASE_URL + "/CP_Mobile_App/CP_App_Banner";
 }

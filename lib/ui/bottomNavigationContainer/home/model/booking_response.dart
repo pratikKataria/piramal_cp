@@ -72,6 +72,7 @@ class BookingResponse {
     _CRMApproved = json['CRMApproved'];
     dueInvoice = json['Due_Invoice'];
     walkingDate = json['Walkin_Date'];
+    bookingDate = json['Booking_Date'];
   }
 
   String _nextFollowUp;
@@ -148,6 +149,7 @@ class BookingResponse {
     map['CRMApproved'] = _CRMApproved;
     map['Due_Invoice'] = dueInvoice;
     map['Walkin_Date'] = walkingDate;
+    map['Booking_Date'] = bookingDate;
     return map;
   }
 

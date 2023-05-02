@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -63,7 +62,8 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
   try {
     print("Message Received: ${message.data}");
-    String image = /*message.data["image"]*/"https://images.unsplash.com/photo-1488372759477-a7f4aa078cb6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80";
+    String image = message.data[
+        "image"] /*"https://images.unsplash.com/photo-1488372759477-a7f4aa078cb6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"*/;
     // print(image);
 
     /* final Response response = await Dio().get(image, options: Options(responseType: ResponseType.bytes));
@@ -87,8 +87,8 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   if (notification != null && android != null) {
     flutterLocalNotificationsPlugin.show(
       notification.hashCode,
-      "400",
-      "404",
+      notification.title,
+      notification.body,
       NotificationDetails(
         android: AndroidNotificationDetails(
           channel.id,
@@ -286,8 +286,8 @@ class MyApp extends StatelessWidget {
       if (notification != null && android != null) {
         flutterLocalNotificationsPlugin.show(
           notification.hashCode,
-          "400",
-          "404",
+          notification.title,
+          notification.body,
           NotificationDetails(
             android: AndroidNotificationDetails(
               channel.id,

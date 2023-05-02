@@ -8,6 +8,7 @@ import 'package:piramal_channel_partner/api/api_error_parser.dart';
 import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/account_status_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/booking_response.dart';
+import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/cp_banner_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/current_promotion_blocker_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/device_token_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/project_unit_response.dart';
@@ -204,26 +205,14 @@ class HomePresenter {
       return;
     }
 
-    String uID = await Utility.uID();
-    var body = {"AccountID": "$uID"};
-    // var body = {"AccountID": "001p000000wiszQ"};
 
     // Dialogs.showLoader(context, "Fetching cp event data ...");
-    apiController.post(EndPoints.CP_EVENT_LIST, body: body, headers: await Utility.header())
+    apiController.post(EndPoints.CP_APP_BANNER,  headers: await Utility.header())
       ..then((response) async {
         // await Dialogs.hideLoader(context);
-        List<CpEventResponse> brList = [];
-        var listOfDynamic = response.data as List;
-        listOfDynamic.forEach((element) => brList.add(CpEventResponse.fromJson(element)));
-
-        CpEventResponse bookingResponse = brList.isNotEmpty ? brList.first : null;
-        if (bookingResponse == null) {
-          _v.onError("No Event Available");
-          return;
-        }
-
-        if (bookingResponse.returnCode) {
-          _v.onEventFetched(brList);
+        CpBannerResponse cpBannerResponse = CpBannerResponse.fromJson(response.data);
+        if (cpBannerResponse.returnCode) {
+          _v.onEventFetched(cpBannerResponse.bannerDataList);
         } else {
           _v.noEventPresent();
         }
