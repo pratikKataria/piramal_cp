@@ -9,6 +9,7 @@
 ///  "InvoiceNumberGenerated": true,
 //   "GenerateInvoice": true,
 class InvoiceResponse {
+  String BookingApprovalDate = "";
   String _statusChangeDate;
   String _status;
   bool _returnCode;
@@ -48,6 +49,7 @@ class InvoiceResponse {
     map['InvoiceNumberGenerated'] = _invoiceNumberGenerated;
     map['GenerateInvoice'] = _generatedInvoice;
     map['ShowInvoiceNumber'] = _showInvoiceNumber;
+    map['BookingApprovalDate'] = BookingApprovalDate;
 
     return map;
   }
@@ -64,5 +66,6 @@ class InvoiceResponse {
     _invoiceNumberGenerated = json['InvoiceNumberGenerated'];
     _generatedInvoice = json['GenerateInvoice'];
     _showInvoiceNumber = json['ShowInvoiceNumber'];
+    BookingApprovalDate = json['BookingApprovalDates'];
   }
 }

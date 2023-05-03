@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:piramal_channel_partner/extension/extention%20function.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
@@ -165,7 +166,7 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
                 children: [
                   Text("Booked", style: textStyle20px500w),
                   horizontalSpace(12.0),
-                  Text("On March 21th, 2021", style: textStyleSubText14px500w),
+                  Text("On ${response?.bookingApprovalDate?.formatDate2}", style: textStyleSubText14px500w),
                   Spacer(),
                   PmlButton(
                     width: 30,

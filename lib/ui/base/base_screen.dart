@@ -26,8 +26,8 @@ class BaseScreen extends StatelessWidget {
 
   void initState() async {
 
-    bool completed = await Utility.isTourCompleted(Screens.kBottomNavigationScreen);
-    if (completed == false && globalTutorialCoachMark == null) {
+    // bool completed = await Utility.isTourCompleted(Screens.kBottomNavigationScreen);
+    if ( globalTutorialCoachMark == null) {
       createTutorial();
       Future.delayed(Duration(milliseconds: 800), showTutorial);
     }

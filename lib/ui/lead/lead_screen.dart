@@ -227,10 +227,10 @@ class _LeadScreenState extends State<LeadScreen> implements LeadView {
               if (leadData.cpLeadStatus != null && leadData.cpLeadStatus.isNotEmpty) Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(6),
-                  color: AppColors.chipColor,
+                  color: AppColors.green,
                 ),
                 padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-                child: Text("${leadData.cpLeadStatus}", style: textStyle14px500w),
+                child: Text("${leadData.cpLeadStatus}", style: textStyleWhite14px600w),
               ),
 
             ],

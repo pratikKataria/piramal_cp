@@ -30,7 +30,7 @@ import 'package:piramal_channel_partner/widgets/pml_outline_button.dart';
 import 'package:piramal_channel_partner/widgets/refresh_list_view.dart';
 import 'package:provider/provider.dart';
 
-String currentSelectedTab = "Lead";
+String currentSelectedTab = "CP Lead";
 bool currentPromoShowing = false;
 
 class HomeScreen extends StatefulWidget {
@@ -63,10 +63,10 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
     _homePresenter = HomePresenter(this);
     _leadPresenter = LeadPresenter(this);
 
-    if (kDebugMode) _leadPresenter.getLeadListS(context);
-    if (kDebugMode) _homePresenter.getAccountStatus(context);
+    _leadPresenter.getLeadListS(context);
+    _homePresenter.getAccountStatus(context);
     _homePresenter.getEventList(context);
-    if (kDebugMode) _homePresenter.postDeviceToken(context);
+    _homePresenter.postDeviceToken(context);
     super.initState();
   }
 
@@ -234,24 +234,24 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
       },
       tabs: [
         Tab(
-          child: currentSelectedTab == "Lead"
+          child: currentSelectedTab == "CP Lead"
               ? PmlButton(
-                  text: "Lead",
+                  text: "CP Lead",
                   height: 28.0,
                   textStyle: textStyleWhite12px500w,
                   color: AppColors.colorSecondary,
                   onTap: () {
-                    currentSelectedTab = "Lead";
+                    currentSelectedTab = "CP Lead";
                     _tabController.index = 0;
                     setState(() {});
                   },
                 )
               : PmlOutlineButton(
-                  text: "Lead",
+            text: "CP Lead",
                   height: 28.0,
                   textStyle: textStyle12px500w,
                   onTap: () {
-                    currentSelectedTab = "Lead";
+                    currentSelectedTab = "CP Lead";
                     _tabController.index = 0;
                     setState(() {});
                   },
@@ -405,17 +405,20 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
               ],
             ),
           );
-        }).then((BannerDataList value) {
+        }).then((BannerDataList value) async {
       switch (value.bannerType) {
         case "1":
-          Navigator.pushNamed(context, Screens.kCPEventScreen);
           BaseProvider baseProvider = Provider.of<BaseProvider>(context, listen: false);
           baseProvider.setBottomNavScreen(Screens.kCPEventScreen);
+          await Navigator.pushNamed(context, Screens.kCPEventScreen);
+          baseProvider.setBottomNavScreen(Screens.kHomeScreen);
+
           break;
         case "2":
-          Navigator.pushNamed(context, Screens.kCurrentPromotionsScreen);
           BaseProvider baseProvider = Provider.of<BaseProvider>(context, listen: false);
           baseProvider.setBottomNavScreen(Screens.kCurrentPromotionsScreen);
+          await Navigator.pushNamed(context, Screens.kCurrentPromotionsScreen);
+          baseProvider.setBottomNavScreen(Screens.kHomeScreen);
           break;
       }
     });
@@ -526,10 +529,10 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(6),
-                    color: AppColors.chipColor,
+                    color: AppColors.green,
                   ),
                   padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-                  child: Text("${leadData.cpLeadStatus}", style: textStyle14px500w),
+                  child: Text("${leadData.cpLeadStatus}", style: textStyleWhite14px600w),
                 ),
             ],
           ),
@@ -592,8 +595,8 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
     AuthUser.getInstance().updateUser(currentUser);
 
     //sent request again
-    if (kDebugMode) _homePresenter.getWalkInListV2s(context);
-    if (kDebugMode) _homePresenter.getBookingList(context);
+    _homePresenter.getWalkInListV2s(context);
+    _homePresenter.getBookingList(context);
     _leadPresenter.getLeadListS(context);
   }
 
@@ -678,7 +681,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                     color: !(projectUnitResponse?.paymentConfirmationByCP ?? false) ? AppColors.colorPrimary : AppColors.colorPrimary.withOpacity(0.5),
                     onTap: () async {
                       if (!(projectUnitResponse?.paymentConfirmationByCP ?? false)) {
-                        if (kDebugMode) _homePresenter.acknowledgePayment(context, projectUnitResponse.sfdcid, projectUnitResponse.brokerageRecordId);
+                        _homePresenter.acknowledgePayment(context, projectUnitResponse.sfdcid, projectUnitResponse.brokerageRecordId);
                       }
                     },
                   )
@@ -802,7 +805,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
   @override
   void onTaggingDone() {
     Utility.showSuccessToastB(context, "Tagging completed");
-    if (kDebugMode) _homePresenter.getWalkInListV2s(context);
+    _homePresenter.getWalkInListV2s(context);
   }
 
   @override
@@ -810,8 +813,8 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
     switch (accountStatusResponse.applicationStatus) {
       case Constants.ADMIN:
         await updateUserCreds(accountStatusResponse?.customerAccountID);
-        if (kDebugMode) _homePresenter.getWalkInList(context);
-        if (kDebugMode) _homePresenter.getBookingList(context);
+        _homePresenter.getWalkInList(context);
+        _homePresenter.getBookingList(context);
         break;
       case Constants.GUEST_USER:
         break;
@@ -820,11 +823,11 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
         break;
       case Constants.APPROVED:
         await updateUserCreds(accountStatusResponse?.customerAccountID);
-        if (kDebugMode) _homePresenter.getWalkInList(context);
-        if (kDebugMode) _homePresenter.getBookingList(context);
+        _homePresenter.getWalkInList(context);
+        _homePresenter.getBookingList(context);
         break;
     }
-    if (kDebugMode) _homePresenter.getCurrentPromotionBlocker(context);
+    _homePresenter.getCurrentPromotionBlocker(context);
   }
 
   void updateUserCreds(String uId) async {
@@ -891,7 +894,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
 
   void updateHome() {
     setState(() {});
-    if (kDebugMode) _homePresenter.getWalkInListV2s(context);
+    _homePresenter.getWalkInListV2s(context);
   }
 
   @override
