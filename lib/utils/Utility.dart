@@ -11,8 +11,10 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
+import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/res/Strings.dart';
 import 'package:piramal_channel_partner/user/AuthUser.dart';
+import 'package:piramal_channel_partner/utils/SharedManager.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// Created by Pratik Kataria on 20-02-2021.
@@ -370,6 +372,14 @@ class Utility {
         // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: new Text("whatsapp no installed")));
       }
     }
+  }
+
+  static Future<bool> isTourCompleted(String screen) async {
+    return await SharedManager.getBooleanPreference(screen);
+  }
+
+  static void setTourCompleted(String screen) async {
+    SharedManager.setBooleanPreference(screen, true);
   }
 
   static Future<void> getPdfFromBlob(String blob) async {

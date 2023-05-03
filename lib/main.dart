@@ -173,9 +173,17 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(primarySwatch: Colors.deepOrange, scaffoldBackgroundColor: AppColors.white),
         navigatorKey: navigatorGk,
         builder: (_, child) {
-          return ScrollConfiguration(
-            behavior: MyBehavior(),
-            child: BaseScreen(child: child),
+          return Overlay(
+            initialEntries: [
+              OverlayEntry(
+                builder: (BuildContext context) {
+                 return ScrollConfiguration(
+                    behavior: MyBehavior(),
+                    child: BaseScreen(child: child),
+                  );
+                },
+              ),
+            ],
           );
         },
         onGenerateRoute: (RouteSettings settings) {

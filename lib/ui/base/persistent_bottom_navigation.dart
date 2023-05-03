@@ -4,36 +4,41 @@ import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
 import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
+import 'package:piramal_channel_partner/ui/bottomNavigationContainer/tour_keys_bottom_navigation.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/utils/navigator_gk.dart';
 import 'package:provider/provider.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
+
 
 class PersistentBottomNavigation extends StatelessWidget {
-  const PersistentBottomNavigation({Key key}) : super(key: key);
+  PersistentBottomNavigation();
 
   @override
   Widget build(BuildContext context) {
+
     return Container(
       color: AppColors.white,
       height: 70.0,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          buildBottomNavigationButton(Images.kIconHome, "Home", () {}, context),
-          buildBottomNavigationButton(Images.kIconExplore, "Explore", () {}, context),
-          buildBottomNavigationButton(Images.kIconUpload, Screens.kUpload, () {}, context),
-          buildBottomNavigationButton(Images.kIconTodayFollowup, Screens.kTodayFollowUpScreen, () {}, context),
-          buildBottomNavigationButton(Images.kIconNotification, "Notifications", () {}, context),
+          buildBottomNavigationButton(Images.kIconHome, "Home", () {}, context, homeBtnKey),
+          buildBottomNavigationButton(Images.kIconExplore, "Explore", () {}, context, expBtnKey),
+          buildBottomNavigationButton(Images.kIconUpload, Screens.kUpload, () {}, context, uploadBtnKey),
+          buildBottomNavigationButton(Images.kIconTodayFollowup, Screens.kTodayFollowUpScreen, () {}, context, todayFuBtnKey),
+          buildBottomNavigationButton(Images.kIconNotification, "Notifications", () {}, context, notificationBtnKey),
           // buildBottomNavigationButton(Images.kIconLeaderboard, "Leaderboard", () {}),
         ],
       ),
     );
   }
 
-  Consumer buildBottomNavigationButton(String icon, String text, Function() onTap, BuildContext context) {
+  Consumer buildBottomNavigationButton(String icon, String text, Function() onTap, BuildContext context, GlobalKey key) {
     return Consumer<BaseProvider>(
       builder: (_, provider, __) {
         return InkWell(
+          key: key,
           onTap: () {
             provider.setBottomNavScreen(text);
             navigateToFirstRoute(context);

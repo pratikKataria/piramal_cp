@@ -17,6 +17,7 @@ import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/cp_banner_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/project_unit_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/schedule_visit_response.dart';
+import 'package:piramal_channel_partner/ui/bottomNavigationContainer/tour_keys_bottom_navigation.dart';
 import 'package:piramal_channel_partner/ui/core/login/model/token_response.dart';
 import 'package:piramal_channel_partner/ui/lead/lead_presenter.dart';
 import 'package:piramal_channel_partner/ui/lead/lead_view.dart';
@@ -53,6 +54,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
   List<BannerDataList> listOfBannerStrings = [BannerDataList(bannerName: "No event available")];
   String filterValue;
   String filterDate;
+  String dueInvoiceChecked;
   bool dueInvoice = false;
 
   @override
@@ -61,12 +63,10 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
     _homePresenter = HomePresenter(this);
     _leadPresenter = LeadPresenter(this);
 
-    if (kReleaseMode) _leadPresenter.getLeadListS(context);
-
-    if (kReleaseMode) _homePresenter.getAccountStatus(context);
+    if (kDebugMode) _leadPresenter.getLeadListS(context);
+    if (kDebugMode) _homePresenter.getAccountStatus(context);
     _homePresenter.getEventList(context);
-    if (kReleaseMode) _homePresenter.postDeviceToken(context);
-    if (kReleaseMode) _homePresenter.getCurrentPromotionBlocker(context);
+    if (kDebugMode) _homePresenter.postDeviceToken(context);
     super.initState();
   }
 
@@ -205,6 +205,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                 PmlOutlineButton(
                   onTap: () {
                     dueInvoice = !dueInvoice;
+                    dueInvoiceChecked = dueInvoice ? "" : null;
                     setState(() {});
                   },
                   text: "Due Invoice",
@@ -564,8 +565,11 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
   void onBookingListFetched(List<BookingResponse> brList) {
     bookingList.clear();
     bookingList.addAll(brList);
+
     //filter project form the response and add it to the project list
     bookingList.forEach((booking) => addProjectListValue(booking.projectFinalized));
+
+    //filter Date form the response and add it to the Date list
     bookingList.where((element) => element.bookingDate != null).forEach((booking) => listOfMonths.add(booking.bookingDate));
     setState(() {});
   }
@@ -588,8 +592,8 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
     AuthUser.getInstance().updateUser(currentUser);
 
     //sent request again
-    if (kReleaseMode) _homePresenter.getWalkInListV2s(context);
-    if (kReleaseMode) _homePresenter.getBookingList(context);
+    if (kDebugMode) _homePresenter.getWalkInListV2s(context);
+    if (kDebugMode) _homePresenter.getBookingList(context);
     _leadPresenter.getLeadListS(context);
   }
 
@@ -674,7 +678,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                     color: !(projectUnitResponse?.paymentConfirmationByCP ?? false) ? AppColors.colorPrimary : AppColors.colorPrimary.withOpacity(0.5),
                     onTap: () async {
                       if (!(projectUnitResponse?.paymentConfirmationByCP ?? false)) {
-                        if (kReleaseMode) _homePresenter.acknowledgePayment(context, projectUnitResponse.sfdcid, projectUnitResponse.brokerageRecordId);
+                        if (kDebugMode) _homePresenter.acknowledgePayment(context, projectUnitResponse.sfdcid, projectUnitResponse.brokerageRecordId);
                       }
                     },
                   )
@@ -729,16 +733,64 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
 
   List<Widget> getBookingListByFilterValue() {
     return bookingList
-        .where((element) =>
-            (filterValue == null || filterValue == element.projectFinalized) && dueInvoice == element.dueInvoice || filterDate == element.bookingDate) // filter out by project
+        .where((element) => filterValue == null || filterValue == element.projectFinalized) // filter out by project
+        .where((element) => filterDate == null || filterDate == element.bookingDate)
+        .where((element) =>  dueInvoiceChecked == null ||dueInvoice == element.dueInvoice)
         .map((element) => BookingCardWidget(element, _homePresenter)) // convert to map then to widget
         .toList(); // provide list
+  }
+
+  bool filterBooking(BookingResponse element) {
+    // Apply the first filter
+    bool isFilterValueValid = filterValue == null || filterValue == element.projectFinalized;
+
+    // Apply the second filter
+    bool isDueInvoiceValid = dueInvoice == element.dueInvoice;
+
+    // Apply the third filter
+    bool isFilterDateValid = filterDate == element.bookingDate;
+
+    bool combination1 = isFilterValueValid;
+    bool combination2 = isDueInvoiceValid;
+    bool combination3 = isFilterDateValid;
+
+    bool combination4 = isFilterValueValid && isDueInvoiceValid;
+    bool combination5 = isFilterValueValid && isFilterDateValid;
+    bool combination6 = isDueInvoiceValid && isFilterDateValid;
+
+    bool combination7 = isFilterValueValid && isDueInvoiceValid && isFilterDateValid;
+
+    bool combination8 = isDueInvoiceValid && isFilterDateValid && !isFilterValueValid;
+    bool combination9 = isFilterValueValid && isFilterDateValid && !isDueInvoiceValid;
+    bool combination10 = isFilterValueValid && isDueInvoiceValid && !isFilterDateValid;
+
+    bool combination11 = isFilterValueValid || isDueInvoiceValid && !isFilterDateValid;
+    bool combination12 = isDueInvoiceValid || isFilterDateValid && !isFilterValueValid;
+    bool combination13 = isFilterDateValid || isFilterValueValid && !isDueInvoiceValid;
+
+    bool combination14 = false;
+
+    // Check if any combination is true
+    return combination1 ||
+        combination2 ||
+        combination3 ||
+        combination4 ||
+        combination5 ||
+        combination6 ||
+        combination7 ||
+        combination8 ||
+        combination9 ||
+        combination10 ||
+        combination11 ||
+        combination12 ||
+        combination13 ||
+        combination14;
   }
 
   @override
   void onTaggingDone() {
     Utility.showSuccessToastB(context, "Tagging completed");
-    if (kReleaseMode) _homePresenter.getWalkInListV2s(context);
+    if (kDebugMode) _homePresenter.getWalkInListV2s(context);
   }
 
   @override
@@ -746,8 +798,8 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
     switch (accountStatusResponse.applicationStatus) {
       case Constants.ADMIN:
         await updateUserCreds(accountStatusResponse?.customerAccountID);
-        if (kReleaseMode) _homePresenter.getWalkInList(context);
-        if (kReleaseMode) _homePresenter.getBookingList(context);
+        if (kDebugMode) _homePresenter.getWalkInList(context);
+        if (kDebugMode) _homePresenter.getBookingList(context);
         break;
       case Constants.GUEST_USER:
         break;
@@ -756,11 +808,11 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
         break;
       case Constants.APPROVED:
         await updateUserCreds(accountStatusResponse?.customerAccountID);
-        if (kReleaseMode) _homePresenter.getWalkInList(context);
-        if (kReleaseMode) _homePresenter.getBookingList(context);
-        if (kReleaseMode) _homePresenter.getCurrentPromotionBlocker(context);
+        if (kDebugMode) _homePresenter.getWalkInList(context);
+        if (kDebugMode) _homePresenter.getBookingList(context);
         break;
     }
+    if (kDebugMode) _homePresenter.getCurrentPromotionBlocker(context);
   }
 
   void updateUserCreds(String uId) async {
@@ -827,7 +879,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
 
   void updateHome() {
     setState(() {});
-    if (kReleaseMode) _homePresenter.getWalkInListV2s(context);
+    if (kDebugMode) _homePresenter.getWalkInListV2s(context);
   }
 
   @override
@@ -868,7 +920,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
   void onCurrentPromotionPageBlockerDataFetched(List<String> pageBlockersImagesList) {
     if (pageBlockersImagesList == null) return;
 
-    dialogz(pageBlockersImagesList);
+    if (kReleaseMode) dialogz(pageBlockersImagesList);
   }
 
 
@@ -897,6 +949,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                 ),
                 verticalSpace(20.0),
                 Container(
+                  key: currentPromoPageBlockerBtnKey,
                   width: Utility.screenWidth(context),
                   height: Utility.screenWidth(context),
                   child: ClipRRect(
