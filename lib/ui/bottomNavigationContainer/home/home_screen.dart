@@ -118,8 +118,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                   onRefresh: () {
                     _leadPresenter.getLeadList(context);
                   },
-                  children:
-                      listOfLeads.where((element) => filterValue == null || filterValue == element.projectInterested).map<Widget>((element) => cardViewLead(element)).toList(),
+                  children: getLeadListByFilterValue(),
                 ),
                 RefreshListView(
                   children: getWalkInListByFilterValue(),
@@ -439,7 +438,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
     );
   }
 
-  cardViewLead(AllLeadResponse leadData) {
+  Widget cardViewLead(AllLeadResponse leadData) {
     return Container(
       height: 150,
       padding: EdgeInsets.symmetric(horizontal: 20.0),
@@ -497,6 +496,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                   baseProvider.setBottomNavScreen(Screens.kEditLeadScreen);
                   var created = await Navigator.pushNamed(context, Screens.kEditLeadScreen, arguments: leadData);
                   if (created is bool && created) _leadPresenter.getLeadListS(context);
+                  baseProvider.setBottomNavScreen(Screens.kHomeScreen);
                 },
               ),
               horizontalSpace(10.0),
@@ -720,11 +720,23 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
     }
   }
 
+  List<Widget> getLeadListByFilterValue() {
+    List<Widget> listOfWidgets = [];
+
+    listOfWidgets = listOfLeads
+        .where((element) => filterValue == null || filterValue == element.projectInterested) // filter out by project
+        .map<Widget>((element) => cardViewLead(element)) // convert to map then to widget
+        .toList(); // provide list
+
+    return listOfWidgets;
+  }
+
   List<Widget> getWalkInListByFilterValue() {
     List<Widget> walkInWidgetList = [];
 
     walkInWidgetList = walkInList
-        .where((element) => filterValue == null || filterValue == element.projectInterested || filterDate == element.bookingDate) // filter out by project
+        .where((element) => filterValue == null || filterValue == element.projectInterested) // filter out by project
+        .where((element) => filterDate == null || filterDate == element.walkingDate)
         .map((element) => WalkInCardWidget(element, _homePresenter)) // convert to map then to widget
         .toList(); // provide list
 
