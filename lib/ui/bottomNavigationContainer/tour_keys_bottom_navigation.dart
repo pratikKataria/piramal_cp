@@ -17,4 +17,12 @@ GlobalKey walkInBtnKey = GlobalKey();
 GlobalKey bookingBtnKey = GlobalKey();
 GlobalKey currentPromoPageBlockerBtnKey = GlobalKey();
 
+// Booking detail screen
+GlobalKey bookedCustomerTopProfile = GlobalKey();
+GlobalKey bookedCustomerDetails = GlobalKey();
+GlobalKey bookedCustomerUnitDetails = GlobalKey();
+GlobalKey bookedCustomerProgressStatus = GlobalKey();
+
+
+
 

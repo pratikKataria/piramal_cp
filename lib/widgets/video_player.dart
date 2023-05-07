@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class MyVideoPlayer extends StatefulWidget {
@@ -42,9 +43,13 @@ class _MyVideoPlayerState extends State<MyVideoPlayer> {
   }
 
   @override
-  void dispose() {
-    _controller.toggleFullScreenMode();
-    _controller?.dispose();
+  Future<void> dispose() async {
     super.dispose();
+
+    await Future.delayed(Duration(milliseconds: 600));
+    Utility.portrait();
+
+    _controller?.dispose();
+    await Future.delayed(Duration(milliseconds: 600));
   }
 }

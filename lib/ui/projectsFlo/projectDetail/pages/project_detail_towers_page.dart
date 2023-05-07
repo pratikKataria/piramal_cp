@@ -3,9 +3,11 @@ import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
 import 'package:piramal_channel_partner/res/Screens.dart';
+import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/projectDetail/model/project_tower_response.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/extension.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProjectDetailTowerPage extends StatelessWidget {
@@ -101,6 +103,8 @@ class ProjectDetailTowerPage extends StatelessWidget {
         ],
       ).onClick(() {
         Navigator.pushNamed(context, Screens.kConstructionUpdate, arguments: response.towerId);
+        BaseProvider baseProvider = Provider.of<BaseProvider>(context, listen: false);
+        baseProvider.setBottomNavScreen(Screens.kProjectScreen);
       }),
     );
   }

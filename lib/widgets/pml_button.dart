@@ -25,7 +25,8 @@ class PmlButton extends StatelessWidget {
     this.height,
     this.width,
     this.radius,
-  });
+    Key key
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

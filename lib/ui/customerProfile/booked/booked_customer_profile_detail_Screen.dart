@@ -3,10 +3,12 @@ import 'package:piramal_channel_partner/extension/extention%20function.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
+import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/res/constants.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/booking_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/project_unit_response.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/schedule_visit_response.dart';
+import 'package:piramal_channel_partner/ui/bottomNavigationContainer/tour_keys_bottom_navigation.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/booked/model/generate_invoice_response.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/booked/model/invoice_response.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/customer_profile_presenter.dart';
@@ -16,6 +18,7 @@ import 'package:piramal_channel_partner/widgets/download_button.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
 import 'package:piramal_channel_partner/widgets/refresh_list_view.dart';
 import 'package:piramal_channel_partner/widgets/whats_app_button.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'model/invoice_number_request.dart';
@@ -30,6 +33,7 @@ class BookedCustomerProfileDetailScreen extends StatefulWidget {
 }
 
 class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfileDetailScreen> implements CustomerProfileView {
+
   CustomerProfilePresenter _presenter;
   InvoiceResponse response;
   InvoiceNumberRequest _invoiceNumberRequest = InvoiceNumberRequest();
@@ -37,12 +41,22 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
   bool _invoiceGenerated = false;
   bool _invoiceNumberGenerated = false;
 
+  TutorialCoachMark globalTutorialCoachMark;
+
   @override
   void initState() {
     _presenter = CustomerProfilePresenter(this);
     // _homePresenter.getWalkInList(context);
     _presenter.getInvoice(context, widget?.response?.sfdcid);
     super.initState();
+  }
+
+  void tour() async {
+    bool completed = await Utility.isTourCompleted(Screens.kCustomerProfileDetailBooking);
+    if (!completed && globalTutorialCoachMark == null) {
+      createTutorial();
+      showTutorial();
+    }
   }
 
   @override
@@ -55,13 +69,12 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Column(
+            key: bookedCustomerTopProfile,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               verticalSpace(10.0),
               //customer pic with name and time
               Text("${widget.response?.name}", style: textStyleRegular18pxW500),
-              /*Text("Next Follow up: ${Utility.formatDate(widget?.response?.nextFollowUp)}", style: textStyleSubText14px500w),
-*/
               //calender call whatsapp
               verticalSpace(12.0),
               Row(
@@ -164,11 +177,17 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text("Booked", style: textStyle20px500w),
-                  horizontalSpace(12.0),
-                  Text("On ${response?.bookingApprovalDate?.formatDate2}", style: textStyleSubText14px500w),
+                  Row(
+                    key: bookedCustomerDetails,
+                    children: [
+                      Text("Booked", style: textStyle20px500w),
+                      horizontalSpace(12.0),
+                      Text("On ${response?.bookingApprovalDate?.formatDate2}", style: textStyleSubText14px500w),
+                    ],
+                  ),
                   Spacer(),
                   PmlButton(
+                    key: bookedCustomerUnitDetails,
                     width: 30,
                     height: 30,
                     color: AppColors.colorSecondary,
@@ -222,6 +241,7 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Column(
+            key: bookedCustomerProgressStatus,
             children: [
               ...timelineViewBuilder(),
             ],
@@ -529,6 +549,7 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
     _invoiceGenerated = response?.generatedInvoice ?? false;
     _invoiceNumberGenerated = response?.invoiceNumberGenerated ?? false;
 
+    tour();
     setState(() {});
   }
 
@@ -621,6 +642,146 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
       },
     );
   }
+
+  void showTutorial() {
+    globalTutorialCoachMark.show(context: context);
+  }
+
+  void createTutorial() {
+    globalTutorialCoachMark = TutorialCoachMark(
+      targets: _createTargets(),
+      colorShadow: AppColors.colorPrimary,
+      hideSkip: true,
+      paddingFocus: 10,
+      opacityShadow: 0.8,
+      onFinish: () {
+        // Utility.setTourCompleted(Screens.kCustomerProfileDetailBooking);
+      },
+      onClickTarget: (target) {
+        print('onClickTarget: $target');
+        Utility.setTourCompleted(Screens.kCustomerProfileDetailBooking);
+      },
+      onClickTargetWithTapPosition: (target, tapDetails) {
+        print("target: $target");
+        print("clicked at position local: ${tapDetails.localPosition} - global: ${tapDetails.globalPosition}");
+      },
+      onClickOverlay: (target) {
+        print('onClickOverlay: $target');
+      },
+      onSkip: () {
+        print("skip");
+      },
+    );
+  }
+
+  List<TargetFocus> _createTargets() {
+    List<TargetFocus> targets = [];
+    targets.add(
+      TargetFocus(
+        identify: "keyBottomNavigation11",
+        keyTarget: bookedCustomerTopProfile,
+        alignSkip: Alignment.topRight,
+        shape: ShapeLightFocus.RRect,
+        radius: 5,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+
+            builder: (context, controller) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const <Widget>[
+                  Text("User Profile", style: textStyleWhite14px600w),
+                  Text("View details about booking and call or whats app to tagged RM", style: textStyleWhite14px500w),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+
+    targets.add(
+      TargetFocus(
+        identify: "keyBottomNavigation111",
+        keyTarget: bookedCustomerDetails,
+        alignSkip: Alignment.topRight,
+        shape: ShapeLightFocus.RRect,
+        radius: 5,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+
+            builder: (context, controller) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const <Widget>[
+                  Text("Booking information", style: textStyleWhite14px600w),
+                  Text("Check booking date, invoice status, generate invoice.", style: textStyleWhite14px500w),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+
+    targets.add(
+      TargetFocus(
+        identify: "bookedCustomerUnitDetails",
+        keyTarget: bookedCustomerUnitDetails,
+        alignSkip: Alignment.topRight,
+        radius: 5,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+
+            builder: (context, controller) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const <Widget>[
+                  Text("Unit details", style: textStyleWhite14px600w),
+                  Text("Tower Name, Unit Number, Payment date, Amount and others", style: textStyleWhite14px500w),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+
+    targets.add(
+      TargetFocus(
+        identify: "bookedCustomerProgressStatus",
+        keyTarget: bookedCustomerProgressStatus,
+        alignSkip: Alignment.topRight,
+        radius: 5,
+        shape: ShapeLightFocus.RRect,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+
+            builder: (context, controller) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const <Widget>[
+                  Text("Timeline", style: textStyleWhite14px600w),
+                  Text("View your invoice timeline", style: textStyleWhite14px500w),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+    return targets;
+  }
+
+
 
   @override
   void onInvoiceNumberSaved() {

@@ -6,7 +6,6 @@ import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/tour_keys_bottom_navigation.dart';
 import 'package:piramal_channel_partner/utils/Dialogs.dart';
-import 'package:piramal_channel_partner/utils/SharedManager.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/utils/navigator_gk.dart';
 import 'package:provider/provider.dart';
@@ -25,11 +24,10 @@ class BaseScreen extends StatelessWidget {
   }
 
   void initState() async {
-
-    // bool completed = await Utility.isTourCompleted(Screens.kBottomNavigationScreen);
-    if ( globalTutorialCoachMark == null) {
+    bool completed = await Utility.isTourCompleted("baseScreen1");
+    if (!completed && globalTutorialCoachMark == null) {
       createTutorial();
-      Future.delayed(Duration(milliseconds: 800), showTutorial);
+      Future.delayed(Duration(milliseconds: 1200), showTutorial);
     }
   }
 
@@ -175,7 +173,8 @@ class BaseScreen extends StatelessWidget {
       paddingFocus: 10,
       opacityShadow: 0.8,
       onFinish: () {
-        Utility.setTourCompleted(Screens.kBottomNavigationScreen);
+        print("Create Tutorial findish");
+        Utility.setTourCompleted("baseScreen");
       },
       onClickTarget: (target) {
         print('onClickTarget: $target');
