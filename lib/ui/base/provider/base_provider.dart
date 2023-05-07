@@ -53,4 +53,6 @@ class BaseProvider extends ChangeNotifier {
     showAppbarAndBottomNavigation = true;
     notifyListeners();
   }
+
+
 }

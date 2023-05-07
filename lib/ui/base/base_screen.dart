@@ -19,15 +19,13 @@ TutorialCoachMark globalTutorialCoachMark;
 class BaseScreen extends StatelessWidget {
   BuildContext context;
 
-  BaseScreen({this.child}) {
-    initState();
-  }
+  BaseScreen({this.child});
 
-  void initState() async {
+  void showTour() async {
     bool completed = await Utility.isTourCompleted("baseScreen1");
     if (!completed && globalTutorialCoachMark == null) {
       createTutorial();
-      Future.delayed(Duration(milliseconds: 1200), showTutorial);
+      Future.delayed(Duration.zero, showTutorial);
     }
   }
 
@@ -44,6 +42,12 @@ class BaseScreen extends StatelessWidget {
     return Consumer<BaseProvider>(
       builder: (_, provider, __) {
         print("Base consumer rebuilding ... $child");
+
+        if (provider.showAppbarAndBottomNavigation) {
+          showTour();
+        }
+
+
         return Scaffold(
           appBar: provider.showAppbarAndBottomNavigation ? buildAppBar(context) : null,
           drawerScrimColor: Colors.transparent,
@@ -174,7 +178,7 @@ class BaseScreen extends StatelessWidget {
       opacityShadow: 0.8,
       onFinish: () {
         print("Create Tutorial findish");
-        Utility.setTourCompleted("baseScreen");
+        Utility.setTourCompleted("baseScreen1");
       },
       onClickTarget: (target) {
         print('onClickTarget: $target');
