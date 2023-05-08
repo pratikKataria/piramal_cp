@@ -11,7 +11,10 @@ import 'package:piramal_channel_partner/ui/projectsFlo/project_presenter.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/download_button_lwc.dart';
 import 'package:piramal_channel_partner/widgets/refresh_list_view.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import 'project_screen_tour_keys.dart';
 
 class ProjectScreen extends StatefulWidget {
   const ProjectScreen({Key key}) : super(key: key);
@@ -26,6 +29,8 @@ class _ProjectScreenState extends State<ProjectScreen> implements ProjectView {
 
   ProjectPresenter projectPresenter;
   List<ProjectListResponse> listOfProjects = [];
+
+  TutorialCoachMark globalTutorialCoachMark;
 
   @override
   void initState() {
@@ -109,6 +114,7 @@ class _ProjectScreenState extends State<ProjectScreen> implements ProjectView {
                     child: Container(
                       width: 30,
                       height: 30,
+                      key: projectData.mapOfKeys["projectScreenWebsiteButton"],
                       padding: EdgeInsets.all(10.0),
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
@@ -144,7 +150,7 @@ class _ProjectScreenState extends State<ProjectScreen> implements ProjectView {
                       //     child: Icon(Icons.download_rounded, color: AppColors.white, size: 16),
                       //   ),
                       // ),
-                      DownloadButtonLwc(projectData?.projectId, Constants.BROCHURE),
+                      DownloadButtonLwc(projectData?.projectId, Constants.BROCHURE, key: projectData.mapOfKeys["projectScreenDownloadButton"],),
                     ],
                   ),
                   verticalSpace(10.0),
@@ -159,6 +165,93 @@ class _ProjectScreenState extends State<ProjectScreen> implements ProjectView {
     );
   }
 
+  void showTour() async {
+    bool completed = await Utility.isTourCompleted(Screens.kProjectScreen);
+    if (!completed && globalTutorialCoachMark == null) {
+      createTutorial();
+      await Future.delayed(Duration(milliseconds: 400));
+      globalTutorialCoachMark.show(context: context);
+    }
+  }
+
+  void createTutorial() {
+    globalTutorialCoachMark = TutorialCoachMark(
+      targets: _createTargets(),
+      colorShadow: AppColors.colorPrimary,
+      hideSkip: true,
+      paddingFocus: 10,
+      opacityShadow: 0.8,
+      onFinish: () {
+        print("Create Tutorial findish");
+        Utility.setTourCompleted(Screens.kProjectScreen);
+      },
+      onClickTarget: (target) {
+        print('onClickTarget: $target');
+      },
+      onClickTargetWithTapPosition: (target, tapDetails) {
+        print("target: $target");
+        print("clicked at position local: ${tapDetails.localPosition} - global: ${tapDetails.globalPosition}");
+      },
+      onClickOverlay: (target) {
+        print('onClickOverlay: $target');
+      },
+      onSkip: () {
+        print("skip");
+      },
+    );
+  }
+
+  List<TargetFocus> _createTargets() {
+    List<TargetFocus> targets = [];
+    targets.add(
+      TargetFocus(
+        identify: "projectScreenWebsiteButton",
+        keyTarget: projectScreenWebsiteButton,
+        alignSkip: Alignment.topRight,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const <Widget>[
+                  Text("Go to project website", style: textStyleWhite14px600w),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+
+    targets.add(
+      TargetFocus(
+        identify: "projectScreenDownloadButton",
+        keyTarget: projectScreenDownloadButton,
+        alignSkip: Alignment.topRight,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const <Widget>[
+                  Text("Download project brochure", style: textStyleWhite14px600w),
+                ],
+              );
+            },
+          ),
+
+        ],
+      ),
+    );
+
+    return targets;
+  }
+
+
   @override
   onError(String message) {
     Utility.showErrorToastB(context, message);
@@ -168,6 +261,16 @@ class _ProjectScreenState extends State<ProjectScreen> implements ProjectView {
   void onProjectListFetched(List<ProjectListResponse> projectListResponse) {
     listOfProjects.clear();
     listOfProjects.addAll(projectListResponse);
+
+    if (listOfProjects.isNotEmpty) {
+      listOfProjects.first.mapOfKeys.addAll({
+        "projectScreenWebsiteButton": projectScreenWebsiteButton,
+        "projectScreenDownloadButton": projectScreenDownloadButton,
+      });
+
+      showTour();
+    }
+
     setState(() {});
   }
 }

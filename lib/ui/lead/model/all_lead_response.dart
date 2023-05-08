@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 /// suburban : ""
 /// sfdcid : "a2xp0000000exg2AAA"
 /// returnCode : true
@@ -14,6 +16,7 @@
 
 class AllLeadResponse {
  String cpLeadStatus;
+ Map<String, Key> mapOfKeys = {};
 
   AllLeadResponse({
       String suburban, 

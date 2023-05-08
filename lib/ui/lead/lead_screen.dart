@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
@@ -9,6 +8,9 @@ import 'package:piramal_channel_partner/ui/lead/model/all_lead_response.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
 import 'package:piramal_channel_partner/widgets/refresh_list_view.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
+
+import 'lead_tour_keys_bottom_navigation.dart';
 
 class LeadScreen extends StatefulWidget {
   const LeadScreen({Key key}) : super(key: key);
@@ -27,6 +29,8 @@ class _LeadScreenState extends State<LeadScreen> implements LeadView {
   List<String> projectList = [""];
   String projectFilterVal = "";
 
+  TutorialCoachMark globalTutorialCoachMark;
+
   @override
   void initState() {
     super.initState();
@@ -41,6 +45,7 @@ class _LeadScreenState extends State<LeadScreen> implements LeadView {
     return Scaffold(
       backgroundColor: AppColors.screenBackgroundColor,
       floatingActionButton: PmlButton(
+        key: leadScreenAddLead,
         height: 45.0,
         width: 45.0,
         color: AppColors.black,
@@ -97,6 +102,7 @@ class _LeadScreenState extends State<LeadScreen> implements LeadView {
               Container(
                 width: Utility.screenWidth(context) * .30,
                 height: 20.0,
+                key: leadScreenSelectProjectFilter,
                 child: DropdownButton<String>(
                   isExpanded: true,
                   underline: Container(),
@@ -195,6 +201,7 @@ class _LeadScreenState extends State<LeadScreen> implements LeadView {
               PmlButton(
                 height: 32.0,
                 width: 32.0,
+                key: leadData.mapOfKeys["leadScreenCardViewEditButton"],
                 color: AppColors.screenBackgroundColor,
                 child: Icon(Icons.edit, size: 16),
                 onTap: () async {
@@ -206,6 +213,7 @@ class _LeadScreenState extends State<LeadScreen> implements LeadView {
               PmlButton(
                 height: 32.0,
                 width: 32.0,
+                key: leadData.mapOfKeys["leadScreenCardViewDeleteButton"],
                 color: AppColors.colorPrimaryLight,
                 child: Icon(Icons.delete, color: AppColors.colorPrimary, size: 16),
                 onTap: () => leadPresenter.deleteLead(context, leadData),
@@ -271,12 +279,151 @@ class _LeadScreenState extends State<LeadScreen> implements LeadView {
       bool isProjectAlreadyPresent = projectList.contains(lead.projectInterested);
       if (!isProjectAlreadyPresent) projectList.add(lead.projectInterested);
     });
+
+    if (listOfLeads.isNotEmpty) {
+      listOfLeads.first.mapOfKeys.addAll({
+        "leadScreenCardViewEditButton": leadScreenCardViewEditButton,
+        "leadScreenCardViewDeleteButton": leadScreenCardViewDeleteButton,
+      });
+
+      showTour();
+    }
     setState(() {});
   }
 
   @override
   onError(String message) {
     Utility.showErrorToastB(context, message);
+  }
+
+  void showTour() async {
+    bool completed = await Utility.isTourCompleted(Screens.kLeadScreen);
+    if (!completed && globalTutorialCoachMark == null) {
+      createTutorial();
+      await Future.delayed(Duration(milliseconds: 400));
+      globalTutorialCoachMark.show(context: context);
+    }
+  }
+
+  void createTutorial() {
+    globalTutorialCoachMark = TutorialCoachMark(
+      targets: _createTargets(),
+      colorShadow: AppColors.colorPrimary,
+      hideSkip: true,
+      paddingFocus: 10,
+      opacityShadow: 0.8,
+      onFinish: () {
+        print("Create Tutorial findish");
+        Utility.setTourCompleted(Screens.kLeadScreen);
+      },
+      onClickTarget: (target) {
+        print('onClickTarget: $target');
+      },
+      onClickTargetWithTapPosition: (target, tapDetails) {
+        print("target: $target");
+        print("clicked at position local: ${tapDetails.localPosition} - global: ${tapDetails.globalPosition}");
+      },
+      onClickOverlay: (target) {
+        print('onClickOverlay: $target');
+      },
+      onSkip: () {
+        print("skip");
+      },
+    );
+  }
+
+  List<TargetFocus> _createTargets() {
+    List<TargetFocus> targets = [];
+    targets.add(
+      TargetFocus(
+        identify: "leadScreenSelectProjectFilter",
+        keyTarget: leadScreenSelectProjectFilter,
+        alignSkip: Alignment.topRight,
+        shape: ShapeLightFocus.RRect,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const <Widget>[
+                  Text("Filter leads by project interested.", style: textStyleWhite14px600w),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+
+    targets.add(
+      TargetFocus(
+        identify: "leadScreenCardViewEditButton",
+        keyTarget: leadScreenCardViewEditButton,
+        alignSkip: Alignment.topRight,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const <Widget>[
+                  Text("Edit existing lead details", style: textStyleWhite14px600w),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+
+    targets.add(
+      TargetFocus(
+        identify: "leadScreenCardViewDeleteButton",
+        keyTarget: leadScreenCardViewDeleteButton,
+        alignSkip: Alignment.topRight,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const <Widget>[
+                  Text("Delete existing lead.", style: textStyleWhite14px600w),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+
+    targets.add(
+      TargetFocus(
+        identify: "leadScreenAddLead",
+        keyTarget: leadScreenAddLead,
+        alignSkip: Alignment.topLeft,
+        contents: [
+          TargetContent(
+            align: ContentAlign.top,
+            builder: (context, controller) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const <Widget>[
+                  Text("Add new lead by taping on + button.", style: textStyleWhite14px600w),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+
+    return targets;
   }
 
   @override

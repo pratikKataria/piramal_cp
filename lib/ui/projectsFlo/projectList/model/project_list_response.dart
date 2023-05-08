@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 
 class ProjectListResponse {
   Key key;
+  Map<String, Key> mapOfKeys = {};
+
   ProjectListResponse({
       bool returnCode, 
       String projectWebsite, 
