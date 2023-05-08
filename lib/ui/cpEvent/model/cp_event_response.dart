@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 /// returnCode : true
 /// message : "SUCCESS"
 /// EventName : "test event"
@@ -7,6 +9,7 @@
 /// Availabilitystatus : "Tentative"
 
 class CpEventResponse {
+  Map<String, Key> mapOfKeys = {};
   CpEventResponse({
       bool returnCode, 
       String message, 

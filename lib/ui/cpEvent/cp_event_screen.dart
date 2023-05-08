@@ -1,17 +1,18 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
+import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/ui/cpEvent/cp_event_presenter.dart';
+import 'package:piramal_channel_partner/ui/cpEvent/cp_event_tour_keys.dart';
 import 'package:piramal_channel_partner/ui/cpEvent/cp_event_view.dart';
 import 'package:piramal_channel_partner/ui/cpEvent/model/cp_event_response.dart';
 import 'package:piramal_channel_partner/ui/cpEvent/model/cp_event_status_update_response.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
 import 'package:piramal_channel_partner/widgets/refresh_list_view.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CPEventScreen extends StatefulWidget {
@@ -32,6 +33,8 @@ class _CPEventScreenState extends State<CPEventScreen> implements CPEventView {
   CPEventPresenter presenter;
   String comment;
   String size = "0";
+
+  TutorialCoachMark globalTutorialCoachMark;
 
   @override
   void initState() {
@@ -91,6 +94,7 @@ class _CPEventScreenState extends State<CPEventScreen> implements CPEventView {
         children: [
           AspectRatio(
             aspectRatio: 16/9,
+            key: cpEventData.mapOfKeys["cpEventImage"],
             child: Container(
                decoration: BoxDecoration(
                   image: DecorationImage(
@@ -105,9 +109,12 @@ class _CPEventScreenState extends State<CPEventScreen> implements CPEventView {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("${cpEventData.eventName}", style: textStyle24px500w),
+                Text("${cpEventData.eventName}",
+                    key: cpEventData.mapOfKeys["cpEventTitle"],
+                    style: textStyle24px500w),
                 verticalSpace(10.0),
                 Wrap(
+                  key: cpEventData.mapOfKeys["cpEventDateTime"],
                   children: [
                     Image.asset(Images.kIconCpEventCalender, height: 16),
                     horizontalSpace(10.0),
@@ -133,6 +140,7 @@ class _CPEventScreenState extends State<CPEventScreen> implements CPEventView {
                         height: 32.0,
                         text: "Attend",
                         color: AppColors.attendButtonColor,
+                        key: cpEventData.mapOfKeys["cpEventAttend"],
                         padding: EdgeInsets.symmetric(horizontal: 20.0),
                         onTap: () {
                           showDetailDialog(cpEventData, "Attend", size);
@@ -142,6 +150,7 @@ class _CPEventScreenState extends State<CPEventScreen> implements CPEventView {
                       PmlButton(
                         height: 32.0,
                         text: "Tentative",
+                        key: cpEventData.mapOfKeys["cpEventTentative"],
                         color: AppColors.tentativeButtonColor,
                         padding: EdgeInsets.symmetric(horizontal: 20.0),
                         onTap: () {
@@ -154,6 +163,7 @@ class _CPEventScreenState extends State<CPEventScreen> implements CPEventView {
                         height: 32.0,
                         text: "Not Going",
                         color: AppColors.red,
+                        key: cpEventData.mapOfKeys["cpEventNotGoing"],
                         padding: EdgeInsets.symmetric(horizontal: 20.0),
                         onTap: () {
                           presenter.revertToEvent(context, "Not Going", size, cpEventData.cpeventId);
@@ -196,6 +206,18 @@ class _CPEventScreenState extends State<CPEventScreen> implements CPEventView {
   void onEventFetched(List<CpEventResponse> response) {
     cpEventList.clear();
     cpEventList.addAll(response);
+    if (cpEventList.isNotEmpty) {
+      cpEventList.first.mapOfKeys.addAll({
+        "cpEventImage": cpEventImage,
+        "cpEventTitle": cpEventTitle,
+        "cpEventDateTime": cpEventDateTime,
+        "cpEventAttend": cpEventAttend,
+        "cpEventTentative": cpEventTentative,
+        "cpEventNotGoing": cpEventNotGoing,
+      });
+
+      showTour();
+    }
     setState(() {});
   }
 
@@ -348,55 +370,188 @@ class _CPEventScreenState extends State<CPEventScreen> implements CPEventView {
       },
     );
   }
+
+  void showTour() async {
+    bool completed = await Utility.isTourCompleted(Screens.kCPEventScreen);
+    if (!completed && globalTutorialCoachMark == null) {
+      createTutorial();
+      await Future.delayed(Duration(milliseconds: 400));
+      globalTutorialCoachMark.show(context: context);
+    }
+  }
+
+  void createTutorial() {
+    globalTutorialCoachMark = TutorialCoachMark(
+      targets: _createTargets(),
+      colorShadow: AppColors.colorPrimary,
+      hideSkip: true,
+      paddingFocus: 10,
+      opacityShadow: 0.8,
+      onFinish: () {
+        print("Create Tutorial findish");
+        Utility.setTourCompleted(Screens.kMyAssistProjectScreen);
+      },
+      onClickTarget: (target) {
+        print('onClickTarget: $target');
+      },
+      onClickTargetWithTapPosition: (target, tapDetails) {
+        print("target: $target");
+        print("clicked at position local: ${tapDetails.localPosition} - global: ${tapDetails.globalPosition}");
+      },
+      onClickOverlay: (target) {
+        print('onClickOverlay: $target');
+      },
+      onSkip: () {
+        print("skip");
+      },
+    );
+  }
+
+  List<TargetFocus> _createTargets() {
+    List<TargetFocus> targets = [];
+    targets.add(
+      TargetFocus(
+        identify: "cpEventImage",
+        keyTarget: cpEventImage,
+        alignSkip: Alignment.topRight,
+        shape: ShapeLightFocus.RRect,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const <Widget>[
+                  Text("Event Detail image", style: textStyleWhite14px600w),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+
+    targets.add(
+      TargetFocus(
+        identify: "cpEventTitle",
+        keyTarget: cpEventTitle,
+        alignSkip: Alignment.topRight,
+        shape: ShapeLightFocus.RRect,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const <Widget>[
+                  Text("Event Title", style: textStyleWhite14px600w),
+                ],
+              );
+            },
+          ),
+
+        ],
+      ),
+    );
+
+    targets.add(
+      TargetFocus(
+        identify: "cpEventDateTime",
+        keyTarget: cpEventDateTime,
+        alignSkip: Alignment.topRight,
+        shape: ShapeLightFocus.RRect,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const <Widget>[
+                  Text("Event date and time", style: textStyleWhite14px600w),
+                ],
+              );
+            },
+          ),
+
+        ],
+      ),
+    );
+
+    targets.add(
+      TargetFocus(
+        identify: "cpEventAttend",
+        keyTarget: cpEventAttend,
+        alignSkip: Alignment.topRight,
+        shape: ShapeLightFocus.RRect,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const <Widget>[
+                  Text("To attend event tap on Attend", style: textStyleWhite14px600w),
+                ],
+              );
+            },
+          ),
+
+        ],
+      ),
+    );
+
+    targets.add(
+      TargetFocus(
+        identify: "cpEventTentative",
+        keyTarget: cpEventTentative,
+        alignSkip: Alignment.topRight,
+        shape: ShapeLightFocus.RRect,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const <Widget>[
+                  Text("When your are not sure of attending event tap on Tentative.", style: textStyleWhite14px600w),
+                ],
+              );
+            },
+          ),
+
+        ],
+      ),
+    );
+
+    targets.add(
+      TargetFocus(
+        identify: "cpEventNotGoing",
+        keyTarget: cpEventNotGoing,
+        alignSkip: Alignment.topRight,
+        shape: ShapeLightFocus.RRect,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const <Widget>[
+                  Text("When your are not going tap on Not Going.", style: textStyleWhite14px600w),
+                ],
+              );
+            },
+          ),
+
+        ],
+      ),
+    );
+    return targets;
+  }
+
 }
-
-/*
-
-
-
- Text("Previous Events", style: textStyle20px500w),
-                  verticalSpace(10.0),
-                  Container(
-                    margin: EdgeInsets.only(bottom: 18.0),
-                    decoration: BoxDecoration(
-                      color: AppColors.white,
-                      borderRadius: BorderRadius.circular(6.0),
-                      boxShadow: [
-                        BoxShadow(
-                          // box-shadow: 0px 10px 30px 0px #0000000D;
-                          color: AppColors.colorSecondary.withOpacity(0.1),
-                          blurRadius: 20.0,
-                          spreadRadius: 5.0,
-                          offset: Offset(0, 8),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Container(
-                          height: 130.0,
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                            image: AssetImage(Images.kImgEventPlaceholder),
-                            fit: BoxFit.fill,
-                          )),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("Revanta - Ravik Launch Event", style: textStyle24px500w),
-                              verticalSpace(10.0),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-
-
-*/
