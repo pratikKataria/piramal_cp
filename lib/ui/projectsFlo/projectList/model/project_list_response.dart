@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 /// returnCode : true
 /// ProjectWebsite : "www.piramalvaikunth.com"
 /// ProjectName : "Piramal Vaikunth"
@@ -8,6 +10,7 @@
 /// message : "Success"
 
 class ProjectListResponse {
+  Key key;
   ProjectListResponse({
       bool returnCode, 
       String projectWebsite, 

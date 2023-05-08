@@ -4,10 +4,12 @@ import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/ui/myProfile/model/my_profile_response.dart';
 import 'package:piramal_channel_partner/ui/myProfile/my_profile_presenter.dart';
+import 'package:piramal_channel_partner/ui/myProfile/my_profile_tour_keys.dart';
 import 'package:piramal_channel_partner/ui/myProfile/my_profile_view.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
 import 'package:piramal_channel_partner/widgets/refresh_list_view.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 class MyProfileScreen extends StatefulWidget {
   const MyProfileScreen({Key key}) : super(key: key);
@@ -23,12 +25,24 @@ class _MyProfileScreenState extends State<MyProfileScreen> implements MyProfileV
   MyProfilePresenter leadPresenter;
   MyProfileResponse assistResponse;
 
+  TutorialCoachMark globalTutorialCoachMark;
+
+
   @override
   void initState() {
     super.initState();
     leadPresenter = MyProfilePresenter(this);
     leadPresenter.getProfileData(context);
   }
+
+  void showTour() async {
+    bool completed = await Utility.isTourCompleted(Screens.kSettingsScreen);
+    if (!completed && globalTutorialCoachMark == null) {
+      createTutorial();
+      Future.delayed(Duration.zero, showTutorial);
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +68,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> implements MyProfileV
                     leadPresenter.uploadProfile(context, img);
                   },
                   child: ClipRRect(
+                    key: myProfileProfilePhoto,
                     borderRadius: BorderRadius.circular(80.0),
                     child: Container(
                       height: 46,
@@ -74,6 +89,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> implements MyProfileV
                 PmlButton(
                   height: 32.0,
                   width: 32.0,
+                  key: myProfileUploadPendingDocuments,
                   child: Icon(Icons.edit, color: AppColors.white, size: 16),
                   onTap: () async {
                     if (assistResponse.PendingDocuments.isEmpty) {
@@ -88,10 +104,15 @@ class _MyProfileScreenState extends State<MyProfileScreen> implements MyProfileV
               ],
             ),
             verticalSpace(30.0),
-            buildProfileDetailCard("Primary Contact Person", assistResponse?.primaryContactPerson ?? ""),
-            buildProfileDetailCard("Primary Mobile Number", assistResponse?.primaryMobileNo ?? ""),
-            buildProfileDetailCard("Secondary Mobile Number", assistResponse?.secondaryMobileNo ?? ""),
-            buildProfileDetailCard("Primary Email ID", assistResponse?.primaryEmail ?? ""),
+            Column(
+              key: myProfileProfileDetail,
+              children: [
+                buildProfileDetailCard("Primary Contact Person", assistResponse?.primaryContactPerson ?? ""),
+                buildProfileDetailCard("Primary Mobile Number", assistResponse?.primaryMobileNo ?? ""),
+                buildProfileDetailCard("Secondary Mobile Number", assistResponse?.secondaryMobileNo ?? ""),
+                buildProfileDetailCard("Primary Email ID", assistResponse?.primaryEmail ?? ""),
+              ],
+            ),
             buildProfileDetailCard("Permanent Account Number (PAN)", assistResponse?.pan ?? ""),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -134,6 +155,111 @@ class _MyProfileScreenState extends State<MyProfileScreen> implements MyProfileV
     );
   }
 
+  void createTutorial() {
+    globalTutorialCoachMark = TutorialCoachMark(
+      targets: _createTargets(),
+      colorShadow: AppColors.colorPrimary,
+      hideSkip: true,
+      paddingFocus: 10,
+      opacityShadow: 0.8,
+      onFinish: () {
+        print("Create Tutorial findish");
+        Utility.setTourCompleted(Screens.kSettingsScreen);
+      },
+      onClickTarget: (target) {
+        print('onClickTarget: $target');
+      },
+      onClickTargetWithTapPosition: (target, tapDetails) {
+        print("target: $target");
+        print("clicked at position local: ${tapDetails.localPosition} - global: ${tapDetails.globalPosition}");
+      },
+      onClickOverlay: (target) {
+        print('onClickOverlay: $target');
+      },
+      onSkip: () {
+        print("skip");
+      },
+    );
+  }
+
+  void showTutorial() {
+    globalTutorialCoachMark.show(context: context);
+  }
+
+  List<TargetFocus> _createTargets() {
+    List<TargetFocus> targets = [];
+    targets.add(
+      TargetFocus(
+        identify: "myProfileProfilePhoto",
+        keyTarget: myProfileProfilePhoto,
+        alignSkip: Alignment.topRight,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const <Widget>[
+                  Text("Upload profile picture from here", style: textStyleWhite14px600w),
+
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+
+    targets.add(
+      TargetFocus(
+        identify: "myProfileUploadPendingDocuments",
+        keyTarget: myProfileUploadPendingDocuments,
+        alignSkip: Alignment.topRight,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text("Upload pending document", style: textStyleWhite14px600w),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+
+    targets.add(
+      TargetFocus(
+        identify: "myProfileProfileDetail",
+        keyTarget: myProfileProfileDetail,
+        alignSkip: Alignment.topCenter,
+        shape: ShapeLightFocus.RRect,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const <Widget>[
+                  Text("Profile Information", style: textStyleWhite14px600w),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+
+    return targets;
+  }
+
+
   @override
   onError(String message) {
     Utility.showErrorToastB(context, message);
@@ -142,6 +268,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> implements MyProfileV
   @override
   void onProfileDataFetch(MyProfileResponse myAssistResponse) {
     assistResponse = myAssistResponse;
+    showTour();
     setState(() {});
   }
 
