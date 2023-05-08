@@ -31,5 +31,8 @@ abstract class Screens {
    static const kUploadPendingDocumentScreen = "kUploadPendingDocumentScreen";
    static const kConstructionUpdate = "kConstructionUpdate";
 
+   static const kWalkingTour = "kWalkingTour";
+   static const kBookingTour = "kBookingTour";
+
    static const kErrorTxt = "No Data Found";
 }

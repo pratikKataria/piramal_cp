@@ -7,6 +7,7 @@ import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/res/constants.dart';
+import 'package:piramal_channel_partner/ui/base/base_screen.dart';
 import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/homeWidgets/booking_card_widget.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/homeWidgets/walkin_card_widget.dart';
@@ -29,6 +30,9 @@ import 'package:piramal_channel_partner/widgets/pml_button.dart';
 import 'package:piramal_channel_partner/widgets/pml_outline_button.dart';
 import 'package:piramal_channel_partner/widgets/refresh_list_view.dart';
 import 'package:provider/provider.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
+
+import 'home_tour_key.dart';
 
 String currentSelectedTab = "CP Lead";
 bool currentPromoShowing = false;
@@ -56,6 +60,10 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
   String filterDate;
   String dueInvoiceChecked;
   bool dueInvoice = false;
+
+  TutorialCoachMark walkinTutorialCoachMark;
+  TutorialCoachMark bookingTutorialCoachMark;
+
 
   @override
   void initState() {
@@ -267,6 +275,8 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                   onTap: () {
                     currentSelectedTab = "Walk in";
                     _tabController.index = 1;
+                    showTourWalking();
+
                     setState(() {});
                   },
                 )
@@ -277,6 +287,8 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                   onTap: () {
                     currentSelectedTab = "Walk in";
                     _tabController.index = 1;
+                    showTourWalking();
+
                     setState(() {});
                   },
                 ),
@@ -291,6 +303,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                   onTap: () {
                     currentSelectedTab = "Booking";
                     _tabController.index = 2;
+                    showTourBooking();
                     setState(() {});
                   },
                 )
@@ -301,6 +314,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                   onTap: () {
                     currentSelectedTab = "Booking";
                     _tabController.index = 2;
+                    showTourBooking();
                     setState(() {});
                   },
                 ),
@@ -574,8 +588,376 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
 
     //filter Date form the response and add it to the Date list
     bookingList.where((element) => element.bookingDate != null).forEach((booking) => listOfMonths.add(booking.bookingDate));
+
+    if (bookingList.isNotEmpty) {
+      bookingList.first.mapOfKeys.addAll({
+        "homeBookingTitle": homeBookingTitle,
+        "homeBookingStatus": homeBookingStatus,
+        "homeBookingCall": homeBookingCall,
+        "homeBookingWhatsapp": homeBookingWhatsapp,
+        "homeBookingUnit": homeBookingUnit,
+      });
+    }
+
+
     setState(() {});
   }
+
+  void showTourWalking() async {
+    bool completed = await Utility.isTourCompleted(Screens.kWalkingTour);
+    if (!completed && walkinTutorialCoachMark == null && walkInList.isNotEmpty) {
+      createTutorialWalking();
+      await Future.delayed(Duration(milliseconds: 400));
+      walkinTutorialCoachMark.show(context: context);
+    }
+  }
+
+  void showTourBooking() async {
+    bool completed = await Utility.isTourCompleted(Screens.kBookingTour);
+    if (!completed && bookingTutorialCoachMark == null && bookingList.isNotEmpty) {
+      createTutorialBooking();
+      await Future.delayed(Duration(milliseconds: 400));
+      bookingTutorialCoachMark.show(context: context);
+    }
+  }
+
+  void createTutorialWalking() {
+    walkinTutorialCoachMark = TutorialCoachMark(
+      targets: _createTargetsWalking(),
+      colorShadow: AppColors.colorPrimary,
+      hideSkip: true,
+      paddingFocus: 10,
+      opacityShadow: 0.8,
+      onFinish: () {
+        print("Create Tutorial findish");
+        Utility.setTourCompleted(Screens.kWalkingTour);
+      },
+      onClickTarget: (target) {
+        print('onClickTarget: $target');
+      },
+      onClickTargetWithTapPosition: (target, tapDetails) {
+        print("target: $target");
+        print("clicked at position local: ${tapDetails.localPosition} - global: ${tapDetails.globalPosition}");
+      },
+      onClickOverlay: (target) {
+        print('onClickOverlay: $target');
+      },
+      onSkip: () {
+        print("skip");
+      },
+    );
+  }
+
+  void createTutorialBooking() {
+    bookingTutorialCoachMark = TutorialCoachMark(
+      targets: _createTargetBooking(),
+      colorShadow: AppColors.colorPrimary,
+      hideSkip: true,
+      paddingFocus: 10,
+      opacityShadow: 0.8,
+      onFinish: () {
+        print("Create Tutorial findish");
+        Utility.setTourCompleted(Screens.kBookingTour);
+      },
+      onClickTarget: (target) {
+        print('onClickTarget: $target');
+      },
+      onClickTargetWithTapPosition: (target, tapDetails) {
+        print("target: $target");
+        print("clicked at position local: ${tapDetails.localPosition} - global: ${tapDetails.globalPosition}");
+      },
+      onClickOverlay: (target) {
+        print('onClickOverlay: $target');
+      },
+      onSkip: () {
+        print("skip");
+      },
+    );
+  }
+
+
+  List<TargetFocus> _createTargetsWalking() {
+    List<TargetFocus> targets = [];
+
+    targets.add(
+      TargetFocus(
+        identify: "homeWalkingTitle",
+        keyTarget: homeWalkingTitle,
+        alignSkip: Alignment.topRight,
+        shape: ShapeLightFocus.RRect,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const <Widget>[
+                  Text("Walking Customer Name", style: textStyleWhite14px600w),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+
+    targets.add(
+      TargetFocus(
+        identify: "homeWalkingRating",
+        keyTarget: homeWalkingRating,
+        alignSkip: Alignment.topRight,
+        shape: ShapeLightFocus.RRect,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const <Widget>[
+                  Text("Walking customer conversion rating", style: textStyleWhite14px600w),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+
+    targets.add(
+      TargetFocus(
+        identify: "homeWalkingValidity",
+        keyTarget: homeWalkingValidity,
+        alignSkip: Alignment.topRight,
+        shape: ShapeLightFocus.RRect,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const <Widget>[
+                  Text("Shows validity of walking customer", style: textStyleWhite14px600w),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+
+    targets.add(
+      TargetFocus(
+        identify: "homeWalkingCalendar",
+        keyTarget: homeWalkingCalendar,
+        alignSkip: Alignment.topRight,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const <Widget>[
+                  Text("Schedule visit", style: textStyleWhite14px600w),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+
+    targets.add(
+      TargetFocus(
+        identify: "homeWalkingCall",
+        keyTarget: homeWalkingCall,
+        alignSkip: Alignment.topRight,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const <Widget>[
+                  Text("Call customer", style: textStyleWhite14px600w),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+
+    targets.add(
+      TargetFocus(
+        identify: "homeWalkingWhatsapp",
+        keyTarget: homeWalkingWhatsapp,
+        alignSkip: Alignment.topRight,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const <Widget>[
+                  Text("Chat with customer", style: textStyleWhite14px600w),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+
+    targets.add(
+      TargetFocus(
+        identify: "homeWalkingTaggingStatus",
+        keyTarget: homeWalkingTaggingStatus,
+        alignSkip: Alignment.topRight,
+        shape: ShapeLightFocus.RRect,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const <Widget>[
+                  Text("Customer tagging status", style: textStyleWhite14px600w),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+
+    return targets;
+  }
+
+  List<TargetFocus> _createTargetBooking() {
+    List<TargetFocus> targets = [];
+
+    targets.add(
+      TargetFocus(
+        identify: "homeBookingTitle",
+        keyTarget: homeBookingTitle,
+        alignSkip: Alignment.topRight,
+        shape: ShapeLightFocus.RRect,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const <Widget>[
+                  Text("Booked customer Name", style: textStyleWhite14px600w),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+
+    targets.add(
+      TargetFocus(
+        identify: "homeBookingStatus",
+        keyTarget: homeBookingStatus,
+        alignSkip: Alignment.topRight,
+        shape: ShapeLightFocus.RRect,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const <Widget>[
+                  Text("Booked customer status", style: textStyleWhite14px600w),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+
+    targets.add(
+      TargetFocus(
+        identify: "homeBookingCall",
+        keyTarget: homeBookingCall,
+        alignSkip: Alignment.topRight,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const <Widget>[
+                  Text("Call Customer", style: textStyleWhite14px600w),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+
+    targets.add(
+      TargetFocus(
+        identify: "homeBookingWhatsapp",
+        keyTarget: homeBookingWhatsapp,
+        alignSkip: Alignment.topRight,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const <Widget>[
+                  Text("Chat with Customer", style: textStyleWhite14px600w),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+
+    targets.add(
+      TargetFocus(
+        identify: "homeBookingUnit",
+        keyTarget: homeBookingUnit,
+        alignSkip: Alignment.topRight,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const <Widget>[
+                  Text("Get Unit details", style: textStyleWhite14px600w),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+
+    return targets;
+  }
+
 
   @override
   void onWalkInListFetched(List<BookingResponse> wList) {
@@ -584,6 +966,20 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
     //filter project form the response and add it to the project list
     walkInList.forEach((booking) => addProjectListValue(booking.projectInterested));
     walkInList.where((element) => element.walkingDate != null).forEach((booking) => listOfMonths.add(booking.walkingDate));
+
+
+    if (walkInList.isNotEmpty) {
+      walkInList.first.mapOfKeys.addAll({
+        "homeWalkingTitle": homeWalkingTitle,
+        "homeWalkingRating": homeWalkingRating,
+        "homeWalkingValidity": homeWalkingValidity,
+        "homeWalkingCalendar": homeWalkingCalendar,
+        "homeWalkingCall": homeWalkingCall,
+        "homeWalkingWhatsapp": homeWalkingWhatsapp,
+        "homeWalkingTaggingStatus": homeWalkingTaggingStatus,
+      });
+    }
+
     setState(() {});
   }
 
@@ -755,52 +1151,6 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
         .toList(); // provide list
   }
 
-  bool filterBooking(BookingResponse element) {
-    // Apply the first filter
-    bool isFilterValueValid = filterValue == null || filterValue == element.projectFinalized;
-
-    // Apply the second filter
-    bool isDueInvoiceValid = dueInvoice == element.dueInvoice;
-
-    // Apply the third filter
-    bool isFilterDateValid = filterDate == element.bookingDate;
-
-    bool combination1 = isFilterValueValid;
-    bool combination2 = isDueInvoiceValid;
-    bool combination3 = isFilterDateValid;
-
-    bool combination4 = isFilterValueValid && isDueInvoiceValid;
-    bool combination5 = isFilterValueValid && isFilterDateValid;
-    bool combination6 = isDueInvoiceValid && isFilterDateValid;
-
-    bool combination7 = isFilterValueValid && isDueInvoiceValid && isFilterDateValid;
-
-    bool combination8 = isDueInvoiceValid && isFilterDateValid && !isFilterValueValid;
-    bool combination9 = isFilterValueValid && isFilterDateValid && !isDueInvoiceValid;
-    bool combination10 = isFilterValueValid && isDueInvoiceValid && !isFilterDateValid;
-
-    bool combination11 = isFilterValueValid || isDueInvoiceValid && !isFilterDateValid;
-    bool combination12 = isDueInvoiceValid || isFilterDateValid && !isFilterValueValid;
-    bool combination13 = isFilterDateValid || isFilterValueValid && !isDueInvoiceValid;
-
-    bool combination14 = false;
-
-    // Check if any combination is true
-    return combination1 ||
-        combination2 ||
-        combination3 ||
-        combination4 ||
-        combination5 ||
-        combination6 ||
-        combination7 ||
-        combination8 ||
-        combination9 ||
-        combination10 ||
-        combination11 ||
-        combination12 ||
-        combination13 ||
-        combination14;
-  }
 
   @override
   void onTaggingDone() {
@@ -1023,3 +1373,58 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
     currentPromoShowing = true;
   }
 }
+
+/*
+
+  bool filterBooking(BookingResponse element) {
+    // Apply the first filter
+    bool isFilterValueValid = filterValue == null || filterValue == element.projectFinalized;
+
+    // Apply the second filter
+    bool isDueInvoiceValid = dueInvoice == element.dueInvoice;
+
+    // Apply the third filter
+    bool isFilterDateValid = filterDate == element.bookingDate;
+
+    bool combination1 = isFilterValueValid;
+    bool combination2 = isDueInvoiceValid;
+    bool combination3 = isFilterDateValid;
+
+    bool combination4 = isFilterValueValid && isDueInvoiceValid;
+    bool combination5 = isFilterValueValid && isFilterDateValid;
+    bool combination6 = isDueInvoiceValid && isFilterDateValid;
+
+    bool combination7 = isFilterValueValid && isDueInvoiceValid && isFilterDateValid;
+
+    bool combination8 = isDueInvoiceValid && isFilterDateValid && !isFilterValueValid;
+    bool combination9 = isFilterValueValid && isFilterDateValid && !isDueInvoiceValid;
+    bool combination10 = isFilterValueValid && isDueInvoiceValid && !isFilterDateValid;
+
+    bool combination11 = isFilterValueValid || isDueInvoiceValid && !isFilterDateValid;
+    bool combination12 = isDueInvoiceValid || isFilterDateValid && !isFilterValueValid;
+    bool combination13 = isFilterDateValid || isFilterValueValid && !isDueInvoiceValid;
+
+    bool combination14 = false;
+
+    // Check if any combination is true
+    return combination1 ||
+        combination2 ||
+        combination3 ||
+        combination4 ||
+        combination5 ||
+        combination6 ||
+        combination7 ||
+        combination8 ||
+        combination9 ||
+        combination10 ||
+        combination11 ||
+        combination12 ||
+        combination13 ||
+        combination14;
+  }
+
+
+
+
+
+* */

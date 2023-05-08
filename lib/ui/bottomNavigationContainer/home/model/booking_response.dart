@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 /// TowerFinalized : null
 /// StageName : "Booking"
 /// sfdcid : "006p00000092NBeAAM"
@@ -16,6 +18,7 @@ class BookingResponse {
   String bookingDate;
   String walkingDate;
   bool dueInvoice = false;
+  Map<String, Key> mapOfKeys = {};
 
   BookingResponse({
     dynamic towerFinalized,

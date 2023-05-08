@@ -61,12 +61,13 @@ class BookingCardWidget extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("${_bookingResponse?.name ?? ""}", style: textStyleRegular18pxW500),
+                    Text("${_bookingResponse?.name ?? ""}", key: _bookingResponse.mapOfKeys["homeBookingTitle"], style: textStyleRegular18pxW500),
                     // Text("Next Follow up: ${Utility.formatDate(_bookingResponse.nextFollowUp)}", style: textStyleSubText14px500w),
                   ],
                 ),
                 if (_bookingResponse.CRMApproved)
                   Container(
+                    key: _bookingResponse.mapOfKeys["homeBookingStatus"],
                     padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(3.0)),
@@ -76,7 +77,18 @@ class BookingCardWidget extends StatelessWidget {
                       "Approved",
                       style: textStyleWhite10px500w,
                     ),
-                  ) /*Image.asset(Images.kIconApproved, height: 34.0)*/
+                  ),
+                if (!_bookingResponse.CRMApproved)
+                  Container(
+                    key: _bookingResponse.mapOfKeys["homeBookingStatus"],
+                    width: 65.0,
+                    height: 10,
+                    padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(3.0)),
+                      color: AppColors.green,
+                    ),
+                  )
               ],
             ),
           ),
@@ -128,7 +140,7 @@ class BookingCardWidget extends StatelessWidget {
               // horizontalSpace(8.0),
               callButton(),
               horizontalSpace(8.0),
-              WhatsAppButton(_bookingResponse?.mobilenumber),
+              WhatsAppButton(_bookingResponse?.mobilenumber, key: _bookingResponse.mapOfKeys["homeBookingWhatsapp"]),
               Spacer(),
               InkWell(
                 onTap: () {
@@ -137,6 +149,7 @@ class BookingCardWidget extends StatelessWidget {
                 child: Container(
                   width: 35,
                   height: 35,
+                  key: _bookingResponse.mapOfKeys["homeBookingUnit"],
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: AppColors.colorSecondary,
@@ -205,6 +218,7 @@ class BookingCardWidget extends StatelessWidget {
       child: Container(
         width: 32,
         height: 32,
+        key: _bookingResponse.mapOfKeys["homeBookingCall"],
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: AppColors.colorPrimaryLight,

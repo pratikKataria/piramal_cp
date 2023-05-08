@@ -51,7 +51,7 @@ class WalkInCardWidget extends StatelessWidget {
             },
             child: Row(
               children: [
-                /*       ClipRRect(
+                /* ClipRRect(
                   borderRadius: BorderRadius.circular(80.0),
                   child: Container(
                     height: 37,
@@ -63,9 +63,8 @@ class WalkInCardWidget extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("${_bookingResponse?.name ?? ""}", style: textStyleRegular18pxW500),
-                    Text("Next Follow up: ${Utility.formatDate(_bookingResponse?.nextFollowUp)}",
-                        style: textStyleSubText14px500w),
+                    Text("${_bookingResponse?.name ?? ""}", key: _bookingResponse.mapOfKeys["homeWalkingTitle"], style: textStyleRegular18pxW500),
+                    Text("Next Follow up: ${Utility.formatDate(_bookingResponse?.nextFollowUp)}", style: textStyleSubText14px500w),
                   ],
                 ),
               ],
@@ -77,6 +76,7 @@ class WalkInCardWidget extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               children: [
                 Container(
+                  key: _bookingResponse.mapOfKeys["homeWalkingRating"],
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(6),
                     color: getRatingColor(_bookingResponse.newRating),
@@ -86,6 +86,7 @@ class WalkInCardWidget extends StatelessWidget {
                 ),
                 horizontalSpace(10.0),
                 Container(
+                  key: _bookingResponse.mapOfKeys["homeWalkingValidity"],
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(6),
                     color: AppColors.chipColor,
@@ -123,9 +124,11 @@ class WalkInCardWidget extends StatelessWidget {
               horizontalSpace(8.0),
               callButton(),
               horizontalSpace(8.0),
-              WhatsAppButton(_bookingResponse?.mobilenumber),
+              WhatsAppButton(
+                _bookingResponse?.mobilenumber,
+                key: _bookingResponse.mapOfKeys["homeWalkingWhatsapp"],
+              ),
               Spacer(),
-
               InkWell(
                 onTap: () {
                   if (!(_bookingResponse?.completeTagging ?? false)) {
@@ -135,6 +138,7 @@ class WalkInCardWidget extends StatelessWidget {
                 child: Container(
                   width: 110,
                   height: 32,
+                  key: _bookingResponse.mapOfKeys["homeWalkingTaggingStatus"],
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(40.0)),
                     color: AppColors.colorSecondary,
@@ -183,6 +187,7 @@ class WalkInCardWidget extends StatelessWidget {
       child: Container(
         width: 35,
         height: 35,
+        key: _bookingResponse.mapOfKeys["homeWalkingCalendar"],
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: AppColors.colorPrimaryLight,
@@ -199,6 +204,7 @@ class WalkInCardWidget extends StatelessWidget {
         launch("tel://${_bookingResponse?.mobilenumber ?? ""}");
       },
       child: Container(
+        key: _bookingResponse.mapOfKeys["homeWalkingCall"],
         width: 35,
         height: 35,
         decoration: BoxDecoration(
