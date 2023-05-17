@@ -12,6 +12,7 @@ class MyVideoPlayer extends StatefulWidget {
 }
 
 class _MyVideoPlayerState extends State<MyVideoPlayer> {
+
   YoutubePlayerController _controller;
 
   @override
