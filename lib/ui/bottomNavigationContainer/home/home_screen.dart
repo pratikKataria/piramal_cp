@@ -5,9 +5,9 @@ import 'package:marquee/marquee.dart';
 import 'package:piramal_channel_partner/extension/extention%20function.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
+import 'package:piramal_channel_partner/res/Images.dart';
 import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/res/constants.dart';
-import 'package:piramal_channel_partner/ui/base/base_screen.dart';
 import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/homeWidgets/booking_card_widget.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/homeWidgets/walkin_card_widget.dart';
@@ -33,6 +33,7 @@ import 'package:provider/provider.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 import 'home_tour_key.dart';
+import 'model/current_promotion_blocker_response.dart';
 
 String currentSelectedTab = "CP Lead";
 bool currentPromoShowing = false;
@@ -52,18 +53,20 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
   List<BookingResponse> bookingList = [];
   List<BookingResponse> walkInList = [];
   List<AllLeadResponse> listOfLeads = [];
-  Set<String> listOfMonths = {};
+  Set<String> listOfYears = {};
   List<String> projectList = [];
 
   List<BannerDataList> listOfBannerStrings = [BannerDataList(bannerName: "No event available")];
   String filterValue;
-  String filterDate;
+  String filterQuarter;
+  String filterYear;
   String dueInvoiceChecked;
   bool dueInvoice = false;
 
+  int fiscalYearStartMonth = 4; // Assuming fiscal year starts in April
+
   TutorialCoachMark walkinTutorialCoachMark;
   TutorialCoachMark bookingTutorialCoachMark;
-
 
   @override
   void initState() {
@@ -85,6 +88,19 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
 
     return Scaffold(
       backgroundColor: AppColors.screenBackgroundColor,
+      floatingActionButton: currentSelectedTab == "CP Lead"
+          ? PmlButton(
+              height: 45.0,
+              width: 45.0,
+              color: AppColors.black,
+              child: Icon(Icons.add, size: 24, color: AppColors.screenBackgroundColor),
+              onTap: () async {
+                provider.setBottomNavScreen(Screens.kAddLeadScreen);
+                var created = await Navigator.pushNamed(context, Screens.kAddLeadScreen);
+                if (created is bool && created) _leadPresenter.getLeadListS(context);
+              },
+            )
+          : null,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -180,33 +196,63 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                   .toList(),
             ),
           ),
-          if (listOfMonths.isNotEmpty) ...[
+          if (listOfYears.isNotEmpty) ...[
             verticalSpace(8.0),
-            Text("Months", style: textStyleRegular16px400w),
+            Text("Years", style: textStyleRegular16px400w),
             verticalSpace(8.0),
             Container(
               height: 25.0,
               child: ListView(
                 scrollDirection: Axis.horizontal,
-                children: listOfMonths
+                children: listOfYears
+                    .map<Widget>(
+                      (e) => PmlOutlineButton(
+                        onTap: () {
+                          filterYear = e == filterYear ? null : e;
+                          if (filterYear == null) filterQuarter = null;
+                          setState(() {});
+                        },
+                        text: "${e.formatYear}",
+                        padding: EdgeInsets.symmetric(horizontal: 15.0),
+                        margin: EdgeInsets.only(right: 10.0),
+                        height: 25.0,
+                        fillColor: filterYear == e ? AppColors.colorSecondary : AppColors.screenBackgroundColor,
+                        textStyle: filterYear == e ? textStyleWhite12px500w : textStyle12px500w,
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
+          ],
+          if (listOfYears.isNotEmpty && filterYear != null) ...[
+            verticalSpace(8.0),
+            Text("Quarter", style: textStyleRegular16px400w),
+            verticalSpace(8.0),
+            Container(
+              height: 25.0,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: ["Q1", "Q2", "Q3", "Q4"]
                     .map<Widget>((e) => PmlOutlineButton(
-                  onTap: () {
-                            filterDate = e == filterDate ? null : e;
+                          onTap: () {
+                            filterQuarter = e == filterQuarter ? null : e;
                             setState(() {});
                           },
                           text: "${e.formatDate}",
                           padding: EdgeInsets.symmetric(horizontal: 15.0),
                           margin: EdgeInsets.only(right: 10.0),
                           height: 25.0,
-                          fillColor: filterDate == e ? AppColors.colorSecondary : AppColors.screenBackgroundColor,
-                          textStyle: filterDate == e ? textStyleWhite12px500w : textStyle12px500w,
+                          fillColor: filterQuarter == e ? AppColors.colorSecondary : AppColors.screenBackgroundColor,
+                          textStyle: filterQuarter == e ? textStyleWhite12px500w : textStyle12px500w,
                         ))
                     .toList(),
               ),
             ),
           ],
-          if (_tabController.index == 2) verticalSpace(20.0),
-          if (_tabController.index == 2)
+          if (_tabController.index == 2) ...[
+            verticalSpace(20.0),
+            Container(height: 2, color: AppColors.lineColor),
+            verticalSpace(20.0),
             Row(
               children: [
                 PmlOutlineButton(
@@ -224,6 +270,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                 ),
               ],
             ),
+          ],
         ],
       ),
     );
@@ -385,7 +432,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Events", style: textStyle14px500w),
+                        // Text("Events", style: textStyle14px500w),
                         verticalSpace(10.0),
                         ...listOfBannerStrings.map((e) {
                           return Container(
@@ -587,7 +634,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
     bookingList.forEach((booking) => addProjectListValue(booking.projectFinalized));
 
     //filter Date form the response and add it to the Date list
-    bookingList.where((element) => element.bookingDate != null).forEach((booking) => listOfMonths.add(booking.bookingDate));
+    bookingList.where((element) => element.bookingDate != null).forEach((booking) => listOfYears.add(booking.bookingDate.toDate.year.toString()));
 
     if (bookingList.isNotEmpty) {
       bookingList.first.mapOfKeys.addAll({
@@ -598,7 +645,6 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
         "homeBookingUnit": homeBookingUnit,
       });
     }
-
 
     setState(() {});
   }
@@ -965,8 +1011,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
     walkInList.addAll(wList);
     //filter project form the response and add it to the project list
     walkInList.forEach((booking) => addProjectListValue(booking.projectInterested));
-    walkInList.where((element) => element.walkingDate != null).forEach((booking) => listOfMonths.add(booking.walkingDate));
-
+    walkInList.where((element) => element.walkingDate != null).forEach((booking) => listOfYears.add(booking.walkingDate.toDate.year.toString()));
 
     if (walkInList.isNotEmpty) {
       walkInList.first.mapOfKeys.addAll({
@@ -1033,7 +1078,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
   void onEventFetched(List<BannerDataList> brList) {
     listOfBannerStrings.clear();
     listOfBannerStrings.addAll(brList);
-    // brList.forEach((element) => events = "$events${element.eventName}     \u2022    ");
+    if (listOfBannerStrings.isEmpty) listOfBannerStrings.add(BannerDataList(bannerName: "No event available"));
     setState(() {});
   }
 
@@ -1064,7 +1109,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                 buildDialogRow("Carpet Area", "${projectUnitResponse?.carpetarea}"),
                 buildDialogRow("Agreement Value", "${projectUnitResponse?.totalAgreementValue}"),
                 verticalSpace(10.0),
-                Text("Payment details", style: textStyle14px500w),
+                /*Text("Payment details", style: textStyle14px500w),
                 buildDialogRow("Payment to Broker by BN Status", "${projectUnitResponse?.paymentToBrokerByBNStatus ?? ""}"),
                 buildDialogRow("Payment date", "${projectUnitResponse?.paymentDate ?? ""}"),
                 buildDialogRow("Amount Paid", "${projectUnitResponse?.amountPaid ?? ""}"),
@@ -1080,7 +1125,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                         _homePresenter.acknowledgePayment(context, projectUnitResponse.sfdcid, projectUnitResponse.brokerageRecordId);
                       }
                     },
-                  )
+                  )*/
               ],
             ),
           ),
@@ -1123,6 +1168,22 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
     List<Widget> listOfWidgets = [];
 
     listOfWidgets = listOfLeads
+        .where((element) {
+          int targetQuarter = getQuarterNumber(filterQuarter);
+          if (targetQuarter == -1) return true;
+
+          int year = element.dateFilter.toDate.year;
+          int month = element.dateFilter.toDate.month;
+          int monthsPerQuarter = 3; // Assuming 3 months per fiscal quarter
+
+          // Calculate fiscal year and quarter
+          int fiscalYear = month < fiscalYearStartMonth ? year - 1 : year;
+          int fiscalMonth = (month - fiscalYearStartMonth + 12) % 12;
+          int fiscalQuarter = (fiscalMonth ~/ monthsPerQuarter) + 1;
+
+          return fiscalQuarter == targetQuarter;
+        })
+        .where((element) => filterYear == null || filterYear == element.dateFilter.toDate.year.toString()) // filter years
         .where((element) => filterValue == null || filterValue == element.projectInterested) // filter out by project
         .map<Widget>((element) => cardViewLead(element)) // convert to map then to widget
         .toList(); // provide list
@@ -1135,7 +1196,22 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
 
     walkInWidgetList = walkInList
         .where((element) => filterValue == null || filterValue == element.projectInterested) // filter out by project
-        .where((element) => filterDate == null || filterDate == element.walkingDate)
+        .where((element) => filterYear == null || filterYear == element.walkingDate.toDate.year.toString()) // filter years
+        .where((element) {
+          int targetQuarter = getQuarterNumber(filterQuarter);
+          if (targetQuarter == -1) return true;
+
+          int year = element.walkingDate.toDate.year;
+          int month = element.walkingDate.toDate.month;
+          int monthsPerQuarter = 3; // Assuming 3 months per fiscal quarter
+
+          // Calculate fiscal year and quarter
+          int fiscalYear = month < fiscalYearStartMonth ? year - 1 : year;
+          int fiscalMonth = (month - fiscalYearStartMonth + 12) % 12;
+          int fiscalQuarter = (fiscalMonth ~/ monthsPerQuarter) + 1;
+
+          return fiscalQuarter == targetQuarter;
+        })
         .map((element) => WalkInCardWidget(element, _homePresenter)) // convert to map then to widget
         .toList(); // provide list
 
@@ -1145,12 +1221,40 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
   List<Widget> getBookingListByFilterValue() {
     return bookingList
         .where((element) => filterValue == null || filterValue == element.projectFinalized) // filter out by project
-        .where((element) => filterDate == null || filterDate == element.bookingDate)
-        .where((element) =>  dueInvoiceChecked == null ||dueInvoice == element.dueInvoice)
+        .where((element) => filterYear == null || filterYear == element.bookingDate.toDate.year.toString()) // filter out by project
+        .where((element) {
+          int targetQuarter = getQuarterNumber(filterQuarter);
+          if (targetQuarter == -1) return true;
+
+          int year = element.bookingDate.toDate.year;
+          int month = element.bookingDate.toDate.month;
+          int monthsPerQuarter = 3; // Assuming 3 months per fiscal quarter
+
+          // Calculate fiscal year and quarter
+          int fiscalYear = month < fiscalYearStartMonth ? year - 1 : year;
+          int fiscalMonth = (month - fiscalYearStartMonth + 12) % 12;
+          int fiscalQuarter = (fiscalMonth ~/ monthsPerQuarter) + 1;
+
+          return fiscalQuarter == targetQuarter;
+        })
+        .where((element) => dueInvoiceChecked == null || dueInvoice == element.dueInvoice)
         .map((element) => BookingCardWidget(element, _homePresenter)) // convert to map then to widget
         .toList(); // provide list
   }
 
+  int getQuarterNumber(String q) {
+    switch (q) {
+      case "Q1":
+        return 1;
+      case "Q2":
+        return 2;
+      case "Q3":
+        return 3;
+      case "Q4":
+        return 4;
+    }
+    return -1;
+  }
 
   @override
   void onTaggingDone() {
@@ -1270,6 +1374,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
     listOfLeads.forEach((lead) {
       bool isProjectAlreadyPresent = projectList.contains(lead.projectInterested);
       if (!isProjectAlreadyPresent) projectList.add(lead.projectInterested);
+      listOfYears.add(lead.dateFilter.toDate.year.toString());
     });
     // listOfLeads.forEach((booking) => listOfMonths.add(booking.));
     setState(() {});
@@ -1282,17 +1387,18 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
   }
 
   @override
-  void onCurrentPromotionPageBlockerDataFetched(List<String> pageBlockersImagesList) {
-    if (pageBlockersImagesList == null) return;
+  void onCurrentPromotionPageBlockerDataFetched(List<PageBlockerList> pageBlockersImagesList) {
+    if (pageBlockersImagesList == null || pageBlockersImagesList.isEmpty) return;
 
     if (kReleaseMode) dialogz(pageBlockersImagesList);
   }
 
-
-  void dialogz(List<String> pageBlockersImagesList) {
+  void dialogz(List<PageBlockerList> pageBlockersImagesList) {
+    int totalLength = pageBlockersImagesList.length - 1;
     if (currentPromoShowing == false)
       showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (BuildContext context) {
           int indexOfCurrentImage = 0;
           return StatefulBuilder(builder: (context, alertDialogState) {
@@ -1301,34 +1407,59 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
               elevation: 0.0,
               insetPadding: EdgeInsets.zero,
               actions: <Widget>[
-                Center(
-                  child: Container(
-                    width: 35.0,
-                    height: 35.0,
-                    // padding: const EdgeInsets.all(6.0),
-                    decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white),
-                    child: Icon(Icons.close, size: 14, color: AppColors.colorPrimary),
-                  ).onClick(() {
-                    Navigator.pop(context);
-                  }),
-                ),
-                verticalSpace(20.0),
-                Container(
-                  key: currentPromoPageBlockerBtnKey,
-                  width: Utility.screenWidth(context),
-                  height: Utility.screenWidth(context),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8.0),
+                if (indexOfCurrentImage == totalLength)
+                  Center(
                     child: Container(
-                      color: Colors.white,
-                      padding: EdgeInsets.all(8.0),
-                      child: CachedImageWidget(
-                        imageUrl: pageBlockersImagesList[indexOfCurrentImage],
-                        radius: 0.0,
-                        fit: BoxFit.fill,
+                      width: 35.0,
+                      height: 35.0,
+                      // padding: const EdgeInsets.all(6.0),
+                      decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+                      child: Icon(Icons.close, size: 14, color: AppColors.colorPrimary),
+                    ).onClick(() {
+                      Navigator.pop(context);
+                    }),
+                  ),
+                verticalSpace(20.0),
+                Stack(
+                  children: [
+                    Container(
+                      key: currentPromoPageBlockerBtnKey,
+                      width: Utility.screenWidth(context),
+                      height: Utility.screenWidth(context),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8.0),
+                        child: Container(
+                          color: Colors.white,
+                          padding: EdgeInsets.all(8.0),
+                          child: CachedImageWidget(
+                            imageUrl: pageBlockersImagesList[indexOfCurrentImage].imageURL,
+                            radius: 0.0,
+                            fit: BoxFit.fill,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                    Positioned(
+                      right: 0,
+                      left: 0,
+                      bottom: 20,
+                      child: InkWell(
+                        onTap: () {
+                          Utility.launchUrlX(context, pageBlockersImagesList[indexOfCurrentImage].imageURL);
+                        },
+                        child: Container(
+                          width: 30,
+                          height: 30,
+                          padding: EdgeInsets.all(10.0),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppColors.black.withOpacity(0.5),
+                          ),
+                          child: Image.asset(Images.kIconRedirect),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 verticalSpace(20.0),
                 Row(
@@ -1426,5 +1557,20 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
 
 
 
-
+InkWell(
+                        onTap: () {
+                          filterValue = e == filterValue ? null : e;
+                          setState(() {});
+                        },
+                        child: Container(
+                          color: filterValue == e ? AppColors.colorSecondary : AppColors.screenBackgroundColor,
+                          child: Text(
+                            "$e",
+                            style: filterValue == e ? textStyleWhite12px500w : textStyle12px500w,
+                          ),
+                          padding: EdgeInsets.symmetric(horizontal: 15.0),
+                          margin: EdgeInsets.only(right: 10.0),
+                          height: 25.0,
+                        ),
+                      )
 * */

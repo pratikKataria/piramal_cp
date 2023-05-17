@@ -41,7 +41,7 @@ class _ConstructionUpdateScreenState extends State<ConstructionUpdateScreen> imp
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             verticalSpace(22.0),
-            Text("Construction Images (${listOfProjects.length})", style: textStyle24px500w),
+            Text("Construction Updates (${listOfProjects.length})", style: textStyle24px500w),
             verticalSpace(33.0),
             Expanded(
               child: RefreshListView(

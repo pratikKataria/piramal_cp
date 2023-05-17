@@ -490,7 +490,7 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
                 buildDialogRow("Carpet Area", "${projectUnitResponse?.carpetarea}"),
                 buildDialogRow("Agreement Value", "${projectUnitResponse?.totalAgreementValue}"),
                 verticalSpace(10.0),
-                Text("Payment details", style: textStyle14px500w),
+             /*   Text("Payment details", style: textStyle14px500w),
                 buildDialogRow("Payment to Broker by BN Status", "${projectUnitResponse?.paymentToBrokerByBNStatus ?? ""}"),
                 buildDialogRow("Payment date", "${projectUnitResponse?.paymentDate ?? ""}"),
                 buildDialogRow("Amount Paid", "${projectUnitResponse?.amountPaid ?? ""}"),
@@ -509,7 +509,7 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
                         _presenter.acknowledgePayment(context, widget?.response?.sfdcid, response.brokerageID);
                       }
                     },
-                  )
+                  )*/
               ],
             ),
           ),

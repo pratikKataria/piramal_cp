@@ -9,6 +9,8 @@ import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/
 import 'package:piramal_channel_partner/ui/core/login/model/token_response.dart';
 import 'package:piramal_channel_partner/ui/cpEvent/model/cp_event_response.dart';
 
+import 'model/current_promotion_blocker_response.dart';
+
 abstract class HomeView extends BaseView{
   void onBookingListFetched(List<BookingResponse> brList);
   void onWalkInListFetched(List<BookingResponse> brList);
@@ -20,5 +22,5 @@ abstract class HomeView extends BaseView{
   void onAccountStatusChecked(AccountStatusResponse projectUnitResponse);
   void onPaymentAcknowledged();
   void noEventPresent();
-  void onCurrentPromotionPageBlockerDataFetched(List<String> pageBlockersImagesList);
+  void onCurrentPromotionPageBlockerDataFetched(List<PageBlockerList> pageBlockersImagesList);
 }

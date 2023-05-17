@@ -70,6 +70,52 @@ class HomePresenter {
       });
   }
 
+  void getBookingListWithLoader(BuildContext context) async {
+    //check for internal token
+    if (await AuthUser.getInstance().hasToken()) {
+      _v.onError("Token not found");
+      return;
+    }
+
+    //check network
+    if (!await NetworkCheck.check()) {
+      _v.onError("Network Error");
+      return;
+    }
+
+    // var body = {"CustomerAccountId": "$uID"};
+    String uID = await Utility.uID();
+    var body = {"CustomerAccountId": "$uID"};
+
+    Dialogs.showLoader(context, "Fetching due invoices opportunities ...");
+    apiController.post(EndPoints.DueInvoices, body: body, headers: await Utility.header())
+      ..then((Response response) async {
+        await Dialogs.hideLoader(context);
+
+        List<BookingResponse> brList = [];
+        List listOfDynamic = response.data as List;
+        listOfDynamic.forEach((element) => brList.add(BookingResponse.fromJson(element)));
+
+        BookingResponse bookingResponse = brList.isNotEmpty ? brList.first : null;
+        if (bookingResponse == null) {
+          _v.onError(Screens.kErrorTxt);
+          return;
+        }
+
+        if (bookingResponse.returnCode) {
+          _v.onBookingListFetched(brList);
+        } else {
+          // _v.onError(bookingResponse.message);
+        }
+      })
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
+
+        _v.onError(e.message);
+        ApiErrorParser.getResult(e, _v);
+      });
+  }
+
   void getWalkInList(BuildContext context) async {
     //check for internal token
     if (await AuthUser.getInstance().hasToken()) {
@@ -489,7 +535,7 @@ class HomePresenter {
       ..then((Response response) {
         CurrentPromotionBlockerResponse currentPromotionBlockerResponse = CurrentPromotionBlockerResponse.fromJson(response.data);
         if (currentPromotionBlockerResponse.returnCode) {
-          _v.onCurrentPromotionPageBlockerDataFetched(currentPromotionBlockerResponse.pageBlockersImagesList);
+          _v.onCurrentPromotionPageBlockerDataFetched(currentPromotionBlockerResponse.pageBlockerList);
         } else {
           _v.onError(currentPromotionBlockerResponse.message);
         }

@@ -71,8 +71,13 @@ class PersistentSideNavigation extends StatelessWidget {
               line(),
 
               //View/Add Leads
-              verticalSpace(vSpacing),
+             /* verticalSpace(vSpacing),
               sideNavButton(provider, Screens.kLeadScreen, Images.kIconLeads, "View/Add Leads"),
+              verticalSpace(vSpacing),
+              line(),*/
+
+              verticalSpace(vSpacing),
+              sideNavButton(provider, Screens.kDueInvoiceScreen, Images.kIconBrochure, "Due Invoice"),
               verticalSpace(vSpacing),
               line(),
 

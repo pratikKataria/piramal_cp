@@ -22,6 +22,7 @@ import 'package:piramal_channel_partner/ui/cpEvent/cp_event_screen.dart';
 import 'package:piramal_channel_partner/ui/currentPromotions/current_promotions_screen.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/booked/booked_customer_profile_detail_Screen.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/walkin/walkin_customer_profile_detail_Screen.dart';
+import 'package:piramal_channel_partner/ui/dueInvoice/due_invoice_screen.dart';
 import 'package:piramal_channel_partner/ui/lead/addLead/add_lead_screen.dart';
 import 'package:piramal_channel_partner/ui/lead/editLead/edit_lead_screen.dart';
 import 'package:piramal_channel_partner/ui/lead/lead_screen.dart';
@@ -198,6 +199,9 @@ class MyApp extends StatelessWidget {
               break;
             case Screens.kCustomerProfileDetailBooking:
               return RouteTransition(widget: BookedCustomerProfileDetailScreen(settings.arguments));
+              break;
+            case Screens.kDueInvoiceScreen:
+              return RouteTransition(widget: DueInvoiceScreen());
               break;
             case Screens.kProjectScreen:
               return RouteTransition(widget: ProjectScreen());

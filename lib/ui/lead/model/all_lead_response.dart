@@ -16,6 +16,7 @@ import 'package:flutter/material.dart';
 
 class AllLeadResponse {
  String cpLeadStatus;
+ String dateFilter;
  Map<String, Key> mapOfKeys = {};
 
   AllLeadResponse({
@@ -62,6 +63,7 @@ class AllLeadResponse {
     _configuration = json['Configuration'];
     _budget = json['Budget'];
     cpLeadStatus = json['CP_Lead_Status'];
+    dateFilter = json['Date_Filter'];
   }
   String _suburban;
   String _sfdcid;
@@ -107,6 +109,7 @@ class AllLeadResponse {
     map['Configuration'] = _configuration;
     map['Budget'] = _budget;
     map['CP_Lead_Status'] = cpLeadStatus;
+    map['Date_Filter'] = dateFilter;
     return map;
   }
 

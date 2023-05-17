@@ -30,6 +30,7 @@ abstract class Screens {
    static const kEditLeadScreen = "kEditLeadScreen";
    static const kUploadPendingDocumentScreen = "kUploadPendingDocumentScreen";
    static const kConstructionUpdate = "kConstructionUpdate";
+   static const kDueInvoiceScreen = "kDueInvoiceScreen";
 
    static const kWalkingTour = "kWalkingTour";
    static const kBookingTour = "kBookingTour";

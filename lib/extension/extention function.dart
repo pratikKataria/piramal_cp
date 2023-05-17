@@ -29,6 +29,50 @@ extension stringExtentions on String {
     return date;
   }
 
+  DateTime get toDate {
+    if (this == null || this.isEmpty) return DateTime.now();
+
+    String dateString = this;
+    bool hasHyphen = dateString.contains("-");
+    bool hasSlash = dateString.contains("/");
+
+    DateFormat formatter;
+    if (hasHyphen) {
+      // 2023-04-12
+      formatter = DateFormat('yyyy-MM-dd');
+    } else if (hasSlash) {
+      formatter = DateFormat('dd/MM/yyyy');
+    } else {
+      return DateTime.now();
+    }
+
+    DateTime dateTime = formatter.parse(this);
+    return dateTime;
+  }
+
+  String get formatYear {
+    if (this == null || this.isEmpty) return "-";
+
+    String dateString = this;
+    bool hasHyphen = dateString.contains("-");
+    bool hasSlash = dateString.contains("/");
+
+    DateFormat formatter;
+    if (hasHyphen) {
+      // 2023-04-12
+      formatter = DateFormat('yyyy-MM-dd');
+    } else if (hasSlash) {
+      formatter = DateFormat('dd/MM/yyyy');
+    } else {
+      return this;
+    }
+
+    final DateFormat newFormat = DateFormat('yyyy');
+    DateTime dateTime = formatter.parse(this);
+    String date = newFormat.format(dateTime);
+    return date;
+  }
+
   String get formatDate2 {
     if (this == null || this.isEmpty) return "-";
 

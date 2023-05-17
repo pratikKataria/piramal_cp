@@ -19,6 +19,7 @@ class EndPoints {
   static final String VERIFY_MOBILE = BASE_URL + "/CP_Mobile_App/MobileLogincp";
   static final String SEND_MOBILE_OTP = "https://bulkpush.mytoday.com/BulkSms/SingleMsgApi?";
   static final String GET_BOOKING = BASE_URL + "/CP_Mobile_App/OpportunityDetails";
+  static final String DueInvoices = BASE_URL + "/CP_Mobile_App/Due_Invoice_Opportunities";
   static final String GET_WALK_IN = BASE_URL + "/CP_Mobile_App/WalkinOpportunityDetails";
   static final String SCHEDULE_VISIT = BASE_URL + "/CP_Mobile_App/ScheduleSiteVisits";
   static final String UNIT_DETAIL = BASE_URL + "/CP_Mobile_App/CustomerUnitdetails";
