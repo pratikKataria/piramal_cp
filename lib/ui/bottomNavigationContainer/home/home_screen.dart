@@ -590,7 +590,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(6),
-                    color: AppColors.green,
+                    color: Utility.getColorLead(leadData.cpLeadStatus),
                   ),
                   padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
                   child: Text("${leadData.cpLeadStatus}", style: textStyleWhite14px600w),

@@ -11,7 +11,6 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
-import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/res/Strings.dart';
 import 'package:piramal_channel_partner/user/AuthUser.dart';
 import 'package:piramal_channel_partner/utils/SharedManager.dart';
@@ -477,6 +476,29 @@ class Utility {
       return false;
     }
     return double.tryParse(s) != null;
+  }
+
+  static Color getColorLead(String inputString) {
+    final Map<Color, List<String>> colorMap = {
+      AppColors.red: ["Lost", "Not Contactable"],
+      AppColors.green: ["Site visit fixed", "visit done", "meeting fixed", "meeting done", "visit confirm", "visit proposed"],
+      AppColors.amber: ["interested", "follow-up", "No show"],
+      AppColors.chipColor: ["Open", "YTA"],
+    };
+
+    if (inputString == null || inputString.isEmpty) {
+      return AppColors.chipColor;
+    }
+
+    for (Color keys in colorMap.keys) {
+      List<String> ls = colorMap[keys];
+      for (String s in ls) {
+        print("Compare $s == $inputString { ${s.contains(inputString)} }");
+        if (s.toLowerCase().contains(inputString.toLowerCase())) return keys;
+      }
+    }
+
+    return AppColors.chipColor;
   }
 }
 
