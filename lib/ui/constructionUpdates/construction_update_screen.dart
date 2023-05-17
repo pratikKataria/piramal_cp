@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
@@ -7,6 +8,8 @@ import 'package:piramal_channel_partner/ui/constructionUpdates/construction_upda
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/cached_image_widget.dart';
 import 'package:piramal_channel_partner/widgets/refresh_list_view.dart';
+
+import 'model/construction_update_response.dart';
 
 class ConstructionUpdateScreen extends StatefulWidget {
   final String tID;
@@ -22,7 +25,7 @@ class _ConstructionUpdateScreenState extends State<ConstructionUpdateScreen> imp
   final mainTextStyle = textStyle14px500w;
 
   ConstructionUpdatePresenter projectPresenter;
-  List<String> listOfProjects = [];
+  List<ConUpdateList> listOfProjects = [];
 
   @override
   void initState() {
@@ -57,7 +60,55 @@ class _ConstructionUpdateScreenState extends State<ConstructionUpdateScreen> imp
     );
   }
 
-  cardViewProjects(String image) {
+  cardViewProjects(ConUpdateList data) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 18.0),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(6.0),
+        boxShadow: [
+          BoxShadow(
+            // box-shadow: 0px 10px 30px 0px #0000000D;
+            color: AppColors.colorSecondary.withOpacity(0.1),
+            blurRadius: 20.0,
+            spreadRadius: 5.0,
+            offset: Offset(0, 8),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Container(
+            height: 210.0,
+            margin: EdgeInsets.only(top: 5.0),
+            child: Swiper(
+              pagination: SwiperPagination(
+                builder: DotSwiperPaginationBuilder(size: 6.0, activeSize: 8, activeColor: AppColors.colorPrimary),
+              ),
+              itemBuilder: (BuildContext context, int index) {
+                return Container(
+                  margin: EdgeInsets.symmetric(horizontal: 5.0),
+                  child: CachedImageWidget(imageUrl: data.constructionUpdatesList[index] ?? ""),
+                );
+              },
+              itemCount:  data.constructionUpdatesList.length,
+            ),
+          ),
+
+          verticalSpace(8.0),
+          Container(
+              margin: EdgeInsets.symmetric(horizontal: 8.0),
+              child: Text("${ data.description}", style: textStyle14px500w)),
+          verticalSpace(10.0),
+        ],
+      ),
+    );
+  }
+
+/*
+  cardViewProjects(ConUpdateList e) {
     return InkWell(
       onTap: () {},
       child: Container(
@@ -82,7 +133,7 @@ class _ConstructionUpdateScreenState extends State<ConstructionUpdateScreen> imp
               child: CachedImageWidget(
                 width: Utility.screenWidth(context),
                 height: 200.0,
-                imageUrl: image,
+                imageUrl: "",
                 radius: 0.0,
                 fit: BoxFit.fill,
               ),
@@ -92,7 +143,7 @@ class _ConstructionUpdateScreenState extends State<ConstructionUpdateScreen> imp
               top: 10,
               child: InkWell(
                 onTap: () {
-                  Utility.launchUrlX(context, image);
+                  Utility.launchUrlX(context, "image");
                 },
                 child: Container(
                   width: 30,
@@ -110,7 +161,7 @@ class _ConstructionUpdateScreenState extends State<ConstructionUpdateScreen> imp
         ),
       ),
     );
-  }
+  }*/
 
   @override
   onError(String message) {
@@ -118,9 +169,9 @@ class _ConstructionUpdateScreenState extends State<ConstructionUpdateScreen> imp
   }
 
   @override
-  void onConstructionImagesFetched(List<String> constructionUpdatesList) {
+  void onConstructionImagesFetched(List<ConUpdateList> conUpdateList) {
     listOfProjects.clear();
-    listOfProjects.addAll(constructionUpdatesList);
+    listOfProjects.addAll(conUpdateList);
     setState(() {});
   }
 }

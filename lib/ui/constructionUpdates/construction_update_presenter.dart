@@ -30,7 +30,7 @@ class ConstructionUpdatePresenter {
       return;
     }
 
-    if (kDebugMode) tID = "a04N000000HqMLWIA3";
+    if (kDebugMode) tID = "a04N0000007uHuQ";
     var body = {"TowerId": tID};
 
     Dialogs.showLoader(context, "Please wait fetching your construction update...");
@@ -39,7 +39,7 @@ class ConstructionUpdatePresenter {
         await Dialogs.hideLoader(context);
         ConstructionUpdateResponse constructionUpdateResponse = ConstructionUpdateResponse.fromJson(response.data);
         if (constructionUpdateResponse.returnCode) {
-          _v.onConstructionImagesFetched(constructionUpdateResponse.constructionUpdatesList);
+          _v.onConstructionImagesFetched(constructionUpdateResponse.conUpdateList);
         } else {
           _v.onError(constructionUpdateResponse.message);
         }

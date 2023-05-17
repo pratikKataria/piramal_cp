@@ -1155,7 +1155,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
   }
 
   int totalCustomerCount() {
-    return bookingList.length + walkInList.length;
+    return bookingList.length + walkInList.length + listOfLeads.length;
   }
 
   void addProjectListValue(String val) {
