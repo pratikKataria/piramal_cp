@@ -19,6 +19,7 @@ import 'package:piramal_channel_partner/ui/projectsFlo/projectList/model/project
 import 'package:piramal_channel_partner/ui/projectsFlo/projectList/project_view.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/project_presenter.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
+import 'package:piramal_channel_partner/widgets/pml_button.dart';
 import 'package:piramal_channel_partner/widgets/refresh_list_view.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
@@ -238,8 +239,93 @@ class _DueInvoiceScreenState extends State<DueInvoiceScreen> implements HomeView
 
   @override
   void onProjectUnitResponseFetched(ProjectUnitResponse projectUnitResponse) {
-    // TODO: implement onProjectUnitResponseFetched
+    showDetailDialog(context, projectUnitResponse);
   }
+
+  void showDetailDialog(BuildContext context, ProjectUnitResponse projectUnitResponse) {
+    AlertDialog alert = AlertDialog(
+      contentPadding: EdgeInsets.all(0.0),
+      backgroundColor: Colors.transparent,
+      content: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(6),
+            ),
+            margin: EdgeInsets.all(10.0),
+            padding: EdgeInsets.all(10.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text("Unit details", style: textStyle14px500w),
+                buildDialogRow("Unit Number", "${projectUnitResponse?.apartmentFinalized}"),
+                buildDialogRow("Tower", "${projectUnitResponse?.towerFinalized}"),
+                buildDialogRow("Carpet Area", "${projectUnitResponse?.carpetarea}"),
+                buildDialogRow("Agreement Value", "${projectUnitResponse?.totalAgreementValue}"),
+                verticalSpace(10.0),
+                /*Text("Payment details", style: textStyle14px500w),
+                buildDialogRow("Payment to Broker by BN Status", "${projectUnitResponse?.paymentToBrokerByBNStatus ?? ""}"),
+                buildDialogRow("Payment date", "${projectUnitResponse?.paymentDate ?? ""}"),
+                buildDialogRow("Amount Paid", "${projectUnitResponse?.amountPaid ?? ""}"),
+                buildDialogRow("Payment detail", "${projectUnitResponse?.paymentDetail ?? ""}"),
+                verticalSpace(10.0),
+                if (projectUnitResponse?.paymentByBN ?? false)
+                  PmlButton(
+                    height: 30.0,
+                    text: !(projectUnitResponse?.paymentConfirmationByCP ?? false) ? "Acknowledge Payment" : "Payment Acknowledged",
+                    color: !(projectUnitResponse?.paymentConfirmationByCP ?? false) ? AppColors.colorPrimary : AppColors.colorPrimary.withOpacity(0.5),
+                    onTap: () async {
+                      if (!(projectUnitResponse?.paymentConfirmationByCP ?? false)) {
+                        _homePresenter.acknowledgePayment(context, projectUnitResponse.sfdcid, projectUnitResponse.brokerageRecordId);
+                      }
+                    },
+                  )*/
+              ],
+            ),
+          ),
+          Positioned(
+            right: 0,
+            top: 0,
+            child: PmlButton(
+              width: 30,
+              height: 30,
+              color: AppColors.colorPrimary,
+              child: Icon(Icons.close, color: AppColors.white, size: 16.0),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  Column buildDialogRow(String s, String m) {
+    return Column(
+      children: [
+        verticalSpace(16.0),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text("$s", style: textStyleSubText12px400w),
+            Text("$m", style: textStyle12px500w),
+          ],
+        ),
+        verticalSpace(16.0),
+        line()
+      ],
+    );
+  }
+
 
   @override
   void onSiteVisitScheduled(ScheduleVisitResponse visitResponse) {
