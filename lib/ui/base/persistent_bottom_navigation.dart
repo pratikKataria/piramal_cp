@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:piramal_channel_partner/controller/bottom_navigation_controller.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
@@ -40,6 +41,11 @@ class PersistentBottomNavigation extends StatelessWidget {
         return InkWell(
           key: key,
           onTap: () {
+            if (tourVisibilityController.value) {
+              // Tour visibility is showing
+              return;
+            }
+
             provider.setBottomNavScreen(text);
             navigateToFirstRoute(context);
             onTap();
