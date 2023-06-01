@@ -693,7 +693,7 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: const <Widget>[
                   Text("User Profile", style: textStyleWhite14px600w),
-                  Text("View details about booking and call or whats app to tagged RM", style: textStyleWhite14px500w),
+                  Text("Customer details", style: textStyleWhite14px500w),
                 ],
               );
             },
@@ -718,8 +718,8 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: const <Widget>[
-                  Text("Booking information", style: textStyleWhite14px600w),
-                  Text("Check booking date, invoice status, generate invoice.", style: textStyleWhite14px500w),
+                  Text("Booking Details", style: textStyleWhite14px600w),
+                  // Text("Check booking date, invoice status, generate invoice.", style: textStyleWhite14px500w),
                 ],
               );
             },
@@ -769,8 +769,8 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: const <Widget>[
-                  Text("Timeline", style: textStyleWhite14px600w),
-                  Text("View your invoice timeline", style: textStyleWhite14px500w),
+                  // Text("Timeline", style: textStyleWhite14px600w),
+                  Text("Payment status", style: textStyleWhite14px500w),
                 ],
               );
             },

@@ -25,7 +25,7 @@ class PersistentBottomNavigation extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           buildBottomNavigationButton(Images.kIconHome, "Home", () {}, context, homeBtnKey),
-          buildBottomNavigationButton(Images.kIconExplore, "Explore", () {}, context, expBtnKey),
+          buildBottomNavigationButton(Images.kIconExplore, "Explore", () {}, context, null),
           buildBottomNavigationButton(Images.kIconUpload, Screens.kUpload, () {}, context, uploadBtnKey),
           buildBottomNavigationButton(Images.kIconTodayFollowup, Screens.kTodayFollowUpScreen, () {}, context, todayFuBtnKey),
           buildBottomNavigationButton(Images.kIconNotification, "Notifications", () {}, context, notificationBtnKey),

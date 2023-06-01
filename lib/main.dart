@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -61,28 +62,21 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
   String error = "Error Message -> ";
 
-  try {
+  if (message.data.containsKey("image")) {
     print("Message Received: ${message.data}");
-    String image = message.data["image"] /*"https://images.unsplash.com/photo-1488372759477-a7f4aa078cb6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"*/;
-    // print(image);
-
-    /*final Response response = await Dio().get(image, options: Options(responseType: ResponseType.bytes));
-        Uint8List imageBase64 = response.data; //Uint8List
-        androidBitmap = ByteArrayAndroidBitmap.fromBase64String(base64Encode(imageBase64));
-        styleInformation = BigPictureStyleInformation(androidBitmap);*/
+    String image = message.data[
+        "image"] /*"https://images.unsplash.com/photo-1488372759477-a7f4aa078cb6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"*/;
 
     final Response response = await Dio().get(image, options: Options(responseType: ResponseType.bytes));
     error = "$error ${response.statusCode} ${response.data} ";
 
-    Uint8List imageBase64 = response.data; //Uint8List
-    androidBitmap = ByteArrayAndroidBitmap.fromBase64String(base64Encode(imageBase64));
-    styleInformation = BigPictureStyleInformation(androidBitmap);
-  } catch (er) {
-    error = "$error $er";
-    print(er);
+    if (response.statusCode == 200) {
+      Uint8List imageBase64 = response.data; //Uint8List
+      androidBitmap = ByteArrayAndroidBitmap.fromBase64String(base64Encode(imageBase64));
+      styleInformation = BigPictureStyleInformation(androidBitmap);
+    }
+    error = " $error ${notification.body}";
   }
-
-  error = " $error ${notification.body}";
 
   if (notification != null && android != null) {
     flutterLocalNotificationsPlugin.show(
@@ -127,29 +121,29 @@ Future<void> main() async {
 
   await flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.createNotificationChannel(channel);
 
-  // AwesomeNotifications().initialize(
-  //   // set the icon to null if you want to use the default app icon
-  //     'resource://drawable/ic_app_logo',
-  //     [
-  //       NotificationChannel(
-  //           channelGroupKey: 'basic_channel_group',
-  //           channelKey: 'basic_channel',
-  //           channelName: 'Basic notifications',
-  //           channelDescription: 'Notification channel for basic tests',
-  //           ledColor: Colors.white)
-  //     ],
-  //     // Channel groups are only visual and are not required
-  //     channelGroups: [NotificationChannelGroup(channelGroupkey: 'basic_channel_group', channelGroupName: 'Basic group')],
-  //     debug: true);
-  //
-  // AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
-  //   if (!isAllowed) {
-  //     // This is just a basic example. For real apps, you must show some
-  //     // friendly dialog box before call the request method.
-  //     // This is very important to not harm the user experience
-  //     AwesomeNotifications().requestPermissionToSendNotifications();
-  //   }
-  // });
+  AwesomeNotifications().initialize(
+      // set the icon to null if you want to use the default app icon
+      'resource://drawable/ic_app_logo',
+      [
+        NotificationChannel(
+            channelGroupKey: 'basic_channel_group',
+            channelKey: 'basic_channel',
+            channelName: 'Basic notifications',
+            channelDescription: 'Notification channel for basic tests',
+            ledColor: Colors.white)
+      ],
+      // Channel groups are only visual and are not required
+      channelGroups: [NotificationChannelGroup(channelGroupkey: 'basic_channel_group', channelGroupName: 'Basic group')],
+      debug: true);
+
+  AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+    if (!isAllowed) {
+      // This is just a basic example. For real apps, you must show some
+      // friendly dialog box before call the request method.
+      // This is very important to not harm the user experience
+      AwesomeNotifications().requestPermissionToSendNotifications();
+    }
+  });
 
   bool authResult = await (AuthUser.getInstance()).isLoggedIn();
 
@@ -271,29 +265,22 @@ class MyApp extends StatelessWidget {
 
       String error = "Error Message -> ";
 
-      try {
+      if (message.data.containsKey("image")) {
         print("Message Received: ${message.data}");
         String image = message.data[
             "image"] /*"https://images.unsplash.com/photo-1488372759477-a7f4aa078cb6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"*/;
-        // print(image);
-
-        /* final Response response = await Dio().get(image, options: Options(responseType: ResponseType.bytes));
-        Uint8List imageBase64 = response.data; //Uint8List
-        androidBitmap = ByteArrayAndroidBitmap.fromBase64String(base64Encode(imageBase64));
-        styleInformation = BigPictureStyleInformation(androidBitmap);*/
 
         final Response response = await Dio().get(image, options: Options(responseType: ResponseType.bytes));
         error = "$error ${response.statusCode} ${response.data} ";
 
-        Uint8List imageBase64 = response.data; //Uint8List
-        androidBitmap = ByteArrayAndroidBitmap.fromBase64String(base64Encode(imageBase64));
-        styleInformation = BigPictureStyleInformation(androidBitmap);
-      } catch (er) {
-        error = "$error $er";
-        print(er);
-      }
+        if (response.statusCode == 200) {
+          Uint8List imageBase64 = response.data; //Uint8List
+          androidBitmap = ByteArrayAndroidBitmap.fromBase64String(base64Encode(imageBase64));
+          styleInformation = BigPictureStyleInformation(androidBitmap);
+        }
 
-      error = " $error ${notification.body}";
+        error = " $error ${notification.body}";
+      }
 
       if (notification != null && android != null) {
         flutterLocalNotificationsPlugin.show(
@@ -323,3 +310,10 @@ class MyApp extends StatelessWidget {
     }
   }
 }
+
+// print(image);
+
+/* final Response response = await Dio().get(image, options: Options(responseType: ResponseType.bytes));
+        Uint8List imageBase64 = response.data; //Uint8List
+        androidBitmap = ByteArrayAndroidBitmap.fromBase64String(base64Encode(imageBase64));
+        styleInformation = BigPictureStyleInformation(androidBitmap);*/

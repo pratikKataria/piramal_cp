@@ -223,11 +223,14 @@ class BaseScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: const <Widget>[
                   Text("Access Menu Options", style: textStyleWhite14px600w),
-                  Text("    \u2022 Projects", style: textStyleWhite14px500w),
+                  Text("    \u2022 Project Details", style: textStyleWhite14px500w),
                   Text("    \u2022 Current Promotions", style: textStyleWhite14px500w),
+                  Text("    \u2022 Construction Update", style: textStyleWhite14px500w),
                   Text("    \u2022 Videos", style: textStyleWhite14px500w),
+                  Text("    \u2022 UpComing Events", style: textStyleWhite14px500w),
                   Text("    \u2022 View/Add Leads", style: textStyleWhite14px500w),
-                  Text("    \u2022 Events", style: textStyleWhite14px500w),
+                  Text("    \u2022 Edit/ View Profile", style: textStyleWhite14px500w),
+                  Text("    \u2022 Video Updates", style: textStyleWhite14px500w),
                   Text("    \u2022 Profile", style: textStyleWhite14px500w),
                 ],
               );
@@ -255,8 +258,8 @@ class BaseScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text("    \u2022 Projects", style: textStyleWhite14px500w),
-                      Text("    \u2022 Months", style: textStyleWhite14px500w),
-                      Text("    \u2022 Due Invoices", style: textStyleWhite14px500w),
+                      Text("    \u2022 Financial Year & Quarters - Leads, Walk-ins & Bookings", style: textStyleWhite14px500w),
+                      Text("    \u2022 View/ Download Due Invoices", style: textStyleWhite14px500w),
                     ],
                   ),
                 ],
@@ -280,10 +283,13 @@ class BaseScreen extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: const <Widget>[
-                  Text("Home - Get Information about", style: textStyleWhite14px600w),
-                  Text("    \u2022 Leads", style: textStyleWhite14px500w),
-                  Text("    \u2022 Walk in", style: textStyleWhite14px500w),
-                  Text("    \u2022 Booking", style: textStyleWhite14px500w),
+                  // 1. Upload Leads
+                  // 2. Walk-in Details - Validity & Status
+                  // 3. Bookings - Customer payment status, Invoice Status & Booking details
+                  Text("Home Screen", style: textStyleWhite14px600w),
+                  Text("\u2022 Upload Leads", style: textStyleWhite14px500w),
+                  Text("\u2022 Walk-in Details - Validity & Status", style: textStyleWhite14px500w),
+                  Text("\u2022 Bookings - Customer payment status, Invoice Status & Booking details", style: textStyleWhite14px500w),
                 ],
               );
             },
@@ -292,7 +298,7 @@ class BaseScreen extends StatelessWidget {
       ),
     );
 
-    targets.add(
+    /*targets.add(
       TargetFocus(
         identify: "keyBottomNavigation2",
         keyTarget: expBtnKey,
@@ -312,7 +318,7 @@ class BaseScreen extends StatelessWidget {
           ),
         ],
       ),
-    );
+    );*/
 
     targets.add(
       TargetFocus(
@@ -328,9 +334,7 @@ class BaseScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: const <Widget>[
                   Text("Upload", style: textStyleWhite14px600w),
-                  Text("    \u2022 Submit your queries", style: textStyleWhite14px500w),
-                  Text("    \u2022 Raise tickets", style: textStyleWhite14px500w),
-                  Text("    \u2022 Attach file", style: textStyleWhite14px500w),
+                  Text("    \u2022 Bulk Lead Upload via Excel Sheet", style: textStyleWhite14px500w),
                 ],
               );
             },
@@ -354,7 +358,7 @@ class BaseScreen extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.only(top: 10.0),
                     child: Text(
-                      "Property viewings and inquiries, suggests properties and agents, and offers options to schedule future viewings or connect with an agent for more information.",
+                      "View & Add the follow-ups for client walkins",
                       style: textStyleWhite14px500w,
                     ),
                   ),
@@ -382,7 +386,7 @@ class BaseScreen extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.only(top: 10.0),
                     child: Text(
-                      "Displays a list of recent notifications from an app or system. It may include alerts, messages, reminders, and other updates, often with the option to take action or dismiss them. The screen can provide a quick overview of important information and help users stay informed and organized.",
+                      "Stay updated on all the new offers, events and client updates",
                       style: textStyleWhite14px500w,
                     ),
                   ),

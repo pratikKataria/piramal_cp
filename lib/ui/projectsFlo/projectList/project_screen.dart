@@ -238,7 +238,7 @@ class _ProjectScreenState extends State<ProjectScreen> implements ProjectView {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: const <Widget>[
-                  Text("Download project brochure", style: textStyleWhite14px600w),
+                  Text("Project Brochure Download", style: textStyleWhite14px600w),
                 ],
               );
             },

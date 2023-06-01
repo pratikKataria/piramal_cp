@@ -762,7 +762,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: const <Widget>[
-                  Text("Walking customer conversion rating", style: textStyleWhite14px600w),
+                  Text("H/C/W - Customer Conversion Rating", style: textStyleWhite14px600w),
                 ],
               );
             },
@@ -785,7 +785,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: const <Widget>[
-                  Text("Shows validity of walking customer", style: textStyleWhite14px600w),
+                  Text("Validity - Shows Walk-in source Validity", style: textStyleWhite14px600w),
                 ],
               );
             },
@@ -807,7 +807,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: const <Widget>[
-                  Text("Schedule visit", style: textStyleWhite14px600w),
+                  Text("Schedule Site Visit", style: textStyleWhite14px600w),
                 ],
               );
             },
@@ -874,7 +874,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: const <Widget>[
-                  Text("Customer tagging status", style: textStyleWhite14px600w),
+                  Text("Complete Customer Tagging", style: textStyleWhite14px600w),
                 ],
               );
             },
@@ -903,7 +903,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: const <Widget>[
-                  Text("Booked customer Name", style: textStyleWhite14px600w),
+                  Text("Customer details", style: textStyleWhite14px600w),
                 ],
               );
             },
@@ -926,7 +926,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: const <Widget>[
-                  Text("Booked customer status", style: textStyleWhite14px600w),
+                  Text("Booking Details", style: textStyleWhite14px600w),
                 ],
               );
             },
