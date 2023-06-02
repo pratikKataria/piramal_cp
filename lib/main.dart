@@ -35,6 +35,7 @@ import 'package:piramal_channel_partner/ui/videoScreen/video_screen.dart';
 import 'package:piramal_channel_partner/utils/scroll_behavior.dart';
 import 'package:provider/provider.dart';
 
+import 'firebase_options.dart';
 import 'ui/core/login/login_screen.dart';
 import 'ui/myAssit/assist/my_assist_screen.dart';
 import 'ui/projectsFlo/projectDetail/project_detail_screen.dart';
@@ -106,7 +107,7 @@ Future<void> main() async {
   await Utility.portrait();
 
   // await Firebasep.initializeApp();
-  if (Platform.isIOS) {
+ /* if (Platform.isIOS) {
     await Firebase.initializeApp(
         options: const FirebaseOptions(
             apiKey: "AIzaSyA9PpNpiNMkyI0nnxnjgboSHLji_2jqnqw",
@@ -115,7 +116,11 @@ Future<void> main() async {
             projectId: "cp-mobile-app-a7646"));
   } else {
     await Firebase.initializeApp();
-  }
+  }*/
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 

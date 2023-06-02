@@ -7,12 +7,56 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:970701622319:android:89d6ce356fefeb6f030ada",
+        "android_client_info": {
+          "package_name": "com.mypiramal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "970701622319-54hu9r451diujl0kft4onq95fhl292fi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAB5-LCGExJAVh1kp9pRCWmVN-tSLrfMDE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "970701622319-54hu9r451diujl0kft4onq95fhl292fi.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "970701622319-n34vboifjjh4ovn8asn7nnd4cps50pml.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.stetig.piramalChannelPartner"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:970701622319:android:fc4b63431393f64a030ada",
         "android_client_info": {
           "package_name": "com.stetig.piramal_channel_partner"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "970701622319-ju92ln7bb06k9iik45shup2vg9kou3t8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.stetig.piramal_channel_partner",
+            "certificate_hash": "00fbb7b6dcb5fc8feac7ad1a8cd430a84fb95def"
+          }
+        },
         {
           "client_id": "970701622319-u590ogcgqj99nb7n9ishd8e5b7oa1p8f.apps.googleusercontent.com",
           "client_type": 1,
@@ -37,6 +81,13 @@
             {
               "client_id": "970701622319-54hu9r451diujl0kft4onq95fhl292fi.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "970701622319-n34vboifjjh4ovn8asn7nnd4cps50pml.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.stetig.piramalChannelPartner"
+              }
             }
           ]
         }
