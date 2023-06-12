@@ -26,3 +26,7 @@ samples, guidance on mobile development, and a full API reference.
   arch -x86_64 pod install
   pod install --repo-update
   pod repo update
+
+  https://firebase.flutter.dev/docs/messaging/apple-integration/
+  https://firebase.flutter.dev/docs/overview/
+  https://medium.com/@alaa07996/firebase-push-notifications-with-flutter-6848892a1c15
