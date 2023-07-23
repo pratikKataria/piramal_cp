@@ -1,4 +1,5 @@
 import 'package:piramal_channel_partner/ui/Ticket/model/case_subtype_response.dart';
+import 'package:piramal_channel_partner/ui/Ticket/model/ticket_detail_response.dart';
 import 'package:piramal_channel_partner/ui/Ticket/model/ticket_picklist_response.dart';
 import 'package:piramal_channel_partner/ui/base/BaseView.dart';
 
@@ -21,4 +22,5 @@ abstract class TicketView extends BaseView {
   void onTicketPicklistFetched(TicketPicklistResponse rmDetailResponse);
 
   void caseSubTypeResponse(CaseSubtypeResponse rmDetailResponse);
+
 }

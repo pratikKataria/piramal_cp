@@ -135,7 +135,9 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
                                     verticalSpace(12.0),
                                   ],
                                 ),
-                              ))
+                              ).onClick(() async {
+                                await Navigator.pushNamed(context, Screens.kTicketDetailScreen, arguments: e.caseId);
+                              }))
                           .toList(),
                     ] /*openTickets.map<Widget>((e) => cardViewTicket(e)).toList()*/,
                   ),
@@ -180,7 +182,7 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
       indicatorColor: AppColors.colorPrimary,
       indicatorSize: TabBarIndicatorSize.tab,
       indicator: ShapeDecoration(shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(30.0))), color: Colors.red),
-      indicatorPadding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 4.0),
+      indicatorPadding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 6.0),
       labelPadding: EdgeInsets.symmetric(horizontal: 5.0),
       unselectedLabelStyle: textStyleDark14px500w,
       unselectedLabelColor: AppColors.textColor,

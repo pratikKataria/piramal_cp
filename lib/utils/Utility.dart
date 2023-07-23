@@ -458,6 +458,11 @@ class Utility {
       return;
     }
 
+    if (file.contains("null")) {
+      Utility.showErrorToastB(context, "No link found !!");
+      return;
+    }
+
     //add http if link not having http
     bool hasHttp = file.startsWith("http") || file.startsWith("https");
     file = hasHttp ? file : "https://${file}";

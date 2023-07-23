@@ -75,6 +75,7 @@ class EndPoints {
   static final String POST_SUB_CATEGORY = BASE_URL + "/CP_Mobile_App/caseCategoryCPApp";
   static final String CP_TICKET_PICKLIST = BASE_URL + "/CP_Mobile_App/CPAppPicklistValues";
   static final String CP_TICKET_CASE_SUB_TYPE = BASE_URL + "/CP_Mobile_App/caseSubTypesCPApp";
+  static final String CP_TICKET_CASE_DETAILS = BASE_URL + "/CP_Mobile_App/getCaseDetails";
   static final String POST_CATEGORY = BASE_URL + "/MyticketAllCategory";
   static final String POST_REOPEN_TICKET = BASE_URL + "/ReopenTicket";
 

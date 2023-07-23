@@ -15,10 +15,12 @@ import 'package:piramal_channel_partner/res/RouteTransition.dart';
 import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/res/Strings.dart';
 import 'package:piramal_channel_partner/ui/Ticket/create_new_ticket.dart';
+import 'package:piramal_channel_partner/ui/Ticket/ticketDetail/ticket_detail_screen.dart';
 import 'package:piramal_channel_partner/ui/Ticket/ticket_screen.dart';
 import 'package:piramal_channel_partner/ui/base/base_screen.dart';
 import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/bottom_navigation_base_screen.dart';
+import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/booking_response.dart';
 import 'package:piramal_channel_partner/ui/constructionUpdates/construction_update_screen.dart';
 import 'package:piramal_channel_partner/ui/core/signup/signup_screen.dart';
 import 'package:piramal_channel_partner/ui/core/uploadDocument/upload_document_screen.dart';
@@ -258,6 +260,9 @@ class MyApp extends StatelessWidget {
               break;
             case Screens.kCreateTicketsScreen:
               return RouteTransition(widget: CreateNewTicket());
+              break;
+            case Screens.kTicketDetailScreen:
+              return RouteTransition(widget: TicketDetailScreen(settings.arguments as String));
               break;
             default:
               return RouteTransition(widget: BottomNavigationBaseScreen());

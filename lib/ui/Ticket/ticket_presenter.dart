@@ -8,8 +8,10 @@ import 'package:piramal_channel_partner/ui/Ticket/model/case_subtype_response.da
 import 'package:piramal_channel_partner/ui/Ticket/model/create_ticket_request.dart';
 import 'package:piramal_channel_partner/ui/Ticket/model/create_ticket_response.dart';
 import 'package:piramal_channel_partner/ui/Ticket/model/ticket_category_response.dart';
+import 'package:piramal_channel_partner/ui/Ticket/model/ticket_detail_response.dart';
 import 'package:piramal_channel_partner/ui/Ticket/model/ticket_picklist_response.dart';
 import 'package:piramal_channel_partner/ui/Ticket/model/ticket_response.dart';
+import 'package:piramal_channel_partner/ui/Ticket/ticketDetail/ticket_detail_view.dart';
 import 'package:piramal_channel_partner/ui/base/base_presenter.dart';
 import 'package:piramal_channel_partner/user/AuthUser.dart';
 import 'package:piramal_channel_partner/utils/Dialogs.dart';
@@ -91,7 +93,6 @@ class TicketPresenter extends BasePresenter {
     }
 
     createTicketRequest.customerAccountId = (await AuthUser().getCurrentUser()).userCredentials.accountId;
-
 
     String hasErrorMessage = validateFields(createTicketRequest);
     if (hasErrorMessage != null) {
@@ -256,7 +257,7 @@ class TicketPresenter extends BasePresenter {
     Dialogs.showLoader(context, "Fetching picklist options, please wait...");
     apiController.post(EndPoints.CP_TICKET_PICKLIST, headers: await Utility.header())
       ..then((response) {
-        Dialogs. hideLoader(context);
+        Dialogs.hideLoader(context);
         TicketPicklistResponse rmDetailResponse = TicketPicklistResponse.fromJson(response.data);
         if (rmDetailResponse.returnCode) {
           _v.onTicketPicklistFetched(rmDetailResponse);
@@ -266,7 +267,7 @@ class TicketPresenter extends BasePresenter {
         return;
       })
       ..catchError((e) {
-        Dialogs. hideLoader(context);
+        Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }
@@ -289,6 +290,35 @@ class TicketPresenter extends BasePresenter {
         CaseSubtypeResponse rmDetailResponse = CaseSubtypeResponse.fromJson(response.data);
         if (rmDetailResponse.returnCode) {
           _v.caseSubTypeResponse(rmDetailResponse);
+        } else {
+          _v.onError(rmDetailResponse.message);
+        }
+        return;
+      })
+      ..catchError((e) {
+        // Dialogs. hideLoader(context);
+        ApiErrorParser.getResult(e, _v);
+      });
+  }
+
+  void getCaseDetails(BuildContext context, String caseType) async {
+    //check for internal token
+    if (await AuthUser.getInstance().hasToken()) {
+      _v.onError("Token not found");
+      return;
+    }
+
+    //check network
+    //if (await NetworkCheck.check()) return;
+
+    Map body = {"CaseId": caseType};
+
+    apiController.post(EndPoints.CP_TICKET_CASE_DETAILS, body: body, headers: await Utility.header())
+      ..then((response) {
+        // Dialogs. hideLoader(context);
+        TicketDetailResponse rmDetailResponse = TicketDetailResponse.fromJson(response.data);
+        if (rmDetailResponse.returnCode) {
+          (_v as TicketDetailView).onTicketDetailsFetched(rmDetailResponse);
         } else {
           _v.onError(rmDetailResponse.message);
         }
