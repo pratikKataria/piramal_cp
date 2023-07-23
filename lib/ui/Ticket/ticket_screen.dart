@@ -68,80 +68,84 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
               controller: _tabController,
               // physics: NeverScrollableScrollPhysics(),
               children: [
-                KRCListViewV2(
-                  children: [
-                    ...openTickets
-                        .map((e) => Container(
-                              padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                              color: AppColors.screenBackgroundColor,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                children: [
-                                  verticalSpace(12.0),
-                                  Text("${e.detailCaseRemarks == null ? "" : e.detailCaseRemarks} (#${e.caseNumber})", style: textStyle12px500w),
-                                  verticalSpace(15.0),
-                                  if (e.type != null) Text("Type", style: textStyle12px500w),
-                                  if (e.type != null)
-                                    SingleChildScrollView(
-                                      scrollDirection: Axis.horizontal,
-                                      child: Row(
-                                        children: [
-                                          ...e.type
-                                              .split(";")
-                                              .map((e) => Container(
-                                                  padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
-                                                  margin: EdgeInsets.only(right: 10.0),
-                                                  color: AppColors.textColorSubText,
-                                                  child: Text("$e".notNull, style: textStyleWhite12px500w)))
-                                              .toList(),
-                                        ],
+                if (openTickets.isEmpty) Center(child: Text("No Tickets Present")),
+                if (openTickets.isNotEmpty)
+                  KRCListViewV2(
+                    children: [
+                      ...openTickets
+                          .map((e) => Container(
+                                padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                                color: AppColors.screenBackgroundColor,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  children: [
+                                    verticalSpace(12.0),
+                                    Text("${e.detailCaseRemarks == null ? "" : e.detailCaseRemarks} (#${e.caseNumber})", style: textStyle12px500w),
+                                    verticalSpace(15.0),
+                                    if (e.type != null) Text("Type", style: textStyle12px500w),
+                                    if (e.type != null)
+                                      SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: Row(
+                                          children: [
+                                            ...e.type
+                                                .split(";")
+                                                .map((e) => Container(
+                                                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
+                                                    margin: EdgeInsets.only(right: 10.0),
+                                                    color: AppColors.textColorSubText,
+                                                    child: Text("$e".notNull, style: textStyleWhite12px500w)))
+                                                .toList(),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  verticalSpace(15.0),
-                                  if (e.subType != null) Text("Sub Type", style: textStyle12px500w),
-                                  if (e.subType != null)
-                                    SingleChildScrollView(
-                                      scrollDirection: Axis.horizontal,
-                                      child: Row(
-                                        children: [
-                                          ...e.subType
-                                              .split(";")
-                                              .map((e) => Container(
-                                                  padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
-                                                  margin: EdgeInsets.only(right: 10.0),
-                                                  color: AppColors.textColorSubText,
-                                                  child: Text("$e".notNull, style: textStyleWhite12px500w)))
-                                              .toList(),
-                                        ],
+                                    verticalSpace(15.0),
+                                    if (e.subType != null) Text("Sub Type", style: textStyle12px500w),
+                                    if (e.subType != null)
+                                      SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: Row(
+                                          children: [
+                                            ...e.subType
+                                                .split(";")
+                                                .map((e) => Container(
+                                                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
+                                                    margin: EdgeInsets.only(right: 10.0),
+                                                    color: AppColors.textColorSubText,
+                                                    child: Text("$e".notNull, style: textStyleWhite12px500w)))
+                                                .toList(),
+                                          ],
+                                        ),
                                       ),
+                                    verticalSpace(15.0),
+                                    Wrap(
+                                      children: [
+                                        Text("Created On", style: textStyleBlack10px500w),
+                                        Text(" ${e.createdDate}".notNull, style: textStylePrimary10px500w),
+                                        // Text(" At", style: textStyleBlack10px500w),
+                                        // Text(" ${e.timeData}".notNull, style: textStylePrimary10px500w),
+                                        Text(" | OPEN", style: textStylePrimary10px500w),
+                                      ],
                                     ),
-                                  verticalSpace(15.0),
-                                  Wrap(
-                                    children: [
-                                      Text("Created On", style: textStyleBlack10px500w),
-                                      Text(" ${e.createdDate}".notNull, style: textStylePrimary10px500w),
-                                      // Text(" At", style: textStyleBlack10px500w),
-                                      // Text(" ${e.timeData}".notNull, style: textStylePrimary10px500w),
-                                      Text(" | OPEN", style: textStylePrimary10px500w),
-                                    ],
-                                  ),
-                                  verticalSpace(10.0),
-                                  line(),
-                                  verticalSpace(10.0),
-                                  Center(child: Text("Your ticket will be updated soon", style: textStyleSubText10px500w)),
-                                  verticalSpace(12.0),
-                                ],
-                              ),
-                            ))
-                        .toList(),
-                  ] /*openTickets.map<Widget>((e) => cardViewTicket(e)).toList()*/,
-                ),
-                KRCListViewV2(
-                  children: [
-                    ...closedTickets.map((e) => cardViewTicketClosed(e)).toList(),
-                  ] /*closedTickets.map<Widget>((e) => cardViewTicket(e)).toList()*/,
-                ),
+                                    verticalSpace(10.0),
+                                    line(),
+                                    verticalSpace(10.0),
+                                    Center(child: Text("Your ticket will be updated soon", style: textStyleSubText10px500w)),
+                                    verticalSpace(12.0),
+                                  ],
+                                ),
+                              ))
+                          .toList(),
+                    ] /*openTickets.map<Widget>((e) => cardViewTicket(e)).toList()*/,
+                  ),
+                if (closedTickets.isEmpty) Center(child: Text("No Tickets Present")),
+                if (closedTickets.isNotEmpty)
+                  KRCListViewV2(
+                    children: [
+                      ...closedTickets.map((e) => cardViewTicketClosed(e)).toList(),
+                    ] /*closedTickets.map<Widget>((e) => cardViewTicket(e)).toList()*/,
+                  ),
               ],
             ),
           ),
@@ -175,11 +179,8 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
       controller: _tabController,
       indicatorColor: AppColors.colorPrimary,
       indicatorSize: TabBarIndicatorSize.tab,
-      indicator: ShapeDecoration(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(30.0))),
-          color: Colors.red
-      ),
-      indicatorPadding: EdgeInsets.symmetric(horizontal: 20.0),
+      indicator: ShapeDecoration(shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(30.0))), color: Colors.red),
+      indicatorPadding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 4.0),
       labelPadding: EdgeInsets.symmetric(horizontal: 5.0),
       unselectedLabelStyle: textStyleDark14px500w,
       unselectedLabelColor: AppColors.textColor,
