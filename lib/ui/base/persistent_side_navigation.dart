@@ -93,6 +93,12 @@ class PersistentSideNavigation extends StatelessWidget {
               verticalSpace(vSpacing),
               line(),
 
+              //My Assists
+              verticalSpace(vSpacing),
+              sideNavButton(provider, Screens.kTicketsScreen, Assets.imagesTicket, "Ticket"),
+              verticalSpace(vSpacing),
+              line(),
+
               //Settings
               verticalSpace(vSpacing),
               sideNavButton(provider, Screens.kSettingsScreen, Images.kIconSetting, "Profile"),

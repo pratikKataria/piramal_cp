@@ -60,6 +60,7 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
       ),
       body: Column(
         children: [
+          verticalSpace(10.0),
           buildTabs(),
           verticalSpace(20.0),
           Expanded(
@@ -174,10 +175,16 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
       controller: _tabController,
       indicatorColor: AppColors.colorPrimary,
       indicatorSize: TabBarIndicatorSize.tab,
+      indicator: ShapeDecoration(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(30.0))),
+          color: Colors.red
+      ),
+      indicatorPadding: EdgeInsets.symmetric(horizontal: 20.0),
       labelPadding: EdgeInsets.symmetric(horizontal: 5.0),
       unselectedLabelStyle: textStyleDark14px500w,
       unselectedLabelColor: AppColors.textColor,
-      labelColor: AppColors.colorPrimary,
+      labelColor: AppColors.white,
+      labelStyle: textStyleRegular16px500w,
       onTap: (int index) {
         setState(() {});
       },

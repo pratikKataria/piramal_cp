@@ -57,5 +57,6 @@ class Assets {
   static const String imagesImgPlaceholder = 'assets/images/img_placeholder.png';
   static const String imagesImgPlaceholder1 = 'assets/images/img_placeholder_1.png';
   static const String imagesImgPlaceholderAmenities = 'assets/images/img_placeholder_amenities.png';
+  static const String imagesTicket = 'assets/images/ticket.png';
 
 }

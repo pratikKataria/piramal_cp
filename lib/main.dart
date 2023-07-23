@@ -253,6 +253,9 @@ class MyApp extends StatelessWidget {
             case Screens.kVideoScreen:
               return RouteTransition(widget: VideoScreen());
               break;
+            case Screens.kTicketsScreen:
+              return RouteTransition(widget: TicketScreen());
+              break;
             case Screens.kCreateTicketsScreen:
               return RouteTransition(widget: CreateNewTicket());
               break;
@@ -261,7 +264,7 @@ class MyApp extends StatelessWidget {
               break;
           }
         },
-        home: kDebugMode ? TicketScreen() : checkAuthUser(authResult),
+        home: checkAuthUser(authResult),
       ),
     );
   }
