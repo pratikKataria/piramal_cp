@@ -190,6 +190,18 @@ const textStyleSubText12px400w = TextStyle(
     fontWeight: FontWeight.w400,
     fontSize: fontH6);
 
+const textStylePrimary10px500w = TextStyle(
+    color: AppColors.colorPrimary,
+    fontFamily: kFontFamily,
+    fontWeight: FontWeight.w500,
+    fontSize: 10);
+
+const textStyle14px600w = TextStyle(
+    color: AppColors.textColor,
+    fontFamily: kFontFamily,
+    fontWeight: FontWeight.w600,
+    fontSize: 14);
+
 const textStyleDark12px700w = TextStyle(
     color: AppColors.textColorBlack,
     fontFamily: kFontFamily,

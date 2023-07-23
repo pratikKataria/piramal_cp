@@ -30,6 +30,18 @@ abstract class AppColors {
   static const background = Color(0xFFECF0F3);
   static const red = Colors.red;
 
+  static const transparent = Colors.transparent;
+  static const bookingDetailCardBg = Color(0xFFF6F5F5);
+  static const profileDetailApplicantBg = Color(0xFFFF7F7F7);
+  static const chipBg = Color(0xFFEBEBEB);
+  static const attachmentBg = Color(0xFFF6F6F6);
+  static const cardColorDark = Color(0xFF2A2A2A);
+  static const cardColorDark2 = Color(0xFF303030);
+
+  static const cardColorLite = Color(0xFF373737);
+  static const lightGrey = Color(0xFF333333);
+  static const applicantsCardBackground = Color(0xFFF7F7F7);
+
   //Shimmer color
   static const baseLightColor = Color(0xFFF5F5F5);
   static const highLightColor = Color(0xFFE6E6E6);
@@ -52,5 +64,4 @@ abstract class AppColors {
   static const cold = Color(0xFFFD321F);
   static const lost = Color(0xFF939693);
   static const won = Color(0xFF007CFF);
-
 }

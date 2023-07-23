@@ -35,5 +35,8 @@ abstract class Screens {
    static const kWalkingTour = "kWalkingTour";
    static const kBookingTour = "kBookingTour";
 
+   static const kTicketsScreen = "Ticket";
+   static const kCreateTicketsScreen = "Create Ticket";
+
    static const kErrorTxt = "No Data Found";
 }

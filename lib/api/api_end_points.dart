@@ -68,4 +68,15 @@ class EndPoints {
   static final String CP_APP_OFFER_VIDEOS = BASE_URL + "/CP_Mobile_App/CP_App_Offer_Videos";
   static final String CP_CURRENT_PROMO_BLOCKER = BASE_URL + "/CP_Mobile_App/CP_App_Page_Bloclkers";
   static final String CP_APP_BANNER = BASE_URL + "/CP_Mobile_App/CP_App_Banner";
+
+  //Ticket Module
+  static final String GET_TICKETS = BASE_URL + "/CP_Mobile_App/getCPCasesList";
+  static final String POST_CREATE_TICKET = BASE_URL + "/CP_Mobile_App/createCaseCPApp";
+  static final String POST_SUB_CATEGORY = BASE_URL + "/CP_Mobile_App/caseCategoryCPApp";
+  static final String CP_TICKET_PICKLIST = BASE_URL + "/CP_Mobile_App/CPAppPicklistValues";
+  static final String CP_TICKET_CASE_SUB_TYPE = BASE_URL + "/CP_Mobile_App/caseSubTypesCPApp";
+  static final String POST_CATEGORY = BASE_URL + "/MyticketAllCategory";
+  static final String POST_REOPEN_TICKET = BASE_URL + "/ReopenTicket";
+
+
 }

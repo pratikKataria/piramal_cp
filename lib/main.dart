@@ -6,6 +6,7 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -13,6 +14,8 @@ import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/RouteTransition.dart';
 import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/res/Strings.dart';
+import 'package:piramal_channel_partner/ui/Ticket/create_new_ticket.dart';
+import 'package:piramal_channel_partner/ui/Ticket/ticket_screen.dart';
 import 'package:piramal_channel_partner/ui/base/base_screen.dart';
 import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/bottom_navigation_base_screen.dart';
@@ -107,7 +110,7 @@ Future<void> main() async {
   await Utility.portrait();
 
   // await Firebasep.initializeApp();
- /* if (Platform.isIOS) {
+  /* if (Platform.isIOS) {
     await Firebase.initializeApp(
         options: const FirebaseOptions(
             apiKey: "AIzaSyA9PpNpiNMkyI0nnxnjgboSHLji_2jqnqw",
@@ -176,7 +179,7 @@ class MyApp extends StatelessWidget {
             initialEntries: [
               OverlayEntry(
                 builder: (BuildContext context) {
-                 return ScrollConfiguration(
+                  return ScrollConfiguration(
                     behavior: MyBehavior(),
                     child: BaseScreen(child: child),
                   );
@@ -250,12 +253,15 @@ class MyApp extends StatelessWidget {
             case Screens.kVideoScreen:
               return RouteTransition(widget: VideoScreen());
               break;
+            case Screens.kCreateTicketsScreen:
+              return RouteTransition(widget: CreateNewTicket());
+              break;
             default:
               return RouteTransition(widget: BottomNavigationBaseScreen());
               break;
           }
         },
-        home: checkAuthUser(authResult),
+        home: kDebugMode ? TicketScreen() : checkAuthUser(authResult),
       ),
     );
   }
