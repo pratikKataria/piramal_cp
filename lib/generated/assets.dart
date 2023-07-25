@@ -5,6 +5,7 @@ class Assets {
   static const String fontsCalibriBold = 'assets/fonts/calibri_bold.ttf';
   static const String fontsCalibriLight = 'assets/fonts/calibri_light.ttf';
   static const String fontsCalibriRegular = 'assets/fonts/calibri_regular.ttf';
+  static const String imagesBtnReopen = 'assets/images/btn_reopen.png';
   static const String imagesIcAdd = 'assets/images/ic_add.png';
   static const String imagesIcAmenities = 'assets/images/ic_amenities.png';
   static const String imagesIcAppLogo = 'assets/images/ic_app_logo.png';
@@ -35,7 +36,6 @@ class Assets {
   static const String imagesIcPlay = 'assets/images/ic_play.png';
   static const String imagesIcProjectRedirect = 'assets/images/ic_project_redirect.png';
   static const String imagesIcProjects = 'assets/images/ic_projects.png';
-  static const String imagesIcReopen = 'assets/images/ic_reopen.png';
   static const String imagesIcSetting = 'assets/images/ic_setting.png';
   static const String imagesIcTodayFollowup = 'assets/images/ic_today_followup.png';
   static const String imagesIcTower = 'assets/images/ic_tower.png';

@@ -7,6 +7,7 @@ import 'package:piramal_channel_partner/api/api_error_parser.dart';
 import 'package:piramal_channel_partner/ui/Ticket/model/case_subtype_response.dart';
 import 'package:piramal_channel_partner/ui/Ticket/model/create_ticket_request.dart';
 import 'package:piramal_channel_partner/ui/Ticket/model/create_ticket_response.dart';
+import 'package:piramal_channel_partner/ui/Ticket/model/reopen_ticket_request.dart';
 import 'package:piramal_channel_partner/ui/Ticket/model/ticket_category_response.dart';
 import 'package:piramal_channel_partner/ui/Ticket/model/ticket_detail_response.dart';
 import 'package:piramal_channel_partner/ui/Ticket/model/ticket_picklist_response.dart';
@@ -129,7 +130,7 @@ class TicketPresenter extends BasePresenter {
       });
   }
 
-  void reopenTicket(BuildContext context, String ticketId, reopenReason) async {
+  void reopenTicket(BuildContext context, ReopenTicketRequest reopenTicketRequest) async {
     //check for internal token
     if (await AuthUser.getInstance().hasToken()) {
       _v.onError("Token not found");
@@ -139,7 +140,12 @@ class TicketPresenter extends BasePresenter {
     //check network
     //if (await NetworkCheck.check()) return;
 
-    var body = {"ticketId": ticketId, "Reason": reopenReason};
+    var body = {
+      "CaseId": reopenTicketRequest.caseId,
+      "Reason": reopenTicketRequest.reason,
+      "fileType": reopenTicketRequest.fileType,
+      "attachFile": reopenTicketRequest.attachFile,
+    };
 
     Dialogs.showLoader(context, "Submitting your request ...");
     apiController.post(EndPoints.POST_REOPEN_TICKET, body: body, headers: await Utility.header())

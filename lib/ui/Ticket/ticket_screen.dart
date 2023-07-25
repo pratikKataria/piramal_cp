@@ -6,9 +6,11 @@ import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/ui/Ticket/model/case_subtype_response.dart';
 import 'package:piramal_channel_partner/ui/Ticket/model/create_ticket_response.dart';
 import 'package:piramal_channel_partner/ui/Ticket/model/reopen_response.dart';
+import 'package:piramal_channel_partner/ui/Ticket/model/reopen_ticket_request.dart';
 import 'package:piramal_channel_partner/ui/Ticket/model/ticket_picklist_response.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/extension.dart';
+import 'package:piramal_channel_partner/widgets/hrm_input_fields_dummy.dart';
 import 'package:piramal_channel_partner/widgets/krc_list_v2.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
 
@@ -36,6 +38,8 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
   List<String> subCategory = [""];
   ValueNotifier<List<String>> valueNotifier = ValueNotifier([""]);
   String val2;
+
+  ReopenTicketRequest _reopenTicketRequest = ReopenTicketRequest();
 
   @override
   void initState() {
@@ -81,10 +85,22 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
                                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                                   children: [
                                     verticalSpace(12.0),
-                                    Text("${e.detailCaseRemarks == null ? "" : e.detailCaseRemarks} (#${e.caseNumber})", style: textStyle12px500w),
-                                    verticalSpace(15.0),
-                                    if (e.type != null) Text("Type", style: textStyle12px500w),
-                                    if (e.type != null)
+                                    Text("Case No: ${e.caseNumber}", style: textStyle12px500w),
+                                    verticalSpace(4.0),
+                                    Text("Description: ${e.detailCaseRemarks == null ? "" : e.detailCaseRemarks}", style: textStyle12px500w),
+                                    verticalSpace(4.0),
+                                    Wrap(
+                                      children: [
+                                        Text("Created On", style: textStyleBlack10px500w),
+                                        Text(" ${e.createdDate}".notNull, style: textStylePrimary10px500w),
+                                        // Text(" At", style: textStyleBlack10px500w),
+                                        // Text(" ${e.timeData}".notNull, style: textStylePrimary10px500w),
+                                        Text(" | OPEN", style: textStylePrimary10px500w),
+                                      ],
+                                    ),
+                                    verticalSpace(10.0),
+                                    if (e.type != null) ...[
+                                      Text("Type", style: textStyle12px500w),
                                       SingleChildScrollView(
                                         scrollDirection: Axis.horizontal,
                                         child: Row(
@@ -100,9 +116,10 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
                                           ],
                                         ),
                                       ),
-                                    verticalSpace(15.0),
-                                    if (e.subType != null) Text("Sub Type", style: textStyle12px500w),
-                                    if (e.subType != null)
+                                      verticalSpace(10.0),
+                                    ],
+                                    if (e.subType != null) ...[
+                                      Text("Sub Type", style: textStyle12px500w),
                                       SingleChildScrollView(
                                         scrollDirection: Axis.horizontal,
                                         child: Row(
@@ -118,21 +135,8 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
                                           ],
                                         ),
                                       ),
-                                    verticalSpace(15.0),
-                                    Wrap(
-                                      children: [
-                                        Text("Created On", style: textStyleBlack10px500w),
-                                        Text(" ${e.createdDate}".notNull, style: textStylePrimary10px500w),
-                                        // Text(" At", style: textStyleBlack10px500w),
-                                        // Text(" ${e.timeData}".notNull, style: textStylePrimary10px500w),
-                                        Text(" | OPEN", style: textStylePrimary10px500w),
-                                      ],
-                                    ),
-                                    verticalSpace(10.0),
-                                    line(),
-                                    verticalSpace(10.0),
-                                    Center(child: Text("Your ticket will be updated soon", style: textStyleSubText10px500w)),
-                                    verticalSpace(12.0),
+                                      verticalSpace(10.0),
+                                    ],
                                   ],
                                 ),
                               ).onClick(() async {
@@ -204,62 +208,67 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
 
   cardViewTicketClosed(ClosedCasesList e) {
     return Container(
-      height: 200.0,
+      color: AppColors.screenBackgroundColor,
       padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-      decoration: BoxDecoration(
-          // image: DecorationImage(image: AssetImage(Assets.imagesIcTicket), fit: BoxFit.fill),
-          ),
+
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Text("${e.subType} (#${e.caseNumber})", style: textStyle12px500w),
-          Text("${e.detailCaseRemarks}".notNull, style: textStylePrimary12px500w),
-          Container(
-              padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
-              color: AppColors.textColorSubText,
-              child: Text("${e.category}".notNull, style: textStyleWhite12px500w)),
-          Center(child: Text("Your ticket will be updated soon", style: textStyleSubText10px500w)),
-
-          // Container(
-          //   padding: EdgeInsets.all(8),
-          //   color: AppColors.white.withOpacity(0.06),
-          //   child: Text(e.status, style: textStyleWhite14px600w),
-          // ),
-          line(),
-
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          verticalSpace(10.0),
+          Text("Case No: ${e.caseNumber}", style: textStyle12px500w),
+          verticalSpace(4.0),
+          Text("Description: ${e.detailCaseRemarks == null ? "" : e.detailCaseRemarks}", style: textStyle12px500w),
+          verticalSpace(4.0),
+          Wrap(
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Text("Created On", style: textStyleBlack10px500w),
-                      Text(" ${e.createdDate}".notNull, style: textStylePrimary10px500w),
-                    ],
-                  ),
-                  // Row(
-                  //   children: [
-                  //     Text("At", style: textStyleBlack10px500w),
-                  //     Text(" ${e.tim}".notNull, style: textStylePrimary10px500w),
-                  //   ],
-                  // ),
-                ],
-              ),
-              horizontalSpace(20.0),
-              Image.asset(Assets.imagesIcReopen, height: 50).onClick(() {
-                FocusScope.of(context).unfocus();
-                reopenTicketDialog(context, e.caseId);
-              })
+              Text("Created On", style: textStyleBlack10px500w),
+              Text(" ${e.createdDate}".notNull, style: textStylePrimary10px500w),
             ],
           ),
-          // Container(
-          //   padding: EdgeInsets.all(8),
-          //   color: AppColors.white.withOpacity(0.06),
-          //   child: Text(e.status, style: textStyleWhite14px600w),
-          // ),
+          verticalSpace(10.0),
+          if (e.type != null) ...[
+            Text("Type", style: textStyle12px500w),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  ...e.type
+                      .split(";")
+                      .map((e) => Container(
+                          padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
+                          margin: EdgeInsets.only(right: 10.0),
+                          color: AppColors.textColorSubText,
+                          child: Text("$e".notNull, style: textStyleWhite12px500w)))
+                      .toList(),
+                ],
+              ),
+            ),
+            verticalSpace(10.0),
+          ],
+          if (e.subType != null) ...[
+            Text("Sub Type", style: textStyle12px500w),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  ...e.subType
+                      .split(";")
+                      .map((e) => Container(
+                          padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
+                          margin: EdgeInsets.only(right: 10.0),
+                          color: AppColors.textColorSubText,
+                          child: Text("$e".notNull, style: textStyleWhite12px500w)))
+                      .toList(),
+                ],
+              ),
+            ),
+            verticalSpace(10.0),
+          ],
+          Image.asset(Assets.imagesBtnReopen, height: 50).onClick(() {
+            FocusScope.of(context).unfocus();
+            reopenTicketDialog(context, e.caseId);
+          })
         ],
       ),
     );
@@ -466,7 +475,7 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
     return showDialog(
       context: context,
       builder: (BuildContext context) {
-        String reason = "";
+         String name;
         return StatefulBuilder(builder: (context, alertDialogState) {
           return AlertDialog(
             backgroundColor: Colors.transparent,
@@ -474,7 +483,7 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
             actions: <Widget>[
               Container(
                 color: Colors.white,
-                height: 235.0,
+                height: 300.0,
                 padding: EdgeInsets.all(10.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -489,20 +498,45 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
                         style: textStyle14px500w,
                         decoration: new InputDecoration.collapsed(hintText: "Add reason here ..."),
                         onChanged: (v) {
-                          reason = v;
+                          _reopenTicketRequest.reason = v;
                         },
                       ),
                     ),
+
+                    HrmInputFieldDummy(
+                      // textController: dobTextController,
+                        headingText: "",
+                        text: name == null ? "Add img, pdf or xls" : name,
+                        mandate: true)
+                        .onClick(() async {
+                      try {
+                        List<String> fileAndName = await Utility.pickFile(context);
+                        _reopenTicketRequest.attachFile = fileAndName[0].isEmpty ? null : fileAndName[0];
+                        name = fileAndName[1].isEmpty ? null : fileAndName[1];
+
+                        // Split the file name by '.' to separate the name and extension
+                        List<String> parts = name.split('.');
+                        _reopenTicketRequest.fileType = parts.last;
+                      } catch (e) {
+                        _reopenTicketRequest.attachFile = null;
+                        name = null;
+                      }
+                      alertDialogState((){});
+                    }),
                     verticalSpace(10.0),
                     Spacer(),
                     PmlButton(
                       text: "Reopen",
-                      onTap: () {
-                        if (reason.isNotEmpty) {
-                          _presenter.reopenTicket(context, id, reason);
-                        } else {
+                      onTap: () async {
+                        if (_reopenTicketRequest.reason.isEmpty) {
                           onError("Please enter reason");
+                          return;
                         }
+
+                        _reopenTicketRequest.caseId = id;
+                        _presenter.reopenTicket(context, _reopenTicketRequest);
+                        Navigator.pop(context);
+
                         // Navigator.push(context, MaterialPageRoute(builder: (context) => TermsAndC`onditionScreen()));
                         // Navigator.pushNamed(context, Screens.kHomeBase);
                       },
@@ -514,13 +548,15 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
           );
         });
       },
-    ).then((value) => value as bool);
+    ).then((value) {
+      _reopenTicketRequest = ReopenTicketRequest();
+      return value as bool;
+    });
   }
 
   @override
   void onTicketReopened(ReopenResponse rmDetailResponse) {
     _presenter.getTicketsWithoutLoader(context);
-    Navigator.pop(context);
   }
 
   @override
