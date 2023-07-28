@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:piramal_channel_partner/api/interceptor/curl_interceptor.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 
 import 'http.dart';
@@ -31,6 +32,7 @@ class ApiController {
     // headersMap["NoEncryption"] = 'true';
     Utility.log(
         tag, "Api Call :\n $url \n --> Inputs :\n $body \n --> payload :\n ${payload.toString()} \n --> header :\n $headers");
+    dio.interceptors.add(CurlInterceptor());
     Response response = await dio.post(
       url,
       data: body,
@@ -56,6 +58,7 @@ class ApiController {
     // headersMap["NoEncryption"] = 'true';
     Utility.log(tag,
         "Api Call :\n $url \n --> Inputs :\n ${body.toString()} \n --> payload :\n ${payload.toString()} \n --> header :\n ${text.toString()}");
+    dio.interceptors.add(CurlInterceptor());
     Response response = await dio.post(
       url,
       data: body,
@@ -81,6 +84,7 @@ class ApiController {
     // headersMap["NoEncryption"] = 'true';
     Utility.log(tag,
         "Api Call :\n $url \n --> Inputs :\n ${body.toString()} \n --> payload :\n ${payload.toString()} \n --> header :\n ${headers.toString()}");
+    dio.interceptors.add(CurlInterceptor());
     Response response = await dio.put(
       url,
       data: body,
@@ -106,6 +110,7 @@ class ApiController {
     // headersMap["NoEncryption"] = 'true';
     Utility.log(tag,
         "Api Call :\n $url \n --> Inputs :\n ${body.toString()} \n --> payload :\n ${payload.toString()} \n --> header :\n ${headers.toString()}");
+    dio.interceptors.add(CurlInterceptor());
     Response response = await dio.patch(
       url,
       data: body,
@@ -131,6 +136,7 @@ class ApiController {
     // headerMap["NoEncryption"] = 'true';
     Utility.log(tag, "Api Call :\n $url \n Inputs :\n ${body.toString()} \n Payload :\n ${payload}  \n Header :\n $headers");
 
+    dio.interceptors.add(CurlInterceptor());
     Response response = await dio.get(url,
         queryParameters: payload,
         options: Options(
@@ -152,6 +158,7 @@ class ApiController {
     Map<String, String> headerMap = headers ?? {};
     Utility.log(tag, "Api Call :\n $url \n Inputs :\n ${body.toString()} \n Payload :\n ${payload} \n Headers :\n ${headerMap} ");
 
+    dio.interceptors.add(CurlInterceptor());
     Response response = await dio.deleteUri(Uri.parse(url),
         data: body,
         options: Options(
@@ -174,6 +181,7 @@ class ApiController {
     // headerMap["NoEncryption"] = 'true';
     Utility.log(tag, "Api Call :\n $url \n Inputs :\n ${body.toString()} \n Payload :\n ${payload}  \n Header :\n $headers");
 
+    dio.interceptors.add(CurlInterceptor());
     Response response = await dio.get(
       url,
       queryParameters: payload,

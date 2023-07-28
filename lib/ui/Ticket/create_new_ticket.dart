@@ -29,6 +29,7 @@ class _CreateNewTicketState extends State<CreateNewTicket> implements TicketView
   // List<String> listOfSubCategory = [];
   // List<String> listOfCategory = [];
   List<String> listOfTypes = [];
+  List<String> listOfRequestTypes = [];
   List<String> listOfSubTypes = [];
 
   TicketPresenter presenter;
@@ -54,6 +55,48 @@ class _CreateNewTicketState extends State<CreateNewTicket> implements TicketView
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           children: [
             verticalSpace(20.0),
+
+            Text("Request Type", style: textStyle14px500w),
+            verticalSpace(10.0),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Stack(
+                  children: [
+                    Positioned(
+                      top: 0.0,
+                      child: Text("${createTicketRequest.requestType}".notNullEmpty, style: textStyleSubText14px500w),
+                    ),
+                    Container(
+                      width: Utility.screenWidth(context) * .70,
+                      height: 35.0,
+                      child: DropdownButton<String>(
+                        isExpanded: true,
+                        iconSize: 34.0,
+                        items: <String>[...listOfRequestTypes].map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          if (value != null) {
+                            createTicketRequest.requestType = value;
+                            // createTicketRequest.caseType = null;
+                            // createTicketRequest.caseSubType = null;
+                            // presenter.getTicketSubType(context, value);
+                            setState(() {});
+                          }
+                        },
+                      ),
+                    )
+                  ],
+                )
+              ],
+            ),
+            verticalSpace(10.0),
+
             Text("Type", style: textStyle14px500w),
             verticalSpace(10.0),
             Column(
@@ -255,6 +298,13 @@ class _CreateNewTicketState extends State<CreateNewTicket> implements TicketView
     setState(() {});
 
     rmDetailResponse.fieldList.forEach((element) {
+
+      if (element.fieldName == "Service Request Type") {
+        List<String> tempListOfValues = element.values.split(",");
+        tempListOfValues.removeLast();
+        listOfRequestTypes.addAll(tempListOfValues);
+      }
+
       if (element.fieldName == "Case Type") {
         List<String> tempListOfValues = element.values.split(",");
         tempListOfValues.removeLast();
@@ -273,10 +323,9 @@ class _CreateNewTicketState extends State<CreateNewTicket> implements TicketView
       createTicketRequest.caseType = listOfTypes.first;
     }
 
-    // if (listOfCategory.isNotEmpty) {
-    //   presenter.getTicketSubCategory(context, listOfCategory[0]);
-    //   createTicketRequest.source = listOfCategory.first;
-    // }
+    if (listOfRequestTypes.isNotEmpty) {
+      createTicketRequest.requestType = listOfRequestTypes.first;
+    }
 
     setState(() {});
   }

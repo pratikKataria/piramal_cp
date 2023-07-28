@@ -103,7 +103,7 @@ class TicketPresenter extends BasePresenter {
     }
 
     var body = {
-      "requestType": "Request",
+      "requestType": createTicketRequest.requestType,
       "CustomerAccountId": createTicketRequest.customerAccountId,
       "caseType": createTicketRequest.caseType,
       "caseSubType": createTicketRequest.caseSubType,
@@ -378,9 +378,9 @@ class TicketPresenter extends BasePresenter {
       return "Description is required.";
     }
 
-    // if (createTicketRequest.fileType == null || createTicketRequest.fileType.isEmpty) {
-    //   return "File Type is required.";
-    // }
+    if (createTicketRequest.requestType == null || createTicketRequest.requestType.isEmpty) {
+      return "Request Type is required.";
+    }
 
     // Note: Since attachFile is optional (nullable), we don't include it in validation.
 

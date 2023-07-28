@@ -8,6 +8,7 @@
 /// attachFile : ""
 
 class CreateTicketRequest {
+  String requestType;
   CreateTicketRequest({
       String customerAccountId, 
       String caseType, 
