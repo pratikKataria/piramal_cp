@@ -41,7 +41,7 @@ class HrmInputFieldDummy extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (headingText != null) Text(headingText, style: textStyle14px600w, maxLines: 1),
+          if (headingText != null) Text(headingText, style: textStyleSubText14px500w, maxLines: 1),
           if (headingText != null) verticalSpace(5.0),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 20.0),

@@ -2,6 +2,7 @@
 /// openCasesList : [{"User_Comments":"Test Milestone 1","Type":"Brokerage related","SubType":"Delay in payment;GST/tax related;Others","Status":"Open","Position":null,"Pending_with_User":null,"Detail_case_remarks":"test create case","createdDate":"21/7/2023 08:08 PM","close_Date":null,"Category":"Email","caseNumber":"00008437","caseId":"500p000000BoVZKAA3"},{"User_Comments":"Test Milestone 1","Type":"Brokerage related","SubType":null,"Status":"Open","Position":null,"Pending_with_User":null,"Detail_case_remarks":null,"createdDate":"21/7/2023 04:35 PM","close_Date":null,"Category":"Email;WhatsApp App","caseNumber":"00008431","caseId":"500p000000BoUr8AAF"},{"User_Comments":"Test Milestone 1","Type":"Brokerage related","SubType":null,"Status":"Open","Position":null,"Pending_with_User":null,"Detail_case_remarks":null,"createdDate":"21/7/2023 08:24 PM","close_Date":null,"Category":null,"caseNumber":"00008438","caseId":"500p000000BoVcFAAV"},{"User_Comments":null,"Type":"Brokerage related","SubType":null,"Status":"Open","Position":null,"Pending_with_User":null,"Detail_case_remarks":"test create case","createdDate":"21/7/2023 06:18 PM","close_Date":null,"Category":"Email","caseNumber":"00008432","caseId":"500p000000BoVCMAA3"},{"User_Comments":null,"Type":"Brokerage related","SubType":null,"Status":"Open","Position":null,"Pending_with_User":null,"Detail_case_remarks":"test create case","createdDate":"21/7/2023 06:18 PM","close_Date":null,"Category":"Email","caseNumber":"00008433","caseId":"500p000000BoVCkAAN"},{"User_Comments":"Test Milestone 1","Type":"Brokerage related","SubType":"Delay in payment;GST/tax related;Others","Status":"Open","Position":null,"Pending_with_User":null,"Detail_case_remarks":"test create case","createdDate":"21/7/2023 02:06 PM","close_Date":null,"Category":"Email","caseNumber":"00008430","caseId":"500p000000BoUISAA3"},{"User_Comments":"Test Milestone 1","Type":"Brokerage related","SubType":"Delay in payment;Others","Status":"Open","Position":null,"Pending_with_User":null,"Detail_case_remarks":"test create case 21 test","createdDate":"21/7/2023 07:54 PM","close_Date":null,"Category":"Email","caseNumber":"00008436","caseId":"500p000000BoVWCAA3"},{"User_Comments":null,"Type":"Brokerage related","SubType":"Delay in payment;Others","Status":"Open","Position":null,"Pending_with_User":null,"Detail_case_remarks":"test create case 21","createdDate":"21/7/2023 07:30 PM","close_Date":null,"Category":"Email","caseNumber":"00008435","caseId":"500p000000BoVS9AAN"},{"User_Comments":"Test Milestone 1","Type":"Brokerage related","SubType":"Others","Status":"Open","Position":null,"Pending_with_User":null,"Detail_case_remarks":"test create case 21","createdDate":"21/7/2023 07:20 PM","close_Date":null,"Category":"Email","caseNumber":"00008434","caseId":"500p000000BoVPkAAN"}]
 /// message : "Success"
 /// closedCasesList : [{"User_Comments":"Test Milestone 1","Type":"Brokerage related","SubType":"Others","Status":"Open","Position":null,"Pending_with_User":null,"Detail_case_remarks":"test create case 21","createdDate":"21/7/2023 07:20 PM","close_Date":null,"Category":"Email","caseNumber":"00008434","caseId":"500p000000BoVPkAAN"}]
+import 'package:intl/intl.dart'; // Import the intl library for DateFormat
 
 class TicketResponse {
   TicketResponse({
@@ -86,7 +87,7 @@ class TicketResponse {
 /// caseNumber : "00008434"
 /// caseId : "500p000000BoVPkAAN"
 
-class ClosedCasesList {
+class ClosedCasesList extends Comparable<ClosedCasesList> {
   ClosedCasesList({
     String userComments,
     String type,
@@ -212,6 +213,22 @@ class ClosedCasesList {
     map['caseId'] = _caseId;
     return map;
   }
+
+  @override
+  int compareTo(ClosedCasesList other) {
+    // Parse the createdDate strings to DateTime objects for comparison
+    DateTime thisDate = _parseDateString(createdDate);
+    DateTime otherDate = _parseDateString(other.createdDate);
+
+    return thisDate.compareTo(otherDate);
+  }
+
+  DateTime _parseDateString(String dateString) {
+    // Parse the date string in the format "dd/MM/yyyy hh:mm a" to DateTime
+    // String formattedDate = dateString.replaceAll(" PM", "PM").replaceAll(" AM", "AM");
+    final format = DateFormat('dd/MM/yyyy hh:mm a');
+    return format.parse(dateString);
+  }
 }
 
 /// User_Comments : "Test Milestone 1"
@@ -227,7 +244,7 @@ class ClosedCasesList {
 /// caseNumber : "00008437"
 /// caseId : "500p000000BoVZKAA3"
 
-class OpenCasesList {
+class OpenCasesList extends Comparable<OpenCasesList> {
   OpenCasesList({
     String userComments,
     String type,
@@ -312,6 +329,22 @@ class OpenCasesList {
         caseNumber: caseNumber ?? _caseNumber,
         caseId: caseId ?? _caseId,
       );
+
+  @override
+  int compareTo(OpenCasesList other) {
+    // Parse the createdDate strings to DateTime objects for comparison
+    DateTime thisDate = _parseDateString(createdDate);
+    DateTime otherDate = _parseDateString(other.createdDate);
+
+    return thisDate.compareTo(otherDate);
+  }
+
+  DateTime _parseDateString(String dateString) {
+    // Parse the date string in the format "dd/MM/yyyy hh:mm a" to DateTime
+    // String formattedDate = dateString.replaceAll(" PM", "PM").replaceAll(" AM", "AM");
+    final format = DateFormat('dd/MM/yyyy hh:mm a');
+    return format.parse(dateString);
+  }
 
   String get userComments => _userComments;
 

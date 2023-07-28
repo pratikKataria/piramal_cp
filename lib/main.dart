@@ -15,6 +15,7 @@ import 'package:piramal_channel_partner/res/RouteTransition.dart';
 import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/res/Strings.dart';
 import 'package:piramal_channel_partner/ui/Ticket/create_new_ticket.dart';
+import 'package:piramal_channel_partner/ui/Ticket/model/ticket_response.dart';
 import 'package:piramal_channel_partner/ui/Ticket/ticketDetail/ticket_detail_screen.dart';
 import 'package:piramal_channel_partner/ui/Ticket/ticket_screen.dart';
 import 'package:piramal_channel_partner/ui/base/base_screen.dart';
@@ -262,7 +263,7 @@ class MyApp extends StatelessWidget {
               return RouteTransition(widget: CreateNewTicket());
               break;
             case Screens.kTicketDetailScreen:
-              return RouteTransition(widget: TicketDetailScreen(settings.arguments as String));
+              return RouteTransition(widget: TicketDetailScreen(settings.arguments as OpenCasesList));
               break;
             default:
               return RouteTransition(widget: BottomNavigationBaseScreen());

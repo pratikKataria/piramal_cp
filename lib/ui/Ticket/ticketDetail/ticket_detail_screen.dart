@@ -32,9 +32,9 @@ import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class TicketDetailScreen extends StatefulWidget {
-  final String caseID;
+  final OpenCasesList arguments;
 
-  TicketDetailScreen(this.caseID, {Key key}) : super(key: key);
+  TicketDetailScreen(this.arguments, {Key key}) : super(key: key);
 
   @override
   _TicketDetailScreenState createState() => _TicketDetailScreenState();
@@ -44,68 +44,95 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> implements Tick
   TicketPresenter _presenter;
 
   TicketDetailResponse rmDetailResponse;
+  List<TicketDetailResponse> responseList = [];
 
   @override
   void initState() {
     _presenter = TicketPresenter(this);
     // _homePresenter.getWalkInList(context);
-    _presenter.getCaseDetails(context, widget.caseID);
+    _presenter.getCaseDetails(context, widget.arguments.caseId);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    if (responseList.isNotEmpty) {
+      rmDetailResponse = responseList.first;
+    }
+
     return RefreshListView(
       onRefresh: () {
-        _presenter.getCaseDetails(context, widget.caseID);
+        _presenter.getCaseDetails(context, widget.arguments.caseId);
       },
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Column(
-            key: bookedCustomerTopProfile,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              verticalSpace(10.0),
-              //customer pic with name and time
-              if (rmDetailResponse != null)
-                Text("${rmDetailResponse.description == null ? "" : rmDetailResponse.description} (#${rmDetailResponse.caseNumber})", style: textStyleRegular18pxW500),
-
-              //chip layout
-              // verticalSpace(12.0),
-              // Container(
-              //   height: 30,
-              //   child: ListView(
-              //     scrollDirection: Axis.horizontal,
-              //     children: [
-              //       ...[
-              //         Container(
-              //           decoration: BoxDecoration(
-              //             borderRadius: BorderRadius.circular(6),
-              //             color: AppColors.chipColor,
-              //           ),
-              //           padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-              //           child: Text("Revisit", style: textStyle14px500w),
-              //         ),
-              //         horizontalSpace(10.0),
-              //       ],
-              //       Container(
-              //         decoration: BoxDecoration(
-              //           borderRadius: BorderRadius.circular(6),
-              //           color: AppColors.chipColor,
-              //         ),
-              //         padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-              //         child: Text("${widget?.response?.projectFinalized ?? "NA"}", style: textStyle14px500w),
-              //       ),
-              //     ],
-              //   ),
-              // ),
-            ],
+        if (rmDetailResponse != null) ...[
+          Container(
+            width: Utility.screenWidth(context),
+            padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                verticalSpace(12.0),
+                Text("Case No: ${widget.arguments.caseNumber}", style: textStyle14px500w),
+                verticalSpace(4.0),
+                Text("Description: ${widget.arguments.detailCaseRemarks == null ? "" : widget.arguments.detailCaseRemarks}", style: textStyle14px500w),
+                verticalSpace(4.0),
+                Wrap(
+                  children: [
+                    Text("Created On", style: textStyle14px500w),
+                    Text(" ${widget.arguments.createdDate}".notNull, style: textStylePrimary14px500w),
+                    // Text(" At", style: textStyleBlack10px500w),
+                    // Text(" ${e.timeData}".notNull, style: textStylePrimary10px500w),
+                    Text(" | ${widget.arguments.status}", style: textStylePrimary14px500w),
+                  ],
+                ),
+                verticalSpace(10.0),
+                if (widget.arguments.type != null) ...[
+                  Text("Type", style: textStyle14px500w),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        ...widget.arguments.type
+                            .split(";")
+                            .map((e) => Container(
+                                padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
+                                margin: EdgeInsets.only(right: 10.0),
+                                color: AppColors.colorSecondary,
+                                child: Text("$e".notNull, style: textStyleWhite14px500w)))
+                            .toList(),
+                      ],
+                    ),
+                  ),
+                  verticalSpace(10.0),
+                ],
+                if (widget.arguments.subType != null) ...[
+                  Text("Sub Type", style: textStyle14px500w),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        ...widget.arguments.subType
+                            .split(";")
+                            .map((e) => Container(
+                                padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
+                                margin: EdgeInsets.only(right: 10.0),
+                                color: AppColors.colorSecondary,
+                                child: Text("$e".notNull, style: textStyleWhite14px500w)))
+                            .toList(),
+                      ],
+                    ),
+                  ),
+                  verticalSpace(10.0),
+                ],
+              ],
+            ),
           ),
-        ),
+        ],
 
         //Comment layout
-        verticalSpace(30.0),
+        verticalSpace(10.0),
         line(),
         Container(
           color: AppColors.white,
@@ -118,21 +145,21 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> implements Tick
                 children: [
                   Text("Attachment", style: textStyle20px500w),
                   horizontalSpace(12.0),
-                  Text("On  ${rmDetailResponse?.createdDate}", style: textStyleSubText14px500w),
+                  Text("On  ${rmDetailResponse?.createdDate ?? ""}", style: textStyleSubText14px500w),
                 ],
               ),
               verticalSpace(25.0),
               downloadButtonWidget(),
-              verticalSpace(25.0),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Icon(Icons.info, size: 14.0, color: AppColors.colorSecondary),
-                  horizontalSpace(12.0),
-                  Text("Sign, stamp & submit at site", style: textStyle14px500w),
-                ],
-              ),
-              verticalSpace(20.0),
+              // verticalSpace(25.0),
+              // Row(
+              //   crossAxisAlignment: CrossAxisAlignment.end,
+              //   children: [
+              //     Icon(Icons.info, size: 14.0, color: AppColors.colorSecondary),
+              //     horizontalSpace(12.0),
+              //     Text("Sign, stamp & submit at site", style: textStyle14px500w),
+              //   ],
+              // ),
+              // verticalSpace(20.0),
             ],
           ),
         ),
@@ -151,16 +178,16 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> implements Tick
           ),
         ),
 
-        // verticalSpace(20.0),
-        // Padding(
-        //   padding: const EdgeInsets.symmetric(horizontal: 20.0),
-        //   child: Column(
-        //     key: bookedCustomerProgressStatus,
-        //     children: [
-        //       ...timelineViewBuilder(),
-        //     ],
-        //   ),
-        // ),
+        verticalSpace(20.0),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: Column(
+            key: bookedCustomerProgressStatus,
+            children: [
+              ...timelineViewBuilder(),
+            ],
+          ),
+        ),
 
         verticalSpace(30.0),
         line(),
@@ -192,6 +219,52 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> implements Tick
     );
   }
 
+  List<Column> timelineViewBuilder() {
+    List<Column> colList = [];
+
+    int currentStatusIndex = 99;
+    responseList?.forEach((element) {
+      if (element.currentStatus == element.status) currentStatusIndex = element.position;
+      print("elemen positon ${element.position} current status position $currentStatusIndex");
+      colList.insert(
+        element.position,
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (element.position != 0)
+              Container(
+                width: 2.0,
+                height: 50.0,
+                margin: EdgeInsets.only(left: 3.4),
+                decoration: BoxDecoration(
+                  color: element.position <= currentStatusIndex ? getColorFromStatus(element.status) : AppColors.textColorHeather,
+                ),
+              ),
+            Row(
+              children: [
+                Container(
+                  width: 10.0,
+                  height: 10.0,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: element.position <= currentStatusIndex ? getColorFromStatus(element.status) : AppColors.textColorHeather,
+                  ),
+                ),
+                horizontalSpace(10.0),
+                Text(
+                  element?.status ?? "",
+                  style: element.position <= currentStatusIndex ? getTextStyleFromStatus(element.status) : textStyleSubText10px500w,
+                )
+              ],
+            ),
+          ],
+        ),
+      );
+    });
+
+    return colList;
+  }
+
   @override
   onError(String message) {
     Utility.showErrorToastB(context, message);
@@ -219,8 +292,36 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> implements Tick
   void onTicketReopened(ReopenResponse rmDetailResponse) {}
 
   @override
-  void onTicketDetailsFetched(TicketDetailResponse rmDetailResponse) {
-    this.rmDetailResponse = rmDetailResponse;
+  void onTicketDetailsFetched(List<TicketDetailResponse> rmDetailResponse) {
+    this.responseList.addAll(rmDetailResponse);
     setState(() {});
+  }
+
+  getColorFromStatus(String status) {
+    switch (status.toLowerCase()) {
+      case "open":
+        return AppColors.warm;
+        break;
+      case "in progress":
+        return AppColors.amber;
+        break;
+      case "closed":
+        return AppColors.green;
+        break;
+    }
+  }
+
+  getTextStyleFromStatus(String status) {
+    switch (status.toLowerCase()) {
+      case "open":
+        return textStyleSubText10px500w.withColor(AppColors.warm);
+        break;
+      case "in progress":
+        return textStyleSubText10px500w.withColor(AppColors.amber);
+        break;
+      case "closed":
+        return textStyleSubText10px500w.withColor(AppColors.green);
+        break;
+    }
   }
 }

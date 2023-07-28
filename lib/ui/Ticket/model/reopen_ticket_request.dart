@@ -4,6 +4,8 @@
 /// attachFile : ""
 
 class ReopenTicketRequest {
+
+  String name;
   ReopenTicketRequest({
       String caseId, 
       String reason, 

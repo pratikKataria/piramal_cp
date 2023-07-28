@@ -13,11 +13,13 @@ import 'package:piramal_channel_partner/widgets/extension.dart';
 import 'package:piramal_channel_partner/widgets/hrm_input_fields_dummy.dart';
 import 'package:piramal_channel_partner/widgets/krc_list_v2.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
+import 'package:piramal_channel_partner/widgets/refresh_list_view.dart';
 
 import 'model/ticket_category_response.dart';
 import 'model/ticket_response.dart';
 import 'ticket_presenter.dart';
 import 'ticket_view.dart';
+import 'dart:math' as math;
 
 class TicketScreen extends StatefulWidget {
   const TicketScreen({Key key}) : super(key: key);
@@ -38,6 +40,7 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
   List<String> subCategory = [""];
   ValueNotifier<List<String>> valueNotifier = ValueNotifier([""]);
   String val2;
+  bool ascending = true;
 
   ReopenTicketRequest _reopenTicketRequest = ReopenTicketRequest();
 
@@ -66,19 +69,53 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
         children: [
           verticalSpace(10.0),
           buildTabs(),
-          verticalSpace(20.0),
+          Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Center(child: Text("Sort Date", style: textStyle14px500w)),
+                Icon(ascending ? Icons.arrow_upward : Icons.arrow_downward, color: AppColors.colorSecondary),
+                horizontalSpace(20.0),
+              ],
+            ),
+          ).onClick(() {
+            if (ascending) {
+              openTickets.sort();
+              closedTickets.sort();
+            } else {
+              openTickets = openTickets.reversed.toList();
+              closedTickets = closedTickets.reversed.toList();
+            }
+
+            ascending = !ascending;
+            setState(() {});
+          }),
+          verticalSpace(10.0),
           Expanded(
             child: TabBarView(
               controller: _tabController,
               // physics: NeverScrollableScrollPhysics(),
               children: [
-                if (openTickets.isEmpty) Center(child: Text("No Tickets Present")),
+                if (openTickets.isEmpty)
+                  RefreshListView(
+                    onRefresh: () {
+                      _presenter.getTickets(context);
+                    },
+                    children: [
+                      Container(height: Utility.screenHeight(context) * 0.3),
+                      Center(child: Text("No Tickets Present")),
+                    ],
+                  ),
                 if (openTickets.isNotEmpty)
-                  KRCListViewV2(
+                  RefreshListView(
+                    onRefresh: () {
+                      _presenter.getTickets(context);
+                    },
                     children: [
                       ...openTickets
                           .map((e) => Container(
                                 padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                                margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
                                 color: AppColors.screenBackgroundColor,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,8 +128,8 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
                                     verticalSpace(4.0),
                                     Wrap(
                                       children: [
-                                        Text("Created On", style: textStyleBlack10px500w),
-                                        Text(" ${e.createdDate}".notNull, style: textStylePrimary10px500w),
+                                        Text("Created On", style: textStyle12px500w),
+                                        Text(" ${e.createdDate}".notNull, style: textStylePrimary12px500w),
                                         // Text(" At", style: textStyleBlack10px500w),
                                         // Text(" ${e.timeData}".notNull, style: textStylePrimary10px500w),
                                         Text(" | OPEN", style: textStylePrimary10px500w),
@@ -110,7 +147,7 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
                                                 .map((e) => Container(
                                                     padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
                                                     margin: EdgeInsets.only(right: 10.0),
-                                                    color: AppColors.textColorSubText,
+                                                    color: AppColors.colorSecondary,
                                                     child: Text("$e".notNull, style: textStyleWhite12px500w)))
                                                 .toList(),
                                           ],
@@ -129,7 +166,7 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
                                                 .map((e) => Container(
                                                     padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
                                                     margin: EdgeInsets.only(right: 10.0),
-                                                    color: AppColors.textColorSubText,
+                                                    color: AppColors.colorSecondary,
                                                     child: Text("$e".notNull, style: textStyleWhite12px500w)))
                                                 .toList(),
                                           ],
@@ -140,14 +177,26 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
                                   ],
                                 ),
                               ).onClick(() async {
-                                await Navigator.pushNamed(context, Screens.kTicketDetailScreen, arguments: e.caseId);
+                                await Navigator.pushNamed(context, Screens.kTicketDetailScreen, arguments: e);
                               }))
                           .toList(),
                     ] /*openTickets.map<Widget>((e) => cardViewTicket(e)).toList()*/,
                   ),
-                if (closedTickets.isEmpty) Center(child: Text("No Tickets Present")),
+                if (closedTickets.isEmpty)
+                  RefreshListView(
+                    onRefresh: () {
+                      _presenter.getTickets(context);
+                    },
+                    children: [
+                      Container(height: Utility.screenHeight(context) * 0.3),
+                      Center(child: Text("No Tickets Present", style: textStyle14px500w)),
+                    ],
+                  ),
                 if (closedTickets.isNotEmpty)
-                  KRCListViewV2(
+                  RefreshListView(
+                    onRefresh: () {
+                      _presenter.getTickets(context);
+                    },
                     children: [
                       ...closedTickets.map((e) => cardViewTicketClosed(e)).toList(),
                     ] /*closedTickets.map<Widget>((e) => cardViewTicket(e)).toList()*/,
@@ -210,7 +259,7 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
     return Container(
       color: AppColors.screenBackgroundColor,
       padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-
+      margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -222,8 +271,8 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
           verticalSpace(4.0),
           Wrap(
             children: [
-              Text("Created On", style: textStyleBlack10px500w),
-              Text(" ${e.createdDate}".notNull, style: textStylePrimary10px500w),
+              Text("Created On", style: textStyle12px500w),
+              Text(" ${e.createdDate}".notNull, style: textStylePrimary12px500w),
             ],
           ),
           verticalSpace(10.0),
@@ -238,7 +287,7 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
                       .map((e) => Container(
                           padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
                           margin: EdgeInsets.only(right: 10.0),
-                          color: AppColors.textColorSubText,
+                          color: AppColors.colorSecondary,
                           child: Text("$e".notNull, style: textStyleWhite12px500w)))
                       .toList(),
                 ],
@@ -257,7 +306,7 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
                       .map((e) => Container(
                           padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
                           margin: EdgeInsets.only(right: 10.0),
-                          color: AppColors.textColorSubText,
+                          color: AppColors.colorSecondary,
                           child: Text("$e".notNull, style: textStyleWhite12px500w)))
                       .toList(),
                 ],
@@ -271,7 +320,9 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
           })
         ],
       ),
-    );
+    ).onClick(() async {
+      await Navigator.pushNamed(context, Screens.kTicketDetailScreen, arguments: OpenCasesList.fromJson(e.toJson()));
+    });
   }
 
   StateSetter setter;
@@ -475,7 +526,6 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
     return showDialog(
       context: context,
       builder: (BuildContext context) {
-         String name;
         return StatefulBuilder(builder: (context, alertDialogState) {
           return AlertDialog(
             backgroundColor: Colors.transparent,
@@ -491,7 +541,7 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
                     Text("Reopen", style: textStyle14px500w),
                     Container(
                       padding: EdgeInsets.all(4.0),
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.0), border: Border.all(color: AppColors.textColorSubText.withOpacity(0.5))),
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.0), border: Border.all(color: AppColors.colorSecondary.withOpacity(0.5))),
                       child: TextField(
                         keyboardType: TextInputType.multiline,
                         maxLines: 5,
@@ -502,33 +552,32 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
                         },
                       ),
                     ),
-
+                    verticalSpace(10.0),
                     HrmInputFieldDummy(
                       // textController: dobTextController,
-                        headingText: "",
-                        text: name == null ? "Add img, pdf or xls" : name,
-                        mandate: true)
-                        .onClick(() async {
+                      headingText: "Attach File",
+                      text: _reopenTicketRequest.name == null ? "Add img, pdf or xls" : _reopenTicketRequest.name,
+                    ).onClick(() async {
                       try {
                         List<String> fileAndName = await Utility.pickFile(context);
                         _reopenTicketRequest.attachFile = fileAndName[0].isEmpty ? null : fileAndName[0];
-                        name = fileAndName[1].isEmpty ? null : fileAndName[1];
+                        _reopenTicketRequest.name = fileAndName[1].isEmpty ? null : fileAndName[1];
 
                         // Split the file name by '.' to separate the name and extension
-                        List<String> parts = name.split('.');
+                        List<String> parts = _reopenTicketRequest.name.split('.');
                         _reopenTicketRequest.fileType = parts.last;
                       } catch (e) {
                         _reopenTicketRequest.attachFile = null;
-                        name = null;
+                        _reopenTicketRequest.name = null;
                       }
-                      alertDialogState((){});
+                      alertDialogState(() {});
                     }),
                     verticalSpace(10.0),
                     Spacer(),
                     PmlButton(
                       text: "Reopen",
                       onTap: () async {
-                        if (_reopenTicketRequest.reason.isEmpty) {
+                        if (_reopenTicketRequest?.reason?.isEmpty ?? true) {
                           onError("Please enter reason");
                           return;
                         }

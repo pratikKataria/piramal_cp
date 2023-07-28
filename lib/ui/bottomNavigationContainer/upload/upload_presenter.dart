@@ -48,8 +48,8 @@ class UploadPresenter {
 
     Dialogs.showLoader(context, "Uploading your file ...");
     apiController.post(EndPoints.UPLOAD, body: body, headers: await Utility.header())
-      ..then((Response response) {
-        Dialogs.hideLoader(context);
+      ..then((Response response) async {
+        await Dialogs.hideLoader(context);
         UploadFileResponse nResponse = UploadFileResponse.fromJson(response.data);
 
         if (nResponse.returnCode == null) {
@@ -64,7 +64,7 @@ class UploadPresenter {
         }
       })
       ..catchError((e) async {
-        Dialogs.hideLoader(context);
+        await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
   }

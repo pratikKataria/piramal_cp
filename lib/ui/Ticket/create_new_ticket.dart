@@ -26,8 +26,8 @@ class CreateNewTicket extends StatefulWidget {
 }
 
 class _CreateNewTicketState extends State<CreateNewTicket> implements TicketView {
-  List<String> listOfSubCategory = [];
-  List<String> listOfCategory = [];
+  // List<String> listOfSubCategory = [];
+  // List<String> listOfCategory = [];
   List<String> listOfTypes = [];
   List<String> listOfSubTypes = [];
 
@@ -128,85 +128,7 @@ class _CreateNewTicketState extends State<CreateNewTicket> implements TicketView
               ],
             ),
             verticalSpace(20.0),
-            Text("Category", style: textStyle14px500w),
-            verticalSpace(10.0),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Stack(
-                  children: [
-                    Positioned(
-                      top: 0.0,
-                      child: Text("${createTicketRequest.source}".notNullEmpty, style: textStyleSubText14px500w),
-                    ),
-                    Container(
-                      width: Utility.screenWidth(context) * .70,
-                      height: 35.0,
-                      child: DropdownButton<String>(
-                        isExpanded: true,
-                        iconSize: 34.0,
-                        items: <String>[...listOfCategory].map((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          if (value != null) {
-                            createTicketRequest.source = value;
-                            createTicketRequest.category = null;
-                            listOfSubCategory.clear();
 
-                            presenter.getTicketSubCategory(context, value);
-                            setState(() {});
-                          }
-                        },
-                      ),
-                    )
-                  ],
-                )
-              ],
-            ),
-            verticalSpace(20.0),
-            Text("Sub Category", style: textStyle14px500w),
-            verticalSpace(10.0),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Stack(
-                  children: [
-                    Positioned(
-                      top: 0.0,
-                      child: Text("${createTicketRequest.category}".notNullEmpty, style: textStyleSubText14px500w),
-                    ),
-                    Container(
-                      width: Utility.screenWidth(context) * .70,
-                      height: 35.0,
-                      child: DropdownButton<String>(
-                        isExpanded: true,
-                        iconSize: 34.0,
-                        items: <String>[...listOfSubCategory].map((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          if (value != null) {
-                            createTicketRequest.category = value;
-
-                            setState(() {});
-                          }
-                        },
-                      ),
-                    )
-                  ],
-                )
-              ],
-            ),
-            verticalSpace(20.0),
             Text("Description", style: textStyle14px500w),
             Container(
               height: 45,
@@ -286,13 +208,13 @@ class _CreateNewTicketState extends State<CreateNewTicket> implements TicketView
 
   @override
   void onSubCategoryFetched(TicketCategoryResponse rmDetailResponse) {
-    listOfSubCategory.clear();
-    if (rmDetailResponse.values.isNotEmpty) listOfSubCategory.addAll(rmDetailResponse.values.split(",").toList());
-    if (listOfSubCategory.isNotEmpty) {
-      listOfSubCategory.removeLast();
-      createTicketRequest.category = listOfSubCategory.first;
-    }
-    setState(() {});
+    // listOfSubCategory.clear();
+    // if (rmDetailResponse.values.isNotEmpty) listOfSubCategory.addAll(rmDetailResponse.values.split(",").toList());
+    // if (listOfSubCategory.isNotEmpty) {
+    //   listOfSubCategory.removeLast();
+    //   createTicketRequest.category = listOfSubCategory.first;
+    // }
+    // setState(() {});
   }
 
   @override
@@ -328,8 +250,8 @@ class _CreateNewTicketState extends State<CreateNewTicket> implements TicketView
   void onTicketPicklistFetched(TicketPicklistResponse rmDetailResponse) {
     listOfSubTypes.clear();
     listOfTypes.clear();
-    listOfCategory.clear();
-    listOfSubCategory.clear();
+    // listOfCategory.clear();
+    // listOfSubCategory.clear();
     setState(() {});
 
     rmDetailResponse.fieldList.forEach((element) {
@@ -342,7 +264,7 @@ class _CreateNewTicketState extends State<CreateNewTicket> implements TicketView
       if (element.fieldName == "Case Origin") {
         List<String> tempListOfValues = element.values.split(",");
         tempListOfValues.removeLast();
-        listOfCategory.addAll(tempListOfValues);
+        // listOfCategory.addAll(tempListOfValues);
       }
     });
 
@@ -351,10 +273,10 @@ class _CreateNewTicketState extends State<CreateNewTicket> implements TicketView
       createTicketRequest.caseType = listOfTypes.first;
     }
 
-    if (listOfCategory.isNotEmpty) {
-      presenter.getTicketSubCategory(context, listOfCategory[0]);
-      createTicketRequest.source = listOfCategory.first;
-    }
+    // if (listOfCategory.isNotEmpty) {
+    //   presenter.getTicketSubCategory(context, listOfCategory[0]);
+    //   createTicketRequest.source = listOfCategory.first;
+    // }
 
     setState(() {});
   }
@@ -372,3 +294,83 @@ class _CreateNewTicketState extends State<CreateNewTicket> implements TicketView
     setState(() {});
   }
 }
+
+
+/*   Text("Category", style: textStyle14px500w),
+            verticalSpace(10.0),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Stack(
+                  children: [
+                    Positioned(
+                      top: 0.0,
+                      child: Text("${createTicketRequest.source}".notNullEmpty, style: textStyleSubText14px500w),
+                    ),
+                    Container(
+                      width: Utility.screenWidth(context) * .70,
+                      height: 35.0,
+                      child: DropdownButton<String>(
+                        isExpanded: true,
+                        iconSize: 34.0,
+                        items: <String>[...listOfCategory].map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          if (value != null) {
+                            createTicketRequest.source = value;
+                            createTicketRequest.category = null;
+                            listOfSubCategory.clear();
+
+                            presenter.getTicketSubCategory(context, value);
+                            setState(() {});
+                          }
+                        },
+                      ),
+                    )
+                  ],
+                )
+              ],
+            ),
+            verticalSpace(20.0),
+            Text("Sub Category", style: textStyle14px500w),
+            verticalSpace(10.0),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Stack(
+                  children: [
+                    Positioned(
+                      top: 0.0,
+                      child: Text("${createTicketRequest.category}".notNullEmpty, style: textStyleSubText14px500w),
+                    ),
+                    Container(
+                      width: Utility.screenWidth(context) * .70,
+                      height: 35.0,
+                      child: DropdownButton<String>(
+                        isExpanded: true,
+                        iconSize: 34.0,
+                        items: <String>[...listOfSubCategory].map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          if (value != null) {
+                            createTicketRequest.category = value;
+
+                            setState(() {});
+                          }
+                        },
+                      ),
+                    )
+                  ],
+                )
+              ],
+            ),*/
