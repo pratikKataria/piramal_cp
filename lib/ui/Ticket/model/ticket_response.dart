@@ -1,9 +1,9 @@
-/// returnCode : true
-/// openCasesList : [{"User_Comments":"Test Milestone 1","Type":"Brokerage related","SubType":"Delay in payment;GST/tax related;Others","Status":"Open","Position":null,"Pending_with_User":null,"Detail_case_remarks":"test create case","createdDate":"21/7/2023 08:08 PM","close_Date":null,"Category":"Email","caseNumber":"00008437","caseId":"500p000000BoVZKAA3"},{"User_Comments":"Test Milestone 1","Type":"Brokerage related","SubType":null,"Status":"Open","Position":null,"Pending_with_User":null,"Detail_case_remarks":null,"createdDate":"21/7/2023 04:35 PM","close_Date":null,"Category":"Email;WhatsApp App","caseNumber":"00008431","caseId":"500p000000BoUr8AAF"},{"User_Comments":"Test Milestone 1","Type":"Brokerage related","SubType":null,"Status":"Open","Position":null,"Pending_with_User":null,"Detail_case_remarks":null,"createdDate":"21/7/2023 08:24 PM","close_Date":null,"Category":null,"caseNumber":"00008438","caseId":"500p000000BoVcFAAV"},{"User_Comments":null,"Type":"Brokerage related","SubType":null,"Status":"Open","Position":null,"Pending_with_User":null,"Detail_case_remarks":"test create case","createdDate":"21/7/2023 06:18 PM","close_Date":null,"Category":"Email","caseNumber":"00008432","caseId":"500p000000BoVCMAA3"},{"User_Comments":null,"Type":"Brokerage related","SubType":null,"Status":"Open","Position":null,"Pending_with_User":null,"Detail_case_remarks":"test create case","createdDate":"21/7/2023 06:18 PM","close_Date":null,"Category":"Email","caseNumber":"00008433","caseId":"500p000000BoVCkAAN"},{"User_Comments":"Test Milestone 1","Type":"Brokerage related","SubType":"Delay in payment;GST/tax related;Others","Status":"Open","Position":null,"Pending_with_User":null,"Detail_case_remarks":"test create case","createdDate":"21/7/2023 02:06 PM","close_Date":null,"Category":"Email","caseNumber":"00008430","caseId":"500p000000BoUISAA3"},{"User_Comments":"Test Milestone 1","Type":"Brokerage related","SubType":"Delay in payment;Others","Status":"Open","Position":null,"Pending_with_User":null,"Detail_case_remarks":"test create case 21 test","createdDate":"21/7/2023 07:54 PM","close_Date":null,"Category":"Email","caseNumber":"00008436","caseId":"500p000000BoVWCAA3"},{"User_Comments":null,"Type":"Brokerage related","SubType":"Delay in payment;Others","Status":"Open","Position":null,"Pending_with_User":null,"Detail_case_remarks":"test create case 21","createdDate":"21/7/2023 07:30 PM","close_Date":null,"Category":"Email","caseNumber":"00008435","caseId":"500p000000BoVS9AAN"},{"User_Comments":"Test Milestone 1","Type":"Brokerage related","SubType":"Others","Status":"Open","Position":null,"Pending_with_User":null,"Detail_case_remarks":"test create case 21","createdDate":"21/7/2023 07:20 PM","close_Date":null,"Category":"Email","caseNumber":"00008434","caseId":"500p000000BoVPkAAN"}]
-/// message : "Success"
-/// closedCasesList : [{"User_Comments":"Test Milestone 1","Type":"Brokerage related","SubType":"Others","Status":"Open","Position":null,"Pending_with_User":null,"Detail_case_remarks":"test create case 21","createdDate":"21/7/2023 07:20 PM","close_Date":null,"Category":"Email","caseNumber":"00008434","caseId":"500p000000BoVPkAAN"}]
-import 'package:intl/intl.dart'; // Import the intl library for DateFormat
+import "package:intl/intl.dart";
 
+/// returnCode : true
+/// openCasesList : [{"User_Comments":null,"Type":"CP detail update/change","SubType":"Banking detail","Status":"Open","sortDate":"2023-07-29","Position":null,"Pending_with_User":null,"Detail_case_remarks":"Greece","createdDate":"29/7/2023 12:32 AM","close_Date":null,"caseNumber":"00008483","caseId":"500p000000Bp6h3AAB"}]
+/// message : "Success"
+/// closedCasesList : [{"User_Comments":null,"Type":"Brokerage related","SubType":"Delay in payment","Status":"Closed","sortDate":"2023-07-28","ShowFeedbackForm":false,"Position":null,"Pending_with_User":null,"Detail_case_remarks":"","createdDate":"28/7/2023 05:57 PM","close_Date":null,"caseNumber":"00008478","caseId":"500p000000Bp5VIAAZ"}]
 class TicketResponse {
   TicketResponse({
     bool returnCode,
@@ -74,31 +74,33 @@ class TicketResponse {
   }
 }
 
-/// User_Comments : "Test Milestone 1"
+/// User_Comments : null
 /// Type : "Brokerage related"
-/// SubType : "Others"
-/// Status : "Open"
+/// SubType : "Delay in payment"
+/// Status : "Closed"
+/// sortDate : "2023-07-28"
+/// ShowFeedbackForm : false
 /// Position : null
 /// Pending_with_User : null
-/// Detail_case_remarks : "test create case 21"
-/// createdDate : "21/7/2023 07:20 PM"
+/// Detail_case_remarks : ""
+/// createdDate : "28/7/2023 05:57 PM"
 /// close_Date : null
-/// Category : "Email"
-/// caseNumber : "00008434"
-/// caseId : "500p000000BoVPkAAN"
+/// caseNumber : "00008478"
+/// caseId : "500p000000Bp5VIAAZ"
 
-class ClosedCasesList extends Comparable<ClosedCasesList> {
+class ClosedCasesList implements Comparable<ClosedCasesList> {
   ClosedCasesList({
-    String userComments,
+    dynamic userComments,
     String type,
     String subType,
     String status,
+    String sortDate,
+    bool showFeedbackForm,
     dynamic position,
     dynamic pendingWithUser,
     String detailCaseRemarks,
     String createdDate,
     dynamic closeDate,
-    String category,
     String caseNumber,
     String caseId,
   }) {
@@ -106,12 +108,13 @@ class ClosedCasesList extends Comparable<ClosedCasesList> {
     _type = type;
     _subType = subType;
     _status = status;
+    _sortDate = sortDate;
+    _showFeedbackForm = showFeedbackForm;
     _position = position;
     _pendingWithUser = pendingWithUser;
     _detailCaseRemarks = detailCaseRemarks;
     _createdDate = createdDate;
     _closeDate = closeDate;
-    _category = category;
     _caseNumber = caseNumber;
     _caseId = caseId;
   }
@@ -121,40 +124,43 @@ class ClosedCasesList extends Comparable<ClosedCasesList> {
     _type = json['Type'];
     _subType = json['SubType'];
     _status = json['Status'];
+    _sortDate = json['sortDate'];
+    _showFeedbackForm = json['ShowFeedbackForm'];
     _position = json['Position'];
     _pendingWithUser = json['Pending_with_User'];
     _detailCaseRemarks = json['Detail_case_remarks'];
     _createdDate = json['createdDate'];
     _closeDate = json['close_Date'];
-    _category = json['Category'];
     _caseNumber = json['caseNumber'];
     _caseId = json['caseId'];
   }
 
-  String _userComments;
+  dynamic _userComments;
   String _type;
   String _subType;
   String _status;
+  String _sortDate;
+  bool _showFeedbackForm;
   dynamic _position;
   dynamic _pendingWithUser;
   String _detailCaseRemarks;
   String _createdDate;
   dynamic _closeDate;
-  String _category;
   String _caseNumber;
   String _caseId;
 
   ClosedCasesList copyWith({
-    String userComments,
+    dynamic userComments,
     String type,
     String subType,
     String status,
+    String sortDate,
+    bool showFeedbackForm,
     dynamic position,
     dynamic pendingWithUser,
     String detailCaseRemarks,
     String createdDate,
     dynamic closeDate,
-    String category,
     String caseNumber,
     String caseId,
   }) =>
@@ -163,23 +169,28 @@ class ClosedCasesList extends Comparable<ClosedCasesList> {
         type: type ?? _type,
         subType: subType ?? _subType,
         status: status ?? _status,
+        sortDate: sortDate ?? _sortDate,
+        showFeedbackForm: showFeedbackForm ?? _showFeedbackForm,
         position: position ?? _position,
         pendingWithUser: pendingWithUser ?? _pendingWithUser,
         detailCaseRemarks: detailCaseRemarks ?? _detailCaseRemarks,
         createdDate: createdDate ?? _createdDate,
         closeDate: closeDate ?? _closeDate,
-        category: category ?? _category,
         caseNumber: caseNumber ?? _caseNumber,
         caseId: caseId ?? _caseId,
       );
 
-  String get userComments => _userComments;
+  dynamic get userComments => _userComments;
 
   String get type => _type;
 
   String get subType => _subType;
 
   String get status => _status;
+
+  String get sortDate => _sortDate;
+
+  bool get showFeedbackForm => _showFeedbackForm;
 
   dynamic get position => _position;
 
@@ -191,28 +202,9 @@ class ClosedCasesList extends Comparable<ClosedCasesList> {
 
   dynamic get closeDate => _closeDate;
 
-  String get category => _category;
-
   String get caseNumber => _caseNumber;
 
   String get caseId => _caseId;
-
-  Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    map['User_Comments'] = _userComments;
-    map['Type'] = _type;
-    map['SubType'] = _subType;
-    map['Status'] = _status;
-    map['Position'] = _position;
-    map['Pending_with_User'] = _pendingWithUser;
-    map['Detail_case_remarks'] = _detailCaseRemarks;
-    map['createdDate'] = _createdDate;
-    map['close_Date'] = _closeDate;
-    map['Category'] = _category;
-    map['caseNumber'] = _caseNumber;
-    map['caseId'] = _caseId;
-    return map;
-  }
 
   @override
   int compareTo(ClosedCasesList other) {
@@ -229,33 +221,51 @@ class ClosedCasesList extends Comparable<ClosedCasesList> {
     final format = DateFormat('dd/MM/yyyy hh:mm a');
     return format.parse(dateString);
   }
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['User_Comments'] = _userComments;
+    map['Type'] = _type;
+    map['SubType'] = _subType;
+    map['Status'] = _status;
+    map['sortDate'] = _sortDate;
+    map['ShowFeedbackForm'] = _showFeedbackForm;
+    map['Position'] = _position;
+    map['Pending_with_User'] = _pendingWithUser;
+    map['Detail_case_remarks'] = _detailCaseRemarks;
+    map['createdDate'] = _createdDate;
+    map['close_Date'] = _closeDate;
+    map['caseNumber'] = _caseNumber;
+    map['caseId'] = _caseId;
+    return map;
+  }
 }
 
-/// User_Comments : "Test Milestone 1"
-/// Type : "Brokerage related"
-/// SubType : "Delay in payment;GST/tax related;Others"
+/// User_Comments : null
+/// Type : "CP detail update/change"
+/// SubType : "Banking detail"
 /// Status : "Open"
+/// sortDate : "2023-07-29"
 /// Position : null
 /// Pending_with_User : null
-/// Detail_case_remarks : "test create case"
-/// createdDate : "21/7/2023 08:08 PM"
+/// Detail_case_remarks : "Greece"
+/// createdDate : "29/7/2023 12:32 AM"
 /// close_Date : null
-/// Category : "Email"
-/// caseNumber : "00008437"
-/// caseId : "500p000000BoVZKAA3"
+/// caseNumber : "00008483"
+/// caseId : "500p000000Bp6h3AAB"
 
 class OpenCasesList extends Comparable<OpenCasesList> {
   OpenCasesList({
-    String userComments,
+    dynamic userComments,
     String type,
     String subType,
     String status,
+    String sortDate,
     dynamic position,
     dynamic pendingWithUser,
     String detailCaseRemarks,
     String createdDate,
     dynamic closeDate,
-    String category,
     String caseNumber,
     String caseId,
   }) {
@@ -263,12 +273,12 @@ class OpenCasesList extends Comparable<OpenCasesList> {
     _type = type;
     _subType = subType;
     _status = status;
+    _sortDate = sortDate;
     _position = position;
     _pendingWithUser = pendingWithUser;
     _detailCaseRemarks = detailCaseRemarks;
     _createdDate = createdDate;
     _closeDate = closeDate;
-    _category = category;
     _caseNumber = caseNumber;
     _caseId = caseId;
   }
@@ -278,40 +288,40 @@ class OpenCasesList extends Comparable<OpenCasesList> {
     _type = json['Type'];
     _subType = json['SubType'];
     _status = json['Status'];
+    _sortDate = json['sortDate'];
     _position = json['Position'];
     _pendingWithUser = json['Pending_with_User'];
     _detailCaseRemarks = json['Detail_case_remarks'];
     _createdDate = json['createdDate'];
     _closeDate = json['close_Date'];
-    _category = json['Category'];
     _caseNumber = json['caseNumber'];
     _caseId = json['caseId'];
   }
 
-  String _userComments;
+  dynamic _userComments;
   String _type;
   String _subType;
   String _status;
+  String _sortDate;
   dynamic _position;
   dynamic _pendingWithUser;
   String _detailCaseRemarks;
   String _createdDate;
   dynamic _closeDate;
-  String _category;
   String _caseNumber;
   String _caseId;
 
   OpenCasesList copyWith({
-    String userComments,
+    dynamic userComments,
     String type,
     String subType,
     String status,
+    String sortDate,
     dynamic position,
     dynamic pendingWithUser,
     String detailCaseRemarks,
     String createdDate,
     dynamic closeDate,
-    String category,
     String caseNumber,
     String caseId,
   }) =>
@@ -320,12 +330,12 @@ class OpenCasesList extends Comparable<OpenCasesList> {
         type: type ?? _type,
         subType: subType ?? _subType,
         status: status ?? _status,
+        sortDate: sortDate ?? _sortDate,
         position: position ?? _position,
         pendingWithUser: pendingWithUser ?? _pendingWithUser,
         detailCaseRemarks: detailCaseRemarks ?? _detailCaseRemarks,
         createdDate: createdDate ?? _createdDate,
         closeDate: closeDate ?? _closeDate,
-        category: category ?? _category,
         caseNumber: caseNumber ?? _caseNumber,
         caseId: caseId ?? _caseId,
       );
@@ -346,13 +356,15 @@ class OpenCasesList extends Comparable<OpenCasesList> {
     return format.parse(dateString);
   }
 
-  String get userComments => _userComments;
+  dynamic get userComments => _userComments;
 
   String get type => _type;
 
   String get subType => _subType;
 
   String get status => _status;
+
+  String get sortDate => _sortDate;
 
   dynamic get position => _position;
 
@@ -364,8 +376,6 @@ class OpenCasesList extends Comparable<OpenCasesList> {
 
   dynamic get closeDate => _closeDate;
 
-  String get category => _category;
-
   String get caseNumber => _caseNumber;
 
   String get caseId => _caseId;
@@ -376,12 +386,12 @@ class OpenCasesList extends Comparable<OpenCasesList> {
     map['Type'] = _type;
     map['SubType'] = _subType;
     map['Status'] = _status;
+    map['sortDate'] = _sortDate;
     map['Position'] = _position;
     map['Pending_with_User'] = _pendingWithUser;
     map['Detail_case_remarks'] = _detailCaseRemarks;
     map['createdDate'] = _createdDate;
     map['close_Date'] = _closeDate;
-    map['Category'] = _category;
     map['caseNumber'] = _caseNumber;
     map['caseId'] = _caseId;
     return map;

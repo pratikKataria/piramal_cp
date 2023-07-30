@@ -9,6 +9,7 @@
 
 class CreateTicketRequest {
   String requestType;
+  bool selected = false;
   CreateTicketRequest({
       String customerAccountId, 
       String caseType, 

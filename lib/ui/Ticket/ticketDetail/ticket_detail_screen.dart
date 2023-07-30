@@ -324,4 +324,7 @@ class _TicketDetailScreenState extends State<TicketDetailScreen> implements Tick
         break;
     }
   }
+
+  @override
+  void onFeedbackSubmitted() {}
 }

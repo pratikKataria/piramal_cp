@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:piramal_channel_partner/generated/assets.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
@@ -46,10 +47,22 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
 
   @override
   void initState() {
-    _tabController = TabController(length: 2, vsync: this);
     _presenter = TicketPresenter(this);
-
     _presenter.getTickets(context);
+
+    _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(() async {
+      await Future.delayed(Duration(milliseconds: 400));
+
+      if (_tabController.index == 1 && closedTickets.isNotEmpty) {
+        //Check for Active Feedback Form
+
+        ClosedCasesList feedbackDataList = closedTickets.firstWhere((element) => element.showFeedbackForm == false, orElse: () => ClosedCasesList());
+        if (feedbackDataList.showFeedbackForm == false) {
+          feedbackPopUp(feedbackDataList);
+        }
+      }
+    });
 
     super.initState();
   }
@@ -69,6 +82,7 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
         children: [
           verticalSpace(10.0),
           buildTabs(),
+          verticalSpace(8.0),
           Container(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -90,7 +104,7 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
             ascending = !ascending;
             setState(() {});
           }),
-          verticalSpace(10.0),
+          verticalSpace(8.0),
           Expanded(
             child: TabBarView(
               controller: _tabController,
@@ -463,6 +477,161 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
     );
   }
 
+  bool isShowing = false;
+
+  Future<bool> feedbackPopUp(ClosedCasesList feedback) {
+    String rating = "4";
+    String desc = "";
+    bool submitted = false;
+    if (isShowing == false) {
+      isShowing = true;
+      return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          String reason = "";
+          return StatefulBuilder(builder: (context, alertDialogState) {
+            return Center(
+              child: ListView(
+                shrinkWrap: true,
+                children: [
+                  AlertDialog(
+                    backgroundColor: Colors.white,
+                    elevation: 0.0,
+                    actions: <Widget>[
+                      Container(
+                        color: Colors.white,
+                        padding: EdgeInsets.all(10.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text("Feedback", style: textStyle14px500w),
+                            verticalSpace(20.0),
+                            Text("Case No: ${feedback.caseNumber}", style: textStyle14px500w),
+                            verticalSpace(4.0),
+                            Text("Description: ${feedback.detailCaseRemarks == null ? "" : feedback.detailCaseRemarks}", style: textStyle14px500w),
+                            verticalSpace(4.0),
+                            Wrap(
+                              children: [
+                                Text("Created On", style: textStyle14px500w),
+                                Text(" ${feedback.createdDate}".notNull, style: textStylePrimary14px500w),
+                                // Text(" At", style: textStyleBlack10px500w),
+                                // Text(" ${e.timeData}".notNull, style: textStylePrimary10px500w),
+                                Text(" | ${feedback.status}", style: textStylePrimary14px500w),
+                              ],
+                            ),
+                            verticalSpace(10.0),
+                            if (feedback.type != null) ...[
+                              Text("Type", style: textStyle14px500w),
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  children: [
+                                    ...feedback.type
+                                        .split(";")
+                                        .map((e) => Container(
+                                        padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
+                                        margin: EdgeInsets.only(right: 10.0),
+                                        color: AppColors.colorSecondary,
+                                        child: Text("$e".notNull, style: textStyleWhite14px500w)))
+                                        .toList(),
+                                  ],
+                                ),
+                              ),
+                              verticalSpace(10.0),
+                            ],
+                            if (feedback.subType != null) ...[
+                              Text("Sub Type", style: textStyle14px500w),
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  children: [
+                                    ...feedback.subType
+                                        .split(";")
+                                        .map((e) => Container(
+                                        padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
+                                        margin: EdgeInsets.only(right: 10.0),
+                                        color: AppColors.colorSecondary,
+                                        child: Text("$e".notNull, style: textStyleWhite14px500w)))
+                                        .toList(),
+                                  ],
+                                ),
+                              ),
+                              verticalSpace(10.0),
+                            ],
+                            verticalSpace(20.0),
+                            Text("Description (Max 1000 characters)", style: textStyle14px500w),
+                            verticalSpace(10.0),
+                            Container(
+                              height: 150.0,
+                              padding: EdgeInsets.symmetric(horizontal: 10.0),
+                              decoration: BoxDecoration(
+                                color: AppColors.white,
+                                borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                                border: Border.all(color: AppColors.lineColor, width: 1.5),
+                              ),
+                              child: TextField(
+                                style: textStyle14px600w,
+                                maxLines: 5,
+                                maxLength: 1000,
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  focusedBorder: InputBorder.none,
+                                  enabledBorder: InputBorder.none,
+                                  errorBorder: InputBorder.none,
+                                  disabledBorder: InputBorder.none,
+                                  hintText: "Write description ...",
+                                  hintStyle: textStyle14px500w,
+                                  suffixStyle: textStyle14px500w,
+                                  isDense: true,
+                                ),
+                                onChanged: (s) {
+                                  desc = s;
+                                },
+                              ),
+                            ),
+                            verticalSpace(20.0),
+                            Text("Rating", style: textStyle14px500w),
+                            verticalSpace(10.0),
+                            RatingBar.builder(
+                              initialRating: 4,
+                              minRating: 1,
+                              direction: Axis.horizontal,
+                              allowHalfRating: true,
+                              itemCount: 5,
+                              itemSize: 40,
+                              itemBuilder: (context, _) => Icon(Icons.star, color: Colors.amber),
+                              onRatingUpdate: (rat) {
+                                print(rat);
+                                rating = rat.toInt().toString();
+                              },
+                            ),
+                            verticalSpace(20.0),
+                            PmlButton(
+                              text: "Submit",
+                              onTap: () {
+                                submitted = true;
+                                _presenter.submitFeedback(context, feedback.caseId, rating, desc);
+                                FocusScope.of(context).unfocus();
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          });
+        },
+      ).then((value) {
+        FocusScope.of(context).unfocus();
+        isShowing = false;
+        return value as bool;
+      });
+    }
+  }
+
   @override
   onError(String message) {
     Utility.showErrorToastB(context, message);
@@ -613,4 +782,12 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
 
   @override
   void caseSubTypeResponse(CaseSubtypeResponse rmDetailResponse) {}
+
+  @override
+  void onFeedbackSubmitted() {
+    isShowing = false;
+    Navigator.pop(context); // close popup;
+    _presenter.getTicketsWithoutLoader(context);
+    Utility.showSuccessToastB(context, "Feedback submitted");
+  }
 }

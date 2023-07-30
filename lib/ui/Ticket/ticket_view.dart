@@ -23,4 +23,5 @@ abstract class TicketView extends BaseView {
 
   void caseSubTypeResponse(CaseSubtypeResponse rmDetailResponse);
 
+  void onFeedbackSubmitted();
 }

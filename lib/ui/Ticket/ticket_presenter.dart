@@ -352,6 +352,41 @@ class TicketPresenter extends BasePresenter {
       });
   }
 
+  void submitFeedback(BuildContext context, String caseId, String rating, String feedback) async {
+    //check for internal token
+    if (await AuthUser.getInstance().hasToken()) {
+      _v.onError("Token not found");
+      return;
+    }
+
+    if (feedback == null || feedback.isEmpty) {
+      _v.onError("Description is required");
+      return;
+    }
+
+    //check network
+    //if (await NetworkCheck.check()) return;
+    String accountId = (await AuthUser().getCurrentUser()).userCredentials.accountId;
+
+    Map body = {
+      "CustomerAccountId": accountId,
+      "CaseId": caseId,
+      "Rating": rating,
+      "Feedback": feedback,
+    };
+
+    Dialogs.showLoader(context, "Submitting feedback ...");
+    apiController.post(EndPoints.SUBMIT_FEEDBACK, body: body, headers: await Utility.header())
+      ..then((response) async {
+        await Dialogs.hideLoader(context);
+        _v.onFeedbackSubmitted();
+      })
+      ..catchError((e) {
+        Dialogs.hideLoader(context);
+        ApiErrorParser.getResult(e, _v);
+      });
+  }
+
   // Validation function
   String validateFields(CreateTicketRequest createTicketRequest) {
     if (createTicketRequest.customerAccountId == null || createTicketRequest.customerAccountId.isEmpty) {

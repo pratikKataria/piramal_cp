@@ -6,6 +6,7 @@ import 'package:piramal_channel_partner/ui/Ticket/model/case_subtype_response.da
 import 'package:piramal_channel_partner/ui/Ticket/model/create_ticket_request.dart';
 import 'package:piramal_channel_partner/ui/Ticket/model/create_ticket_response.dart';
 import 'package:piramal_channel_partner/ui/Ticket/model/reopen_response.dart';
+import 'package:piramal_channel_partner/ui/Ticket/model/sub_type_drop_down.dart';
 import 'package:piramal_channel_partner/ui/Ticket/model/ticket_category_response.dart';
 import 'package:piramal_channel_partner/ui/Ticket/model/ticket_picklist_response.dart';
 import 'package:piramal_channel_partner/ui/Ticket/model/ticket_response.dart';
@@ -30,7 +31,7 @@ class _CreateNewTicketState extends State<CreateNewTicket> implements TicketView
   // List<String> listOfCategory = [];
   List<String> listOfTypes = [];
   List<String> listOfRequestTypes = [];
-  List<String> listOfSubTypes = [];
+  List<SubTypeDropDown> listOfSubTypes = [];
 
   TicketPresenter presenter;
   String name;
@@ -55,7 +56,6 @@ class _CreateNewTicketState extends State<CreateNewTicket> implements TicketView
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           children: [
             verticalSpace(20.0),
-
             Text("Request Type", style: textStyle14px500w),
             verticalSpace(10.0),
             Column(
@@ -77,7 +77,7 @@ class _CreateNewTicketState extends State<CreateNewTicket> implements TicketView
                         items: <String>[...listOfRequestTypes].map((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
-                            child: Text(value),
+                            child: Text(value, style: textStyle12px500w),
                           );
                         }).toList(),
                         onChanged: (value) {
@@ -96,7 +96,6 @@ class _CreateNewTicketState extends State<CreateNewTicket> implements TicketView
               ],
             ),
             verticalSpace(10.0),
-
             Text("Type", style: textStyle14px500w),
             verticalSpace(10.0),
             Column(
@@ -118,13 +117,14 @@ class _CreateNewTicketState extends State<CreateNewTicket> implements TicketView
                         items: <String>[...listOfTypes].map((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
-                            child: Text(value),
+                            child: Text(value, style: textStyle12px500w),
                           );
                         }).toList(),
                         onChanged: (value) {
                           if (value != null) {
                             createTicketRequest.caseType = value;
                             createTicketRequest.caseSubType = null;
+                            listOfSubTypes.clear();
                             presenter.getTicketSubType(context, value);
                             setState(() {});
                           }
@@ -146,7 +146,7 @@ class _CreateNewTicketState extends State<CreateNewTicket> implements TicketView
                   children: [
                     Positioned(
                       top: 0.0,
-                      child: Text("${createTicketRequest.caseSubType}".notNullEmpty, style: textStyleSubText14px500w),
+                      child: Text("${createTicketRequest.caseSubType.replaceAll(";", ",")}".notNullEmpty, style: textStyleSubText14px500w),
                     ),
                     Container(
                       width: Utility.screenWidth(context) * .70,
@@ -154,24 +154,61 @@ class _CreateNewTicketState extends State<CreateNewTicket> implements TicketView
                       child: DropdownButton<String>(
                         isExpanded: true,
                         iconSize: 34.0,
-                        items: <String>[...listOfSubTypes].map((String value) {
+                        items: <SubTypeDropDown>[...listOfSubTypes].map((SubTypeDropDown subTypeDropDown) {
                           return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
+                            value: subTypeDropDown.value,
+                            child: StatefulBuilder(
+                              builder: (context, st) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    subTypeDropDown.selected = !subTypeDropDown.selected;
+
+                                    String semiColonValues = listOfSubTypes.where((element) => element.selected == true).map((person) => person.value).join('; ');
+                                    createTicketRequest.caseSubType = semiColonValues;
+                                    print(createTicketRequest.caseSubType);
+                                    st(() {});
+                                    setState(() {});
+                                  },
+                                  child: Container(
+                                    margin: EdgeInsets.only(bottom: 10.0),
+                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(2.0), color: AppColors.inputFieldBackgroundColor),
+                                    child: Row(
+                                      children: [
+                                        Checkbox(
+                                          value: subTypeDropDown.selected ?? false,
+                                          onChanged: (value) {},
+                                        ),
+                                        Expanded(child: Text(subTypeDropDown.value, style: textStyle12px500w)),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
                           );
                         }).toList(),
-                        onChanged: (value) {
-                          createTicketRequest.caseSubType = value;
-                          setState(() {});
-                        },
+                        onChanged: (value) {},
                       ),
-                    )
+                    ),
                   ],
                 )
               ],
             ),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: listOfSubTypes
+                    .where((element) => element.selected == true)
+                    .map((option) => Container(
+                          margin: EdgeInsets.only(left: 10.0),
+                          padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(2.0), color: AppColors.inputFieldBackgroundColor),
+                          child: Text(option.value, style: textStyle12px500w),
+                        ))
+                    .toList(),
+              ),
+            ),
             verticalSpace(20.0),
-
             Text("Description", style: textStyle14px500w),
             Container(
               height: 45,
@@ -298,7 +335,6 @@ class _CreateNewTicketState extends State<CreateNewTicket> implements TicketView
     setState(() {});
 
     rmDetailResponse.fieldList.forEach((element) {
-
       if (element.fieldName == "Service Request Type") {
         List<String> tempListOfValues = element.values.split(",");
         tempListOfValues.removeLast();
@@ -336,14 +372,18 @@ class _CreateNewTicketState extends State<CreateNewTicket> implements TicketView
     if (rmDetailResponse.values != null) {
       List<String> tempListOfValues = rmDetailResponse.values.split(",");
       tempListOfValues.removeLast();
-      listOfSubTypes.addAll(tempListOfValues);
-      createTicketRequest.caseSubType = listOfSubTypes.first;
+      List<SubTypeDropDown> sub = tempListOfValues.map((element) => SubTypeDropDown(value: element)).toList();
+      listOfSubTypes.addAll(sub);
+      // listOfSubTypes.addAll(tempListOfValues);
+      createTicketRequest.caseSubType = listOfSubTypes.first.value;
     }
 
     setState(() {});
   }
-}
 
+  @override
+  void onFeedbackSubmitted() {}
+}
 
 /*   Text("Category", style: textStyle14px500w),
             verticalSpace(10.0),

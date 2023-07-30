@@ -3,8 +3,8 @@ import 'package:dio/dio.dart';
 class CurlInterceptor extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    print("-- Request --");
-    print("Curl: ${_getCurlCommand(options)}");
+    // print("-- Request --");
+    // print("Curl: ${_getCurlCommand(options)}");
     super.onRequest(options, handler);
   }
 
