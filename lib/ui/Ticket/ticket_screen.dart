@@ -57,8 +57,8 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
       if (_tabController.index == 1 && closedTickets.isNotEmpty) {
         //Check for Active Feedback Form
 
-        ClosedCasesList feedbackDataList = closedTickets.firstWhere((element) => element.showFeedbackForm == false, orElse: () => ClosedCasesList());
-        if (feedbackDataList.showFeedbackForm == false) {
+        ClosedCasesList feedbackDataList = closedTickets.firstWhere((element) => element.showFeedbackForm == true, orElse: () => ClosedCasesList());
+        if (feedbackDataList.showFeedbackForm == true) {
           feedbackPopUp(feedbackDataList);
         }
       }
@@ -480,7 +480,7 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
   bool isShowing = false;
 
   Future<bool> feedbackPopUp(ClosedCasesList feedback) {
-    String rating = "4";
+    String rating = "2";
     String desc = "";
     bool submitted = false;
     if (isShowing == false) {
@@ -529,10 +529,10 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
                                     ...feedback.type
                                         .split(";")
                                         .map((e) => Container(
-                                        padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
-                                        margin: EdgeInsets.only(right: 10.0),
-                                        color: AppColors.colorSecondary,
-                                        child: Text("$e".notNull, style: textStyleWhite14px500w)))
+                                            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
+                                            margin: EdgeInsets.only(right: 10.0),
+                                            color: AppColors.colorSecondary,
+                                            child: Text("$e".notNull, style: textStyleWhite14px500w)))
                                         .toList(),
                                   ],
                                 ),
@@ -548,10 +548,10 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
                                     ...feedback.subType
                                         .split(";")
                                         .map((e) => Container(
-                                        padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
-                                        margin: EdgeInsets.only(right: 10.0),
-                                        color: AppColors.colorSecondary,
-                                        child: Text("$e".notNull, style: textStyleWhite14px500w)))
+                                            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
+                                            margin: EdgeInsets.only(right: 10.0),
+                                            color: AppColors.colorSecondary,
+                                            child: Text("$e".notNull, style: textStyleWhite14px500w)))
                                         .toList(),
                                   ],
                                 ),
@@ -593,13 +593,34 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
                             Text("Rating", style: textStyle14px500w),
                             verticalSpace(10.0),
                             RatingBar.builder(
-                              initialRating: 4,
+                              initialRating: 0,
                               minRating: 1,
                               direction: Axis.horizontal,
-                              allowHalfRating: true,
-                              itemCount: 5,
+                              allowHalfRating: false,
+                              itemCount: 3,
                               itemSize: 40,
-                              itemBuilder: (context, _) => Icon(Icons.star, color: Colors.amber),
+                              itemBuilder: (context, index) {
+                                switch (index) {
+                                  case 0:
+                                    return Icon(
+                                      Icons.sentiment_very_dissatisfied,
+                                      color: Colors.red,
+                                    );
+                                  case 1:
+                                    return Icon(
+                                      Icons.sentiment_neutral,
+                                      color: Colors.amber,
+                                    );
+
+                                  case 2:
+                                    return Icon(
+                                      Icons.sentiment_very_satisfied,
+                                      color: Colors.green,
+                                    );
+                                }
+                                return Container();
+                              },
+                              // itemBuilder: (context, _) => Icon(Icons.star, color: Colors.amber),
                               onRatingUpdate: (rat) {
                                 print(rat);
                                 rating = rat.toInt().toString();
