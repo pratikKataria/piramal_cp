@@ -39,7 +39,7 @@ class _WalkinCustomerProfileDetailScreenState extends State<WalkinCustomerProfil
   @override
   void initState() {
     presenter = CustomerProfilePresenter(this);
-    presenter.getCommentList(context, widget.response.sfdcid);
+    presenter.getCommentList(context, widget?.response?.sfdcid ?? "0065j00001F82nu");
     super.initState();
   }
 
@@ -140,7 +140,7 @@ class _WalkinCustomerProfileDetailScreenState extends State<WalkinCustomerProfil
                   child: Text("Validity: ${widget.response?.createdDays} Days", style: textStyle14px500w),
                 ),
                 horizontalSpace(10.0),
-                if (widget.response.revisit)
+                if (widget.response?.revisit ?? false)
                   Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(6),

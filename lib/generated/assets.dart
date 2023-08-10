@@ -20,6 +20,7 @@ class Assets {
   static const String imagesIcClose = 'assets/images/ic_close.png';
   static const String imagesIcCpEvents = 'assets/images/ic_cp_events.png';
   static const String imagesIcCurrentPromotions = 'assets/images/ic_current_promotions.png';
+  static const String imagesIcDown = 'assets/images/ic_down.png';
   static const String imagesIcDownload = 'assets/images/ic_download.png';
   static const String imagesIcEventCalender = 'assets/images/ic_event_calender.png';
   static const String imagesIcExplore = 'assets/images/ic_explore.png';
