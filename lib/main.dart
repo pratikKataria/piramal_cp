@@ -270,7 +270,7 @@ class MyApp extends StatelessWidget {
               break;
           }
         },
-        home: /*checkAuthUser(authResult)*/WalkinCustomerProfileDetailScreen(null),
+        home: checkAuthUser(authResult),
       ),
     );
   }
