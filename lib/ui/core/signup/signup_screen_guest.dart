@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:piramal_channel_partner/global/variables.dart';
@@ -9,6 +11,7 @@ import 'package:piramal_channel_partner/ui/core/core_presenter.dart';
 import 'package:piramal_channel_partner/ui/core/login/model/login_response.dart';
 import 'package:piramal_channel_partner/ui/core/login/model/token_response.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/relation_manager_list_response.dart';
+import 'package:piramal_channel_partner/ui/core/signup/model/signup_guest_request.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/signup_request.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/signup_response.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/signup_validation_check_response.dart';
@@ -21,20 +24,20 @@ import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
 import 'package:sms_autofill/sms_autofill.dart';
 
-class SignupScreen extends StatefulWidget {
-  final String emailMobileAutoPopulateValue;
+class SignupScreenGuest extends StatefulWidget {
+  final String eventId;
 
-  const SignupScreen(this.emailMobileAutoPopulateValue, {Key key}) : super(key: key);
+  const SignupScreenGuest(this.eventId, {Key key}) : super(key: key);
 
   @override
-  _SignupScreenState createState() => _SignupScreenState();
+  _SignupScreenGuestState createState() => _SignupScreenGuestState();
 }
 
-class _SignupScreenState extends State<SignupScreen> with CodeAutoFill implements SignupView {
+class _SignupScreenGuestState extends State<SignupScreenGuest> with CodeAutoFill implements SignupView {
   final subTextStyle = textStyleSubText14px500w;
   final mainTextStyle = textStyle14px500w;
 
-  SignupRequest signupRequest = SignupRequest();
+  SignupGuestRequest signupRequest = SignupGuestRequest();
   CorePresenter corePresenter;
 
   List<String> rmList = [];
@@ -76,12 +79,12 @@ class _SignupScreenState extends State<SignupScreen> with CodeAutoFill implement
   }
 
   void autoPopulateEmailMobile() {
-    String value = widget.emailMobileAutoPopulateValue;
-    if (value == null && value.isEmpty) return;
-    if (Utility.isNumeric(value))
-      signupRequest.primaryMobNo = value;
-    else
-      signupRequest.email = value;
+    // String value = widget.emailMobileAutoPopulateValue;
+    // if (value == null && value.isEmpty) return;
+    // if (Utility.isNumeric(value))
+    //   signupRequest.primaryMobNo = value;
+    // else
+    //   signupRequest.email = value;
   }
 
   @override
@@ -205,38 +208,50 @@ class _SignupScreenState extends State<SignupScreen> with CodeAutoFill implement
                   setState(() {});
                 },
               ),
+
+              verticalSpace(10.0),
+              input(
+                "Enter Pax Size",
+                (String v) {
+                  signupRequest.actualPaxsize = v;
+                  return;
+                },
+                limit: 4,
+                number: true,
+                important: true,
+              ),
               // verticalSpace(10.0),
               // input("Relationship Manager", (String v) {
               //   signupRequest.relationshipManager = v;
               //   return;
               // }),
-              verticalSpace(10.0),
-              Container(
-                height: 38.0,
-                decoration: BoxDecoration(
-                  color: AppColors.inputFieldBackgroundColor,
-                  borderRadius: BorderRadius.circular(6.0),
-                ),
-                padding: EdgeInsets.symmetric(horizontal: 10.0),
-                child: DropdownButton<String>(
-                  isExpanded: true,
-                  hint: Text("Relationship Manager", style: subTextStyle),
-                  value: relationManagerListResponse,
-                  underline: Container(),
-                  items: <String>[...rmList].map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value, style: subTextStyle),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    relationManagerListResponse = value;
-                    signupRequest.relationshipManager = value;
-                    // signupRequest.typeoffirm = value.
-                    setState(() {});
-                  },
-                ),
-              ),
+              // verticalSpace(10.0),
+              // Container(
+              //   height: 38.0,
+              //   decoration: BoxDecoration(
+              //     color: AppColors.inputFieldBackgroundColor,
+              //     borderRadius: BorderRadius.circular(6.0),
+              //   ),
+              //   padding: EdgeInsets.symmetric(horizontal: 10.0),
+              //   child: DropdownButton<String>(
+              //     isExpanded: true,
+              //     hint: Text("Relationship Manager", style: subTextStyle),
+              //     value: relationManagerListResponse,
+              //     underline: Container(),
+              //     items: <String>[...rmList].map((String value) {
+              //       return DropdownMenuItem<String>(
+              //         value: value,
+              //         child: Text(value, style: subTextStyle),
+              //       );
+              //     }).toList(),
+              //     onChanged: (value) {
+              //       relationManagerListResponse = value;
+              //       signupRequest.relationshipManager = value;
+              //       // signupRequest.typeoffirm = value.
+              //       setState(() {});
+              //     },
+              //   ),
+              // ),
               verticalSpace(10.0),
               input(
                 "Permanent Account Number (PAN)",
@@ -247,16 +262,16 @@ class _SignupScreenState extends State<SignupScreen> with CodeAutoFill implement
                 important: true,
                 limit: 10,
               ),
-              verticalSpace(10.0),
-              input(
-                "RERA Registration ID",
-                (String v) {
-                  signupRequest.reraID = v;
-                  return;
-                },
-                important: true,
-                limit: 20,
-              ),
+              // verticalSpace(10.0),
+              // input(
+              //   "RERA Registration ID",
+              //   (String v) {
+              //     signupRequest.reraID = v;
+              //     return;
+              //   },
+              //   important: true,
+              //   limit: 20,
+              // ),
               verticalSpace(40.0),
               loginButton(context),
               verticalSpace(20.0),
@@ -386,14 +401,20 @@ class _SignupScreenState extends State<SignupScreen> with CodeAutoFill implement
           return;
         }
 
-        // corePresenter.singUp(context, signupRequest);
-        corePresenter.postCheckUserExist(context, signupRequest);
+        try {
+          Map<String, dynamic> event = jsonDecode(widget.eventId);
+          signupRequest.parentCPEventId = event["eventId"];
+          corePresenter.singUpGuest(context, signupRequest);
+        } catch (xe) {
+          onError("Incorrect QR Code");
+        }
+        // corePresenter.postCheckUserExist(context, signupRequest);
       },
     );
   }
 
   bool isAllFieldOk() {
-    if (signupRequest.name.isEmpty) {
+    if (signupRequest.name == null || signupRequest.name.isEmpty) {
       onError("Please enter name");
       return false;
     }
@@ -403,30 +424,35 @@ class _SignupScreenState extends State<SignupScreen> with CodeAutoFill implement
     //   return false;
     // }
 
-    if (signupRequest.primaryMobNo.isEmpty) {
+    if (signupRequest.primaryMobNo == null || signupRequest.primaryMobNo.isEmpty) {
       onError("Please enter primary mobile number");
       return false;
     }
 
-    if (signupRequest.email.isEmpty) {
+    if (signupRequest.email == null || signupRequest.email.isEmpty) {
       onError("Please enter email");
       return false;
     }
 
-    if (signupRequest.relationshipManager.isEmpty) {
-      onError("Please enter relationship manager");
+    if (signupRequest.actualPaxsize == null || signupRequest.actualPaxsize.isEmpty) {
+      onError("Please enter email");
       return false;
     }
 
-    if (signupRequest.pan.isEmpty) {
+    // if (signupRequest.relationshipManager.isEmpty) {
+    //   onError("Please enter relationship manager");
+    //   return false;
+    // }
+
+    if (signupRequest.pan == null || signupRequest.pan.isEmpty) {
       onError("Please enter pancard number");
       return false;
     }
 
-    if (signupRequest.reraID.isEmpty) {
-      onError("Please enter rera reg. id");
-      return false;
-    }
+    // if (signupRequest.reraID.isEmpty) {
+    //   onError("Please enter rera reg. id");
+    //   return false;
+    // }
 
     return true;
   }
@@ -556,5 +582,8 @@ class _SignupScreenState extends State<SignupScreen> with CodeAutoFill implement
   }
 
   @override
-  void onSignupGuestSuccessfully(SignupResponse signupResponse) {}
+  void onSignupGuestSuccessfully(SignupResponse signupResponse) {
+    Navigator.pop(context);
+    Navigator.pushNamed(context, Screens.kCPEventGuestScreen, arguments: widget.eventId);
+  }
 }

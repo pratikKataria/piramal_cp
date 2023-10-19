@@ -28,6 +28,7 @@ class EndPoints {
   static final String DELETE_LEAD = BASE_URL + "/CP_Mobile_App/DeleteCplead";
   static final String CREATE_LEAD = BASE_URL + "/CP_Mobile_App/CPLeadDetails";
   static final String CP_EVENT_LIST = BASE_URL + "/CP_Mobile_App/CPEvents";
+  static final String CP_EVENT_GUEST_LIST = BASE_URL + "/CP_Mobile_App/newCPEvent";
   static final String CP_EVENT_AVAILABILITY = BASE_URL + "/CP_Mobile_App/CPEventsAvailability";
   static final String ALL_PROJECT_LIST = BASE_URL + "/CP_Mobile_App/Projects";
   static final String CURRENT_PROMOTIONS = BASE_URL + "/CP_Mobile_App/CurrentPromotionsDetails";
@@ -38,6 +39,7 @@ class EndPoints {
   static final String PROJECT_UNIT_DETAILS = BASE_URL + "/CP_Mobile_App/CustomerUnitdetails";
   static final String GET_R_MANAGER_LIST = BASE_URL + "/CP_Mobile_App/RManagerList";
   static final String SIGN_UP = BASE_URL + "/CP_Mobile_App/CPEmpanelmentSignup";
+  static final String SIGN_UP_GUEST = BASE_URL + "/CP_Mobile_App/newCPSignUp";
   static final String CP_EMP_DOC_UPLOAD = BASE_URL + "/CP_Mobile_App/CPEmpalDocUpload";
   static final String MY_ASSIST = BASE_URL + "/CP_Mobile_App/MyAssist";
   static final String MY_PROFILE = BASE_URL + "/CP_Mobile_App/ProfileDetails";
@@ -68,6 +70,7 @@ class EndPoints {
   static final String CP_APP_OFFER_VIDEOS = BASE_URL + "/CP_Mobile_App/CP_App_Offer_Videos";
   static final String CP_CURRENT_PROMO_BLOCKER = BASE_URL + "/CP_Mobile_App/CP_App_Page_Bloclkers";
   static final String CP_APP_BANNER = BASE_URL + "/CP_Mobile_App/CP_App_Banner";
+  static final String UPDATE_ACTUAL_PAX_SIZE = BASE_URL + "/CP_Mobile_App/updateActualPaxsize";
 
   //Ticket Module
   static final String GET_TICKETS = BASE_URL + "/CP_Mobile_App/getCPCasesList";

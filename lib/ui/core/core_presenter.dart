@@ -17,6 +17,7 @@ import 'package:piramal_channel_partner/ui/core/login/model/token_response.dart'
 import 'package:piramal_channel_partner/ui/core/signup/model/document_upload_request.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/document_upload_response.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/relation_manager_list_response.dart';
+import 'package:piramal_channel_partner/ui/core/signup/model/signup_guest_request.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/signup_request.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/signup_response.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/signup_validation_check_response.dart';
@@ -273,6 +274,39 @@ class CorePresenter extends BasePresenter {
         UploadDocumentView signUpView = _v as UploadDocumentView;
         if (signupResponse.returnCode)
           signUpView.onSignupSuccessfully(signupResponse);
+        else
+          signUpView.onError(signupResponse.message);
+      })
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
+        ApiErrorParser.getResult(e, _v);
+      });
+  }
+
+
+  void singUpGuest(BuildContext context, SignupGuestRequest request) async {
+    //check for internal token
+    if (await AuthUser.getInstance().hasToken()) {
+      _v.onError("Token not found");
+      return;
+    }
+
+    //check network
+    if (!await NetworkCheck.check()) return;
+
+
+    request.tnCFlag = true;
+    request.typeoffirm = "Individual";
+
+    Dialogs.showLoader(context, "Please wait creating user ...");
+    apiController.post(EndPoints.SIGN_UP_GUEST, body: request.toJson(), headers: await Utility.header())
+      ..then((response) async {
+        await Dialogs.hideLoader(context);
+        Utility.log(tag, response.data);
+        SignupResponse signupResponse = SignupResponse.fromJson(response.data);
+        SignupView signUpView = _v as SignupView;
+        if (signupResponse.returnCode)
+          signUpView.onSignupGuestSuccessfully(signupResponse);
         else
           signUpView.onError(signupResponse.message);
       })

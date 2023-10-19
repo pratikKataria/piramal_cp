@@ -37,6 +37,7 @@ class Assets {
   static const String imagesIcPlay = 'assets/images/ic_play.png';
   static const String imagesIcProjectRedirect = 'assets/images/ic_project_redirect.png';
   static const String imagesIcProjects = 'assets/images/ic_projects.png';
+  static const String imagesIcQrCode = 'assets/images/ic_qr_code.png';
   static const String imagesIcSetting = 'assets/images/ic_setting.png';
   static const String imagesIcTodayFollowup = 'assets/images/ic_today_followup.png';
   static const String imagesIcTower = 'assets/images/ic_tower.png';

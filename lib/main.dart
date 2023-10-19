@@ -24,8 +24,10 @@ import 'package:piramal_channel_partner/ui/bottomNavigationContainer/bottom_navi
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/home/model/booking_response.dart';
 import 'package:piramal_channel_partner/ui/constructionUpdates/construction_update_screen.dart';
 import 'package:piramal_channel_partner/ui/core/signup/signup_screen.dart';
+import 'package:piramal_channel_partner/ui/core/signup/signup_screen_guest.dart';
 import 'package:piramal_channel_partner/ui/core/uploadDocument/upload_document_screen.dart';
 import 'package:piramal_channel_partner/ui/cpEvent/cp_event_screen.dart';
+import 'package:piramal_channel_partner/ui/cpEvent/cp_event_screen_guest.dart';
 import 'package:piramal_channel_partner/ui/currentPromotions/current_promotions_screen.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/booked/booked_customer_profile_detail_Screen.dart';
 import 'package:piramal_channel_partner/ui/customerProfile/walkin/walkin_customer_profile_detail_Screen.dart';
@@ -37,6 +39,8 @@ import 'package:piramal_channel_partner/ui/myAssit/projectList/project_screen.da
 import 'package:piramal_channel_partner/ui/myProfile/my_profile.dart';
 import 'package:piramal_channel_partner/ui/myProfile/uploadPendingDocument/upload_pending_document_screen.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/projectList/project_screen.dart';
+import 'package:piramal_channel_partner/ui/qrCodeScanner/qr_code_scanner_screen.dart';
+import 'package:piramal_channel_partner/ui/qrCodeScanner/qr_code_scanner_screen.dart';
 import 'package:piramal_channel_partner/ui/videoScreen/video_screen.dart';
 import 'package:piramal_channel_partner/utils/scroll_behavior.dart';
 import 'package:provider/provider.dart';
@@ -220,6 +224,9 @@ class MyApp extends StatelessWidget {
             case Screens.kCPEventScreen:
               return RouteTransition(widget: CPEventScreen());
               break;
+            case Screens.kCPEventGuestScreen:
+              return RouteTransition(widget: CPEventGuestScreen(settings.arguments));
+              break;
             case Screens.kMyAssistScreen:
               return RouteTransition(widget: MyAssistScreen(settings.arguments));
               break;
@@ -240,6 +247,12 @@ class MyApp extends StatelessWidget {
               break;
             case Screens.kSignupScreen:
               return RouteTransition(widget: SignupScreen(settings.arguments));
+              break;
+            case Screens.kSignupScreenGuest:
+              return RouteTransition(widget: SignupScreenGuest(settings.arguments));
+              break;
+            case Screens.kQrCodeScannerScreen:
+              return RouteTransition(widget: QRCodeScannerScreen(settings.arguments));
               break;
             case Screens.kUploadDocumentScreen:
               return RouteTransition(widget: UploadDocumentScreen(settings.arguments));
@@ -270,7 +283,7 @@ class MyApp extends StatelessWidget {
               break;
           }
         },
-        home: checkAuthUser(authResult),
+        home:checkAuthUser(authResult),
       ),
     );
   }

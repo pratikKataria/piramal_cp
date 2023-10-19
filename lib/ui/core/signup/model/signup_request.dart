@@ -16,7 +16,6 @@
 class SignupRequest {
   String mobileOTP;
   String emailOTP;
-
   SignupRequest({
     String name,
     String primaryContactPerson,

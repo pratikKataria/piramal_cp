@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:piramal_channel_partner/api/api_controller_expo.dart';
 import 'package:piramal_channel_partner/api/api_end_points.dart';
@@ -57,6 +59,53 @@ class CPEventPresenter {
         await Dialogs.hideLoader(context);
         ApiErrorParser.getResult(e, _v);
       });
+  }
+
+  void getEventGuestList(BuildContext context, String eventId) async {
+    try {
+      //check for internal token
+      if (await AuthUser.getInstance().hasToken()) {
+        _v.onError("Token not found");
+        return;
+      }
+
+      //check network
+      if (!await NetworkCheck.check()) {
+        _v.onError("Network Error");
+        return;
+      }
+
+      Map<String, dynamic> event = jsonDecode(eventId);
+      // String uID = await Utility.uID();
+      var body = {"parentCPEventId": event["eventId"]}; /*001p000000wiszQ*/
+
+      Dialogs.showLoader(context, "Fetching cp event data ...");
+      apiController.post(EndPoints.CP_EVENT_GUEST_LIST,body: body,   headers: await Utility.header())
+        ..then((response) async {
+          await Dialogs.hideLoader(context);
+          List<CpEventResponse> brList = [];
+          var listOfDynamic = response.data as List;
+          listOfDynamic.forEach((element) => brList.add(CpEventResponse.fromJson(element)));
+
+          CpEventResponse bookingResponse = brList.isNotEmpty ? brList.first : null;
+          if (bookingResponse == null) {
+            _v.onError(Screens.kErrorTxt);
+            return;
+          }
+
+          if (bookingResponse.returnCode) {
+            _v.onEventFetched(brList);
+          } else {
+            _v.onError(bookingResponse.message);
+          }
+        })
+        ..catchError((e) async {
+          await Dialogs.hideLoader(context);
+          ApiErrorParser.getResult(e, _v);
+        });
+    } catch(xe) {
+      Utility.showErrorToastB(context, "Incorrect QR Code");
+    }
   }
 
   void revertToEvent(BuildContext context, String status, String size, String eventId) async {

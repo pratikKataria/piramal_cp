@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:piramal_channel_partner/generated/assets.dart';
 import 'package:piramal_channel_partner/global/variables.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
@@ -104,6 +105,24 @@ class _LoginScreenState extends State<LoginScreen> with CodeAutoFill implements 
                   child: Text(kCreateAccountText, style: subTextStyle),
                 ),
               ),
+              InkWell(
+                onTap: () {
+                   Navigator.pushNamed(context, Screens.kQrCodeScannerScreen, arguments: Screens.kLoginScreen);
+                },
+                child: Container(
+                  padding: EdgeInsets.all(10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(Assets.imagesIcQrCode, height: 24.0),
+                      horizontalSpace(10.0),
+                      Text("Scan Event", style: subTextStyle),
+                    ],
+                  ),
+                ),
+              ),
+
+
               invisibleOtpInputField(),
             ],
           ),
