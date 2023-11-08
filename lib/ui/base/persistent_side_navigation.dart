@@ -77,7 +77,7 @@ class PersistentSideNavigation extends StatelessWidget {
               line(),*/
 
               verticalSpace(vSpacing),
-              sideNavButton(provider, Screens.kDueInvoiceScreen, Images.kIconBrochure, "Due Invoice"),
+              sideNavButton(provider, Screens.kDueInvoiceScreen, Images.kIconBrochure, "Invoice"),
               verticalSpace(vSpacing),
               line(),
 
@@ -100,11 +100,11 @@ class PersistentSideNavigation extends StatelessWidget {
               line(),
 
 
-              // //My Assists
-              // verticalSpace(vSpacing),
-              // sideNavButton(provider, Screens.kTicketsScreen, Assets.imagesTicket, "Helpdesk"),
-              // verticalSpace(vSpacing),
-              // line(),
+              //My Tickets
+              verticalSpace(vSpacing),
+              sideNavButton(provider, Screens.kTicketsScreen, Assets.imagesTicket, "Helpdesk"),
+              verticalSpace(vSpacing),
+              line(),
 
               //Settings
               verticalSpace(vSpacing),

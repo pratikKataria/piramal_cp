@@ -18,6 +18,8 @@ class StackSetDSA<E> {
   bool get isEmpty => _list.isEmpty;
   bool get isNotEmpty => _list.isNotEmpty;
 
+  int get size => _list.length;
+
   @override
   String toString() => _list.toString();
 }

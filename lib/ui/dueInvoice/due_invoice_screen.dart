@@ -59,7 +59,7 @@ class _DueInvoiceScreenState extends State<DueInvoiceScreen> implements HomeView
             verticalSpace(22.0),
             Container(
                 margin: EdgeInsets.symmetric(horizontal: 20.0),
-                child: Text("Due Invoices (${bookingList.length})", style: textStyle24px500w)),
+                child: Text("Invoices (${bookingList.length})", style: textStyle24px500w)),
             verticalSpace(33.0),
             Expanded(
               child: RefreshListView(
