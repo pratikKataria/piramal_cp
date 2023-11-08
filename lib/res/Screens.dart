@@ -43,5 +43,5 @@ abstract class Screens {
 
    static const kErrorTxt = "No Data Found";
 
-  static const kQrCodeScannerScreen = "QrCodeScannerScreenGuest";
+  static const kQrCodeScannerScreen = "Scan Event";
 }

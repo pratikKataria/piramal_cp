@@ -3,6 +3,7 @@ import 'package:piramal_channel_partner/res/Screens.dart';
 import 'package:piramal_channel_partner/ui/base/provider/base_provider.dart';
 import 'package:piramal_channel_partner/ui/bottomNavigationContainer/todayFu/today_fu_screen.dart';
 import 'package:piramal_channel_partner/ui/core/uploadDocument/upload_document_screen.dart';
+import 'package:piramal_channel_partner/ui/qrCodeScanner/qr_code_scanner_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'explore/explore_screen.dart';
@@ -23,7 +24,7 @@ class BottomNavigationBaseScreen extends StatelessWidget {
   void initState() async {
     allDestinations = {
       Screens.kHomeScreen: HomeScreen(key: hGK),
-      Screens.kExploreScreen: ExploreScreen(),
+      Screens.kQrCodeScannerScreen: QRCodeScannerScreen(null),
       Screens.kUpload: UploadScreen(),
       Screens.kNotificationsScreen: NotificationScreen(key: nGK),
       Screens.kTodayFollowUpScreen: TodayFollowUpScreen(),

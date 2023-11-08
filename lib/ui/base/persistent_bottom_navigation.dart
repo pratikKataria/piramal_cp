@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:piramal_channel_partner/controller/bottom_navigation_controller.dart';
+import 'package:piramal_channel_partner/generated/assets.dart';
 import 'package:piramal_channel_partner/res/AppColors.dart';
 import 'package:piramal_channel_partner/res/Fonts.dart';
 import 'package:piramal_channel_partner/res/Images.dart';
@@ -25,7 +26,7 @@ class PersistentBottomNavigation extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           buildBottomNavigationButton(Images.kIconHome, "Home", () {}, context, homeBtnKey),
-          buildBottomNavigationButton(Images.kIconExplore, "Explore", () {}, context, null),
+          buildBottomNavigationButton(Assets.imagesIcQrCode, Screens.kQrCodeScannerScreen, () {}, context, null),
           buildBottomNavigationButton(Images.kIconUpload, Screens.kUpload, () {}, context, uploadBtnKey),
           buildBottomNavigationButton(Images.kIconTodayFollowup, Screens.kTodayFollowUpScreen, () {}, context, todayFuBtnKey),
           buildBottomNavigationButton(Images.kIconNotification, "Notifications", () {}, context, notificationBtnKey),

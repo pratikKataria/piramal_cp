@@ -94,10 +94,10 @@ class PersistentSideNavigation extends StatelessWidget {
               line(),
 
               //QR Scanner
-              verticalSpace(vSpacing),
-              sideNavButton(provider, Screens.kQrCodeScannerScreen, Assets.imagesIcQrCode, "Scan Event"),
-              verticalSpace(vSpacing),
-              line(),
+              // verticalSpace(vSpacing),
+              // sideNavButton(provider, Screens.kQrCodeScannerScreen, Assets.imagesIcQrCode, "Scan Event"),
+              // verticalSpace(vSpacing),
+              // line(),
 
 
               //My Tickets
