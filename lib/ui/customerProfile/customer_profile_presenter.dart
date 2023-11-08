@@ -364,4 +364,46 @@ class CustomerProfilePresenter extends BasePresenter {
         ApiErrorParser.getResult(e, _v);
       });
   }
+
+  void uploadTDS(BuildContext context, String brokerageID, String file) async {
+    //check for internal token
+    if (await AuthUser.getInstance().hasToken()) {
+      _v.onError("Token not found");
+      return;
+    }
+
+    //check network
+    if (!await NetworkCheck.check()) {
+      _v.onError("Network Error");
+      return;
+    }
+
+    // String uId = await Utility.uID();
+    // var body = {"CustomerAccountID": "$uId", "opportunityid": "$otyID"};
+    var body = {
+      "BrokerageID": brokerageID,
+      "fileType": "pdf",
+      "attachFile": file
+    };
+
+    // var body = {"CustomerAccountID": "001p000000y1SqWAAU", "opportunityid": "006p000000AeMAtAAN"};
+    Dialogs.showLoader(context, "Uploading file ...");
+    apiController.post(EndPoints.UPLOAD_TDS, body: body, headers: await Utility.header())
+      ..then((response) async {
+        await Dialogs.hideLoader(context);
+
+        GenerateInvoiceResponse bookingResponse = GenerateInvoiceResponse.fromJson(response.data);
+
+        if (bookingResponse.returnCode) {
+          _v.onTdsDocumentUploaded();
+        } else {
+          _v.onError(bookingResponse.message);
+        }
+      })
+      ..catchError((e) async {
+        await Dialogs.hideLoader(context);
+        ApiErrorParser.getResult(e, _v);
+      });
+  }
+
 }

@@ -21,20 +21,29 @@ class InvoiceResponse {
   bool _invoiceNumberGenerated;
   bool _generatedInvoice;
   bool _showInvoiceNumber;
+  String tdsDownloadLink;
 
   bool get showInvoiceNumber => _showInvoiceNumber;
+
   String get statusChangeDate => _statusChangeDate;
+
   String get status => _status;
+
   bool get returnCode => _returnCode;
+
   int get position => _position;
+
   String get message => _message;
+
   String get currentStatus => _currentStatus;
+
   String get brokerageID => _brokerageID;
+
   String get bookingApprovalDate => _bookingApprovalDate;
+
   bool get generatedInvoice => _generatedInvoice;
+
   bool get invoiceNumberGenerated => _invoiceNumberGenerated;
-
-
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -50,6 +59,7 @@ class InvoiceResponse {
     map['GenerateInvoice'] = _generatedInvoice;
     map['ShowInvoiceNumber'] = _showInvoiceNumber;
     map['BookingApprovalDate'] = BookingApprovalDate;
+    map['tdsDownloadUrl'] = tdsDownloadLink;
 
     return map;
   }
@@ -67,5 +77,6 @@ class InvoiceResponse {
     _generatedInvoice = json['GenerateInvoice'];
     _showInvoiceNumber = json['ShowInvoiceNumber'];
     BookingApprovalDate = json['BookingApprovalDates'];
+    tdsDownloadLink = json['tdsDownloadUrl'];
   }
 }

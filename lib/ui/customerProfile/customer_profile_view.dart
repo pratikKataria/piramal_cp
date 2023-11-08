@@ -12,4 +12,5 @@ abstract class CustomerProfileView extends BaseView {
   void onTermsAndConditionFetched(String termsAndCondition);
   void onInvoiceNumberSaved();
   void onPaymentAcknowledged();
+  void onTdsDocumentUploaded();
 }

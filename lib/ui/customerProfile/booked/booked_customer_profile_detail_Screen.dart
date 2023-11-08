@@ -33,7 +33,6 @@ class BookedCustomerProfileDetailScreen extends StatefulWidget {
 }
 
 class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfileDetailScreen> implements CustomerProfileView {
-
   CustomerProfilePresenter _presenter;
   InvoiceResponse response;
   InvoiceNumberRequest _invoiceNumberRequest = InvoiceNumberRequest();
@@ -203,11 +202,17 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
               //Invoice number input layout
               if ((response?.showInvoiceNumber ?? false) && !_invoiceNumberGenerated) invoiceNumberInput(),
 
+              //Update TDS Generate invoice layout
+              if (response?.tdsDownloadLink != null && response?.tdsDownloadLink?.isEmpty) uploadTDSWidget(),
+
               //Generate invoice layout
               if (_invoiceNumberGenerated && !_invoiceGenerated) generateInvoiceWidget(),
 
               //Download invoice layout
               if (_invoiceNumberGenerated && _invoiceGenerated) downloadButtonWidget(),
+
+              //Download TDS  layout
+              if (response?.tdsDownloadLink != null && response?.tdsDownloadLink?.isNotEmpty) downloadTDSWidget(),
 
               verticalSpace(25.0),
               Row(
@@ -254,6 +259,33 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
     );
   }
 
+  Container uploadTDSWidget() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 6.0),
+      margin: EdgeInsets.only(bottom: 25.0),
+      color: AppColors.screenBackgroundColor,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text("Upload TDS", style: textStyleRegular16px500px),
+          PmlButton(
+            width: 30,
+            height: 30,
+            onTap: () async {
+              List<String> file = await Utility.pickFile(context);
+              String fileBytes = file[0];
+              // String name = file[1];
+              setState(() {});
+              if (fileBytes != null && fileBytes.isNotEmpty) _presenter.uploadTDS(context, response.brokerageID, fileBytes);
+            },
+            child: Icon(Icons.upload, size: 12, color: AppColors.white),
+          )
+        ],
+      ),
+    );
+  }
+
   Container generateInvoiceWidget() {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 6.0),
@@ -269,6 +301,30 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
             height: 30,
             padding: EdgeInsets.all(8.0),
             onTap: () => _presenter.postGenerateInvoice(context, widget?.response?.sfdcid, response?.brokerageID),
+            child: Image.asset(
+              Images.kIconDownload,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Container downloadTDSWidget() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 6.0),
+      margin: EdgeInsets.only(bottom: 25.0),
+      color: AppColors.screenBackgroundColor,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text("Download TDS", style: textStyleRegular16px500px),
+          PmlButton(
+            width: 30,
+            height: 30,
+            padding: EdgeInsets.all(8.0),
+            onTap: () => Utility.launchUrlX(context, response.tdsDownloadLink),
             child: Image.asset(
               Images.kIconDownload,
             ),
@@ -490,7 +546,7 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
                 buildDialogRow("Carpet Area", "${projectUnitResponse?.carpetarea}"),
                 buildDialogRow("Agreement Value", "${projectUnitResponse?.totalAgreementValue}"),
                 verticalSpace(10.0),
-             /*   Text("Payment details", style: textStyle14px500w),
+                /*   Text("Payment details", style: textStyle14px500w),
                 buildDialogRow("Payment to Broker by BN Status", "${projectUnitResponse?.paymentToBrokerByBNStatus ?? ""}"),
                 buildDialogRow("Payment date", "${projectUnitResponse?.paymentDate ?? ""}"),
                 buildDialogRow("Amount Paid", "${projectUnitResponse?.amountPaid ?? ""}"),
@@ -669,8 +725,8 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
         print('onClickOverlay: $target');
       },
       onSkip: () {
-          Utility.setTourCompleted(Screens.kSettingsScreen);
-   return true;
+        Utility.setTourCompleted(Screens.kSettingsScreen);
+        return true;
       },
     );
   }
@@ -687,7 +743,6 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
         contents: [
           TargetContent(
             align: ContentAlign.bottom,
-
             builder: (context, controller) {
               return Column(
                 mainAxisSize: MainAxisSize.min,
@@ -713,7 +768,6 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
         contents: [
           TargetContent(
             align: ContentAlign.bottom,
-
             builder: (context, controller) {
               return Column(
                 mainAxisSize: MainAxisSize.min,
@@ -738,7 +792,6 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
         contents: [
           TargetContent(
             align: ContentAlign.bottom,
-
             builder: (context, controller) {
               return Column(
                 mainAxisSize: MainAxisSize.min,
@@ -764,7 +817,6 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
         contents: [
           TargetContent(
             align: ContentAlign.bottom,
-
             builder: (context, controller) {
               return Column(
                 mainAxisSize: MainAxisSize.min,
@@ -782,8 +834,6 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
     return targets;
   }
 
-
-
   @override
   void onInvoiceNumberSaved() {
     _invoiceNumberGenerated = true;
@@ -794,6 +844,11 @@ class _BookedCustomerProfileDetailScreenState extends State<BookedCustomerProfil
   void onPaymentAcknowledged() {
     Utility.showSuccessToastB(context, "Payment Acknowledged");
     Navigator.pop(context);
+  }
+
+  @override
+  void onTdsDocumentUploaded() {
+    Utility.showSuccessToastB(context, "TDS Document Uploaded");
   }
 }
 // '"Eligible to Raise Invoice"

@@ -395,6 +395,11 @@ class _WalkinCustomerProfileDetailScreenState extends State<WalkinCustomerProfil
 
   @override
   void onPaymentAcknowledged() {}
+
+  @override
+  void onTdsDocumentUploaded() {
+    // TODO: implement onTdsDocumentUploaded
+  }
 }
 
 /*

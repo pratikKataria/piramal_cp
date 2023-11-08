@@ -71,6 +71,7 @@ class EndPoints {
   static final String CP_CURRENT_PROMO_BLOCKER = BASE_URL + "/CP_Mobile_App/CP_App_Page_Bloclkers";
   static final String CP_APP_BANNER = BASE_URL + "/CP_Mobile_App/CP_App_Banner";
   static final String UPDATE_ACTUAL_PAX_SIZE = BASE_URL + "/CP_Mobile_App/updateActualPaxsize";
+  static final String UPLOAD_TDS = BASE_URL + "/CP_Mobile_App/uploadTDS";
 
   //Ticket Module
   static final String GET_TICKETS = BASE_URL + "/CP_Mobile_App/getCPCasesList";
