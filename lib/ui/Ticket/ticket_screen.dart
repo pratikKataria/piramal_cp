@@ -509,12 +509,8 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
                             Text("Feedback", style: textStyle14px500w),
                             verticalSpace(20.0),
                             Text("Case No: ${feedback.caseNumber}", style: textStyle14px500w),
-                            verticalSpace(4.0),
-                            Text("Description: ${feedback.detailCaseRemarks == null ? "" : feedback.detailCaseRemarks}", style: textStyle14px500w),
-                            verticalSpace(4.0),
-                            Text("Case Remarks: ${feedback.detailCaseRemarks == null ? "" : feedback.detailCaseRemarks}", style: textStyle14px500w),
-                            verticalSpace(4.0),
-                            Text("Closing Comments: ${feedback.case_Close_Comments == null ? "" : feedback.case_Close_Comments}", style: textStyle14px500w),
+                            // verticalSpace(4.0),
+                            // Text("Description: ${feedback.detailCaseRemarks == null ? "" : feedback.detailCaseRemarks}", style: textStyle14px500w),
                             verticalSpace(4.0),
                             Wrap(
                               children: [
@@ -564,6 +560,10 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
                               ),
                               verticalSpace(10.0),
                             ],
+                            verticalSpace(4.0),
+                            Text("Case Remarks: ${feedback.detailCaseRemarks == null ? "" : feedback.detailCaseRemarks}", style: textStyle14px500w),
+                            verticalSpace(4.0),
+                            Text("Closing Comments: ${feedback.case_Close_Comments == null ? "" : feedback.case_Close_Comments}", style: textStyle14px500w),
                             verticalSpace(20.0),
                             Text("Description (Max 1000 characters)", style: textStyle14px500w),
                             verticalSpace(10.0),
@@ -603,7 +603,7 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
                                 GestureDetector(
                                   onTap: () {
                                     selectedIconIndex = 0;
-                                    rating = selectedIconIndex.toString();
+                                    rating = (selectedIconIndex+1).toString();
                                     alertDialogState((){});
                                   },
                                   child: Container(
@@ -623,7 +623,7 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
                                 GestureDetector(
                                   onTap: () {
                                     selectedIconIndex = 1;
-                                    rating = selectedIconIndex.toString();
+                                    rating = (selectedIconIndex+1).toString();
                                     alertDialogState((){});
                                   },
                                   child: Container(
@@ -643,7 +643,7 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
                                 GestureDetector(
                                   onTap: () {
                                     selectedIconIndex = 2;
-                                    rating = selectedIconIndex.toString();
+                                    rating = (selectedIconIndex+1).toString();
                                     alertDialogState((){});
                                   },
                                   child: Container(

@@ -24,6 +24,7 @@ import 'package:piramal_channel_partner/widgets/refresh_list_view.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 import 'due_invoice_presenter.dart';
+import 'model/invoices_response.dart';
 
 class DueInvoiceScreen extends StatefulWidget {
   const DueInvoiceScreen({Key key}) : super(key: key);
@@ -32,20 +33,27 @@ class DueInvoiceScreen extends StatefulWidget {
   _DueInvoiceScreenState createState() => _DueInvoiceScreenState();
 }
 
-class _DueInvoiceScreenState extends State<DueInvoiceScreen> implements HomeView {
+class _DueInvoiceScreenState extends State<DueInvoiceScreen>  with SingleTickerProviderStateMixin  implements DueInvoiceView {
   final subTextStyle = textStyleSubText14px500w;
   final mainTextStyle = textStyle14px500w;
 
-  HomePresenter projectPresenter;
+  TabController _tabController;
+
+  DueInvoicePresenter projectPresenter;
   List<ProjectListResponse> listOfProjects = [];
+  List<PaidInvoicesList> paidInvoicesList = [];
+  List<DueInvoicesList> dueInvoicesList = [];
 
   TutorialCoachMark globalTutorialCoachMark;
 
   @override
   void initState() {
     super.initState();
-    projectPresenter = HomePresenter(this);
-    projectPresenter.getBookingListWithLoader(context);
+    projectPresenter = DueInvoicePresenter(this);
+    projectPresenter.getInvoices(context);
+
+    _tabController = TabController(length: 2, vsync: this);
+
   }
 
   @override
@@ -56,20 +64,57 @@ class _DueInvoiceScreenState extends State<DueInvoiceScreen> implements HomeView
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            verticalSpace(22.0),
-            Container(
-                margin: EdgeInsets.symmetric(horizontal: 20.0),
-                child: Text("Invoices (${bookingList.length})", style: textStyle24px500w)),
-            verticalSpace(33.0),
+            verticalSpace(10.0),
+             buildTabs(),
+            verticalSpace(8.0),
             Expanded(
-              child: RefreshListView(
-                tourKey: myProfileProjectCard,
-                onRefresh: () {
-                  projectPresenter.getBookingList(context);
-                },
-                children: bookingList.map<Widget>((e) => BookingCardWidget(e, projectPresenter)).toList(),
+              child: TabBarView(
+                controller: _tabController,
+                // physics: NeverScrollableScrollPhysics(),
+                children: [
+                  if (paidInvoicesList.isEmpty)
+                    RefreshListView(
+                      onRefresh: () {
+                        // _presenter.getTickets(context);
+                      },
+                      children: [
+                        Container(height: Utility.screenHeight(context) * 0.3),
+                        Center(child: Text("No Invoices Present")),
+                      ],
+                    ),
+                  if (paidInvoicesList.isNotEmpty)
+                    RefreshListView(
+                      onRefresh: () {
+                        // _presenter.getTickets(context);
+                      },
+                      children: [
+                        ...paidInvoicesList.map((e) => BookingCardWidget(BookingResponse.fromJson(e.toJson()), projectPresenter)).toList(),
+                      ] /*openTickets.map<Widget>((e) => cardViewTicket(e)).toList()*/,
+                    ),
+                  if (dueInvoicesList.isEmpty)
+                    RefreshListView(
+                      onRefresh: () {
+                        // _presenter.getTickets(context);
+                      },
+                      children: [
+                        Container(height: Utility.screenHeight(context) * 0.3),
+                        Center(child: Text("No Invoices Present", style: textStyle14px500w)),
+                      ],
+                    ),
+                  if (dueInvoicesList.isNotEmpty)
+                    RefreshListView(
+                      onRefresh: () {
+                        // _presenter.getTickets(context);
+                      },
+                      children: [
+                        ...dueInvoicesList.map((e) => BookingCardWidget(BookingResponse.fromJson(e.toJson()), projectPresenter)).toList(),
+                        // ...dueInvoicesList.map((e) => cardViewTicketClosed(e)).toList(),
+                      ] /*closedTickets.map<Widget>((e) => cardViewTicket(e)).toList()*/,
+                    ),
+                ],
               ),
             ),
+
           ],
         ),
       ),
@@ -322,6 +367,48 @@ class _DueInvoiceScreenState extends State<DueInvoiceScreen> implements HomeView
         ),
         verticalSpace(16.0),
         line()
+      ],
+    );
+  }
+
+
+
+  @override
+  void onInvoicesListFetched(InvoicesResponse invoiceList) {
+    paidInvoicesList.clear();
+    dueInvoicesList.clear();
+    invoiceList.paidInvoicesList.forEach((element) {
+      paidInvoicesList.add(element);
+    });
+
+    invoiceList.dueInvoicesList.forEach((element) {
+      dueInvoicesList.add(element);
+    });
+    setState(() {});
+  }
+
+  TabBar buildTabs() {
+    return TabBar(
+      controller: _tabController,
+      indicatorColor: AppColors.colorPrimary,
+      indicatorSize: TabBarIndicatorSize.tab,
+      indicator: ShapeDecoration(shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(30.0))), color: Colors.red),
+      indicatorPadding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 6.0),
+      labelPadding: EdgeInsets.symmetric(horizontal: 5.0),
+      unselectedLabelStyle: textStyleDark14px500w,
+      unselectedLabelColor: AppColors.textColor,
+      labelColor: AppColors.white,
+      labelStyle: textStyleRegular16px500w,
+      onTap: (int index) {
+        setState(() {});
+      },
+      tabs: [
+        Tab(
+          text: "Paid",
+        ),
+        Tab(
+          text: "Due",
+        ),
       ],
     );
   }

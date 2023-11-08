@@ -77,7 +77,7 @@ class PersistentSideNavigation extends StatelessWidget {
               line(),*/
 
               verticalSpace(vSpacing),
-              sideNavButton(provider, Screens.kDueInvoiceScreen, Images.kIconBrochure, "Invoice"),
+              sideNavButton(provider, Screens.kDueInvoiceScreen, Images.kIconBrochure, "Invoices"),
               verticalSpace(vSpacing),
               line(),
 

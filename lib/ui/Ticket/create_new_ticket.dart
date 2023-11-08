@@ -146,7 +146,7 @@ class _CreateNewTicketState extends State<CreateNewTicket> implements TicketView
                   children: [
                     Positioned(
                       top: 0.0,
-                      child: Text("${createTicketRequest.caseSubType.replaceAll(";", ",")}".notNullEmpty, style: textStyleSubText14px500w),
+                      child: Text("${createTicketRequest?.caseSubType?.replaceAll(";", ",")}"?.notNullEmpty, style: textStyleSubText14px500w),
                     ),
                     Container(
                       width: Utility.screenWidth(context) * .70,

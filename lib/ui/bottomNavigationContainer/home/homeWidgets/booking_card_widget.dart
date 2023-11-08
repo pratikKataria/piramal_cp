@@ -65,7 +65,7 @@ class BookingCardWidget extends StatelessWidget {
                     // Text("Next Follow up: ${Utility.formatDate(_bookingResponse.nextFollowUp)}", style: textStyleSubText14px500w),
                   ],
                 ),
-                if (_bookingResponse.CRMApproved)
+                if (_bookingResponse.CRMApproved != null && _bookingResponse.CRMApproved)
                   Container(
                     key: _bookingResponse.mapOfKeys["homeBookingStatus"],
                     padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
@@ -128,8 +128,8 @@ class BookingCardWidget extends StatelessWidget {
                     borderRadius: BorderRadius.circular(6),
                     color: AppColors.chipColor,
                   ),
-                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-                  child: Text("${_bookingResponse?.projectFinalized ?? ""}", style: textStyle14px500w),
+                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 0.0),
+                  child: Center(child: Text("${_bookingResponse?.projectFinalized ?? ""}", style: textStyle14px500w)),
                 ),
               ],
             ),
