@@ -184,7 +184,7 @@ class BaseScreen extends StatelessWidget {
     globalTutorialCoachMark = TutorialCoachMark(
       targets: _createTargets(),
       colorShadow: AppColors.colorPrimary,
-      hideSkip: true,
+      hideSkip: false,
       paddingFocus: 10,
       opacityShadow: 0.8,
       onFinish: () {
@@ -202,7 +202,7 @@ class BaseScreen extends StatelessWidget {
         print('onClickOverlay: $target');
       },
       onSkip: () {
-        print("skip");
+          Utility.setTourCompleted(Screens.kSettingsScreen);return true;
       },
     );
   }

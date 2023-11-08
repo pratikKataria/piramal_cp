@@ -671,7 +671,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
     walkinTutorialCoachMark = TutorialCoachMark(
       targets: _createTargetsWalking(),
       colorShadow: AppColors.colorPrimary,
-      hideSkip: true,
+      hideSkip: false,
       paddingFocus: 10,
       opacityShadow: 0.8,
       onFinish: () {
@@ -689,7 +689,8 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
         print('onClickOverlay: $target');
       },
       onSkip: () {
-        print("skip");
+          Utility.setTourCompleted(Screens.kSettingsScreen);
+   return true;
       },
     );
   }
@@ -698,7 +699,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
     bookingTutorialCoachMark = TutorialCoachMark(
       targets: _createTargetBooking(),
       colorShadow: AppColors.colorPrimary,
-      hideSkip: true,
+      hideSkip: false,
       paddingFocus: 10,
       opacityShadow: 0.8,
       onFinish: () {
@@ -716,7 +717,8 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
         print('onClickOverlay: $target');
       },
       onSkip: () {
-        print("skip");
+          Utility.setTourCompleted(Screens.kSettingsScreen);
+   return true;
       },
     );
   }
