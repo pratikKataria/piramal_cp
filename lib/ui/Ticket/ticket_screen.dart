@@ -489,7 +489,9 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
         context: context,
         builder: (BuildContext context) {
           String reason = "";
+          int selectedIconIndex;
           return StatefulBuilder(builder: (context, alertDialogState) {
+
             return Center(
               child: ListView(
                 shrinkWrap: true,
@@ -509,6 +511,10 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
                             Text("Case No: ${feedback.caseNumber}", style: textStyle14px500w),
                             verticalSpace(4.0),
                             Text("Description: ${feedback.detailCaseRemarks == null ? "" : feedback.detailCaseRemarks}", style: textStyle14px500w),
+                            verticalSpace(4.0),
+                            Text("Case Remarks: ${feedback.detailCaseRemarks == null ? "" : feedback.detailCaseRemarks}", style: textStyle14px500w),
+                            verticalSpace(4.0),
+                            Text("Closing Comments: ${feedback.case_Close_Comments == null ? "" : feedback.case_Close_Comments}", style: textStyle14px500w),
                             verticalSpace(4.0),
                             Wrap(
                               children: [
@@ -592,39 +598,69 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
                             verticalSpace(20.0),
                             Text("Rating", style: textStyle14px500w),
                             verticalSpace(10.0),
-                            RatingBar.builder(
-                              initialRating: 0,
-                              minRating: 1,
-                              direction: Axis.horizontal,
-                              allowHalfRating: false,
-                              itemCount: 3,
-                              itemSize: 40,
-                              itemBuilder: (context, index) {
-                                switch (index) {
-                                  case 0:
-                                    return Icon(
-                                      Icons.sentiment_very_dissatisfied,
-                                      color: Colors.red,
-                                    );
-                                  case 1:
-                                    return Icon(
+                            Row(
+                              children: <Widget>[
+                                GestureDetector(
+                                  onTap: () {
+                                    selectedIconIndex = 0;
+                                    rating = selectedIconIndex.toString();
+                                    alertDialogState((){});
+                                  },
+                                  child: Container(
+                                    margin: EdgeInsets.all(16.0),
+                                    padding: EdgeInsets.all(12.0),
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: selectedIconIndex == 0 ? AppColors.colorPrimary : Colors.grey,
+                                    ),
+                                    child: Icon(
+                                      Icons.sentiment_dissatisfied,
+                                      size: 24.0,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    selectedIconIndex = 1;
+                                    rating = selectedIconIndex.toString();
+                                    alertDialogState((){});
+                                  },
+                                  child: Container(
+                                    margin: EdgeInsets.all(16.0),
+                                    padding: EdgeInsets.all(12.0),
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: selectedIconIndex == 1 ? AppColors.warm : Colors.grey,
+                                    ),
+                                    child: Icon(
                                       Icons.sentiment_neutral,
-                                      color: Colors.amber,
-                                    );
-
-                                  case 2:
-                                    return Icon(
-                                      Icons.sentiment_very_satisfied,
-                                      color: Colors.green,
-                                    );
-                                }
-                                return Container();
-                              },
-                              // itemBuilder: (context, _) => Icon(Icons.star, color: Colors.amber),
-                              onRatingUpdate: (rat) {
-                                print(rat);
-                                rating = rat.toInt().toString();
-                              },
+                                      size: 24.0,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    selectedIconIndex = 2;
+                                    rating = selectedIconIndex.toString();
+                                    alertDialogState((){});
+                                  },
+                                  child: Container(
+                                    margin: EdgeInsets.all(16.0),
+                                    padding: EdgeInsets.all(12.0),
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: selectedIconIndex == 2 ? AppColors.attendButtonColor : Colors.grey,
+                                    ),
+                                    child: Icon(
+                                      Icons.sentiment_satisfied,
+                                      size: 24.0,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                )
+                              ],
                             ),
                             verticalSpace(20.0),
                             PmlButton(
@@ -810,5 +846,33 @@ class _TicketScreenState extends State<TicketScreen> with SingleTickerProviderSt
     Navigator.pop(context); // close popup;
     _presenter.getTicketsWithoutLoader(context);
     Utility.showSuccessToastB(context, "Feedback submitted");
+  }
+}
+
+class IconItem extends StatelessWidget {
+  final IconData icon;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  IconItem({@required this.icon, @required this.isSelected, @required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: isSelected ? Colors.blue : Colors.grey,
+        ),
+        child: Icon(
+          icon,
+          size: 24.0,
+          color: Colors.white,
+        ),
+      ),
+    );
   }
 }

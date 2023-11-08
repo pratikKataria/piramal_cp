@@ -103,6 +103,7 @@ class ClosedCasesList implements Comparable<ClosedCasesList> {
     dynamic closeDate,
     String caseNumber,
     String caseId,
+    String case_Close_Comments,
   }) {
     _userComments = userComments;
     _type = type;
@@ -117,6 +118,7 @@ class ClosedCasesList implements Comparable<ClosedCasesList> {
     _closeDate = closeDate;
     _caseNumber = caseNumber;
     _caseId = caseId;
+    _case_Close_Comments = case_Close_Comments;
   }
 
   ClosedCasesList.fromJson(dynamic json) {
@@ -133,6 +135,7 @@ class ClosedCasesList implements Comparable<ClosedCasesList> {
     _closeDate = json['close_Date'];
     _caseNumber = json['caseNumber'];
     _caseId = json['caseId'];
+    _case_Close_Comments = json['Case_Close_Comments'];
   }
 
   dynamic _userComments;
@@ -148,6 +151,7 @@ class ClosedCasesList implements Comparable<ClosedCasesList> {
   dynamic _closeDate;
   String _caseNumber;
   String _caseId;
+  String _case_Close_Comments;
 
   ClosedCasesList copyWith({
     dynamic userComments,
@@ -163,6 +167,7 @@ class ClosedCasesList implements Comparable<ClosedCasesList> {
     dynamic closeDate,
     String caseNumber,
     String caseId,
+    String case_Close_Comments,
   }) =>
       ClosedCasesList(
         userComments: userComments ?? _userComments,
@@ -178,6 +183,7 @@ class ClosedCasesList implements Comparable<ClosedCasesList> {
         closeDate: closeDate ?? _closeDate,
         caseNumber: caseNumber ?? _caseNumber,
         caseId: caseId ?? _caseId,
+        case_Close_Comments: case_Close_Comments ?? _case_Close_Comments,
       );
 
   dynamic get userComments => _userComments;
@@ -197,6 +203,7 @@ class ClosedCasesList implements Comparable<ClosedCasesList> {
   dynamic get pendingWithUser => _pendingWithUser;
 
   String get detailCaseRemarks => _detailCaseRemarks;
+  String get case_Close_Comments => _case_Close_Comments;
 
   String get createdDate => _createdDate;
 
@@ -237,6 +244,7 @@ class ClosedCasesList implements Comparable<ClosedCasesList> {
     map['close_Date'] = _closeDate;
     map['caseNumber'] = _caseNumber;
     map['caseId'] = _caseId;
+    map['Case_Close_Comments'] = _case_Close_Comments;
     return map;
   }
 }
