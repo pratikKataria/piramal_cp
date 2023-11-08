@@ -14,6 +14,7 @@ import 'package:piramal_channel_partner/ui/core/signup/model/signup_response.dar
 import 'package:piramal_channel_partner/ui/core/signup/model/signup_validation_check_response.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/terms_and_condition_response.dart';
 import 'package:piramal_channel_partner/ui/core/signup/signup_view.dart';
+import 'package:piramal_channel_partner/ui/lead/addLead/model/pick_list_response.dart';
 import 'package:piramal_channel_partner/user/AuthUser.dart';
 import 'package:piramal_channel_partner/user/CurrentUser.dart';
 import 'package:piramal_channel_partner/utils/Dialogs.dart';
@@ -557,4 +558,7 @@ class _SignupScreenState extends State<SignupScreen> with CodeAutoFill implement
 
   @override
   void onSignupGuestSuccessfully(SignupResponse signupResponse) {}
+
+  @override
+  void onPickListFetched(List<PickListResponse> brList) {}
 }

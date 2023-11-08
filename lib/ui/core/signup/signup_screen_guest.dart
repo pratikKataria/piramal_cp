@@ -17,12 +17,15 @@ import 'package:piramal_channel_partner/ui/core/signup/model/signup_response.dar
 import 'package:piramal_channel_partner/ui/core/signup/model/signup_validation_check_response.dart';
 import 'package:piramal_channel_partner/ui/core/signup/model/terms_and_condition_response.dart';
 import 'package:piramal_channel_partner/ui/core/signup/signup_view.dart';
+import 'package:piramal_channel_partner/ui/lead/addLead/model/pick_list_response.dart';
 import 'package:piramal_channel_partner/user/AuthUser.dart';
 import 'package:piramal_channel_partner/user/CurrentUser.dart';
 import 'package:piramal_channel_partner/utils/Dialogs.dart';
 import 'package:piramal_channel_partner/utils/Utility.dart';
 import 'package:piramal_channel_partner/widgets/pml_button.dart';
 import 'package:sms_autofill/sms_autofill.dart';
+
+import '../../lead/addLead/helper/add_lead_constants.dart';
 
 class SignupScreenGuest extends StatefulWidget {
   final String eventId;
@@ -41,7 +44,8 @@ class _SignupScreenGuestState extends State<SignupScreenGuest> with CodeAutoFill
   CorePresenter corePresenter;
 
   List<String> rmList = [];
-  String relationManagerListResponse;
+  List<String> listOfSubUrban = [];
+  String location;
 
   bool mobileOTPVerified = false;
   bool emailOTPVerified = false;
@@ -55,6 +59,7 @@ class _SignupScreenGuestState extends State<SignupScreenGuest> with CodeAutoFill
     super.initState();
     corePresenter = CorePresenter(this);
     corePresenter.getAccessToken();
+    corePresenter.fetchDropDownValues(context);
     autoPopulateEmailMobile();
 
     SmsAutoFill().getAppSignature.then((signature) {
@@ -262,6 +267,47 @@ class _SignupScreenGuestState extends State<SignupScreenGuest> with CodeAutoFill
                 important: true,
                 limit: 10,
               ),
+
+              verticalSpace(10.0),
+              input(
+                "Sourcing Manager",
+                    (String v) {
+                  signupRequest.sourcingManager = v;
+                  return;
+                },
+                important: true,
+                limit: 100,
+              ),
+
+              verticalSpace(10.0),
+              Container(
+                height: 38.0,
+                decoration: BoxDecoration(
+                  color: AppColors.inputFieldBackgroundColor,
+                  borderRadius: BorderRadius.circular(6.0),
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 10.0),
+                child: DropdownButton<String>(
+                  isExpanded: true,
+                  hint: Text("Location", style: subTextStyle),
+                  value: location,
+                  underline: Container(),
+                  items: <String>[...listOfSubUrban].map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value, style: subTextStyle),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    location = value;
+                    signupRequest.location = value;
+                    // signupRequest.relationshipManager = value;
+                    // signupRequest.typeoffirm = value.
+                    setState(() {});
+                  },
+                ),
+              ),
+              verticalSpace(10.0),
               // verticalSpace(10.0),
               // input(
               //   "RERA Registration ID",
@@ -389,6 +435,8 @@ class _SignupScreenGuestState extends State<SignupScreenGuest> with CodeAutoFill
       height: 36,
       text: "Next",
       onTap: () {
+        print(signupRequest.toJson());
+
         if (!isAllFieldOk()) return;
 
         if (!mobileOTPVerified) {
@@ -585,5 +633,26 @@ class _SignupScreenGuestState extends State<SignupScreenGuest> with CodeAutoFill
   void onSignupGuestSuccessfully(SignupResponse signupResponse) {
     Navigator.pop(context);
     Navigator.pushNamed(context, Screens.kCPEventGuestScreen, arguments: widget.eventId);
+  }
+
+  @override
+  void onPickListFetched(List<PickListResponse> pickList) {
+    pickList.forEach((element) => addListByPickListType(element));
+    setState(() {});
+  }
+
+  void addListByPickListType(PickListResponse element) {
+    if (element?.fieldName == AddLeadConstant.SUB_URBAN_C) {
+      listOfSubUrban.addAll(stringToStringList(element.values));
+    }
+  }
+
+  List<String> stringToStringList(String val) {
+    if (val != null && val.isNotEmpty) {
+      List<String> stringList = val.split(",").toList();
+      stringList.removeLast();
+      return stringList;
+    }
+    return [];
   }
 }

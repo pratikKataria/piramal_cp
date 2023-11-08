@@ -9,30 +9,11 @@
 /// Actual_Paxsize : "1"
 
 class SignupGuestRequest {
-
   String mobileOTP;
   String emailOTP;
 
-  SignupGuestRequest({
-      String name, 
-      String primaryContactPerson, 
-      String primaryMobNo, 
-      String email, 
-      String pan, 
-      String typeoffirm, 
-      bool tnCFlag, 
-      String parentCPEventId, 
-      String actualPaxsize,}){
-    _name = name;
-    _primaryContactPerson = primaryContactPerson;
-    _primaryMobNo = primaryMobNo;
-    _email = email;
-    _pan = pan;
-    _typeoffirm = typeoffirm;
-    _tnCFlag = tnCFlag;
-    _parentCPEventId = parentCPEventId;
-    _actualPaxsize = actualPaxsize;
-}
+
+  SignupGuestRequest();
 
   SignupGuestRequest.fromJson(dynamic json) {
     _name = json['Name'];
@@ -44,7 +25,13 @@ class SignupGuestRequest {
     _tnCFlag = json['TnCFlag'];
     _parentCPEventId = json['parentCPEventId'];
     _actualPaxsize = json['Actual_Paxsize'];
+    _sourcingManager = json['SourcingManager'];
+    _location = json['Location'];
   }
+
+  // "SourcingManager": "Test Devashish",
+  // "Location": "Zaveri Bazar"
+
   String _name;
   String _primaryContactPerson;
   String _primaryMobNo;
@@ -54,25 +41,9 @@ class SignupGuestRequest {
   bool _tnCFlag;
   String _parentCPEventId;
   String _actualPaxsize;
-SignupGuestRequest copyWith({  String name,
-  String primaryContactPerson,
-  String primaryMobNo,
-  String email,
-  String pan,
-  String typeoffirm,
-  bool tnCFlag,
-  String parentCPEventId,
-  String actualPaxsize,
-}) => SignupGuestRequest(  name: name ?? _name,
-  primaryContactPerson: primaryContactPerson ?? _primaryContactPerson,
-  primaryMobNo: primaryMobNo ?? _primaryMobNo,
-  email: email ?? _email,
-  pan: pan ?? _pan,
-  typeoffirm: typeoffirm ?? _typeoffirm,
-  tnCFlag: tnCFlag ?? _tnCFlag,
-  parentCPEventId: parentCPEventId ?? _parentCPEventId,
-  actualPaxsize: actualPaxsize ?? _actualPaxsize,
-);
+  String _sourcingManager;
+  String _location;
+
   String get name => _name;
   String get primaryContactPerson => _primaryContactPerson;
   String get primaryMobNo => _primaryMobNo;
@@ -94,6 +65,8 @@ SignupGuestRequest copyWith({  String name,
     map['TnCFlag'] = _tnCFlag;
     map['parentCPEventId'] = _parentCPEventId;
     map['Actual_Paxsize'] = _actualPaxsize;
+    map['SourcingManager'] = _sourcingManager;
+    map['Location'] = _location;
     return map;
   }
 
@@ -131,5 +104,17 @@ SignupGuestRequest copyWith({  String name,
 
   set name(String value) {
     _name = value;
+  }
+
+  String get location => _location;
+
+  set location(String value) {
+    _location = value;
+  }
+
+  String get sourcingManager => _sourcingManager;
+
+  set sourcingManager(String value) {
+    _sourcingManager = value;
   }
 }
