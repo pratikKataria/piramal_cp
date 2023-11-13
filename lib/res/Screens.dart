@@ -18,6 +18,7 @@ abstract class Screens {
    static const kCurrentPromotionsScreen = "kCurrentPromotions";
    static const kLeadScreen = "kLead";
    static const kVideoScreen = "kVideoScreen";
+   static const kNewsAndArticlesScreen = "kNewsAndArticlesScreen";
    static const kAddLeadScreen = "kAddLead";
    static const kCPEventScreen = "kCpEventScreen";
    static const kCPEventGuestScreen = "kCPEventGuestScreen";
@@ -44,4 +45,5 @@ abstract class Screens {
    static const kErrorTxt = "No Data Found";
 
   static const kQrCodeScannerScreen = "Scan Event";
+  static const kNewsAndArticlesDetailScreen = "kNewsAndArticlesDetailScreen";
 }

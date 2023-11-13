@@ -38,6 +38,8 @@ import 'package:piramal_channel_partner/ui/lead/lead_screen.dart';
 import 'package:piramal_channel_partner/ui/myAssit/projectList/project_screen.dart';
 import 'package:piramal_channel_partner/ui/myProfile/my_profile.dart';
 import 'package:piramal_channel_partner/ui/myProfile/uploadPendingDocument/upload_pending_document_screen.dart';
+import 'package:piramal_channel_partner/ui/newsAndArticles/news_and_articles_detail_screen.dart';
+import 'package:piramal_channel_partner/ui/newsAndArticles/news_and_articles_screen.dart';
 import 'package:piramal_channel_partner/ui/projectsFlo/projectList/project_screen.dart';
 import 'package:piramal_channel_partner/ui/qrCodeScanner/qr_code_scanner_screen.dart';
 import 'package:piramal_channel_partner/ui/qrCodeScanner/qr_code_scanner_screen.dart';
@@ -269,6 +271,12 @@ class MyApp extends StatelessWidget {
             case Screens.kVideoScreen:
               return RouteTransition(widget: VideoScreen());
               break;
+            case Screens.kNewsAndArticlesScreen:
+              return RouteTransition(widget: NewsAndArticlesScreen());
+              break;
+            case Screens.kNewsAndArticlesDetailScreen:
+              return RouteTransition(widget: NewsAndArticlesDetailScreen(settings.arguments));
+              break;
             case Screens.kTicketsScreen:
               return RouteTransition(widget: TicketScreen());
               break;
@@ -283,7 +291,7 @@ class MyApp extends StatelessWidget {
               break;
           }
         },
-        home:checkAuthUser(authResult),
+        home: checkAuthUser(authResult),
       ),
     );
   }

@@ -72,6 +72,8 @@ class EndPoints {
   static final String CP_APP_BANNER = BASE_URL + "/CP_Mobile_App/CP_App_Banner";
   static final String UPDATE_ACTUAL_PAX_SIZE = BASE_URL + "/CP_Mobile_App/updateActualPaxsize";
   static final String UPLOAD_TDS = BASE_URL + "/CP_Mobile_App/uploadTDS";
+  static final String NEWS_AND_ARTICLE_LIST = BASE_URL + "/CP_Mobile_App/NewsANDArticlesList";
+  static final String NEWS_AND_ARTICLE_DETAIL= BASE_URL + "/CP_Mobile_App/newsANDArticleDetail";
 
   //Ticket Module
   static final String GET_TICKETS = BASE_URL + "/CP_Mobile_App/getCPCasesList";

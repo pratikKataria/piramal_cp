@@ -29,7 +29,9 @@ class Assets {
   static const String imagesIcIntelligence = 'assets/images/ic_intelligence.png';
   static const String imagesIcLeaderboard = 'assets/images/ic_leaderboard.png';
   static const String imagesIcLeads = 'assets/images/ic_leads.png';
+  static const String imagesIcMegaphone = 'assets/images/ic_megaphone.png';
   static const String imagesIcMenu = 'assets/images/ic_menu.png';
+  static const String imagesIcNews = 'assets/images/ic_news.png';
   static const String imagesIcNotification = 'assets/images/ic_notification.png';
   static const String imagesIcOverview = 'assets/images/ic_overview.png';
   static const String imagesIcPhone = 'assets/images/ic_phone.png';
