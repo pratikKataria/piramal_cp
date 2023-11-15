@@ -202,7 +202,8 @@ class BaseScreen extends StatelessWidget {
         print('onClickOverlay: $target');
       },
       onSkip: () {
-          Utility.setTourCompleted(Screens.kSettingsScreen);return true;
+          Utility.setTourCompleted("baseScreen1");
+          return true;
       },
     );
   }

@@ -42,6 +42,16 @@ class PersistentBottomNavigation extends StatelessWidget {
         return InkWell(
           key: key,
           onTap: () {
+
+            print("Before if qr scanner $text");
+            //For Scan Screen move to new screen not to Indexed Stack on home screen
+            if (text == Screens.kQrCodeScannerScreen) {
+              navigatorGk.currentState.pushNamed(Screens.kQrCodeScannerScreen);
+              return;
+            }
+            print("After if qr scanner $text");
+
+
             if (tourVisibilityController.value) {
               // Tour visibility is showing
               return;

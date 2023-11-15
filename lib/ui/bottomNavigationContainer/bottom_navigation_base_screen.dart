@@ -24,7 +24,7 @@ class BottomNavigationBaseScreen extends StatelessWidget {
   void initState() async {
     allDestinations = {
       Screens.kHomeScreen: HomeScreen(key: hGK),
-      Screens.kQrCodeScannerScreen: QRCodeScannerScreen(null),
+      // Screens.kQrCodeScannerScreen: QRCodeScannerScreen(null),
       Screens.kUpload: UploadScreen(),
       Screens.kNotificationsScreen: NotificationScreen(key: nGK),
       Screens.kTodayFollowUpScreen: TodayFollowUpScreen(),
