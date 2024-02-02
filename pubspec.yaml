@@ -28,23 +28,23 @@ dependencies:
   url_launcher: any
   intl: any
   pull_to_refresh: any
-  file_picker: 4.4.0
+  file_picker: ^5.3.1
   marquee: any
   cupertino_icons: any
   firebase_core: any
-  firebase_messaging: 11.0.0
-  firebase_messaging_platform_interface: 3.1.6
-  flutter_local_notifications: ^9.4.0
-  awesome_notifications: ^0.6.21
+  firebase_messaging: ^14.7.10
+  firebase_messaging_platform_interface: ^4.5.18
+  flutter_local_notifications: ^16.3.2
+  awesome_notifications: ^0.8.2
   external_path: ^1.0.1
-  permission_handler: 8.1.5
+  permission_handler: ^11.0.1
   sms_autofill: ^2.2.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^1.0.0
+  flutter_lints: ^2.0.3
 
 flutter:
   uses-material-design: true

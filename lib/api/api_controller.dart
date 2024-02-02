@@ -29,16 +29,15 @@ class ApiController {
   Future<Response> post(String url, {Map headers, body, encoding, payload}) async {
     Map<String, String> headersMap = headers ?? {};
     // headersMap["NoEncryption"] = 'true';
-    Utility.log(
-        tag, "Api Call :\n $url \n --> Inputs :\n $body \n --> payload :\n ${payload.toString()} \n --> header :\n $headers");
+    Utility.log(tag, "Api Call :\n $url \n --> Inputs :\n $body \n --> payload :\n ${payload.toString()} \n --> header :\n $headers");
     Response response = await dio.post(
       url,
       data: body,
       queryParameters: payload,
       options: Options(
         contentType: ContentType.json.toString(),
-        receiveTimeout: 300000,
-        sendTimeout: 300000,
+        receiveTimeout: Duration(milliseconds: 300000),
+        sendTimeout: Duration(milliseconds: 300000),
         method: "POST",
         headers: headersMap,
       ),
@@ -54,16 +53,15 @@ class ApiController {
   Future<Response> postV2(String url, {Map text, encoding, payload, String body}) async {
     Map<String, String> headersMap = text ?? {};
     // headersMap["NoEncryption"] = 'true';
-    Utility.log(tag,
-        "Api Call :\n $url \n --> Inputs :\n ${body.toString()} \n --> payload :\n ${payload.toString()} \n --> header :\n ${text.toString()}");
+    Utility.log(tag, "Api Call :\n $url \n --> Inputs :\n ${body.toString()} \n --> payload :\n ${payload.toString()} \n --> header :\n ${text.toString()}");
     Response response = await dio.post(
       url,
       data: body,
       queryParameters: payload,
       options: Options(
         contentType: ContentType.json.toString(),
-        receiveTimeout: 300000,
-        sendTimeout: 300000,
+        receiveTimeout: Duration(milliseconds: 300000),
+        sendTimeout: Duration(milliseconds: 300000),
         method: "POST",
         headers: headersMap,
       ),
@@ -79,16 +77,15 @@ class ApiController {
   Future<Response> put(String url, {Map headers, body, encoding, payload}) async {
     Map<String, String> headersMap = headers ?? {};
     // headersMap["NoEncryption"] = 'true';
-    Utility.log(tag,
-        "Api Call :\n $url \n --> Inputs :\n ${body.toString()} \n --> payload :\n ${payload.toString()} \n --> header :\n ${headers.toString()}");
+    Utility.log(tag, "Api Call :\n $url \n --> Inputs :\n ${body.toString()} \n --> payload :\n ${payload.toString()} \n --> header :\n ${headers.toString()}");
     Response response = await dio.put(
       url,
       data: body,
       queryParameters: payload,
       options: Options(
         contentType: ContentType.json.toString(),
-        receiveTimeout: 300000,
-        sendTimeout: 300000,
+        receiveTimeout: Duration(milliseconds: 300000),
+        sendTimeout: Duration(milliseconds: 300000),
         method: "PUT",
         headers: headersMap,
       ),
@@ -104,16 +101,15 @@ class ApiController {
   Future<Response> patch(String url, {Map headers, body, encoding, payload}) async {
     Map<String, String> headersMap = headers ?? {};
     // headersMap["NoEncryption"] = 'true';
-    Utility.log(tag,
-        "Api Call :\n $url \n --> Inputs :\n ${body.toString()} \n --> payload :\n ${payload.toString()} \n --> header :\n ${headers.toString()}");
+    Utility.log(tag, "Api Call :\n $url \n --> Inputs :\n ${body.toString()} \n --> payload :\n ${payload.toString()} \n --> header :\n ${headers.toString()}");
     Response response = await dio.patch(
       url,
       data: body,
       queryParameters: payload,
       options: Options(
         contentType: ContentType.json.toString(),
-        receiveTimeout: 300000,
-        sendTimeout: 300000,
+        receiveTimeout: Duration(milliseconds: 300000),
+        sendTimeout: Duration(milliseconds: 300000),
         method: "PATCH",
         headers: headersMap,
       ),
@@ -135,8 +131,8 @@ class ApiController {
         queryParameters: payload,
         options: Options(
           contentType: ContentType.json.toString(),
-          receiveTimeout: 300000,
-          sendTimeout: 300000,
+          receiveTimeout: Duration(milliseconds: 300000),
+          sendTimeout: Duration(milliseconds: 300000),
           method: "GET",
           headers: headerMap,
         ));
@@ -156,8 +152,8 @@ class ApiController {
         data: body,
         options: Options(
           contentType: ContentType.json.toString(),
-          receiveTimeout: 300000,
-          sendTimeout: 300000,
+          receiveTimeout: Duration(milliseconds: 300000),
+          sendTimeout: Duration(milliseconds: 300000),
           method: "DELETE",
           headers: headerMap,
         ));
@@ -181,8 +177,8 @@ class ApiController {
           responseType: ResponseType.bytes,
           contentType: ContentType.json.toString(),
           followRedirects: false,
-          receiveTimeout: 300000,
-          sendTimeout: 300000,
+          receiveTimeout: Duration(milliseconds: 300000),
+          sendTimeout: Duration(milliseconds: 300000),
           method: "GET",
           headers: headerMap),
     );

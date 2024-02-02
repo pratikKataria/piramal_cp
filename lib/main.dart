@@ -86,7 +86,7 @@ Future<void> main() async {
             ledColor: Colors.white)
       ],
       // Channel groups are only visual and are not required
-      channelGroups: [NotificationChannelGroup(channelGroupkey: 'basic_channel_group', channelGroupName: 'Basic group')],
+      channelGroups: [NotificationChannelGroup(channelGroupKey: 'basic_channel_group', channelGroupName: 'Basic group')],
       debug: true);
 
   AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
